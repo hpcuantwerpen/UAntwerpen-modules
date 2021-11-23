@@ -19,6 +19,7 @@ installroot="$(pwd)"
 # Some constants
 #
 stackname='calcua'
+systemmodules='modules-infrastructure'
 
 #
 # Functions used in this script
@@ -39,10 +40,10 @@ create_link () {
 # We use more commands than strictly necessary, which can give more precise
 # error messages.
 #
-mkdir -p "$installroot/modules-infrastructure"
-mkdir -p "$installroot/modules-infrastructure/stacks"
-mkdir -p "$installroot/modules-infrastructure/arch"
-mkdir -p "$installroot/modules-infrastructure/infrastructure"
+mkdir -p "$installroot/$systemmodules"
+mkdir -p "$installroot/$systemmodules/stacks"
+mkdir -p "$installroot/$systemmodules/arch"
+mkdir -p "$installroot/$systemmodules/infrastructure"
 
 
 
