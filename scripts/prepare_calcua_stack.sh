@@ -12,8 +12,11 @@
 # That cd will work if the script is called by specifying the path or is simply
 # found on PATH. It will not expand symbolic links.
 cd "$(dirname $0)"
-cd ../..
+cd ..
+repo_modules=${PWD##*/}
+cd ..
 installroot="$(pwd)"
+repo_easybuild="${repo_modules/modules/easybuild}"
 
 #
 # Some constants
@@ -44,6 +47,14 @@ mkdir -p "$installroot/$systemmodules"
 mkdir -p "$installroot/$systemmodules/stacks"
 mkdir -p "$installroot/$systemmodules/arch"
 mkdir -p "$installroot/$systemmodules/infrastructure"
+mkdir -p "$installroot/$systemmodules/init-$repo_modules"
 
-
+#
+# Install the CalcUA-init module
+#
+mkdir -p "$installroot/$systemmodules/init-$repo_modules/CalcUA-init"
+for file in $(find $installroot/$repo_modules/generic-modules/CalcUA-init -name "*.lua")
+do
+	create_link $file $installroot/$systemmodules/init-$repo_modules/CalcUA-init/${file##*/}
+done
 
