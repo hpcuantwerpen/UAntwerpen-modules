@@ -1,7 +1,31 @@
 -- require("strict")
 
+-- -----------------------------------------------------------------------------
+--
+-- get_host_info
+--
+-- Get information about the host. The function returns 4 values:
+--  1. The CPU type in the form <vendpr_id>_<family>_<model>
+--     Values observed are:
+--      * AuthenticAMD_23_49: zen2/rome
+--      * GenuineIntel_6_62:  Ivy Bridge
+--      * GenuineIntel_6_79:  Broadwell
+--      * GenuineIntel_6_85:  Skylake and Cascade Lake
+--  2. The name of the OS
+--  3. The version of the OS
+--  4. The type of the accelerator:
+--      * AMD_MI100    (vaughan AMD Instinct nodes)
+--      * NVIDIA_GP100 (leibniz Pascal nodes)
+--      * NVIDIA_GP104 (leibniz visualization node)
+--      * NVIDIA_GA100 (vaughan Ampere node)
+--      * NEC_aurora1  (leibniz Aurora node)
 
 function get_host_info()
+
+    -- -------------------------------------------------------------------------
+    --
+    -- First part of host info: CPU architecture
+    --
 
     local f = io.popen( '/usr/bin/cat /proc/cpuinfo | /usr/bin/egrep "vendor_id|cpu family|model" -m 3' )
     local cpuinfo = f:read('*a') or ''
@@ -13,11 +37,16 @@ function get_host_info()
     --  * the fifth gsub replaces the remaining two newlines with underscores.
     local cpustring = cpuinfo:gsub( 'vendor_id%s+:%s', '' ):gsub( 'cpu family%s+:%s', '' ):gsub( 'model%s+:%s', '' ):gsub( '\n$', '' ):gsub( '\n', '_' )
 
+    -- -------------------------------------------------------------------------
+    --
+    -- Second part of host info: OS and version
+    --
+
     f = io.popen( 'cat /etc/os-release | egrep "^NAME=|^VERSION_ID="' )
     local osinfo = f:read('*a') or ''
     f:close()
 
-    -- Get the name of the OS:
+    -- Get the name of the OS by looking for the NAME line in the data read from /etc/os-release
     _, _, osname = osinfo:find( 'NAME="([%w%s]+)"' )
     local osname = osname:gsub( '%s', '_' )
 
@@ -25,10 +54,17 @@ function get_host_info()
     local osversion
     _, _, osversion = osinfo:find( 'VERSION_ID="([%d%p]+)"' )
 
+    -- -------------------------------------------------------------------------
+    --
+    -- Third part of host info: Accelerator (via lspci)
+    --
+
+    -- Search for the accelerators in the output of lscpci
     f = io.popen( '/usr/sbin/lspci | /usr/bin/egrep "MI100|GA100|GP104|GP100|NEC" -m 1' )
     local accelinfo = f:read('*a') or ''
     f:close()
 
+    -- Process the output to extract the specific accelerator.
     local accelerator = nil
     if     accelinfo:find( 'MI100' ) then accelerator = 'AMD_MI100'
     elseif accelinfo:find( 'GP100' ) then accelerator = 'NVIDIA_GP100'
@@ -128,6 +164,13 @@ function get_clusterarch()
 
 end
 
+
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+--
+-- Test code for development
+--
 
 cpustring, osname, osversion, accelerator = get_host_info()
 

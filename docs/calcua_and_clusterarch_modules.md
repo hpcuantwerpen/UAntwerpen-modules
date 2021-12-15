@@ -149,9 +149,9 @@ Results:
     E.g.,
 
       * AMD Rome: CPU family 23, model 49.
-      * Intel Ivy Bridge:
-      * Intel Broadwell
-      * Intel Skylake
+      * Intel Ivy Bridge: CPU family 6, model 62
+      * Intel Broadwell: CPU family 6, model 79
+      * Intel Skylake: CPU family 6, model 85
       * Intel Cascade Lake: Actually also CPU family 6, model 85, just a different
         stepping: 7 versus 4 for our Skylake CPUs
 
