@@ -1,0 +1,2 @@
+Here is room to add to the message of the day via the CalcUA-init module rather
+than /etc/motd.
