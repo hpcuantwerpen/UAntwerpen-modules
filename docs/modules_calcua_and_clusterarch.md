@@ -77,6 +77,7 @@ These names are fixed in a function in `SitePackage.lua`.
 
 | long                     | short             |
 |:-------------------------|:------------------|
+| centos8-x86_64           | COS8-x86_64       |
 | centos8-zen2             | COS8-zen2         |
 | centos8-zen2-ampere      | COS8-zen2-NVCC80  |
 | centos8-zen2-arcturus    | COS8-zen2-GFX908  |
@@ -86,6 +87,7 @@ These names are fixed in a function in `SitePackage.lua`.
 | centos8-skylake-aurora1  | COS8-SKLX-NEC1    |
 | centos8-ivybridge        | COS8-IVB          |
 | centos8-skylake          | COS8-SKLX         |
+
 
 
 ## Node detection
