@@ -101,19 +101,19 @@ host $(hostname -i) | awk '{print $NF }'
 
 Results:
 
-| Node type                  | `host $(hostname -i) | awk '{print $NF }'` |
-|:---------------------------|:-------------------------------------------|
-| login node vaughan         | lnX.vaughan.antwerpenb.vsc                 |
-| compute node vaughan       | rXcYYcnZ.vaughan.antwerpen.vsc             |
-| NVIDIA node vaughan        | nvam1.vaughan.antwerpen.vsc                |
-| MI100 node vaughan         | amdarcX.vaughan.antwerpen.vsc              |
-| login node leibniz         | lnX.leibniz.antwerpen.vsc                  |
-| visualisation node leibniz | vizX.leibniz.antwerpen.vsc                 |
-| compute node leibniz       | rXcYYcnZ.leibniz.antwerpen.vsc             |
-| compute node hopper        | rXcYYcnZ.hopper.antwerpen.vsc              |
-| Pascal node leibniz        | paX.leibniz.antwerpen.vsc                  |
-| Aurora node leibniz        | aurora.leibniz.antwerpen.vsc               |
-| Biomina node leibniz       | r0c03cZ.leibniz.antwerpen.vsc              |
+| Node type                  | `host $(hostname -i) \| awk '{print $NF }'` |
+|:---------------------------|:--------------------------------------------|
+| login node vaughan         | lnX.vaughan.antwerpenb.vsc                  |
+| compute node vaughan       | rXcYYcnZ.vaughan.antwerpen.vsc              |
+| NVIDIA node vaughan        | nvam1.vaughan.antwerpen.vsc                 |
+| MI100 node vaughan         | amdarcX.vaughan.antwerpen.vsc               |
+| login node leibniz         | lnX.leibniz.antwerpen.vsc                   |
+| visualisation node leibniz | vizX.leibniz.antwerpen.vsc                  |
+| compute node leibniz       | rXcYYcnZ.leibniz.antwerpen.vsc              |
+| compute node hopper        | rXcYYcnZ.hopper.antwerpen.vsc               |
+| Pascal node leibniz        | paX.leibniz.antwerpen.vsc                   |
+| Aurora node leibniz        | aurora.leibniz.antwerpen.vsc                |
+| Biomina node leibniz       | r0c03cZ.leibniz.antwerpen.vsc               |
 
 
 ### Based on VSC_ variables
@@ -175,4 +175,9 @@ Results:
 | Aurora node leibniz        | GenuineIntel | 6          | 85    | NEC     |
 | Biomina node leibniz       | GenuineIntel | 6          | 85    | /       |
 
+
+### Final solution
+
+The solution chosen was the last one, reading information from `/proc/cpuinfo`, `/etc/os-release`
+and the output of `lspci`.
 
