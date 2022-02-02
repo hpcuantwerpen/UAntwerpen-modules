@@ -75,19 +75,44 @@ Note for the short names:
 
 These names are fixed in a function in `SitePackage.lua`.
 
-| long                     | short             |
-|:-------------------------|:------------------|
-| centos8-x86_64           | COS8-x86_64       |
-| centos8-zen2             | COS8-zen2         |
-| centos8-zen2-ampere      | COS8-zen2-NVCC80  |
-| centos8-zen2-arcturus    | COS8-zen2-GFX908  |
-| centos8-broadwell        | COS8-BRW          |
-| centos8-broadwell-quadro | COS8-BRW-NVGP61GL |
-| centos8-broadwell-pascal | COS8-BRW-NVCC60   |
-| centos8-skylake-aurora1  | COS8-SKLX-NEC1    |
-| centos8-ivybridge        | COS8-IVB          |
-| centos8-skylake          | COS8-SKLX         |
+| long                      | short             |
+|:--------------------------|:------------------|
+| centos8-x86_64            | COS8-x86_64       |
+| centos8-zen2              | COS8-zen2         |
+| centos8-zen2-noaccel      | COS8-zen2-host    |
+| centos8-zen2-ampere       | COS8-zen2-NVCC80  |
+| centos8-zen2-arcturus     | COS8-zen2-GFX908  |
+| centos8-broadwell         | COS8-BRW          |
+| centos8-broadwell-noaccel | COS8-BRW-host     |
+| centos8-broadwell-quadro  | COS8-BRW-NVGP61GL |
+| centos8-broadwell-pascal  | COS8-BRW-NVCC60   |
+| centos8-ivybridge         | COS8-IVB          |
+| centos8-skylake           | COS8-SKLX         |
+| centos8-skylake-noaccel   | COS8-SKLX-host    |
+| centos8-skylake-aurora1   | COS8-SKLX-NEC1    |
 
+
+### Possible names for cluster modules
+
+  * cluster/hopper = arch/centos8-ivybridge
+
+  * cluster/leibniz = arch/centos8-broadwell or arch/centos8-broadwell-noaccel (depending
+    on choices discussed further down)
+
+  * cluster/leibniz-viz = arch/centos8-broadwell-quadro
+
+  * cluster/leibniz-nvidia = arch/centos8-broadwell-pascal
+
+  * cluster/vaughan = arch/centos8-zen2 or arch/cents8-rome-noaccel
+
+  * cluster/vaughn-amd = arch/centos8-zen2-arcturus
+
+  * cluster/vaughan-nvidia = arch/centos8-zen2-ampere
+
+  * cluster/biomina = arch/centos8-skylake or arch/centos8-skylake-noaccel depending
+    on choices discussed further down
+
+  * cluster/aurora = arch/centos8-skylake-aurora1
 
 
 ## Node detection
@@ -182,4 +207,105 @@ Results:
 
 The solution chosen was the last one, reading information from `/proc/cpuinfo`, `/etc/os-release`
 and the output of `lspci`.
+
+
+## Binary versions loaded by the cluster and arch modules
+
+### Option 1: Maximal common installations
+
+There are almost always three levels:
+
+  * Level 1: Unoptimized generic x86 64-bit CPU
+
+  * Level 2: Specific CPU architecture, but the package is fully GPU agnostic
+
+  * Level 3: Specific CPU architecture and the package may have accelerated versions
+    that we need to install with the same name.
+
+Combinations:
+
+  * login nodes and regular compute nodes vaughan: centos8-zen2-noaccel, centos8-zen2, centos8-x86_64
+
+  * NVIDIA nodes vaughan: centos8-zen2-ampere, centos8-zen2, centos8-x86_64
+
+  * MI100 nodes vaughan: centos8-zen2-arcturus, centos8-zen2, centos8-x86_64
+
+  * Regular login and compute nodes leibniz: centos8-broadwell-noaccel, centos8-broadwell, centos8-x86_64
+
+  * Visualisation node leibniz: centos8-broadwell-quadro, centos8-broadwell, centos8-x86_64
+
+  * Pascal node leibniz: centos8-broadwell-pascal, centos8-broadwell, centos8-x86_64
+
+  * BioMina node leibniz: centos8-skylake-noaccel, centos8-skylake, centos8-x86_64
+
+  * Aurora node leibniz: centos8-skylake-aurora1, centos8-skylake, centos8-x86_64
+
+  * Hopper node: centos8-ivybridge, centos8-x86_64
+
+Advantages:
+
+  * Minimal number of duplicated installations
+
+Disadvantages:
+
+  * Very easy to make mistakes about what to install where. No package should be installed with the same
+    full name (name + version + versionsuffix) at multiple levels. No package can have
+    dependencies at a higher level.
+
+  * As it would be dangerous to have both an OpenMPI with and without accelerator support loaded, it means
+    we have to install OpenMPI and all packages that depend on it at level 3, so we need to be very careful
+    here.
+
+      * Everything installed with Intel that does not need a GPU can be installed at level 2 as there is
+        no GPU-specific Intel MPI.
+
+      * With FOSS and its subtoolchains the situation is different. GCCcore and GCC can be installed at level
+        1 or 2 but as long as we do not know if the EasyBuild community will succeed at building a single
+        MPI module that works for everything, gompi and foss software should be installed at level 3.
+
+
+### Option 2: Only common installations for software such as Matlab or maybe system toolchain
+
+Now there are two levels:
+
+  * Level 1: Unoptimized generic x86 64-bit CPU
+
+  * Level 2: Optimised software
+
+Combinations:
+
+  * login nodes and regular compute nodes vaughan: centos8-zen2-noaccel or centos8-zen2, centos8-x86_64
+
+  * NVIDIA nodes vaughan: centos8-zen2-ampere, centos8-x86_64
+
+  * MI100 nodes vaughan: centos8-zen2-arcturus, centos8-x86_64
+
+  * Regular login and compute nodes leibniz: centos8-broadwell-noaccel or centos8-broadwell, centos8-x86_64
+
+  * Visualisation node leibniz: centos8-broadwell-quadro, centos8-x86_64
+
+  * Pascal node leibniz: centos8-broadwell-pascal, centos8-x86_64
+
+  * BioMina node leibniz: centos8-skylake-noaccel or centos8-skylake, centos8-x86_64
+
+  * Aurora node leibniz: centos8-skylake-aurora1, centos8-x86_64
+
+  * Hopper node: centos8-ivybridge, centos8-x86_64
+
+Users could in principle still use software from another architecture within the stack
+by loading the appropriate clusterarch module so we could still be fairly selective
+about what we provide for the "special" nodes with accelerators. However, many of the
+often recurring dependencies like alternatives for what are often basic OS libraries
+would have to be installed multiple times.
+
+In this case the "noaccel" architecture isn't really needed unless we want all names
+to have three components if they are on level 2.
+
+Advantages
+
+  * Conceptually certainly simpler as there is little doubt about where to install a module
+
+Disadvantages
+
+  * Larger volume of the overall software stack as more modules will be duplicated.
 
