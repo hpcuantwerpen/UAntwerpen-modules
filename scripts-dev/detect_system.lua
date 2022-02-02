@@ -2,30 +2,19 @@
 
 -- -----------------------------------------------------------------------------
 --
--- get_host_info
+-- get_cpu_info
 --
--- Get information about the host. The function returns 4 values:
+-- Get information about the host. The function returns 1 value:
 --  1. The CPU type in the form <vendpr_id>_<family>_<model>
 --     Values observed are:
 --      * AuthenticAMD_23_49: zen2/rome
 --      * GenuineIntel_6_62:  Ivy Bridge
 --      * GenuineIntel_6_79:  Broadwell
 --      * GenuineIntel_6_85:  Skylake and Cascade Lake
---  2. The name of the OS
---  3. The version of the OS
---  4. The type of the accelerator:
---      * AMD_MI100    (vaughan AMD Instinct nodes)
---      * NVIDIA_GP100 (leibniz Pascal nodes)
---      * NVIDIA_GP104 (leibniz visualization node)
---      * NVIDIA_GA100 (vaughan Ampere node)
---      * NEC_aurora1  (leibniz Aurora node)
-
-function get_host_info()
-
-    -- -------------------------------------------------------------------------
-    --
-    -- First part of host info: CPU architecture
-    --
+--
+-- This function is not currently exported to module files.
+--
+function get_cpu_info()
 
     local f = io.popen( '/usr/bin/cat /proc/cpuinfo | /usr/bin/egrep "vendor_id|cpu family|model" -m 3' )
     local cpuinfo = f:read('*a') or ''
@@ -37,10 +26,22 @@ function get_host_info()
     --  * the fifth gsub replaces the remaining two newlines with underscores.
     local cpustring = cpuinfo:gsub( 'vendor_id%s+:%s', '' ):gsub( 'cpu family%s+:%s', '' ):gsub( 'model%s+:%s', '' ):gsub( '\n$', '' ):gsub( '\n', '_' )
 
-    -- -------------------------------------------------------------------------
-    --
-    -- Second part of host info: OS and version
-    --
+    return cpustring
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- get_os_info
+--
+-- Get information about the host. The function returns 2 values:
+--  1. The name of the OS
+--  2. The version of the OS
+--
+-- This function is not currently exported to module files.
+--
+function get_os_info()
 
     f = io.popen( 'cat /etc/os-release | egrep "^NAME=|^VERSION_ID="' )
     local osinfo = f:read('*a') or ''
@@ -54,10 +55,26 @@ function get_host_info()
     local osversion
     _, _, osversion = osinfo:find( 'VERSION_ID="([%d%p]+)"' )
 
-    -- -------------------------------------------------------------------------
-    --
-    -- Third part of host info: Accelerator (via lspci)
-    --
+    return osname, osversion
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- get_accelerator_info
+--
+-- Get information about the host. The function returns 1 value:
+--  1. The type of the accelerator:
+--      * AMD_MI100    (vaughan AMD Instinct nodes)
+--      * NVIDIA_GP100 (leibniz Pascal nodes)
+--      * NVIDIA_GP104 (leibniz visualization node)
+--      * NVIDIA_GA100 (vaughan Ampere node)
+--      * NEC_aurora1  (leibniz Aurora node)
+--
+-- This function is not currently exported to module files.
+--
+function get_accelerator_info()
 
     -- Search for the accelerators in the output of lscpci
     f = io.popen( '/usr/sbin/lspci | /usr/bin/egrep "MI100|GA100|GP104|GP100|NEC" -m 1' )
@@ -73,52 +90,77 @@ function get_host_info()
     elseif accelinfo:find( 'NEC' )   then accelerator = 'NEC_aurora1'
     end
 
-    return cpustring, osname, osversion, accelerator
+    return accelerator
 
 end
 
 
+-- -----------------------------------------------------------------------------
+--
+-- Data structures for mapping CPU, OS and accelerator to the names that are
+-- actually used in the modules
+--
+local cpustring_to_longtarget = {
+    AuthenticAMD_23_49 = 'zen2',
+    GenuineIntel_6_62  = 'ivybridge',
+    GenuineIntel_6_79  = 'broadwell',
+    GenuineIntel_6_85  = 'skylake',
+}
+
+local cpustring_to_shorttarget = {
+    AuthenticAMD_23_49 = 'zen2',
+    GenuineIntel_6_62  = 'IVB',
+    GenuineIntel_6_79  = 'BRW',
+    GenuineIntel_6_85  = 'SKLX',
+}
+
+local osname_to_longos = {
+    CentOS_Linux = 'redhat',
+}
+
+local osname_to_shortos = {
+    CentOS_Linux = 'RH',
+}
+
+local accelerator_to_longacc = {
+    AMD_MI100    = 'arcturus',
+    NVIDIA_GA100 = 'ampere',
+    NVIDIA_GP100 = 'pascal',
+    NVIDIA_GP104 = 'quadro',
+    NEC_aurora1  = 'aurora1',
+}
+
+local accelerator_to_shortacc = {
+    AMD_MI100    = 'GFX908',
+    NVIDIA_GA100 = 'NVCC80',
+    NVIDIA_GP100 = 'NVCC60',
+    NVIDIA_GP104 = 'NVCC61GL',
+    NEC_aurora1  = 'NEC1',
+}
+
+
+-- -----------------------------------------------------------------------------
+--
+-- get_clusterarch
+--
+-- Returns the cluster architecture for use in the clusterarch modules in
+-- different ways.
+--
+-- The function returns 4 values:
+--  1. Short minimal name, i.e., no `-host` is added for nodes without
+--     accelerator.
+--  2. Long minimal name, i.e., no `-noaccel` is added for nodes without
+--     accelerator.
+--  3. Short name, with `-host` added for nodes without accelerator
+--  4. Long name, with `-noaccel` added for nodes without accelerator
+-- e.g., `RH8-zen2, redhat8-zen2, RH8-zen2-host, redhat8-zen2-noaccel` or
+-- `RH8-SKLX-NEC1, redhat8-skylake-aurora1, RH8-SKLX-NEC1, redhat8-skylake-aurora1`
+--
 function get_clusterarch()
 
-    local cpustring_to_longtarget = {
-        AuthenticAMD_23_49 = 'zen2',
-        GenuineIntel_6_62  = 'ivybridge',
-        GenuineIntel_6_79  = 'broadwell',
-        GenuineIntel_6_85  = 'skylake',
-    }
-
-    local cpustring_to_shorttarget = {
-        AuthenticAMD_23_49 = 'zen2',
-        GenuineIntel_6_62  = 'IVB',
-        GenuineIntel_6_79  = 'BRW',
-        GenuineIntel_6_85  = 'SKLX',
-    }
-
-    local osname_to_longos = {
-        CentOS_Linux = 'centos',
-    }
-
-    local osname_to_shortos = {
-        CentOS_Linux = 'COS',
-    }
-
-    local accelerator_to_longacc = {
-        AMD_MI100    = 'arcturus',
-        NVIDIA_GA100 = 'ampere',
-        NVIDIA_GP100 = 'pascal',
-        NVIDIA_GP104 = 'quadro',
-        NEC_aurora1  = 'aurora1',
-    }
-
-    local accelerator_to_shortacc = {
-        AMD_MI100    = 'GFX908',
-        NVIDIA_GA100 = 'NVCC80',
-        NVIDIA_GP100 = 'NVCC60',
-        NVIDIA_GP104 = 'NVCC61GL',
-        NEC_aurora1  = 'NEC1',
-    }
-
-    local cpustring, osname, osversion, accelerator = get_host_info()
+    local cpustring         = get_cpu_info()
+    local osname, osversion = get_os_info()
+    local accelerator       = get_accelerator_info()
 
     if cpustring == nil then
         io.stderr:write( 'SitePackage.lua get_clusterarch/get_host_info: Failed to determine the CPU type.\n' )
@@ -150,17 +192,24 @@ function get_clusterarch()
         return nil, nil
     end
 
-    local clusterarch_short = cpustring_to_shorttarget[cpustring] .. '-' ..
-                              osname_to_shortos[osname] .. osversion
-    local clusterarch_long  = cpustring_to_longtarget[cpustring] .. '-' ..
-                              osname_to_longos[osname] .. osversion
+    local clusterarch_short_minimal = osname_to_shortos[osname] .. osversion  .. '-' ..
+                                      cpustring_to_shorttarget[cpustring]
+    local clusterarch_long_minimal  = osname_to_longos[osname] .. osversion .. '-' ..
+                                      cpustring_to_longtarget[cpustring]
+    local clusterarch_short
+    local clusterarch_long
 
-    if accelerator ~= nil then
-        clusterarch_short = clusterarch_short .. '-' .. accelerator_to_shortacc[accelerator]
-        clusterarch_long  = clusterarch_long  .. '-' .. accelerator_to_longacc[accelerator]
+    if accelerator == nil then
+        clusterarch_short = clusterarch_short_minimal .. '-host'
+        clusterarch_long  = clusterarch_long_minimal  .. '-noaccel'
+    else
+        clusterarch_short_minimal = clusterarch_short_minimal .. '-' .. accelerator_to_shortacc[accelerator]
+        clusterarch_long_minimal  = clusterarch_long_minimal  .. '-' .. accelerator_to_longacc[accelerator]
+        clusterarch_short = clusterarch_short_minimal
+        clusterarch_long  = clusterarch_long_minimal
     end
 
-    return clusterarch_short, clusterarch_long
+    return clusterarch_short_minimal, clusterarch_long_minimal, clusterarch_short, clusterarch_long
 
 end
 
@@ -172,7 +221,9 @@ end
 -- Test code for development
 --
 
-cpustring, osname, osversion, accelerator = get_host_info()
+cpustring         = get_cpu_info()
+osname, osversion = get_os_info()
+accelerator       = get_accelerator_info()
 
 if accelerator then
     print( cpustring .. ', ' .. osname .. ' ' .. osversion .. ', ' .. accelerator )
@@ -180,6 +231,10 @@ else
     print( cpustring .. ', ' .. osname .. ' ' .. osversion )
 end
 
-clusterarch_short, clusterarch_long = get_clusterarch()
+clusterarch_short, clusterarch_long, _, _ = get_clusterarch()
+print( 'Minimal arch: ' .. clusterarch_short .. ', long arch: ' .. clusterarch_long )
 
-print( 'Short arch: ' .. clusterarch_short .. ', long arch: ' .. clusterarch_long )
+_, _, clusterarch_short, clusterarch_long = get_clusterarch()
+print( 'Full arch: ' .. clusterarch_short .. ', long arch: ' .. clusterarch_long )
+
+
