@@ -268,7 +268,7 @@ local accelerator_to_longacc = {
     AMD_MI100    = 'arcturus',
     NVIDIA_GA100 = 'ampere',
     NVIDIA_GP100 = 'pascal',
-    NVIDIA_GP104 = 'quadro',
+    NVIDIA_GP104 = 'P5000',
     NEC_aurora1  = 'aurora1',
 }
 
