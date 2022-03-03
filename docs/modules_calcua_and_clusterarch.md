@@ -9,7 +9,7 @@ The calcua module is loaded first. This module sets the version of the software
 stack. The version of the software stack is of the form year followed by the letter
 a or b.
 
-TODO: Think about support for yyyy.mm also as this is used during the development
+**TODO**: Think about support for yyyy.mm also as this is used during the development
 of new toolchains in EasyBuild itself, and also for EESSI.
 
 The calcua modules will automatically load the best fitting clusterarch module
@@ -77,42 +77,42 @@ These names are fixed in a function in `SitePackage.lua`.
 
 | long                      | short             |
 |:--------------------------|:------------------|
-| centos8-x86_64            | COS8-x86_64       |
-| centos8-zen2              | COS8-zen2         |
-| centos8-zen2-noaccel      | COS8-zen2-host    |
-| centos8-zen2-ampere       | COS8-zen2-NVCC80  |
-| centos8-zen2-arcturus     | COS8-zen2-GFX908  |
-| centos8-broadwell         | COS8-BRW          |
-| centos8-broadwell-noaccel | COS8-BRW-host     |
-| centos8-broadwell-quadro  | COS8-BRW-NVGP61GL |
-| centos8-broadwell-pascal  | COS8-BRW-NVCC60   |
-| centos8-ivybridge         | COS8-IVB          |
-| centos8-skylake           | COS8-SKLX         |
-| centos8-skylake-noaccel   | COS8-SKLX-host    |
-| centos8-skylake-aurora1   | COS8-SKLX-NEC1    |
+| redhat8-x86_64            | RH8-x86_64       |
+| redhat8-zen2              | RH8-zen2         |
+| redhat8-zen2-noaccel      | RH8-zen2-host    |
+| redhat8-zen2-ampere       | RH8-zen2-NVCC80  |
+| redhat8-zen2-arcturus     | RH8-zen2-GFX908  |
+| redhat8-broadwell         | RH8-BRW          |
+| redhat8-broadwell-noaccel | RH8-BRW-host     |
+| redhat8-broadwell-P5000   | RH8-BRW-NVGP61GL |
+| redhat8-broadwell-pascal  | RH8-BRW-NVCC60   |
+| redhat8-ivybridge         | RH8-IVB          |
+| redhat8-skylake           | RH8-SKLX         |
+| redhat8-skylake-noaccel   | RH8-SKLX-host    |
+| redhat8-skylake-aurora1   | RH8-SKLX-NEC1    |
 
 
 ### Possible names for cluster modules
 
-  * cluster/hopper = arch/centos8-ivybridge
+  * cluster/hopper = arch/redhat8-ivybridge
 
-  * cluster/leibniz = arch/centos8-broadwell or arch/centos8-broadwell-noaccel (depending
+  * cluster/leibniz = arch/redhat8-broadwell or arch/redhat8-broadwell-noaccel (depending
     on choices discussed further down)
 
-  * cluster/leibniz-viz = arch/centos8-broadwell-quadro
+  * cluster/leibniz-viz = arch/redhat8-broadwell-P5000
 
-  * cluster/leibniz-nvidia = arch/centos8-broadwell-pascal
+  * cluster/leibniz-nvidia = arch/redhat8-broadwell-pascal
 
-  * cluster/vaughan = arch/centos8-zen2 or arch/cents8-rome-noaccel
+  * cluster/vaughan = arch/redhat8-zen2 or arch/cents8-rome-noaccel
 
-  * cluster/vaughn-amd = arch/centos8-zen2-arcturus
+  * cluster/vaughn-amd = arch/redhat8-zen2-arcturus
 
-  * cluster/vaughan-nvidia = arch/centos8-zen2-ampere
+  * cluster/vaughan-nvidia = arch/redhat8-zen2-ampere
 
-  * cluster/biomina = arch/centos8-skylake or arch/centos8-skylake-noaccel depending
+  * cluster/biomina = arch/redhat8-skylake or arch/redhat8-skylake-noaccel depending
     on choices discussed further down
 
-  * cluster/aurora = arch/centos8-skylake-aurora1
+  * cluster/aurora = arch/redhat8-skylake-aurora1
 
 
 ## Node detection
@@ -153,7 +153,7 @@ Results:
 
           * What about the aurora node?
 
-      * VSC_OS_LOCAL: centos7 or centos8
+      * VSC_OS_LOCAL: centos7 or redhat8
 
   * It is not possible to detect the accelerator type
 
@@ -224,23 +224,23 @@ There are almost always three levels:
 
 Combinations:
 
-  * login nodes and regular compute nodes vaughan: centos8-zen2-noaccel, centos8-zen2, centos8-x86_64
+  * login nodes and regular compute nodes vaughan: redhat8-zen2-noaccel, redhat8-zen2, redhat8-x86_64
 
-  * NVIDIA nodes vaughan: centos8-zen2-ampere, centos8-zen2, centos8-x86_64
+  * NVIDIA nodes vaughan: redhat8-zen2-ampere, redhat8-zen2, redhat8-x86_64
 
-  * MI100 nodes vaughan: centos8-zen2-arcturus, centos8-zen2, centos8-x86_64
+  * MI100 nodes vaughan: redhat8-zen2-arcturus, redhat8-zen2, redhat8-x86_64
 
-  * Regular login and compute nodes leibniz: centos8-broadwell-noaccel, centos8-broadwell, centos8-x86_64
+  * Regular login and compute nodes leibniz: redhat8-broadwell-noaccel, redhat8-broadwell, redhat8-x86_64
 
-  * Visualisation node leibniz: centos8-broadwell-quadro, centos8-broadwell, centos8-x86_64
+  * Visualisation node leibniz: redhat8-broadwell-P5000, redhat8-broadwell, redhat8-x86_64
 
-  * Pascal node leibniz: centos8-broadwell-pascal, centos8-broadwell, centos8-x86_64
+  * Pascal node leibniz: redhat8-broadwell-pascal, redhat8-broadwell, redhat8-x86_64
 
-  * BioMina node leibniz: centos8-skylake-noaccel, centos8-skylake, centos8-x86_64
+  * BioMina node leibniz: redhat8-skylake-noaccel, redhat8-skylake, redhat8-x86_64
 
-  * Aurora node leibniz: centos8-skylake-aurora1, centos8-skylake, centos8-x86_64
+  * Aurora node leibniz: redhat8-skylake-aurora1, redhat8-skylake, redhat8-x86_64
 
-  * Hopper node: centos8-ivybridge, centos8-x86_64
+  * Hopper node: redhat8-ivybridge, redhat8-x86_64
 
 Advantages:
 
@@ -274,23 +274,23 @@ Now there are two levels:
 
 Combinations:
 
-  * login nodes and regular compute nodes vaughan: centos8-zen2-noaccel or centos8-zen2, centos8-x86_64
+  * login nodes and regular compute nodes vaughan: redhat8-zen2-noaccel or redhat8-zen2, redhat8-x86_64
 
-  * NVIDIA nodes vaughan: centos8-zen2-ampere, centos8-x86_64
+  * NVIDIA nodes vaughan: redhat8-zen2-ampere, redhat8-x86_64
 
-  * MI100 nodes vaughan: centos8-zen2-arcturus, centos8-x86_64
+  * MI100 nodes vaughan: redhat8-zen2-arcturus, redhat8-x86_64
 
-  * Regular login and compute nodes leibniz: centos8-broadwell-noaccel or centos8-broadwell, centos8-x86_64
+  * Regular login and compute nodes leibniz: redhat8-broadwell-noaccel or redhat8-broadwell, redhat8-x86_64
 
-  * Visualisation node leibniz: centos8-broadwell-quadro, centos8-x86_64
+  * Visualisation node leibniz: redhat8-broadwell-P5000, redhat8-x86_64
 
-  * Pascal node leibniz: centos8-broadwell-pascal, centos8-x86_64
+  * Pascal node leibniz: redhat8-broadwell-pascal, redhat8-x86_64
 
-  * BioMina node leibniz: centos8-skylake-noaccel or centos8-skylake, centos8-x86_64
+  * BioMina node leibniz: redhat8-skylake-noaccel or redhat8-skylake, redhat8-x86_64
 
-  * Aurora node leibniz: centos8-skylake-aurora1, centos8-x86_64
+  * Aurora node leibniz: redhat8-skylake-aurora1, redhat8-x86_64
 
-  * Hopper node: centos8-ivybridge, centos8-x86_64
+  * Hopper node: redhat8-ivybridge, redhat8-x86_64
 
 Users could in principle still use software from another architecture within the stack
 by loading the appropriate clusterarch module so we could still be fairly selective
@@ -299,7 +299,8 @@ often recurring dependencies like alternatives for what are often basic OS libra
 would have to be installed multiple times.
 
 In this case the "noaccel" architecture isn't really needed unless we want all names
-to have three components if they are on level 2.
+to have three components if they are on level 2 (which may ease a transition to option
+1 later on).
 
 Advantages
 
