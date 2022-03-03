@@ -4,6 +4,8 @@
 
   * [The generic calcua and clusterarch modules](modules_calcua_and_clusterarch.md)
 
-  * [Directory structure](directory_structure.md)
+  * [The SitePackage.lua file and its included LUA files](SitePAckage.md)
+
+  * [Directory structure of the repositories and software stack](directory_structure.md)
 
   * [Procedures](procedures.md)

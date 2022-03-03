@@ -11,6 +11,11 @@ Procedures in this document:
 
 ## Starting a new software stack
 
+Code to check:
+
+  * Table `toolchain_map` in `SitePackage_map_toolchain.lua`: Add an entry for the
+    new toolchain.
+
 **TODO**
 
 
@@ -27,3 +32,6 @@ things and hence should be done with care and proper testing.
 ## Adding a new node type to the CalcuUA infrastructure
 
 The following files/routines may need changes: **TODO**
+
+  * Tables in `LMOD/SitePackage_arch_hierarchy.lua`
+
