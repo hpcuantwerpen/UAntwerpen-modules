@@ -149,7 +149,7 @@ Results:
 
       * VSC_ARCH_LOCAL: Currently ivybridge, broadwell or rome.
 
-          * The BioMina node also returns VSC_ARCH_LOCA=broadwell...
+          * The BioMina node also returns VSC_ARCH_LOCAL=broadwell...
 
           * What about the aurora node?
 
