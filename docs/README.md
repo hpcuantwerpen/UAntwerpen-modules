@@ -1,11 +1,13 @@
 # UAntwerpen-modules documentation overview
 
-  * [The CalcUA-init module](modules_calcua-init.md)
+-   [Design decisions](design_decisions.md)
 
-  * [The generic calcua and clusterarch modules](modules_calcua_and_clusterarch.md)
+-   [The CalcUA-init module](modules_calcua-init.md)
 
-  * [The SitePackage.lua file and its included LUA files](SitePAckage.md)
+-   [The generic calcua and clusterarch modules](modules_calcua_and_clusterarch.md)
 
-  * [Directory structure of the repositories and software stack](directory_structure.md)
+-   [The SitePackage.lua file and its included LUA files](SitePAckage.md)
 
-  * [Procedures](procedures.md)
+-   [Directory structure of the repositories and software stack](directory_structure.md)
+
+-   [Procedures](procedures.md)
