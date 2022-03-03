@@ -104,65 +104,64 @@
 
 **To be corrected!!!**
 
-/apps
-
-`+ `/antwerpen  
-`  └─`/CalcUA  
-`    ├─`/**UAntwerpen-modules**: Repository with LMOD configuration and generic modules  
-`    ├─`/**UAntwerpen-easybuild:** EasyBuild setup  
-`    │ └─`/*easybuild*  
-`    │   ├─`/easyconfigs  
-`    │   ├─`/easyblocks  
-`    │   |…`Customisations to naming schemes etc   
-`    │   └─`/config: Configuration files for some settings not done via environment  
-`    ├─`/**modules-infrastructure**: Lmod hierarchy as the framework of the module system  
-`    │ ├─`/*stacks*: First level: Software stack modules  
-`    │ │ ├─`/calcua  
-`    │ │   ├─`/2021b.lua: Symbolic link to a generic module!  
-`    │ ├─`/*arch*: Second level: Architecture of the stack  
-`    │ │ ├─`/calcua  
-`    │ │   ├─`/2021b  
-`    │ │     ├─`/cluster  
-`    │ │     │ ├─`/hopper.lua: Symbolic link to a generic module!  
-`    │ │     │ ├─`/leibniz.lua  
-`    │ │     │ ├─`/leibniz-skl.lua  
-`    │ │     │ ├─`/vaughan.lua  
-`    │ │     │ └─`/generic.lua  
-`    │ │     └─`/arch  
-`    │ │       ├─`redhat8-x86_64  
-`    │ │       ├─`redhat8-broadwell-noaccel  
-`    │ │       └─`redhat8-broadwell-quadro  
-`    │ └─`/*infrastructure*: Third level: Infrastructure modules, e.g., EasyBuild configuration  
-`    │   └─`/CalcUA  
-`    │     └─`/2021b  
-`    │       └─`/arch  
-`    │         └─`/redhat8-ivybridge-noaccel  
-`    │           ├─`/EasyBuild-production  
-`    │           ├─`/EasyBuild-infrastructure  
-`    │           └─`/EasyBuild-user  
-`    ├─`/**modules-easybuild**: Modules generated with EasyBuild  
-`    │ ├─`/*CalcUA-2021b*  
-`    │ │ ├─`redhat8_x86_64 : Directory for potential generic builds if performance does not matter  
-`    │ │ ├─`redhat8-broadwell-noaccel  
-`    │ │ └─`redhat8-broadwell-quadro  
-`    │ └─`/*system*: Modules outside the regular software stacks  
-`    │   ├─`redhat8-x86_64 : No specific processor versions, e.g., Matlab  
-`    │   └─`redhat8-ivybridge-noaccel : Specific processor version, e.g., Gaussian  
-`    ├─`/**modules-manual**: Manually generated modules - OPTIONAL  
-`    ├─`/**SW**  
-`    │ ├─`*CalcUA-2021b*  
-`    │ │ ├─`RH8-x86_64  
-`    │ │ ├─`RH8-BRW-host  
-`    │ │ └─`RH8-BRW-NVGP61GL  
-`    │ ├─`/*system*: Sometimes relatively empty subdirs if EasyBuild only creates a module   
-`    │ │ ├─`RH8  
-`    │ │ └─`RH8-IVB  
-`    │ └─`/*MNL*: Manually installed software    
-`    │   └─`RH8-x86_64  
-`    ├─`/**ebrepo_files**  
-`    │ ├─`*CalcUA-2021b*  
-`    │ │ ├─`RH8-x86_64  
-`    │ │ └─`RH8-BRW-host  
-`    │ └─`/*system*: Modules outside the regular software stacks  
-`    │    └─`redhat8-x86_64 : No specific processor versions, e.g., Matlab  
-`    └─`/*lmod_cache*  
+/apps  
+`└─`/antwerpen  
+`..└─`/CalcUA  
+`....├─`/**UAntwerpen-modules**: Repository with LMOD configuration and generic modules  
+`....├─`/**UAntwerpen-easybuild:** EasyBuild setup  
+`....│.└─`/*easybuild*  
+`....│...├─`/easyconfigs  
+`....│...├─`/easyblocks  
+`....│...├─`Customisations to naming schemes etc   
+`....│...└─`/config: Configuration files for some settings not done via environment  
+`....├─`/**modules-infrastructure**: Lmod hierarchy as the framework of the module system  
+`....│.├─`/*stacks*: First level: Software stack modules  
+`....│.│.├─`/calcua  
+`....│.│...├─`/2021b.lua: Symbolic link to a generic module!  
+`....│.├─`/*arch*: Second level: Architecture of the stack  
+`....│.│.└─`/calcua  
+`....│.│...└─`/2021b  
+`....│.│.....├─`/cluster  
+`....│.│.....│.├─`/hopper.lua: Symbolic link to a generic module!  
+`....│.│.....│.├─`/leibniz.lua  
+`....│.│.....│.├─`/leibniz-skl.lua  
+`....│.│.....│.├─`/vaughan.lua  
+`....│.│.....│.└─`/generic.lua  
+`....│.│.....└─`/arch  
+`....│.│.......├─`redhat8-x86_64  
+`....│.│.......├─`redhat8-broadwell-noaccel  
+`....│.│.......└─`redhat8-broadwell-quadro  
+`....│.└─`/*infrastructure*: Third level: Infrastructure modules, e.g., EasyBuild configuration  
+`....│...└─`/CalcUA  
+`....│...  └─`/2021b  
+`....│.......└─`/arch  
+`....│........ └─`/redhat8-ivybridge-noaccel  
+`....│...........├─`/EasyBuild-production  
+`....│...........├─`/EasyBuild-infrastructure  
+`....│...........└─`/EasyBuild-user  
+`....├─`/**modules-easybuild**: Modules generated with EasyBuild  
+`....│.├─`/*CalcUA-2021b*  
+`....│.│.├─`redhat8_x86_64 : Directory for potential generic builds if performance does not matter  
+`....│.│.├─`redhat8-broadwell-noaccel  
+`....│.│.└─`redhat8-broadwell-quadro  
+`....│.└─`/*system*: Modules outside the regular software stacks  
+`....│...├─`redhat8-x86_64 : No specific processor versions, e.g., Matlab  
+`....│...└─`redhat8-ivybridge-noaccel : Specific processor version, e.g., Gaussian  
+`....├─`/**modules-manual**: Manually generated modules - OPTIONAL  
+`....├─`/**SW**  
+`....│.├─`*CalcUA-2021b*  
+`....│.│.├─`RH8-x86_64  
+`....│.│.├─`RH8-BRW-host  
+`....│.│.└─`RH8-BRW-NVGP61GL  
+`....│.├─`/*system*: Sometimes relatively empty subdirs if EasyBuild only creates a module...
+`....│.│.├─`RH8  
+`....│.│.└─`RH8-IVB  
+`....│.└─`/*MNL*: Manually installed software... 
+`....│...└─`RH8-x86_64  
+`....├─`/**ebrepo_files**  
+`....│.├─`*CalcUA-2021b*  
+`....│.│.├─`RH8-x86_64  
+`....│.│.└─`RH8-BRW-host  
+`....│.└─`/*system*: Modules outside the regular software stacks  
+`....│....└─`redhat8-x86_64 : No specific processor versions, e.g., Matlab  
+`....└─`/*lmod_cache*  
