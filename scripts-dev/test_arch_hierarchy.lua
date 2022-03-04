@@ -1,4 +1,9 @@
+#! /usr/bin/env lua
+
 dofile( 'test_import_from_lua.lua' )
+dofile( '../etc/SystemDefinition.lua' )
+dofile( '../LMOD/SitePackage_helper.lua' )
+dofile( '../LMOD/SitePackage_map_toolchain.lua' )
 dofile( '../LMOD/SitePackage_arch_hierarchy.lua' )
 
 --
@@ -7,19 +12,20 @@ dofile( '../LMOD/SitePackage_arch_hierarchy.lua' )
 
 print( '\ntesting get_long_osarch and get_long_osarch_reverse' )
 
+stack_version = '202001'
 osname = 'redhat8'
 archname = 'x86_64'
-result = get_long_osarchs( osname, archname )
-print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' is ' .. table.concat( result, ', ') )
-result = get_long_osarchs_reverse( osname, archname )
-print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' is ' .. table.concat( result, ', ') )
+result = get_long_osarchs( stack_version, osname, archname )
+print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+result = get_long_osarchs_reverse( stack_version, osname, archname )
+print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
 
 osname = 'redhat8'
 archname = 'zen2-arcturus'
-result = get_long_osarchs( osname, archname )
-print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' is ' .. table.concat( result, ', ') )
-result = get_long_osarchs_reverse( osname, archname )
-print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' is ' .. table.concat( result, ', ') )
+result = get_long_osarchs( stack_version, osname, archname )
+print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+result = get_long_osarchs_reverse( stack_version, osname, archname )
+print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
 
 --
 -- Testing map_long_to_short

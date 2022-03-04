@@ -1,4 +1,12 @@
 --------------------------------------------------------------------------
+--
+-- This is a file that replaces a number of functions that are available
+-- in Lmod when writing routines for SitePackage.lua. It can be included
+-- in test scripts to enable routine developement without having to 
+-- test everything via Lmod modules.
+--
+
+--------------------------------------------------------------------------
 -- An iterator to loop split a pieces.  This code is from the
 -- lua-users.org/lists/lua-l/2006-12/msg00414.html
 -- @param self input string

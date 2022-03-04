@@ -7,7 +7,10 @@ local hook = require( 'Hook' )
 require("sandbox")
 
 local lmod_dir = os.getenv( 'LMOD_PACKAGE_PATH' )
+dofile( pathJoin( lmod_dir, '../etc/SystemDefinition.lua' ) )
+dofile( pathJoin( lmod_dir, 'SitePackage_helper.lua' ) )
 dofile( pathJoin( lmod_dir, 'SitePackage_map_toolchain.lua' ) )
+dofile( pathJoin( lmod_dir, 'SitePackage_arch_hierarchy.lua' ) )
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
@@ -44,37 +47,6 @@ function get_hostname()
     return hostname
 
 end
-
--- -----------------------------------------------------------------------------
---
--- Function get_user_prefix_EasyBuild
---
--- Returns the user prefix for the EasyBuild installation.
---
--- The value is taken from EBU_USER_PREFIX or if that one is not defined,
--- computed from the location of the home directory.
---
--- There is no trailing dash in the output.
---
-function get_user_prefix_EasyBuild()
-
-    local home_prefix = os.getenv( 'HOME' ) .. '/EasyBuild'
-    home_prefix = home_prefix:gsub( '//', '/' ):gsub( '/$', '' )
-
-    local ebu_user_prefix = os.getenv( 'EBU_USER_PREFIX' )
-
-    if ebu_user_prefix == '' then
-        -- EBU_USER_PREFIX is empty which indicates that there is no user
-        -- installation, also not the default one.
-        return nil
-    else
-        -- If EBU_USER_PREFIX is set, return that one and otherwise the
-        -- default directory.
-        return ( ebu_user_prefix or home_prefix )
-    end
-
-end
-
 
 -- -----------------------------------------------------------------------------
 --

@@ -3,13 +3,13 @@
 -- The following mapping is used to define generic versions of specific
 -- architectures.
 --
--- NOTE: Current restrictions of the implementastion
+-- NOTE: Current restrictions of the implementation
 --   * OS version numbers are integers and OS names only include regular
 --     characters. If not , the conversion function between long and short names
 --     may fail.
 --
 
-map_arch_redhat8 = {
+map_arch_redhat8_L2 = {
     ['zen2-noaccel']      = 'x86_64',
     ['zen2-ampere']       = 'x86_64',
     ['zen2-arcturus']     = 'x86_64',
@@ -22,7 +22,7 @@ map_arch_redhat8 = {
     ['x86_64']            = nil,
 }
 
-map_arch_redhat8_alt = {
+map_arch_redhat8_L3 = {
     ['zen2-noaccel']      = 'zen2',
     ['zen2-ampere']       = 'zen2',
     ['zen2-arcturus']     = 'zen2',
@@ -38,9 +38,9 @@ map_arch_redhat8_alt = {
     ['x86_64']            = nil,
 }
 
-map_os_arch = {
-    ['redhat8'] = map_arch_redhat8,
-}
+-- map_os_arch = {
+--     ['redhat8'] = map_arch_redhat8_L2,
+-- }
 
 map_os_long_to_short = {
     ['redhat'] = 'RH',
@@ -69,6 +69,9 @@ map_accel_long_to_short = {
 -- get_long_osarchs
 --
 -- Input arguments:
+--   * stack_version: Version of the software stack (or `system` for the
+--     software installed against the system or in manual mode).
+--     The routine also accpets versions in yyyymm format.
 --   * osname: Name (with version) of the OS (currently only redhat8)
 --   * archname: Architecture, e.g., zen2-noaccel or x86_64.
 --
@@ -78,16 +81,23 @@ map_accel_long_to_short = {
 --
 -- The order is from the least generic to the most generic one.
 --
-function get_long_osarchs( osname, archname )
+function get_long_osarchs( stack_version, osname, archname )
 
-    result = {}
+    local result = {}
+    local version = map_toolchain( stack_version )
+
+    if version == nil then
+        -- This is actually an error as we do not recognize the
+        -- version of the stack.
+        return nil
+    end
+
+    local matching_version = get_matching_key( stack_version )
 
     while archname ~= nil
     do
-
         table.insert( result, osname .. '-' .. archname )
-        archname = map_os_arch[osname][archname]
-
+        archname = CalcUA_map_arch_hierarchy[matching_version][archname]
     end
 
     return result
@@ -100,6 +110,9 @@ end
 -- Function get_long_osarchs_reverse
 --
 -- Input arguments:
+--   * stack_version: Version of the software stack (or `system` for the
+--     software installed against the system or in manual mode).
+--     The routine also accpets versions in yyyymm format.
 --   * osname: Name (with version) of the OS (currently only redhat8)
 --   * archname: Architecture, e.g., zen2-noaccel or x86_64.
 --
@@ -109,16 +122,23 @@ end
 --
 -- The order is from the most generic to the least generic one.
 --
-function get_long_osarchs_reverse( osname, archname )
+function get_long_osarchs_reverse( stack_version, osname, archname )
 
     result = {}
+    local version = map_toolchain( stack_version )
+
+    if version == nil then
+        -- This is actually an error as we do not recognize the
+        -- version of the stack.
+        return nil
+    end
+
+    local matching_version = get_matching_key( stack_version )
 
     while archname ~= nil
     do
-
         table.insert( result, 1, osname .. '-' .. archname )
-        archname = map_os_arch[osname][archname]
-
+        archname = CalcUA_map_arch_hierarchy[matching_version][archname]
     end
 
     return result
