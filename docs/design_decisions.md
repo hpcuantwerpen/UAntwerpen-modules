@@ -19,8 +19,8 @@
     -   Software installed via EasyBuild (though with some tricks)  That software appears
         in the EasyBuild-managed modules and EasyBuild repo also.
 
-        The software is installed via a fake architecture in a regular toolchain so that we
-        don't need a separate EasyBuild installation  
+        The software is installed via a dummy version of the calcua software stack
+        (`calcua/system`) with its own copy of EasyBuild.  
 
     -   Software installed without using EasyBuild, with modules that are generated 
         via dummy EasyConfig files in the EasyBuild hierarchy.

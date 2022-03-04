@@ -13,6 +13,13 @@ but instead in the file `etc/SystemDefinition.lua`.
 
 ## etc/SystemDefinition.lua
 
+-   `CalcUA_SystemTable`: Defines the whole structure of the software tree, including the manually
+    installed software and system-wide EasyBuild managed software. Note that the table will be
+    completed automatically with more generic os-cpu-accelerator architecture strings based
+    on the other tables in this file.
+    
+    **TODO** Explain the structure. 
+
 -   `CalcUA_toolchain_map`: Associative table, with the yyyy[a|b] toolchains as the keys and
     the matching yyyymm value as the value (note: no dot, not yyyy.mm)
 
@@ -27,8 +34,6 @@ but instead in the file `etc/SystemDefinition.lua`.
     -   Second level: Associative table with as keys the CPU/GPU architecture
         string and as value the parent GPU/architecture string, or `nil` if it is
         the top (= most generic) architecture.
-
-
 
 
 ## SitePackage_map_toolchain.lua
@@ -86,9 +91,34 @@ Routines:
         equivalent long name. It also works for names that do not include the
         accelerator.
 
+-   Extracting parts from the os-cpu-accelerator strings:
+
+    -   `extract_os`  : Extracts the first part of the os-cpu-acceleartor argument
+
+    -   `extract_cpu` : Extracts the second part of the os-cpu-accelerator argument
+
+    -   `extract_accel` : Extracts the third part of the os-cpu-accelerator argument,
+        or returns `nil` if there is no accelerator part in the argument.
+
+    -   `extract_arch` : Extracts the second and (optional) third part of the
+        os-cpu-accelerator argument, i.e., returns cpu-accelerator or just cpu if there
+        is no accelerator part.
+
+
 -   Computing directories
 
     -   `get_system_module_dir`: Compute the module directory from the three input arguments:
         long os-and-architecture name, stack name and stack version.
 
-        The directory name returned is relative from the installation root.
+        The directory name returned is relative from the installation root, with the most 
+        generic one first.
+
+        Note `system` in the name does not denote the `system` stack but the whole
+        system installation, versus the user installation.
+
+    -   `get_system_module_dirs`: Compute the module directory hierarchy from the three input 
+        arguments: long os-and-architecture name, stack name and stack version.
+
+        The directory names returned are relative from the installation root, with the most 
+        generic one first.
+
