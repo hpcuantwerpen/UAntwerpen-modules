@@ -56,6 +56,10 @@
 
         4   Long name string of the architecture (OS-CPU-Accelerator except for OS-x86_64).
 
+    -   `init-UAntwerpen-modules`: Outside the hierarchy: Subdirectory for the module(s) that 
+        initialises the whole module setup.
+
+
 -   EasyBuild-managed modules: `modules-easybuild`
 
     Here we treat the system-wide installed software which is independent from any calcua software
@@ -115,6 +119,7 @@
 `....│...├─`Customisations to naming schemes etc   
 `....│...└─`/config: Configuration files for some settings not done via environment  
 `....├─`/**modules-infrastructure**: Lmod hierarchy as the framework of the module system  
+`....│.├─`/*init-UAntwerpen-modules*: Subdirectory for the startup module  
 `....│.├─`/*stacks*: First level: Software stack modules  
 `....│.│.├─`/calcua  
 `....│.│...├─`/2021b.lua: Symbolic link to a generic module!  
