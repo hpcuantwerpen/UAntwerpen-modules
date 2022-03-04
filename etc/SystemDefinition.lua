@@ -9,6 +9,16 @@
 -- 
 
 CalcUA_SystemTable = {
+    ['system'] = {
+        ['redhat8'] = {
+            'x86_64',
+        },    
+    },
+    ['manual'] = {
+        ['redhat8'] = {
+            'x86_64',
+        },    
+    },
     ['2020a'] = {
         ['redhat7'] = {
             'ivybridge-noaccel',
@@ -38,6 +48,7 @@ CalcUA_SystemTable = {
 
 CalcUA_toolchain_map = {
     ['system'] = '200000',
+    ['manual'] = '200000',
     ['2020a']  = '202001',
     ['2020b']  = '202007',
     ['2021a']  = '202101',
