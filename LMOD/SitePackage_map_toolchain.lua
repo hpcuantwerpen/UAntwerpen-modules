@@ -43,8 +43,8 @@ function map_toolchain( version )
                 map_version = version:match( '(%d%d%d%d)b' ) .. '07'
             end
         end
-    else
-        map_version = nil
+    else -- This will treat version == system or manual, or an illegal version
+        map_version = CalcUA_toolchain_map[version]
     end
 
     return map_version

@@ -78,9 +78,9 @@ end
 --
 -- Input arguments:
 --   * stack_version: Version of the software stack (or `system` for the
---     software installed against the system or in manual mode).
+--     software installed against the system or or 'manual' for  manual mode).
 --     The routine also accpets versions in yyyymm format.
---   * osname: Name (with version) of the OS (currently only redhat8)
+--   * osname: Name (with version) of the OS
 --   * archname: Architecture, e.g., zen2-noaccel or x86_64.
 --
 -- Output: A table with the chain of architectures, each a string with two or
@@ -214,21 +214,121 @@ function map_short_to_long( shortname )
 
 end
 
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+--
+-- Functions to work with long or short full names
+--
+-- extract_os( name )    : Extract the first part, the OS
+-- extract_cpu( name )   : Extract the second part, the CPU
+-- extract_accel( name ) : Extract the third part, teh accelerator, or nil if not 
+--                         present
+-- extract_arch( name )  : Extract CPU + accelerator
+
+function extract_os( name )
+
+    return name:match( '([^-]+)-' )
+
+end
+
+function extract_cpu( name )
+
+    return name:match( '[^-]+-([^-]+)' )
+
+end
+
+function extract_accel( name )
+
+    return name:match( '[^-]+-[^-]+-(.*)' )
+
+end
+
+function extract_arch( name )
+
+    return name:match( '[^-]+-(.*)' )
+
+end
+
 
 -- -----------------------------------------------------------------------------
 --
 -- Function get_system_module_dir( longname, stack_name, stack_version )
+-- Function get_system_module_dirs( longname, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
---   * Stack name
---   * Stack version
+--   * Stack name, can be system or manual
+--   * Stack version, not used when the stack name is system of manual
 --
 -- Return argument: 1
---   * Directory, starting from the installation root.
+--   * get_system_module_dir: Module directory in the modules-easybuild directory
+--     corresposnding to the given stack.
+--   * get_system_module_dirs: Directories, starting from the installation root, 
+--     with the most generic one first.
 --
+-- Note `system` in the name does not denote the `system` stack but the whole
+-- system installation, versus the user installation.
+--
+
+function get_system_module_dir_worker( longname, stack_version )
+
+    -- Worker function without any error control. The error control is done
+    -- by get_system_module_dir and get_system_module_dirs.
+
+    if stack_version == 'system' or stack_version == 'manual' then
+        prefix = 'modules-easybuild/' .. stack_version .. '/'
+    else
+        prefix = 'modules-easybuild/CalcUA-' .. stack_version .. '/'
+    end
+
+    return prefix .. longname
+
+end
+
 function get_system_module_dir( longname, stack_name, stack_version )
 
-    return ''
+    local use_version    -- Processed stack_version
+    local prefix
+
+    if stack_name == 'calcua' then
+        use_version = stack_version
+    elseif ( stack_name == 'system' ) or ( stack_name == 'manual' ) then
+        use_version = stack_name
+    else
+        -- Error condition, not known how to treat this stack
+        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
+        return nil
+    end  
+
+    return get_system_module_dir_worker( longname, use_version )
+
+end
+
+function get_system_module_dirs( longname, stack_name, stack_version )
+
+    local use_version    -- Processed stack_version
+    local result
+    local all_archs
+    local prefix
+
+    if stack_name == 'calcua' then
+        use_version = stack_version
+    elseif ( stack_name == 'system' ) or ( stack_name == 'manual' ) then
+        use_version = stack_name
+    else
+        -- Error condition, not known how to treat this stack
+        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: Illegal input arguments\n' )
+        return nil
+    end  
+
+    all_archs = get_long_osarchs_reverse( use_version, extract_os( longname ), extract_arch( longname ) )
+
+    result = {} 
+    for index, os_arch_accel in ipairs( all_archs )
+    do
+        table.insert( result, get_system_module_dir_worker( os_arch_accel, use_version ) )
+    end 
+
+    return result
 
 end
