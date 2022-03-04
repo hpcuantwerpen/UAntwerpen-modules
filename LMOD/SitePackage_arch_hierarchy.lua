@@ -9,39 +9,6 @@
 --     may fail.
 --
 
-map_arch_redhat8_L2 = {
-    ['zen2-noaccel']      = 'x86_64',
-    ['zen2-ampere']       = 'x86_64',
-    ['zen2-arcturus']     = 'x86_64',
-    ['broadwell-noaccel'] = 'x86_64',
-    ['broadwell-P5000']   = 'x86_64',
-    ['broadwell-pascal']  = 'x86_64',
-    ['skylake-noaccel']   = 'x86_64',
-    ['skylake-aurora1']   = 'x86_64',
-    ['ivybridge-noaccel'] = 'x86_64',
-    ['x86_64']            = nil,
-}
-
-map_arch_redhat8_L3 = {
-    ['zen2-noaccel']      = 'zen2',
-    ['zen2-ampere']       = 'zen2',
-    ['zen2-arcturus']     = 'zen2',
-    ['zen2']              = 'x86_64',
-    ['broadwell-noaccel'] = 'broadwell',
-    ['broadwell-P5000']   = 'broadwell',
-    ['broadwell-pascal']  = 'broadwell',
-    ['broadwell']         = 'x86_64',
-    ['skylake-noaccel']   = 'skylake',
-    ['skylake-aurora1']   = 'skylake',
-    ['skylake']           = 'x86_64',
-    ['ivybridge-noaccel'] = 'x86_64',
-    ['x86_64']            = nil,
-}
-
--- map_os_arch = {
---     ['redhat8'] = map_arch_redhat8_L2,
--- }
-
 map_os_long_to_short = {
     ['redhat'] = 'RH',
 }
