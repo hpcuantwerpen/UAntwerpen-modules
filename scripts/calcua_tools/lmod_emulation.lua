@@ -9,6 +9,8 @@
 -- -   pathJoin
 -- -   string.split can be useful also but is not part of the official
 --     Lmod API.
+-- -   isDir. The implementation from Lmod uses lfs and that seems to
+--     work better than an implementation using the posix package.
 --
 
 --------------------------------------------------------------------------
@@ -148,5 +150,25 @@ function pathJoin(...)
    local s = table.concat(a,"/")
    s = path_regularize(s)
    return s
+end
+
+
+--------------------------------------------------------------------------
+--
+-- isDir - Check if a directory exists.
+--
+-- This implementation uses the lfs package and works even if the directory
+-- is a symbolic link to another directory.
+--
+function isDir( dir )
+
+    local lfs = require( 'lfs' )
+
+    if ( dir == nil ) then return false end
+
+    local attr = lfs.attributes( dir )
+
+    return ( attr and attr.mode == 'directory' )
+
 end
 
