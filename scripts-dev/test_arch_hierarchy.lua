@@ -1,6 +1,6 @@
 #! /usr/bin/env lua
 
-dofile( 'test_import_from_lua.lua' )
+dofile( '../scripts/calcua_tools/lmod_emulation.lua' )
 dofile( '../etc/SystemDefinition.lua' )
 dofile( '../LMOD/SitePackage_helper.lua' )
 dofile( '../LMOD/SitePackage_map_toolchain.lua' )
@@ -58,9 +58,9 @@ print( long .. ' converts to ' .. map_short_to_long( long ) )
 print( '\nTesting extract_* functions\n' )
 for index, longname in ipairs( { 'redhat8-zen2-arcturus', 'redhat8-x86_64' } )
 do
-    print( longname .. ': os is ' .. extract_os( longname ) .. 
+    print( longname .. ': os is ' .. extract_os( longname ) ..
             ', CPU is ' .. extract_cpu( longname ) ..
-            ', accelerator is ' .. ( extract_accel( longname ) or '' ) .. 
+            ', accelerator is ' .. ( extract_accel( longname ) or '' ) ..
             ', arch is ' .. extract_arch( longname ) )
 end
 
@@ -74,7 +74,7 @@ stack_name =    'calcua'
 stack_version = '2021b'
 longname = 'redhat8-zen2-arcturus'
 result = get_system_module_dirs( longname, stack_name, stack_version )
-print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' .. 
+print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
        get_system_module_dir( longname, stack_name, stack_version ) ..
        '\nFull hierarchy (lowest priority first):\n  ' ..
        table.concat( result, '\n  ') .. '\n' )
@@ -83,7 +83,7 @@ stack_name =    'calcua'
 stack_version = '2021b'
 longname = 'redhat8-x86_64'
 result = get_system_module_dirs( longname, stack_name, stack_version )
-print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' .. 
+print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
        get_system_module_dir( longname, stack_name, stack_version ) ..
        '\nFull hierarchy (lowest priority first):\n  ' ..
        table.concat( result, '\n  ') .. '\n' )
@@ -92,16 +92,16 @@ stack_name =    'calcua'
 stack_version = 'system'
 longname = 'redhat8-zen2-arcturus'
 result = get_system_module_dirs( longname, stack_name, stack_version )
-print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' .. 
+print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
        get_system_module_dir( longname, stack_name, stack_version ) ..
        '\nFull hierarchy (lowest priority first):\n  ' ..
        table.concat( result, '\n  ') .. '\n' )
-       
+
 stack_name =    'manual'
 stack_version = ''
 longname = 'redhat8-zen2-arcturus'
 result = get_system_module_dirs( longname, stack_name, stack_version )
-print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' .. 
+print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
        get_system_module_dir( longname, stack_name, stack_version ) ..
        '\nFull hierarchy (lowest priority first):\n  ' ..
        table.concat( result, '\n  ') .. '\n' )
