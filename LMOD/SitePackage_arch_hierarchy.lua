@@ -79,7 +79,7 @@ end
 -- Input arguments:
 --   * stack_version: Version of the software stack (or `system` for the
 --     software installed against the system or or 'manual' for  manual mode).
---     The routine also accpets versions in yyyymm format.
+--     The routine also accepts versions in yyyymm format.
 --   * osname: Name (with version) of the OS
 --   * archname: Architecture, e.g., zen2-noaccel or x86_64.
 --
@@ -221,7 +221,7 @@ end
 --
 -- extract_os( name )    : Extract the first part, the OS
 -- extract_cpu( name )   : Extract the second part, the CPU
--- extract_accel( name ) : Extract the third part, teh accelerator, or nil if not 
+-- extract_accel( name ) : Extract the third part, teh accelerator, or nil if not
 --                         present
 -- extract_arch( name )  : Extract CPU + accelerator
 
@@ -262,8 +262,8 @@ end
 --
 -- Return argument: 1
 --   * get_system_module_dir: Module directory in the modules-easybuild directory
---     corresposnding to the given stack.
---   * get_system_module_dirs: Directories, starting from the installation root, 
+--     corresponding to the given stack.
+--   * get_system_module_dirs: Directories, starting from the installation root,
 --     with the most generic one first.
 --
 -- Note `system` in the name does not denote the `system` stack but the whole
@@ -298,7 +298,7 @@ function get_system_module_dir( longname, stack_name, stack_version )
         -- Error condition, not known how to treat this stack
         io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
         return nil
-    end  
+    end
 
     return get_system_module_dir_worker( longname, use_version )
 
@@ -319,15 +319,15 @@ function get_system_module_dirs( longname, stack_name, stack_version )
         -- Error condition, not known how to treat this stack
         io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: Illegal input arguments\n' )
         return nil
-    end  
+    end
 
     all_archs = get_long_osarchs_reverse( use_version, extract_os( longname ), extract_arch( longname ) )
 
-    result = {} 
+    result = {}
     for index, os_arch_accel in ipairs( all_archs )
     do
         table.insert( result, get_system_module_dir_worker( os_arch_accel, use_version ) )
-    end 
+    end
 
     return result
 
