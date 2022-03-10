@@ -2,8 +2,13 @@
 --
 -- This is a file that replaces a number of functions that are available
 -- in Lmod when writing routines for SitePackage.lua. It can be included
--- in test scripts to enable routine developement without having to 
+-- in test scripts to enable routine developement without having to
 -- test everything via Lmod modules.
+--
+-- Important functions included in this file:
+-- -   pathJoin
+-- -   string.split can be useful also but is not part of the official
+--     Lmod API.
 --
 
 --------------------------------------------------------------------------
