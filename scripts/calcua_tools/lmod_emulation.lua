@@ -20,25 +20,38 @@
 -- @param pat pattern to split on.
 
 function string.split(self, pat)
+
    pat  = pat or "%s+"
    local st, g = 1, self:gmatch("()("..pat..")")
-   local function getter(myself, segs, seps, sep, cap1, ...)
+
+   local function getter( myself, segs, seps, sep, cap1, ... )
+
       st = sep and seps + #sep
-      return myself:sub(segs, (seps or 0) - 1), cap1 or sep, ...
+
+      return myself:sub( segs, (seps or 0) - 1 ), cap1 or sep, ...
+
    end
-   local function splitter(myself)
-      if st then return getter(myself, st, g()) end
+
+   local function splitter( myself )
+
+      if st then return getter( myself, st, g() ) end
+
    end
+
    return splitter, self
+
 end
 
 function string.trim(self)
-   local ja = self:find("%S")
-   if (ja == nil) then
-      return ""
-   end
-   local  jb = self:find("%s+$") or 0
-   return self:sub(ja,jb-1)
+
+   local ja = self:find( "%S" )
+
+   if (ja == nil) then return '' end
+
+   local jb = self:find( "%s+$" ) or 0
+
+   return self:sub( ja, jb-1 )
+
 end
 
 --------------------------------------------------------------------------

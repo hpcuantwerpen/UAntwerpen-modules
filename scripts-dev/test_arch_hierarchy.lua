@@ -101,8 +101,110 @@ stack_name =    'manual'
 stack_version = ''
 longname = 'redhat8-zen2-arcturus'
 result = get_system_module_dirs( longname, stack_name, stack_version )
-print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_module_dir( longname, stack_name, stack_version ) ..
-       '\nFull hierarchy (lowest priority first):\n  ' ..
-       table.concat( result, '\n  ') .. '\n' )
+if result == nil then
+    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
+else
+    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' DID NOT RETURN NIL!\n' )
+end
 
+
+--
+-- Testing get_system_inframodule_dir() longname, stack_name, stack_version )
+--
+
+print( '\nTesting get_system_inframodule_dirs\n' )
+
+stack_name =    'calcua'
+stack_version = '2021b'
+longname = 'redhat8-zen2-arcturus'
+print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_inframodule_dir( longname, stack_name, stack_version ) ..'\n' )
+
+stack_name =    'calcua'
+stack_version = '2021b'
+longname = 'redhat8-x86_64'
+print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_inframodule_dir( longname, stack_name, stack_version ) .. '\n' )
+
+stack_name =    'calcua'
+stack_version = 'system'
+longname = 'redhat8-zen2-arcturus'
+print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_inframodule_dir( longname, stack_name, stack_version ) .. '\n' )
+
+stack_name =    'manual'
+stack_version = ''
+longname = 'redhat8-zen2-arcturus'
+if get_system_inframodule_dir( longname, stack_name, stack_version ) == nil then
+    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
+else
+    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' DID NOT RETURN NIL!\n' )
+end
+
+
+--
+-- Testing get_system_SW_dir() longname, stack_name, stack_version )
+--
+
+print( '\nTesting get_system_SW_dirs\n' )
+
+stack_name =    'calcua'
+stack_version = '2021b'
+longname = 'redhat8-zen2-arcturus'
+print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_SW_dir( longname, stack_name, stack_version ) ..'\n' )
+
+stack_name =    'calcua'
+stack_version = '2021b'
+longname = 'redhat8-x86_64'
+print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_SW_dir( longname, stack_name, stack_version ) .. '\n' )
+
+stack_name =    'calcua'
+stack_version = 'system'
+longname = 'redhat8-zen2-arcturus'
+print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_SW_dir( longname, stack_name, stack_version ) .. '\n' )
+
+stack_name =    'manual'
+stack_version = ''
+longname = 'redhat8-zen2-arcturus'
+print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_SW_dir( longname, stack_name, stack_version ) .. '\n' )
+
+
+--
+-- Testing get_system_EBrepo_dir() longname, stack_name, stack_version )
+--
+
+print( '\nTesting get_system_EBrepo_dirs\n' )
+
+stack_name =    'calcua'
+stack_version = '2021b'
+longname = 'redhat8-zen2-arcturus'
+print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_EBrepo_dir( longname, stack_name, stack_version ) ..'\n' )
+
+stack_name =    'calcua'
+stack_version = '2021b'
+longname = 'redhat8-x86_64'
+print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_EBrepo_dir( longname, stack_name, stack_version ) .. '\n' )
+
+stack_name =    'calcua'
+stack_version = 'system'
+longname = 'redhat8-zen2-arcturus'
+print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
+       get_system_EBrepo_dir( longname, stack_name, stack_version ) .. '\n' )
+
+stack_name =    'manual'
+stack_version = ''
+longname = 'redhat8-zen2-arcturus'
+stack_name =    'manual'
+stack_version = ''
+longname = 'redhat8-zen2-arcturus'
+if get_system_EBrepo_dir( longname, stack_name, stack_version ) == nil then
+    print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
+else
+    print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' DID NOT RETURN NIL!\n' )
+end
