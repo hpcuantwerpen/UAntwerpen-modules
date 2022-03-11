@@ -158,15 +158,16 @@
 `....│.│.├─`RH8-x86_64  
 `....│.│.├─`RH8-BRW-host  
 `....│.│.└─`RH8-BRW-NVGP61GL  
-`....│.├─`/*system*: Sometimes relatively empty subdirs if EasyBuild only creates a module...
+`....│.├─`/*system*: Sometimes relatively empty subdirs if EasyBuild only creates a module...  
 `....│.│.├─`RH8  
 `....│.│.└─`RH8-IVB  
-`....│.└─`/*MNL*: Manually installed software... 
+`....│.└─`/*MNL*: Manually installed software  
 `....│...└─`RH8-x86_64  
-`....├─`/**ebrepo_files**  
-`....│.├─`*CalcUA-2021b*  
-`....│.│.├─`RH8-x86_64  
-`....│.│.└─`RH8-BRW-host  
-`....│.└─`/*system*: Modules outside the regular software stacks  
-`....│....└─`redhat8-x86_64 : No specific processor versions, e.g., Matlab  
-`....└─`/*lmod_cache*  
+`....└─`/**mgmt**  
+`......├─`/*ebrepo_files*  
+`......│.├─`CalcUA-2021b  
+`......│.│.├─`redhat8-x86_64  
+`......│.│.└─`redhat8-broadwell-noaccel  
+`......│.└─`/system: Modules outside the regular software stacks  
+`......│....└─`redhat8-x86_64 : No specific processor versions, e.g., Matlab  
+`......└─`/*lmod_cache*  
