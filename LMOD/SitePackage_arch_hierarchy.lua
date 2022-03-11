@@ -125,7 +125,7 @@ end
 --
 function map_long_to_short( longname )
 
-    function string.split( self, delimiter )
+    function string.easysplit( self, delimiter )
         local result = {}
         for match in (self .. delimiter):gmatch( "(.-)" .. delimiter ) do
             table.insert( result, match );
@@ -133,12 +133,14 @@ function map_long_to_short( longname )
         return result;
     end
 
-    local elements = longname:split( '-' )
+    local elements = longname:easysplit( '-' )
 
     local returnlist = {}
 
     -- Process the OS part
-    local long_os, version = elements[1]:match( '(%a+)(%d+)' )
+    local long_os
+    local version
+    long_os, version = elements[1]:match( '(%a+)(%d+)' )
     table.insert( returnlist, map_os_long_to_short[long_os] .. version )
 
     -- Process the CPU part
@@ -275,7 +277,7 @@ function get_system_module_dir_worker( longname, stack_version )
     -- Worker function without any error control. The error control is done
     -- by get_system_module_dir and get_system_module_dirs.
 
-    if stack_version == 'system' or stack_version == 'manual' then
+    if stack_version == 'system' then
         prefix = 'modules-easybuild/' .. stack_version .. '/'
     else
         prefix = 'modules-easybuild/CalcUA-' .. stack_version .. '/'
@@ -290,7 +292,10 @@ function get_system_module_dir( longname, stack_name, stack_version )
     local use_version    -- Processed stack_version
     local prefix
 
-    if stack_name == 'calcua' then
+    if stack_name == 'manual' or stack_version == 'manual' then
+        -- No EasyBuild modules for manually installed software
+        return nil
+    elseif stack_name == 'calcua' then
         use_version = stack_version
     elseif ( stack_name == 'system' ) or ( stack_name == 'manual' ) then
         use_version = stack_name
@@ -311,7 +316,10 @@ function get_system_module_dirs( longname, stack_name, stack_version )
     local all_archs
     local prefix
 
-    if stack_name == 'calcua' then
+    if stack_name == 'manual' or stack_version == 'manual' then
+        -- No EasyBuild modules for manually installed software
+        return nil
+    elseif stack_name == 'calcua' then
         use_version = stack_version
     elseif ( stack_name == 'system' ) or ( stack_name == 'manual' ) then
         use_version = stack_name
@@ -332,3 +340,140 @@ function get_system_module_dirs( longname, stack_name, stack_version )
     return result
 
 end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_system_inframodule_dir( longname, stack_name, stack_version )
+--
+-- Input argument: 3
+--   * The long os-and-architecture name
+--   * Stack name, can be system or manual
+--   * Stack version, not used when the stack name is system of manual
+--
+-- Return argument: 1
+--   * Module directory in the modules-infrastructure/infrastructure directory
+--     corresponding to the given stack.
+-- Note `system` in the name does not denote the `system` stack but the whole
+-- system installation, versus the user installation.
+--
+
+function get_system_inframodule_dir( longname, stack_name, stack_version )
+
+    local use_version    -- Processed stack_version
+    local prefix
+
+    if stack_name == 'manual' or stack_version == 'manual' then
+        -- No infrastructure modules for this stack
+        return nil
+    elseif stack_name == 'calcua' then
+        use_version = stack_version
+    elseif ( stack_name == 'system' ) then
+        use_version = stack_name
+    else
+        -- Error condition, not known how to treat this stack
+        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
+        return nil
+    end
+
+    if use_version == 'system' then
+        prefix = 'modules-infrastructure/infrastructure/' .. use_version .. '/'
+    else
+        prefix = 'modules-infrastructure/infrastructure/CalcUA-' .. use_version .. '/'
+    end
+
+    return prefix .. longname
+
+end
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_system_SW_dir( longname, stack_name, stack_version )
+--
+-- Input argument: 3
+--   * The long os-and-architecture name
+--   * Stack name, can be system or manual
+--   * Stack version, not used when the stack name is system of manual
+--
+-- Return argument: 1
+--   * Software directory in the SW directory (starting from the SW level)
+--     corresponding to the given stack.
+-- Note `system` in the name does not denote the `system` stack but the whole
+-- system installation, versus the user installation.
+--
+
+function get_system_SW_dir( longname, stack_name, stack_version )
+
+    local use_version    -- Processed stack_version
+    local prefix
+
+    if stack_name == 'manual' or stack_version == 'manual' then
+        use_version = 'manual'
+    elseif stack_name == 'calcua' then
+        use_version = stack_version
+    elseif ( stack_name == 'system' ) then
+        use_version = stack_name
+    else
+        -- Error condition, not known how to treat this stack
+        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
+        return nil
+    end
+
+    if use_version == 'manual' then
+        prefix = 'SW/MNL/'
+    elseif use_version == 'system' then
+        prefix = 'SW/' .. use_version .. '/'
+    else
+        prefix = 'SW/CalcUA-' .. use_version .. '/'
+    end
+
+    return prefix .. map_long_to_short( longname )
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_system_EBrepo_dir( longname, stack_name, stack_version )
+--
+-- Input argument: 3
+--   * The long os-and-architecture name
+--   * Stack name, can be system or manual
+--   * Stack version, not used when the stack name is system of manual
+--
+-- Return argument: 1
+--   * Module directory in the EBrepo_files directory
+--     corresponding to the given stack (starting from the EBrepo_files level)
+-- Note `system` in the name does not denote the `system` stack but the whole
+-- system installation, versus the user installation.
+--
+
+function get_system_EBrepo_dir( longname, stack_name, stack_version )
+
+    local use_version    -- Processed stack_version
+    local prefix
+
+    if stack_name == 'manual' or stack_version == 'manual' then
+        -- No EBrepo directory for this stack
+        return nil
+    elseif stack_name == 'calcua' then
+        use_version = stack_version
+    elseif ( stack_name == 'system' ) then
+        use_version = stack_name
+    else
+        -- Error condition, not known how to treat this stack
+        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
+        return nil
+    end
+
+    if use_version == 'system' then
+        prefix = 'EBrepo_files/system/'
+    else
+        prefix = 'EBrepo_files/CalcUA-' .. use_version .. '/'
+    end
+
+    return prefix .. longname
+
+end
+
+
