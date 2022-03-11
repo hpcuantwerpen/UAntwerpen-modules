@@ -159,8 +159,8 @@
 `....│.│.├─`RH8-BRW-host  
 `....│.│.└─`RH8-BRW-NVGP61GL  
 `....│.├─`/*system*: Sometimes relatively empty subdirs if EasyBuild only creates a module...  
-`....│.│.├─`RH8  
-`....│.│.└─`RH8-IVB  
+`....│.│.├─`RH8-x86_64  
+`....│.│.└─`RH8-IVB-host  
 `....│.└─`/*MNL*: Manually installed software  
 `....│...└─`RH8-x86_64  
 `....└─`/**mgmt**  
