@@ -130,8 +130,7 @@
 `....│.│.....│.├─`/hopper.lua: Symbolic link to a generic module!  
 `....│.│.....│.├─`/leibniz.lua  
 `....│.│.....│.├─`/leibniz-skl.lua  
-`....│.│.....│.├─`/vaughan.lua  
-`....│.│.....│.└─`/generic.lua  
+`....│.│.....│.└─`/vaughan.lua  
 `....│.│.....└─`/arch  
 `....│.│.......├─`redhat8-x86_64  
 `....│.│.......├─`redhat8-broadwell-noaccel  

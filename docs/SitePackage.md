@@ -17,8 +17,13 @@ but instead in the file `etc/SystemDefinition.lua`.
     installed software and system-wide EasyBuild managed software. Note that the table will be
     completed automatically with more generic os-cpu-accelerator architecture strings based
     on the other tables in this file.
-    
-    **TODO** Explain the structure. 
+
+    **TODO** Explain the structure.
+
+-   `CalcUA_ClusterMap`: Contains for each version of the calcua toolchains, including
+    the dymmy system version, a mapping from cluster names to os-architecture strings.
+
+    **TODO** Explain the structure.
 
 -   `CalcUA_toolchain_map`: Associative table, with the yyyy[a|b] toolchains as the keys and
     the matching yyyymm value as the value (note: no dot, not yyyy.mm)
@@ -46,8 +51,8 @@ Routines:
 
 -   `map_toolchain`:  Returns the matching yyyy.mm toolchain for any toolchain. The
     input argument can be either a yyyy.mm toolchain version (in which case the
-    routine simply returns that version without the dot) or a yyyy[a|b] version in 
-    which case the routine uses the `CalcUA_toolchain_map` to compute the matching 
+    routine simply returns that version without the dot) or a yyyy[a|b] version in
+    which case the routine uses the `CalcUA_toolchain_map` to compute the matching
     yyyymm version or falls back to a default rule (where a becomes 01 and b becomes
     07).
 
@@ -57,7 +62,7 @@ Routines:
 Data structures
 
 -   Uses `CalcUA_map_arch_hierarchy` from `etc/SystemDefinition.lua`.
-   
+
 -   `map_os_long_to_short`: Map long names of the OS to their short equivalent
     (name does not include the version).
 
@@ -110,15 +115,15 @@ Routines:
     -   `get_system_module_dir`: Compute the module directory from the three input arguments:
         long os-and-architecture name, stack name and stack version.
 
-        The directory name returned is relative from the installation root, with the most 
+        The directory name returned is relative from the installation root, with the most
         generic one first.
 
         Note `system` in the name does not denote the `system` stack but the whole
         system installation, versus the user installation.
 
-    -   `get_system_module_dirs`: Compute the module directory hierarchy from the three input 
+    -   `get_system_module_dirs`: Compute the module directory hierarchy from the three input
         arguments: long os-and-architecture name, stack name and stack version.
 
-        The directory names returned are relative from the installation root, with the most 
+        The directory names returned are relative from the installation root, with the most
         generic one first.
 

@@ -4,20 +4,26 @@
 -- indicates which OSes are supported for which architectures.
 --
 -- It is sufficient to only specify the "main" architectures (the leaves
--- of the tree). The other ones will be completed automatically based on 
+-- of the tree). The other ones will be completed automatically based on
 -- the architecture hierarchy structure.
--- 
+--
 
 CalcUA_SystemTable = {
     ['system'] = {
+        ['redhat7'] = {
+            'x86_64',
+        },
         ['redhat8'] = {
             'x86_64',
-        },    
+        },
     },
     ['manual'] = {
+        ['redhat7'] = {
+            'x86_64',
+        },
         ['redhat8'] = {
             'x86_64',
-        },    
+        },
     },
     ['2020a'] = {
         ['redhat7'] = {
@@ -30,8 +36,10 @@ CalcUA_SystemTable = {
         }
     },
     ['2021b'] = {
-        ['redhat8'] = {
+        ['redhat7'] = {
             'ivybridge-noaccel',
+        },
+        ['redhat8'] = {
             'broadwell-noaccel',
             'zen2-noaccel',
             'skylake-noaccel',
@@ -41,9 +49,40 @@ CalcUA_SystemTable = {
 
 -- -----------------------------------------------------------------------------
 --
+-- CalcUA_ClusterMap is a structure that maps names of clusters onto
+-- architectures.
+--
+-- This mapping is not defined for the 'manual' toolchain as that is not
+-- one that users should be able to load via calcua modules.
+--
+
+CalcUA_ClusterMap = {
+    ['system'] = {
+        ['hopper'] =      'redhat7-x86_64',
+        ['leibniz'] =     'redhat8-x86_64',
+        ['leibniz-skl'] = 'redhat8-x86_64',
+        ['vaughan'] =     'redhat8-x86_64',
+    },
+    ['2020a'] = {
+        ['hopper'] =      'redhat7-ivybridge-noaccel',
+        ['leibniz'] =     'redhat7-broadwell-noaccel',
+        ['leibniz-skl'] = 'redhat8-skylake-noaccel',
+        ['vaughan'] =     'redhat8-zen2-noaccel',
+    },
+    ['2021b'] = {
+        ['hopper'] =      'redhat7-ivybridge-noaccel',
+        ['leibniz'] =     'redhat8-broadwell-noaccel',
+        ['leibniz-skl'] = 'redhat8-skylake-noaccel',
+        ['vaughan'] =     'redhat8-zen2-noaccel',
+    },
+}
+
+
+-- -----------------------------------------------------------------------------
+--
 -- SystemTable defines the setup of the module system. For each toolchain in
 -- yyyy[a|b] format it gives the matching toolchain in yyyymm format that should
--- be used in version comparisons. 
+-- be used in version comparisons.
 --
 
 CalcUA_toolchain_map = {
@@ -59,8 +98,8 @@ CalcUA_toolchain_map = {
 
 -- -----------------------------------------------------------------------------
 --
--- The architecture hierarchy is something that we might want to change over 
--- time, in particular the choice of whether we go for two or for three 
+-- The architecture hierarchy is something that we might want to change over
+-- time, in particular the choice of whether we go for two or for three
 -- levels. Adding architectures is not a problem, that shouldn't break
 -- anything and for that we do not need a new version of the architecture
 -- hierarchy tables.
@@ -81,7 +120,7 @@ CalcUA_toolchain_map = {
 --         ['skylake-aurora1']   = 'x86_64',
 --         ['ivybridge-noaccel'] = 'x86_64',
 --         ['x86_64']            = nil,
---  - Current 3-level map: 
+--  - Current 3-level map:
 --         ['zen2-noaccel']      = 'zen2',
 --         ['zen2-ampere']       = 'zen2',
 --         ['zen2-arcturus']     = 'zen2',
@@ -97,7 +136,7 @@ CalcUA_toolchain_map = {
 --         ['x86_64']            = nil,
 
 CalcUA_map_arch_hierarchy = {
-    -- We start with a 2-level map 
+    -- We start with a 2-level map
     ['200000'] = {
         ['zen2-noaccel']      = 'x86_64',
         ['zen2-ampere']       = 'x86_64',
@@ -108,7 +147,7 @@ CalcUA_map_arch_hierarchy = {
         ['skylake-noaccel']   = 'x86_64',
         ['skylake-aurora1']   = 'x86_64',
         ['ivybridge-noaccel'] = 'x86_64',
-        ['x86_64']            = nil,    
+        ['x86_64']            = nil,
     }
 }
 
