@@ -10,7 +10,7 @@ if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myFileName() .. ': Entering' )
 end
 
-family( 'CALCUA_partition' )
+family( 'CalcUA_clusterarch' )
 add_property("lmod","sticky")
 
 
