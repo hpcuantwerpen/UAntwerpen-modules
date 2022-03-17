@@ -52,4 +52,81 @@ function map_toolchain( version )
 end
 
 
+-- -----------------------------------------------------------------------------
+--
+-- function get_versionedfile
+--
+-- Find the package with the most recent version not newer than the given LUMI stack
+-- version.
+--
+-- Input arguments:
+--  * matching: The LUMI stack version to match (e.g., 21.06, 21.05.dev, ...)
+--  * directory: Directory in which the matching package/file should be found.
+--  * filenameprefix: The part of the file name before the version.
+--  * filennamesuffix: The part of the file name after the suffix,
+--
+--  Return value: The full name of the file, or nil if no file is found.
+--
+function get_versionedfile( matching, directory, filenameprefix, filenamesuffix )
+
+    local lfs = require('lfs')
+
+    -- Convert toolchain to number
+    matching = map_toolchain( matching )
+
+    --
+    -- Get a list of versions of the file
+    --
+    
+    local versions = {}
+    -- Since - and . have a special meaning in patterns, we need to replace them 
+    -- with %- and %. so that they become literals
+    local pattern_prefix = filenameprefix:gsub( '%-', '%%-'):gsub( '%.', '%%.' )
+    local pattern_suffix = filenamesuffix:gsub( '%-', '%%-'):gsub( '%.', '%%.' )
+    local pattern = '^' .. pattern_prefix .. '(.+)' .. pattern_suffix .. '$'
+
+    local status = pcall( lfs.dir, directory )
+    if not status then
+        return nil
+    end
+
+    for file in lfs.dir( directory ) do
+        local versionstring = file:match( pattern )
+        if versionstring ~= nil then
+            table.insert( versions, versionstring )
+        end
+    end
+
+    --
+    -- Prepare the versions structure
+    --
+    
+    function compare( arg1, arg2 )
+        return ( map_toolchain( arg1 ) < map_toolchain( arg2 ) )
+    end
+    table.sort( versions, compare )
+    table.insert( versions, 1, '1000.00' ) -- At the first position, no other element should be smaller than 200000 (system stack)
+
+    --
+    -- Do the search and return the resulg
+    --
+    
+    local index = #versions
+    while map_toolchain( versions[index] ) > matching
+    do
+        index = index - 1
+    end
+
+    local returnvalue
+    if index == 1 then
+        returnvalue = nil
+    else
+        returnvalue = string.gsub( directory .. '/' .. filenameprefix .. versions[index] .. filenamesuffix, '//', '/' )
+    end
+
+    return returnvalue
+
+end
+
+
 
