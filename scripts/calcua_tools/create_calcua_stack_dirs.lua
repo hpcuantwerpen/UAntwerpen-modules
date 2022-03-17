@@ -89,6 +89,11 @@ end
 local stack_dir = pathJoin( root_dir, 'modules-infrastructure/stack/calcua' )
 mkDir( stack_dir )
 
+local link_target = get_versionedfile( stack_version,
+    pathJoin( root_dir, 'UAntwerpen-modules/generic-modules/calcua' ),
+    '', '.lua' )
+    
+print( '\nlink ' .. pathJoin( stack_dir, stack_version .. '.lua' ) .. ' -> ' .. link_target )
 -- TODO: Link to the right version of UAntwerpen-modules/generic-modules/calcua
 
 --
@@ -99,9 +104,14 @@ local arch_dir = pathJoin( root_dir, 'modules-infrastructure/arch/calcua', stack
 
 mkDir( pathJoin( arch_dir, 'arch' ) )
 
+local link_target = get_versionedfile( stack_version,
+    pathJoin( root_dir, 'UAntwerpen-modules/generic-modules/clusterarch' ),
+    '', '.lua' )
 for _,longname in ipairs( OSArchTable ) do
 
-    local link_name = pathJoin( arch_dir, 'arch', longname )
+    local link_name = pathJoin( arch_dir, 'arch', longname .. '.lua' )
+
+    print( '\nlink ' .. link_name .. ' -> ' .. link_target )    
     -- TODO: Link the module to the right version of UAntwerpen-modules/generic-modules/clusterarch
 
 end
@@ -114,10 +124,15 @@ local arch_dir = pathJoin( root_dir, 'modules-infrastructure/arch/calcua', stack
 
 mkDir( pathJoin( arch_dir, 'cluster' ) )
 
-for cluster,_ in ipairs( CalcUA_ClusterMap[stack_version] ) do
+if CalcUA_ClusterMap[stack_version] == nil then
+    print( 'Warning: No mapping from cluster names to architectures given, so cannot create the cluster/ modules' )
+else
+    for cluster,_ in pairs( CalcUA_ClusterMap[stack_version] ) do
 
-    local link_name = pathJoin( arch_dir, 'cluster', cluster )
-    -- TODO: Link the module to the right version of UAntwerpen-modules/generic-modules/clusterarch
+        local link_name = pathJoin( arch_dir, 'cluster', cluster .. '.lua' )
 
+        print( '\nlink ' .. link_name .. ' -> ' .. link_target )
+        -- TODO: Link the module to the right version of UAntwerpen-modules/generic-modules/clusterarch
+    end
 end
 
