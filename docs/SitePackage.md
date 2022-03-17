@@ -55,6 +55,11 @@ Routines:
     which case the routine uses the `CalcUA_toolchain_map` to compute the matching
     yyyymm version or falls back to a default rule (where a becomes 01 and b becomes
     07).
+    
+-   `get_versionedfile`: Finds the most recent file with version not younger than a
+    given toolchain, with the file matching a particular pattern given as a directory,
+    part before the version and part after the version. The version can be in any
+    format supported by `map_toolchain`: yyyy[a|b], yyyy.mm, yyyymm, `system`.
 
 
 ## SitePackage_arch_hierarchy.lua
