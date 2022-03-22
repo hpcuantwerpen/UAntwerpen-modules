@@ -49,6 +49,37 @@ CalcUA_SystemTable = {
 
 -- -----------------------------------------------------------------------------
 --
+-- SystemProperties defines other properties of the system, e.g.,
+--   * ['EasyBuild']: Version of EasyBuild to use.
+--   * ['hierarchy']: Type of hierarchy, 3 values though not all are implemented
+--       * 2L_long:  2 levels, all names on the second level include accelerator
+--       * 2L_short: 2 levels, but no -host or -noaccel for archs without accelerator
+--                   NOT IMPLEMENTED
+--       * 3L      : 3 levels
+--                   NOT IMPLEMENTED 
+--
+CalcUA_SystemProperties = {
+    ['system'] = {
+        ['EasyBuild'] = '4.5.3',
+        ['hierarchy'] = '2L_long',  -- Doesn't really matter as we use only one level
+    },
+    ['manual'] = {
+        ['EasyBuild'] = '4.5.3',
+        ['hierarchy'] = '2L_long',  -- Doesn't really matter as we use only one level
+    },
+    ['2020a'] = {
+        ['EasyBuild'] = '4.2.2',
+        ['hierarchy'] = '2L_long',
+    },
+    ['2021b'] = {
+        ['EasyBuild'] = '4.5.3',
+        ['hierarchy'] = '2L_long',
+    },
+}
+
+
+-- -----------------------------------------------------------------------------
+--
 -- CalcUA_ClusterMap is a structure that maps names of clusters onto
 -- architectures.
 --
