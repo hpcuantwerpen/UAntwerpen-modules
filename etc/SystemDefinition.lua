@@ -63,8 +63,7 @@ CalcUA_SystemProperties = {
         ['EasyBuild'] = '4.5.3',
         ['hierarchy'] = '2L_long',  -- Doesn't really matter as we use only one level
     },
-    ['manual'] = {
-        ['EasyBuild'] = '4.5.3',
+    ['manual'] = {  -- This is not an EasyBuild-managed stack.
         ['hierarchy'] = '2L_long',  -- Doesn't really matter as we use only one level
     },
     ['2020a'] = {
