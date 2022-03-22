@@ -98,7 +98,7 @@ end
 --
 sandbox_registration{
     ['get_hostname']              = get_hostname,
-    ['get_user_prefix_EasyBuild'] = get_user_prefix_EasyBuild,
+--    ['get_user_prefix_EasyBuild'] = get_user_prefix_EasyBuild,
     ['get_motd']                  = get_motd,
     ['get_fortune']               = get_fortune,
     ['get_clusterarch']           = get_clusterarch,
