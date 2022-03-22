@@ -43,6 +43,7 @@ create_link () {
 # We use more commands than strictly necessary, which can give more precise
 # error messages.
 #
+mkdir -p "$installroot/sources"
 mkdir -p "$installroot/$systemmodules"
 mkdir -p "$installroot/$systemmodules/stacks"
 mkdir -p "$installroot/$systemmodules/arch"

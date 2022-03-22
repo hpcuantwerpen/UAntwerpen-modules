@@ -1,27 +1,77 @@
 #! /usr/bin/env lua
 
-dofile( 'lmod_emulation.lua' )
-dofile( '../../etc/SystemDefinition.lua' )
-dofile( '../../LMOD/SitePackage_helper.lua' )
-dofile( '../../LMOD/SitePackage_map_toolchain.lua' )
-dofile( '../../LMOD/SitePackage_arch_hierarchy.lua' )
+local lfs = require( 'lfs' )
 
 local routine_name = 'create_calcua_stack_dirs'
 local stack_name = 'calcua'
 
-if #arg ~= 2 then
-    io.stderr:write( routine_name .. ': ERROR: Two command line argument is expected: the version of the calcua stack and the root of the installation.\n' )
+if #arg ~= 1 then
+    io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the calcua stack.\n' )
     os.exit( 1 )
 end
 
 local stack_version = arg[1]
-local root_dir = arg[2]
+
+local script_called_dir = arg[0]:match( '(.*)/[^/]+' )
+lfs.chdir( script_called_dir )
+local repo_root = lfs.currentdir():match( '(.*)/scripts/calcua_tools' )
+local root_dir = repo_root:match( '(.*)/[^/]+' )
+
+dofile( repo_root .. '/scripts/calcua_tools/lmod_emulation.lua' )
+dofile( repo_root .. '/etc/SystemDefinition.lua' )
+dofile( repo_root .. '/LMOD/SitePackage_helper.lua' )
+dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
+dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
+
 
 if CalcUA_SystemTable[stack_version] == nil then
     io.stderr:write( routine_name .. ': ERROR: The stack version ' .. stack_version .. ' is not recognized as a valid stack.\n' ..
                      'Maybe CalcUA_SystemTable in etc/SystemDefinition.lua needs updating?\n' )
     os.exit( 1 )
 end
+
+--
+-- Internal functions
+--
+
+function create_symlink( target, name )
+
+    local lfs = require( 'lfs' )
+    
+    --
+    -- Note that we prefer to always re-create the link if it exists already.
+    -- So far we know no way to figure out if the link is pointing to the right file,
+    -- and we may run this script simply because some links have changed.
+    --
+    local name_attrs = lfs.symlinkattributes( name )
+    if name_attrs == nil then
+        -- This is a new file
+        print( '\nCreating symlink: ' .. target .. ' -> ' .. name )
+        lfs.link( target, name, true )
+    elseif name_attrs.mode == 'link' then
+        if name_attrs.target == nil then
+            print( '\nLink ' .. name .. ' exists but cannot determine the target, so re-creating symlink ' .. target .. ' -> ' .. name )
+            os.remove( name )
+            lfs.link( target, name, true )
+        elseif name_attrs.target == target then
+            print( '\nLink ' .. name .. ' exists and is pointing to the right target ' .. target )
+        else
+            print( '\nLink ' .. name .. ' exists but current target ' .. name_attrs.target .. ' is different, re-creating symlink ' .. target .. ' -> ' .. name )
+            os.remove( name )
+            lfs.link( target, name, true )
+        end
+    elseif name_attrs == 'file' then
+        -- Finding a file is somewhat unexpected but we can handle it:
+        -- remove the file and create the link.
+        print( '\nFile ' .. name .. ' exists, replacing with symlink ' .. target .. ' -> ' .. name )
+        os.remove( name )
+        lfs.link( target, name, true )
+    else
+        print( '\n' .. name .. ' exists as a ' .. name_attrs.mode .. ', do not know how to handle this.' )
+    end
+
+end
+
 
 --
 -- Gather all dependent architectures
@@ -91,10 +141,8 @@ mkDir( stack_dir )
 
 local link_target = get_versionedfile( stack_version,
     pathJoin( root_dir, 'UAntwerpen-modules/generic-modules/calcua' ),
-    '', '.lua' )
-    
-print( '\nlink ' .. pathJoin( stack_dir, stack_version .. '.lua' ) .. ' -> ' .. link_target )
--- TODO: Link to the right version of UAntwerpen-modules/generic-modules/calcua
+    '', '.lua' )    
+create_symlink( link_target, pathJoin( stack_dir, stack_version .. '.lua' ) )
 
 --
 --    *    Architecture modules
@@ -107,20 +155,17 @@ mkDir( pathJoin( arch_dir, 'arch' ) )
 local link_target = get_versionedfile( stack_version,
     pathJoin( root_dir, 'UAntwerpen-modules/generic-modules/clusterarch' ),
     '', '.lua' )
+
 for _,longname in ipairs( OSArchTable ) do
 
     local link_name = pathJoin( arch_dir, 'arch', longname .. '.lua' )
-
-    print( '\nlink ' .. link_name .. ' -> ' .. link_target )    
-    -- TODO: Link the module to the right version of UAntwerpen-modules/generic-modules/clusterarch
+    create_symlink( link_target, link_name )
 
 end
 
 --
 --    *    Cluster modules (architecture modules with cluster name)
 --
-
-local arch_dir = pathJoin( root_dir, 'modules-infrastructure/arch/calcua', stack_version )
 
 mkDir( pathJoin( arch_dir, 'cluster' ) )
 
@@ -130,9 +175,7 @@ else
     for cluster,_ in pairs( CalcUA_ClusterMap[stack_version] ) do
 
         local link_name = pathJoin( arch_dir, 'cluster', cluster .. '.lua' )
-
-        print( '\nlink ' .. link_name .. ' -> ' .. link_target )
-        -- TODO: Link the module to the right version of UAntwerpen-modules/generic-modules/clusterarch
+        create_symlink( link_target, link_name )
     end
 end
 

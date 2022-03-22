@@ -3,6 +3,7 @@
 dofile( '../scripts/calcua_tools/lmod_emulation.lua' )
 dofile( '../etc/SystemDefinition.lua' )
 dofile( '../LMOD/SitePackage_helper.lua' )
+dofile( '../LMOD/SitePackage_system_info.lua' )
 dofile( '../LMOD/SitePackage_map_toolchain.lua' )
 dofile( '../LMOD/SitePackage_arch_hierarchy.lua' )
 
@@ -63,6 +64,15 @@ do
             ', accelerator is ' .. ( extract_accel( longname ) or '' ) ..
             ', arch is ' .. extract_arch( longname ) )
 end
+
+--
+-- Testing get_generic_current
+--
+
+print( '\nTesting get_generic_current function\n' )
+
+print( 'Generic for system: ' .. get_generic_current( 'system' ) )
+print( 'Generic for 2020a: ' .. get_generic_current( '2020a' ) )
 
 --
 -- Testing get_system_module_dirs( longname, stack_name, stack_version )

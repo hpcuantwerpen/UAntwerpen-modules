@@ -16,7 +16,7 @@ do
 end
 table.sort( CalcUA_sorted_archmap_keys )
 
-function get_matching_key( version )
+function get_matching_archmap_key( version )
 
     if version < CalcUA_sorted_archmap_keys[1]
     then

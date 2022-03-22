@@ -59,7 +59,7 @@ function get_long_osarchs( stack_version, osname, archname )
         return nil
     end
 
-    local matching_version = get_matching_key( stack_version )
+    local matching_version = get_matching_archmap_key( stack_version )
 
     while archname ~= nil
     do
@@ -100,7 +100,7 @@ function get_long_osarchs_reverse( stack_version, osname, archname )
         return nil
     end
 
-    local matching_version = get_matching_key( stack_version )
+    local matching_version = get_matching_archmap_key( stack_version )
 
     while archname ~= nil
     do
@@ -111,7 +111,6 @@ function get_long_osarchs_reverse( stack_version, osname, archname )
     return result
 
 end
-
 
 -- -----------------------------------------------------------------------------
 --
@@ -248,6 +247,41 @@ end
 function extract_arch( name )
 
     return name:match( '[^-]+-(.*)' )
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_generic_current( stack_version )
+--
+-- Input argument:
+--   * stack_version: Version of the calcua stack, can be system.
+--
+-- Output: The most generic architecture for the current node.
+--
+function get_generic_current( stack_version )
+
+    local clusterarch
+    if CalcUA_SystemProperties[stack_version] == '2L_short' then
+        _, clusterarch, _, _ = get_clusterarch()
+    else
+        _, _, _, clusterarch = get_clusterarch()
+    end
+
+    local osname = extract_os( clusterarch )
+    local archname = extract_arch( clusterarch )
+
+    local matching_version = get_matching_archmap_key( stack_version )
+
+    local last_archname = archname
+    while archname ~= nil
+    do
+        last_archname = archname
+        archname = CalcUA_map_arch_hierarchy[matching_version][archname]
+    end
+
+    return osname .. '-' .. last_archname
 
 end
 
