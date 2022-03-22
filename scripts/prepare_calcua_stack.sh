@@ -66,5 +66,5 @@ echo -e "  * Using equivalent version $numeric_version for finding version-depen
 
 echo -e "\n## Initialising the directory structure...\n"
 
-$scriptdir/calcua_tools/create_calcua_stack_dirs.lua "$stack_version"
+$scriptdir/calcua_tools/prepare_calcua_stack.lua "$stack_version"
 
