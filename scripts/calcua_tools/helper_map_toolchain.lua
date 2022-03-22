@@ -10,7 +10,7 @@
 
 local lfs = require( 'lfs' )
 
-local routine_name = 'helper_get_generic_current'
+local routine_name = 'helper_map_toolchain'
 local stack_name = 'calcua'
 
 if #arg ~= 1 then
