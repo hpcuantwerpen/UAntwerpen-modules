@@ -7,7 +7,7 @@ end
 --
 add_property( 'lmod', 'sticky' )
 
--- Find the root of the LUMI installation.
+-- Find the root of the CalcUA installation.
 local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init%-.*/CalcUA%-init/.*' )
 local repo =  myFileName():match( '.*/modules%-infrastructure/init%-(.*)/CalcUA%-init/.*' )
 
@@ -125,7 +125,7 @@ You can disable the complete message-of-the-day except for some header by creati
 $ touch ~/.nomotd
 
 Note that it is still your responsability to be aware of the information that is spread
-via the message-of-the-day, so do not blame the LUMI User Support Team nor CSC if you
+via the message-of-the-day, so do not blame the CalcUA User Support Team if you
 miss information because you hide the message-of-the-day. If you are new on the system
 you may have missed information that is in the message-of-the-day and spread by email.
 

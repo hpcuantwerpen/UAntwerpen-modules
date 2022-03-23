@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Script to initialize the LUMI module system.
+# Script to initialize the CalcUA module system.
 #
 # The script takes no arguments.
 #

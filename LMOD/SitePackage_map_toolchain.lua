@@ -56,14 +56,15 @@ end
 --
 -- function get_versionedfile
 --
--- Find the package with the most recent version not newer than the given LUMI stack
+-- Find the package with the most recent version not newer than the given CalcUA stack
 -- version.
 --
 -- Input arguments:
---  * matching: The LUMI stack version to match (e.g., 21.06, 21.05.dev, ...)
---  * directory: Directory in which the matching package/file should be found.
---  * filenameprefix: The part of the file name before the version.
---  * filennamesuffix: The part of the file name after the suffix,
+-- -   matching: The CalcUA stack version to match, in any of the possible formats
+--     accepted by map_toolchain. 
+-- -   directory: Directory in which the matching package/file should be found.
+-- -   filenameprefix: The part of the file name before the version.
+-- -   filennamesuffix: The part of the file name after the suffix,
 --
 --  Return value: The full name of the file, or nil if no file is found.
 --
