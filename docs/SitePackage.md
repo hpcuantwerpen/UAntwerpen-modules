@@ -20,6 +20,25 @@ but instead in the file `etc/SystemDefinition.lua`.
 
     **TODO** Explain the structure.
 
+-   `CalcUA_SystemProperies` adds additional information for each partition that is not contained
+    in `CalcUA_SystemTable`. It is a table of tables, the first index is the name of the calcua
+    stack or `manual` for the pseudo-stack of manually installed software. The table for each
+    software stack has the following entries:
+
+    -   `EasyBuild`: Default version of EasyBuild for this stack. Should not be defined for the
+        manual stack.
+
+    -   `hierarchy`: Type of architecture hierarchy used for this software stack. Currently only 
+        the first option is implemented:
+
+        1.  `2L_long`: two levels, the least generic level always includes an accelerator field
+
+        2.  `2L_short`: two levels, but the least generic level does not include an accelerator
+            field if there is no accelerator
+
+        3. `3L`: 3 levels in the architecture hierarchy.
+
+
 -   `CalcUA_ClusterMap`: Contains for each version of the calcua toolchains, including
     the dymmy system version, a mapping from cluster names to os-architecture strings.
 
