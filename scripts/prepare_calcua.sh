@@ -45,7 +45,7 @@ create_link () {
 #
 mkdir -p "$installroot/sources"
 mkdir -p "$installroot/$systemmodules"
-mkdir -p "$installroot/$systemmodules/stacks"
+mkdir -p "$installroot/$systemmodules/stack"
 mkdir -p "$installroot/$systemmodules/arch"
 mkdir -p "$installroot/$systemmodules/infrastructure"
 mkdir -p "$installroot/$systemmodules/init-$repo_modules"
