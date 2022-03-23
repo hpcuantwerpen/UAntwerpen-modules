@@ -122,13 +122,15 @@ end
 -- Register in the sandbox
 --
 sandbox_registration{
-    ['get_hostname']              = get_hostname,
+    ['get_hostname']                  = get_hostname,
 --    ['get_user_prefix_EasyBuild'] = get_user_prefix_EasyBuild,
-    ['get_motd']                  = get_motd,
-    ['get_fortune']               = get_fortune,
-    ['is_interactive']            = is_interactive,
-    ['get_clusterarch']           = get_clusterarch,
-    [ 'map_toolchain']            = map_toolchain,
+    ['get_motd']                      = get_motd,
+    ['get_fortune']                   = get_fortune,
+    ['is_interactive']                = is_interactive,
+    ['get_clusterarch']               = get_clusterarch,
+    [ 'map_toolchain']                = map_toolchain,
+    ['get_calcua_longosarch_current'] = get_calcua_longosarch_current,
+    ['get_calcua_top_current']        = get_calcua_top_current,
 }
 
 

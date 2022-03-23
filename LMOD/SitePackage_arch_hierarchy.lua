@@ -260,7 +260,7 @@ end
 --
 -- Output: The most generic architecture for the current node.
 --
-function get_generic_current( stack_version )
+function get_calcua_generic_current( stack_version )
 
     local clusterarch
     if CalcUA_SystemProperties[stack_version] == '2L_short' then
@@ -292,11 +292,92 @@ end
 -- Input argument:
 --   * stack_version: Version of the calcua stack, can be system.
 --
--- Output: The most generic architecture for the current node.
+-- Output: The architecture of the current node with long names and in a
+-- format compatible with the indicated software stack (so taking into 
+-- account the hierarchy types 2L_long, 2L_short or 3L).
 --
 
+function get_calcua_longosarch_current( stack_version )
+
+    local d1, d2, d3
+
+    local hierarchy_type = CalcUA_SystemProperties[stack_version]['hierarchy']
+    if hierarchy_type == nil then
+        LmodError( 'Likely an error in CalcUA_SystemProperties in etc/SystemDefinition.lua, no hierarchy entry found for stack ' .. stack_version )
+    end
+
+    local current_osarch
+    if hierarchy_type == '2L_short' then
+        d1, current_osarch, d2, d3 = get_clusterarch()
+    else
+        d1, d2, d3, current_osarch = get_clusterarch()
+    end
+
+    return current_osarch
+
+end
 
 
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_calcua_top_current( stack_version, long_osarch )
+--
+-- Input arguments:
+--   * stack_version: Version of the calcua stack, can be system.
+--   * long_osarch: os and architecture with long names and in a format 
+--     compatible with the indicated version of the software stack (so respecting
+--     the hierarchy types 2L_short, 2L_long or 3L).
+--
+-- Output: The most specific od-architecture for the current node in the indicated
+-- version of the CalcUA software stacks.
+--
+
+function get_calcua_top_current( stack_version, long_osarch )
+
+    --
+    -- -  Some initialisations ot use the data structures of etc/SystemDefinition.lua
+    --
+    local matching_version = get_matching_archmap_key( stack_version )
+    local use_arch = extract_arch( long_osarch )
+    local use_os = extract_os( long_osarch )
+
+    --
+    -- -  Build a table that helps to quickly detect if an architecture is
+    --    available as a for the software stack. 
+    -- 
+    local stack_os_archs = {}
+    if CalcUA_SystemTable[stack_version][use_os] == nil then
+        LmodError( 'Something is wrong with the CalcUA_SystemTable structure in etc/SystemDefinition.lua: ' ..
+                   'No stack version ' .. stack_version .. ' found for OS ' .. use_os )
+    end
+    for index,value in ipairs( CalcUA_SystemTable[stack_version][use_os] ) do
+        stack_os_archs[value] = true
+        local level_p1 = CalcUA_map_arch_hierarchy[matching_version][value]
+        while level_p1 ~= nil do
+            stack_os_archs[level_p1] = true
+            level_p1 = CalcUA_map_arch_hierarchy[matching_version][level_p1]
+        end 
+    end
+
+    --
+    -- -  Now walk down the CalcUA_map_arch_hierarchy searching for an
+    --    architecture supported by the software stack.
+    --
+    while stack_os_archs[use_arch] == nil and CalcUA_map_arch_hierarchy[matching_version][use_arch] ~= nil do
+        use_arch = CalcUA_map_arch_hierarchy[matching_version][use_arch]
+    end
+
+    --
+    -- -  Now check if we have found something and produce the answer.
+    --
+    if stack_os_archs[use_arch] == true then
+        return use_os .. '-' .. use_arch
+    else
+        return nil
+    end
+
+end
 
 
 -- -----------------------------------------------------------------------------

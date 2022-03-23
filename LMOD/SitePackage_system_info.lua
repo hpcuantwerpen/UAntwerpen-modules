@@ -67,17 +67,21 @@ end
 --
 function get_os_info()
 
-    f = io.popen( 'cat /etc/os-release | egrep "^NAME=|^VERSION_ID="' )
+    local d1
+    local d2
+
+    local f = io.popen( 'cat /etc/os-release | egrep "^NAME=|^VERSION_ID="' )
     local osinfo = f:read('*a') or ''
     f:close()
 
     -- Get the name of the OS by looking for the NAME line in the data read from /etc/os-release
-    _, _, osname = osinfo:find( 'NAME="([%w%s]+)"' )
-    local osname = osname:gsub( '%s', '_' )
+    local osname
+    d1, d2, osname = osinfo:find( 'NAME="([%w%s]+)"' )
+    osname = osname:gsub( '%s', '_' )
 
     -- Get the version of the OS (where we assume that it can be a major.minor as in SLES)
     local osversion
-    _, _, osversion = osinfo:find( 'VERSION_ID="([%d%p]+)"' )
+    d1, d2, osversion = osinfo:find( 'VERSION_ID="([%d%p]+)"' )
 
     return osname, osversion
 
@@ -101,7 +105,7 @@ end
 function get_accelerator_info()
 
     -- Search for the accelerators in the output of lscpci
-    f = io.popen( '/usr/sbin/lspci | /usr/bin/egrep "MI100|GA100|GP104|GP100|NEC" -m 1' )
+    local f = io.popen( '/usr/sbin/lspci | /usr/bin/egrep "MI100|GA100|GP104|GP100|NEC" -m 1' )
     local accelinfo = f:read('*a') or ''
     f:close()
 

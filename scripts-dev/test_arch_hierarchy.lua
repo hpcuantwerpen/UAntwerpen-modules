@@ -71,9 +71,30 @@ end
 
 print( '\nTesting get_calcua_generic_current function\n' )
 
-print( 'Generic for system: ' .. get_calcua_generic_current( 'system' ) )
-print( 'Generic for 2020a: ' .. get_calcua_generic_current( '2020a' ) )
+for stack,_ in pairs( CalcUA_ClusterMap ) do
+    print( 'Generic for ' .. stack .. ': ' .. get_calcua_generic_current( stack ) )
+end
+       
+--
+-- Testing get_calcua_longosarch_current
+--
 
+print( '\nTesting get_calcua_longosarch_current function\n' )
+
+for stack,_ in pairs( CalcUA_ClusterMap ) do
+    print( 'Generic for ' .. stack .. ': ' .. get_calcua_longosarch_current( stack ) )
+end
+
+--
+-- Testing get_calcua_top_current
+--
+
+print( '\nTesting get_calcua_top_current function\n' )
+
+for stack,_ in pairs( CalcUA_ClusterMap ) do
+    print( 'Generic for ' .. stack .. ': ' .. get_calcua_top_current( stack, get_calcua_longosarch_current( stack ) ) )
+end
+       
 --
 -- Testing get_system_module_dirs( longname, stack_name, stack_version )
 --
