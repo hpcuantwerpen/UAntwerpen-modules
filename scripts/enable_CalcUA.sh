@@ -15,7 +15,7 @@ systemmodules='modules-infrastructure'
 
 #
 # Print the commands that should be executed via eval to initialise
-# the LUMI module system from the location based on the location of this
+# the CalcUA module system from the location based on the location of this
 # script.
 #
 # - Clear LMOD. We will restart it.
@@ -28,6 +28,7 @@ echo "clearLmod ; "
 echo "export LMOD_PACKAGE_PATH=$installroot/$repo_modules/LMOD ; "
 echo "export LMOD_RC=$installroot/$repo_modules/LMOD/lmodrc.lua ; "
 echo "export LMOD_MODULERCFILE=$installroot/$repo_modules/LMOD/modulerc.lua ; "
+echo "export LMOD_ADMIN_FILE=$installroot/$repo_modules/LMOD/admin.list ; "
 
 # - set the MODULEPATH
 echo "export MODULEPATH=$installroot/$systemmodules/init-$repo_modules ; "
