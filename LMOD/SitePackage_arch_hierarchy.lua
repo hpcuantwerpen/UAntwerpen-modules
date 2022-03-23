@@ -253,7 +253,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_generic_current( stack_version )
+-- Function get_calcua_generic_current( stack_version )
 --
 -- Input argument:
 --   * stack_version: Version of the calcua stack, can be system.
@@ -284,6 +284,19 @@ function get_generic_current( stack_version )
     return osname .. '-' .. last_archname
 
 end
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_calcua_top_current( stack_version )
+--
+-- Input argument:
+--   * stack_version: Version of the calcua stack, can be system.
+--
+-- Output: The most generic architecture for the current node.
+--
+
+
+
 
 
 -- -----------------------------------------------------------------------------

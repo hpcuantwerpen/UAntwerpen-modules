@@ -2,7 +2,7 @@
 
 local lfs = require( 'lfs' )
 
-local routine_name = 'helper_get_generic_current'
+local routine_name = 'helper_get_calcua_generic_current'
 local stack_name = 'calcua'
 
 if #arg ~= 1 then
@@ -34,4 +34,4 @@ end
 --
 -- Actual code
 --
-print( get_generic_current( stack_version ) )
+print( get_calcua_generic_current( stack_version ) )

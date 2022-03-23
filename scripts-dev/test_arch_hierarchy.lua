@@ -66,13 +66,13 @@ do
 end
 
 --
--- Testing get_generic_current
+-- Testing get_calcua_generic_current
 --
 
-print( '\nTesting get_generic_current function\n' )
+print( '\nTesting get_calcua_generic_current function\n' )
 
-print( 'Generic for system: ' .. get_generic_current( 'system' ) )
-print( 'Generic for 2020a: ' .. get_generic_current( '2020a' ) )
+print( 'Generic for system: ' .. get_calcua_generic_current( 'system' ) )
+print( 'Generic for 2020a: ' .. get_calcua_generic_current( '2020a' ) )
 
 --
 -- Testing get_system_module_dirs( longname, stack_name, stack_version )
