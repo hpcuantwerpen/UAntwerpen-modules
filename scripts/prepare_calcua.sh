@@ -51,6 +51,13 @@ mkdir -p "$installroot/$systemmodules/infrastructure"
 mkdir -p "$installroot/$systemmodules/init-$repo_modules"
 
 #
+# Link the style modules
+#
+# We simply link the directory.
+#
+create_link "$installroot/$repo_modules/generic-modules/StyleModifiers" "$installroot/$systemmodules/StyleModifiers"
+
+#
 # Install the CalcUA-init module
 #
 mkdir -p "$installroot/$systemmodules/init-$repo_modules/CalcUA-init"
