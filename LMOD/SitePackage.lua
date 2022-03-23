@@ -176,7 +176,7 @@ local mapT =
         ['modules%-infrastructure/init%-.*']        = 'System initialisation',
         ['modules%-infrastructure/StyleModifiers']  = 'Modify the module display style',
         ['modules%-infrastructure/stack$']          = 'Software stacks',
---         ['modules/SystemPartition/']             = 'LUMI partitions for the software stack _STACK_',
+--         ['modules/SystemPartition/']             = 'Available architectures for the software stack _STACK_',
         -- LMOD
         ['usr/share/lmod/lmod/modulefiles']         = 'LMOD modules',
         -- User-installed software
@@ -200,8 +200,8 @@ local function avail_hook(t)
         return
     end
 
-    local stack = os.getenv( 'LUMI_STACK_NAME_VERSION' ) or 'unknown'
-    local partition = 'LUMI-' .. ( os.getenv( 'LUMI_STACK_PARTITION' ) or 'X' )
+    local stack = os.getenv( 'CALCUA_STACK_NAME_VERSION' ) or 'unknown'
+    local partition = 'CALCUA-' .. ( os.getenv( 'CALCUA_STACK_PARTITION' ) or 'X' )
 
     for directory, dirlabel in pairs(t) do
         for pattern, label in pairs(styleT) do
