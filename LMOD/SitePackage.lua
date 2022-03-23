@@ -176,7 +176,7 @@ local mapT =
         ['modules%-infrastructure/init%-.*']        = 'System initialisation',
         ['modules%-infrastructure/StyleModifiers']  = 'Modify the module display style',
         ['modules%-infrastructure/stack$']          = 'Software stacks',
---         ['modules/SystemPartition/']             = 'Available architectures for the software stack _STACK_',
+        ['modules%-infrastructure/arch/']           = 'Available architectures for the software stack _STACK_',
         -- LMOD
         ['usr/share/lmod/lmod/modulefiles']         = 'LMOD modules',
         -- User-installed software
