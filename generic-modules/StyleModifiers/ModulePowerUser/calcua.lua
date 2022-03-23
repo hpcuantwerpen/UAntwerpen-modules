@@ -27,7 +27,7 @@ if isloaded( 'ModuleStyle' ) then
     unload( 'ModuleStyle' )
 end
 
-setenv( 'LUMI_LMOD_POWERUSER', 1 )
+setenv( 'CALCUA_LMOD_POWERUSER', 1 )
 
 if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() .. ': Exiting' )
