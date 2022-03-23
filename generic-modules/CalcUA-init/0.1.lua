@@ -8,8 +8,29 @@ end
 add_property( 'lmod', 'sticky' )
 
 -- Find the root of the LUMI installation.
-local LUMI_root = myFileName():match( '(.*)/modules/init%-.*/CalcUA%-init/.*' )
-local repo =  myFileName():match( '.*/modules/init%-(.*)/CalcUA%-init/.*' )
+local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init%-.*/CalcUA%-init/.*' )
+local repo =  myFileName():match( '.*/modules%-infrastructure/init%-(.*)/CalcUA%-init/.*' )
+
+
+-- -----------------------------------------------------------------------------
+--
+-- The actual work
+--
+
+-- Setting defaults and visibility, note that this is a PATH-style variable.
+-- It is currently set by the enable_Calcua script already, but add this in again
+-- if needed.
+-- prepend_path( 'LMOD_MODULERCFILE', pathJoin( CalcUA_root, repo, 'LMOD', 'modulerc.lua' ) )
+
+--
+-- Make the modules that determine visibility available
+--
+-- TODO
+
+--
+-- Make the software stacks available
+--
+prepend_path( 'MODULEPATH', pathJoin( CalcUA_root, 'modules-infrastructure/stack' ) )
 
 -- -----------------------------------------------------------------------------
 --
