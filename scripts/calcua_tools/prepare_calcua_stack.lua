@@ -164,18 +164,17 @@ for _,longname in ipairs( OSArchTable ) do
 end
 
 --
---    *    Cluster modules (architecture modules with cluster name)
+--    *    Create a .modulerc.lua with synonyms for the arch modules
 --
 
-mkDir( pathJoin( arch_dir, 'cluster' ) )
+print( '\nCreating ' .. pathJoin( arch_dir, '.modulerc.lua' ) .. '...' )
 
-if CalcUA_ClusterMap[stack_version] == nil then
-    print( 'Warning: No mapping from cluster names to architectures given, so cannot create the cluster/ modules' )
-else
-    for cluster,_ in pairs( CalcUA_ClusterMap[stack_version] ) do
+local f = io.open( pathJoin( arch_dir, '.modulerc.lua' ), 'w' )
 
-        local link_name = pathJoin( arch_dir, 'cluster', cluster .. '.lua' )
-        create_symlink( link_target, link_name )
-    end
+for cluster,arch in pairs( CalcUA_ClusterMap[stack_version] ) do
+    f:write( 'module_version( \'arch/' .. arch .. '\' , \'' .. cluster .. '\' )\n' )
 end
+
+f:close()
+
 
