@@ -133,4 +133,99 @@ sandbox_registration{
 
 
 
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+--
+-- LMOD hooks
+--
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+
+
+local function site_name_hook()
+    -- set the SiteName
+    return "CALCUA"
+end
+
+
+local function packagebasename(t)
+    -- Use the EBROOT variables in the module
+    -- as base dir for the reverse map
+    t.patDir = "^EBROOT.*"
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- avail_hook
+--
+-- Code to rename directories in module avail
+-- Based on "Providing Custom Labels for Avail" in the Lmod manual
+-- Note that this requires the use of LMOD_AVAIL_STYLE, and in this case,
+-- LMOD_AVAIL_STYLE=labeled:system to make the labeled style the default.
+--
+
+-- We need to avoid that EB_prefix is nil so give it some meaningless value if it would
+-- be nil.
+-- local EB_prefix = string.gsub( get_user_prefix_EasyBuild() or '/NONE', '%-', '%%-' )
+
+local mapT =
+{
+    label = {
+--        ['/testview$']                      = 'Activate environments',
+        ['modules%-infrastructure/init%-.*']        = 'System initialisation',
+        ['modules%-infrastructure/StyleModifiers']  = 'Modify the module display style',
+        ['modules%-infrastructure/stack$']          = 'Software stacks',
+--         ['modules/SystemPartition/']             = 'LUMI partitions for the software stack _STACK_',
+        -- LMOD
+        ['usr/share/lmod/lmod/modulefiles']         = 'LMOD modules',
+        -- User-installed software
+--        [ EB_prefix .. '/modules']          = 'EasyBuild managed user software for software stack _STACK_ on _PARTITION_',
+     },
+}
+
+
+local function avail_hook(t)
+
+    dbg.start( 'avail_hook' )
+
+    --
+    -- Use labels instead of directories (if selected)
+    --
+
+    local availStyle = masterTbl().availStyle
+    local styleT     = mapT[availStyle]
+    if (not availStyle or availStyle == "system" or styleT == nil) then
+        io.stderr:write('Avail hook: style not found\n')
+        return
+    end
+
+    local stack = os.getenv( 'LUMI_STACK_NAME_VERSION' ) or 'unknown'
+    local partition = 'LUMI-' .. ( os.getenv( 'LUMI_STACK_PARTITION' ) or 'X' )
+
+    for directory, dirlabel in pairs(t) do
+        for pattern, label in pairs(styleT) do
+            if (directory:find(pattern)) then
+                t[directory] = label:gsub( '_PARTITION_', partition ):gsub( '_STACK_', stack )
+                break
+            end
+        end
+    end
+
+    dbg.fini()
+
+end
+
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Hook registration
+--
+
+hook.register( 'SiteName',        site_name_hook)
+hook.register( 'packagebasename', packagebasename)
+hook.register( 'avail',           avail_hook )
+
+
 
