@@ -500,7 +500,7 @@ hit kernel-imposed limits.</p>
 <p><strong>TODO</strong>: Do we need separate cluster modules or is it better to work with aliases?</p>
 </li>
 <li>
-<p><code>infrastructrue</code> subdirectory then contains the specific infrastructure modules, e.g.,
+<p><code>infrastructure</code> subdirectory then contains the specific infrastructure modules, e.g.,
     the EasyBuild configuration modules.</p>
 <p>4 levels of subdirectories before you reach the infrastructure modules</p>
 <ol>
@@ -583,13 +583,13 @@ result in a single file per ( software stack, architecture) combination.</p>
 <div class="highlight"><pre><span></span><code>apps
 └─ antwerpen
    └─ CalcUA
-      ├─ UAntwerpen-modules <span class="c1">#(1)!</span>
-      └─ UAntwerpen-easybuild <span class="c1">#(2)!</span>
+      ├─ UAntwerpen-modules <span class="c1">#(1)</span>
+      └─ UAntwerpen-easybuild <span class="c1">#(2)</span>
          └─ easybuild
             ├─ easyconfigs
             ├─ easyblocks
             ├─ Customisations to naming schemes etc
-            └─ config <span class="c1">#(3)!</span>
+            └─ config <span class="c1">#(3)</span>
 </code></pre></div>
 <ol>
 <li>Repository with LMOD configuration and generic modules</li>
@@ -600,16 +600,16 @@ result in a single file per ( software stack, architecture) combination.</p>
 <div class="highlight"><pre><span></span><code>apps
 └─ antwerpen
    └─ CalcUA
-      ├─ modules-infrastructure <span class="c1">#(1)!</span>
-      │  ├─ init-UAntwerpen-modules <span class="c1">#(2)!</span>
-      │  ├─ stacks <span class="c1">#(3)!</span>
+      ├─ modules-infrastructure <span class="c1">#(1)</span>
+      │  ├─ init-UAntwerpen-modules <span class="c1">#(2)</span>
+      │  ├─ stacks <span class="c1">#(3)</span>
       │  │  └─ calcua
-      │  │     └─ 2021b.lua <span class="c1">#(4)!</span>
-      │  ├─ arch <span class="c1">#(5)!</span>
+      │  │     └─ 2021b.lua <span class="c1">#(4)</span>
+      │  ├─ arch <span class="c1">#(5)</span>
       │  │  └─ calcua
       │  │     └─ 2021b
       │  │        ├─ cluster
-      │  │        │  ├─ hopper.lua <span class="c1">#(6)!</span>
+      │  │        │  ├─ hopper.lua <span class="c1">#(6)</span>
       │  │        │  ├─ leibniz.lua
       │  │        │  ├─ leibniz-skl.lua
       │  │        │  └─ vaughan.lua
@@ -617,7 +617,7 @@ result in a single file per ( software stack, architecture) combination.</p>
       │  │           ├─ redhat8-x86_64
       │  │           ├─ redhat8-broadwell-noaccel
       │  │           └─ redhat8-broadwell-quadro
-      │  └─ infrastructure <span class="c1">#(7)!</span>
+      │  └─ infrastructure <span class="c1">#(7)</span>
       │     └─ CalcUA
       │        └─ 2021b
       │           └─ arch
@@ -625,14 +625,14 @@ result in a single file per ( software stack, architecture) combination.</p>
       │                  ├─ EasyBuild-production
       │                  ├─ EasyBuild-infrastructure
       │                  └─ EasyBuild-user
-      ├─ modules-easybuild <span class="c1">#(8)!</span>
+      ├─ modules-easybuild <span class="c1">#(8)</span>
       │  ├─ CalcUA-2021b
-      │  │  ├─ redhat8_x86_64 <span class="c1">#(9)!</span>
+      │  │  ├─ redhat8_x86_64 <span class="c1">#(9)</span>
       │  │  ├─ redhat8-broadwell-noaccel
       │  │  └─ redhat8-broadwell-quadro
       │  └─ system* <span class="c1">#(10)!</span>
-      │     ├─ redhat8-x86_64 <span class="c1">#(11)!</span>
-      │     └─ redhat8-ivybridge-noaccel <span class="c1">#(12)!</span>
+      │     ├─ redhat8-x86_64 <span class="c1">#(11)</span>
+      │     └─ redhat8-ivybridge-noaccel <span class="c1">#(12)</span>
       └─ modules-manual <span class="c1">#(13)!</span>
 </code></pre></div>
 <ol>
@@ -659,10 +659,10 @@ result in a single file per ( software stack, architecture) combination.</p>
          │  ├─ RH8-x86_64
          │  ├─ RH8-BRW-host
          │  └─ RH8-BRW-NVGP61GL
-         ├─ system <span class="c1">#(1)!</span>
+         ├─ system <span class="c1">#(1)</span>
          │  ├─ RH8-x86_64
          │  └─ RH8-IVB-host
-         └─ MNL <span class="c1">#(2)!</span>
+         └─ MNL <span class="c1">#(2)</span>
 </code></pre></div>
 <ol>
 <li>Sometimes relatively empty subdirs if EasyBuild only creates a module...</li>
@@ -677,8 +677,8 @@ result in a single file per ( software stack, architecture) combination.</p>
          │  ├─ CalcUA-2021b
          │  │ ├─ redhat8-x86_64
          │  │ └─ redhat8-broadwell-noaccel
-         │  └─ system <span class="c1">#(1)!</span>
-         │     └─ redhat8-x86_64 <span class="c1">#(2)!</span>
+         │  └─ system <span class="c1">#(1)</span>
+         │     └─ redhat8-x86_64 <span class="c1">#(2)</span>
          └─ lmod_cache
 </code></pre></div>
 <ol>
