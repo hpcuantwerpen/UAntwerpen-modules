@@ -1,5 +1,7 @@
 # Design decisions
 
+## Overview of decisions
+
 -   Separate module roots for infrastructure modules that follow a strict
     Lmod hierarchy and for the easybuild-managed modules that are arranged 
     by software stack and architecture.
@@ -37,9 +39,9 @@
 
         2 levels of subdirectories before you reach the architecture modules:
 
-        1   Name of the stack: `calcua`
+        1.  Name of the stack: `calcua`
   
-        2   Version of the stack
+        2.  Version of the stack
        
         **TODO**: Do we need separate cluster modules or is it better to work with aliases?
 
@@ -48,13 +50,13 @@
 
         4 levels of subdirectories before you reach the infrastructure modules
 
-        1   Name of the stack: `calcua`
+        1.  Name of the stack: `calcua`
 
-        2   Version of the stack
+        2.  Version of the stack
 
-        3   `arch`
+        3.  `arch`
 
-        4   Long name string of the architecture (OS-CPU-Accelerator except for OS-x86_64).
+        4.  Long name string of the architecture (OS-CPU-Accelerator except for OS-x86_64).
 
     -   `init-UAntwerpen-modules`: Outside the hierarchy: Subdirectory for the module(s) that 
         initialises the whole module setup.
@@ -69,9 +71,9 @@
 
     2 levels before arriving at the actual infrastructure modules:
 
-    1   Name-version of the software stack, e.g., `calcua-2021b` or `system`
+    1.  Name-version of the software stack, e.g., `calcua-2021b` or `system`
 
-    2   Architecture string
+    2.  Architecture string
 
 -   Manually managed modules: `modules-manual`
 
@@ -83,9 +85,9 @@
     This directory follows the same layout as the one for the EasyBuild-installed software,
     with two differences:
 
-    1   At the architecture level, the short architecture string is used to save space
+    1.  At the architecture level, the short architecture string is used to save space
 
-    2   There is yet another pseudo-stack for manually installed software, called `MNL`  
+    2.  There is yet another pseudo-stack for manually installed software, called `MNL`  
 
         This directory has no corresponding modules directory in the EasyBuild-managed directory
         as it is not managed at all by EasyBuild.
@@ -108,65 +110,124 @@
 
 **To be corrected!!!**
 
-/apps  
-`└─`/antwerpen  
-`..└─`/CalcUA  
-`....├─`/**UAntwerpen-modules**: Repository with LMOD configuration and generic modules  
-`....├─`/**UAntwerpen-easybuild:** EasyBuild setup  
-`....│.└─`/*easybuild*  
-`....│...├─`/easyconfigs  
-`....│...├─`/easyblocks  
-`....│...├─`Customisations to naming schemes etc   
-`....│...└─`/config: Configuration files for some settings not done via environment  
-`....├─`/**modules-infrastructure**: Lmod hierarchy as the framework of the module system  
-`....│.├─`/*init-UAntwerpen-modules*: Subdirectory for the startup module  
-`....│.├─`/*stacks*: First level: Software stack modules  
-`....│.│.├─`/calcua  
-`....│.│...├─`/2021b.lua: Symbolic link to a generic module!  
-`....│.├─`/*arch*: Second level: Architecture of the stack  
-`....│.│.└─`/calcua  
-`....│.│...└─`/2021b  
-`....│.│.....├─`/cluster  
-`....│.│.....│.├─`/hopper.lua: Symbolic link to a generic module!  
-`....│.│.....│.├─`/leibniz.lua  
-`....│.│.....│.├─`/leibniz-skl.lua  
-`....│.│.....│.└─`/vaughan.lua  
-`....│.│.....└─`/arch  
-`....│.│.......├─`redhat8-x86_64  
-`....│.│.......├─`redhat8-broadwell-noaccel  
-`....│.│.......└─`redhat8-broadwell-quadro  
-`....│.└─`/*infrastructure*: Third level: Infrastructure modules, e.g., EasyBuild configuration  
-`....│...└─`/CalcUA  
-`....│...  └─`/2021b  
-`....│.......└─`/arch  
-`....│........ └─`/redhat8-ivybridge-noaccel  
-`....│...........├─`/EasyBuild-production  
-`....│...........├─`/EasyBuild-infrastructure  
-`....│...........└─`/EasyBuild-user  
-`....├─`/**modules-easybuild**: Modules generated with EasyBuild  
-`....│.├─`/*CalcUA-2021b*  
-`....│.│.├─`redhat8_x86_64 : Directory for potential generic builds if performance does not matter  
-`....│.│.├─`redhat8-broadwell-noaccel  
-`....│.│.└─`redhat8-broadwell-quadro  
-`....│.└─`/*system*: Modules outside the regular software stacks  
-`....│...├─`redhat8-x86_64 : No specific processor versions, e.g., Matlab  
-`....│...└─`redhat8-ivybridge-noaccel : Specific processor version, e.g., Gaussian  
-`....├─`/**modules-manual**: Manually generated modules - OPTIONAL  
-`....├─`/**SW**  
-`....│.├─`*CalcUA-2021b*  
-`....│.│.├─`RH8-x86_64  
-`....│.│.├─`RH8-BRW-host  
-`....│.│.└─`RH8-BRW-NVGP61GL  
-`....│.├─`/*system*: Sometimes relatively empty subdirs if EasyBuild only creates a module...  
-`....│.│.├─`RH8-x86_64  
-`....│.│.└─`RH8-IVB-host  
-`....│.└─`/*MNL*: Manually installed software  
-`....│...└─`RH8-x86_64  
-`....└─`/**mgmt**  
-`......├─`/*ebrepo_files*  
-`......│.├─`CalcUA-2021b  
-`......│.│.├─`redhat8-x86_64  
-`......│.│.└─`redhat8-broadwell-noaccel  
-`......│.└─`/system: Modules outside the regular software stacks  
-`......│....└─`redhat8-x86_64 : No specific processor versions, e.g., Matlab  
-`......└─`/*lmod_cache*  
+### Repository part of the tree
+
+``` bash
+apps
+└─ antwerpen
+   └─ CalcUA
+      ├─ UAntwerpen-modules #(1)!
+      └─ UAntwerpen-easybuild #(2)!
+         └─ easybuild
+            ├─ easyconfigs
+            ├─ easyblocks
+            ├─ Customisations to naming schemes etc
+            └─ config #(3)!
+```
+
+1.  Repository with LMOD configuration and generic modules
+2.  EasyBuild setup
+3.  Configuration files for some settings not done via environment
+
+
+
+
+### Module part of the tree
+
+``` bash
+apps
+└─ antwerpen
+   └─ CalcUA
+      ├─ modules-infrastructure #(1)!
+      │  ├─ init-UAntwerpen-modules #(2)!
+      │  ├─ stacks #(3)!
+      │  │  └─ calcua
+      │  │     └─ 2021b.lua #(4)!
+      │  ├─ arch #(5)!
+      │  │  └─ calcua
+      │  │     └─ 2021b
+      │  │        ├─ cluster
+      │  │        │  ├─ hopper.lua #(6)!
+      │  │        │  ├─ leibniz.lua
+      │  │        │  ├─ leibniz-skl.lua
+      │  │        │  └─ vaughan.lua
+      │  │        └─ arch
+      │  │           ├─ redhat8-x86_64
+      │  │           ├─ redhat8-broadwell-noaccel
+      │  │           └─ redhat8-broadwell-quadro
+      │  └─ infrastructure #(7)!
+      │     └─ CalcUA
+      │        └─ 2021b
+      │           └─ arch
+      │               └─ redhat8-ivybridge-noaccel
+      │                  ├─ EasyBuild-production
+      │                  ├─ EasyBuild-infrastructure
+      │                  └─ EasyBuild-user
+      ├─ modules-easybuild #(8)!
+      │  ├─ CalcUA-2021b
+      │  │  ├─ redhat8_x86_64 #(9)!
+      │  │  ├─ redhat8-broadwell-noaccel
+      │  │  └─ redhat8-broadwell-quadro
+      │  └─ system* #(10)!
+      │     ├─ redhat8-x86_64 #(11)!
+      │     └─ redhat8-ivybridge-noaccel #(12)!
+      └─ modules-manual #(13)!
+```
+
+1.  Lmod hierarchy as the framework of the module system 
+2.  Subdirectory for the startup module
+3.  First level: Software stack modules
+4.  Symbolic link to a generic module!
+5.  Second level: Architecture of the stack
+6.  Symbolic link to a generic module!
+7.  Third level: Infrastructure modules, e.g., EasyBuild configuration
+8.  Modules generated with EasyBuild
+9.  Directory for potential generic builds if performance does not matter
+10. Modules outside the regular software stacks
+11. No specific processor versions, e.g., Matlab
+12. Specific processor version, e.g., Gaussian
+13. Manually generated modules - OPTIONAL
+
+
+### Software part of the tree
+
+``` bash
+apps
+└─ antwerpen
+   └─ CalcUA
+      └─ SW
+         ├─ CalcUA-2021b
+         │  ├─ RH8-x86_64
+         │  ├─ RH8-BRW-host
+         │  └─ RH8-BRW-NVGP61GL
+         ├─ system #(1)!
+         │  ├─ RH8-x86_64
+         │  └─ RH8-IVB-host
+         └─ MNL #(2)!
+```
+
+1.  Sometimes relatively empty subdirs if EasyBuild only creates a module...
+2.  Manually installed software
+
+### Management part of the tree
+
+``` bash
+apps
+└─ antwerpen
+   └─ CalcUA
+      └─ mgmt
+         ├─ ebrepo_files
+         │  ├─ CalcUA-2021b
+         │  │ ├─ redhat8-x86_64
+         │  │ └─ redhat8-broadwell-noaccel
+         │  └─ system #(1)!
+         │     └─ redhat8-x86_64 #(2)!
+         └─ lmod_cache
+```
+
+1.  Modules outside the regular software stacks
+2.  No specific processor versions, e.g., Matlab
+
+
+
+

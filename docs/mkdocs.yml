@@ -12,11 +12,12 @@ theme:
   features:
     - navigation.instant
     - navigation.tracking
-    - navigation.tabs
+    #- navigation.tabs
     - navigation.top
     - navigation.indexes
     - header.autohide
     - toc.follow
+    - content.code.annotate
   palette:
     - primary: black
 

@@ -6,30 +6,36 @@ Installed as 'UAntwerpen-modules' in the software stack directory
 
 Subdirectories
 
-  * [docs](./README.md): The technical documentation for the setup
+  * [docs](https://github.com/klust/UAntwerpen-modules/tree/main/docs): 
+    The technical documentation for the setup
 
-  * [etc](../etc): Place to store the message-of-the-day file and the tips list.
+  * [etc](https://github.com/klust/UAntwerpen-modules/tree/main/etc): 
+    Place to store the message-of-the-day file and the tips list.
 
-  * [generic-modules](../generic-modules): Generic implementation of the software stack
-    and EasyBuild configuration modules.
+  * [generic-modules](https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules): 
+    Generic implementation of the software stack and EasyBuild configuration modules.
 
-      * [CalcUA-init](../generic-modules/CalcUA-init): Initialisation module for the
-        software stack, removing some of that stuff from the system images.
+      * [CalcUA-init](https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/CalcUA-init): 
+        Initialisation module for the software stack, removing some of that stuff from the system images.
 
-      * [calcua](../generic-nodules/calcua): Software stack module for the CalcUA software stacks.
+      * [calcua](https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/calcua): 
+        Software stack module for the CalcUA software stacks.
 
-      * [cuslterarch](../generic-modules/clusterarch): Module to select the desired machine
-        architecture for the software.
+      * [clusterarch](https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/clusterarch): 
+        Module to select the desired machine architecture for the software.
 
-      * [EasyBuild-config](../generic-modules/EasyBuild-config): Generic configuration module for
-        EasyBuild
+      * [EasyBuild-config](https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/EasyBuild-config): 
+        Generic configuration module for EasyBuild
 
-  * [LMOD](../LMOD): Module with the configuration files for LMOD.
+      * [StyleModifiers](https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/StyleModifiers):
+        modules to change the display style of the module tree. 
 
-  * [scripts](../scripts): Various scripts to set up and maintain the software stack.
+  * [LMOD](https://github.com/klust/UAntwerpen-modules/tree/main/LMOD): Module with the configuration files for LMOD.
 
-  * [scripts-dev](../scripts-dev): Various scripts used during the development of the this repository,
-    to test concepts.
+  * [scripts](https://github.com/klust/UAntwerpen-modules/tree/main/scripts): Various scripts to set up and maintain the software stack.
+
+  * [scripts-dev](https://github.com/klust/UAntwerpen-modules/tree/main/scripts-dev): Various scripts used during the 
+    development of the this repository, to test concepts.
 
 
 ## The UAntwerpen-easybuild repository
