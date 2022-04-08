@@ -1,5 +1,67 @@
 -- -----------------------------------------------------------------------------
 --
+-- Data structures for mapping CPU, OS and accelerator to the names that are
+-- actually used in the modules
+--
+local cpustring_to_longtarget = {
+    AuthenticAMD_23_49 = 'zen2',
+    GenuineIntel_6_62  = 'ivybridge',
+    GenuineIntel_6_79  = 'broadwell',
+    GenuineIntel_6_85  = 'skylake',
+}
+
+local cpustring_to_shorttarget = {
+    AuthenticAMD_23_49 = 'zen2',
+    GenuineIntel_6_62  = 'IVB',
+    GenuineIntel_6_79  = 'BRW',
+    GenuineIntel_6_85  = 'SKLX',
+}
+
+local osname_to_longos = {
+    CentOS_Linux = 'redhat',
+    Rocky_Linux  = 'redhat',
+}
+
+local osname_to_shortos = {
+    CentOS_Linux = 'RH',
+    Rocky_Linux  = 'RH',
+}
+
+local accelerator_to_longacc = {
+    AMD_MI100    = 'arcturus',
+    NVIDIA_GA100 = 'ampere',
+    NVIDIA_GP100 = 'pascal',
+    NVIDIA_GP104 = 'P5000',
+    NEC_aurora1  = 'aurora1',
+}
+
+local accelerator_to_shortacc = {
+    AMD_MI100    = 'GFX908',
+    NVIDIA_GA100 = 'NVCC80',
+    NVIDIA_GP100 = 'NVCC60',
+    NVIDIA_GP104 = 'NVCC61GL',
+    NEC_aurora1  = 'NEC1',
+}
+
+--
+-- Data structures determining how to extract the OS version (whether we want the
+-- major verison only or major.minor)
+--
+-- Note:
+-- -   CentOS only reports the major version in VERSION_ID in /etc/os-releases
+-- -   Rocky Linux on the other hand reports a major.minor version in VERSION_ID in
+--     /etc/os-releases.
+-- In the following table, we indicate if we want major or major.minor for the OS.
+-- The keys of the table are the names of the OS as found in the NAME field of 
+-- /etc/os-releases.
+local os_version_type = {
+    CentOS_Linux = 'major',
+    Rocky_Linux  = 'major',
+}
+
+
+-- -----------------------------------------------------------------------------
+--
 -- function get_hostname
 --
 -- Gets the hostname from the system.
@@ -79,9 +141,15 @@ function get_os_info()
     d1, d2, osname = osinfo:find( 'NAME="([%w%s]+)"' )
     osname = osname:gsub( '%s', '_' )
 
-    -- Get the version of the OS (where we assume that it can be a major.minor as in SLES)
+    -- Get the version of the OS (where we take into account that for some OSes
+    -- we may want major.minor versions as even minor versions differ significantly
+    -- and can cause compatibility problems.
     local osversion
-    d1, d2, osversion = osinfo:find( 'VERSION_ID="([%d%p]+)"' )
+    if os_version_type[osname] == 'major' then
+        d1, d2, osversion = osinfo:find( 'VERSION_ID="([%d]+)[%d%p]*"' )
+    else
+        d1, d2, osversion = osinfo:find( 'VERSION_ID="([%d%p]+)"' )
+    end
 
     return osname, osversion
 
@@ -121,50 +189,6 @@ function get_accelerator_info()
     return accelerator
 
 end
-
-
--- -----------------------------------------------------------------------------
---
--- Data structures for mapping CPU, OS and accelerator to the names that are
--- actually used in the modules
---
-local cpustring_to_longtarget = {
-    AuthenticAMD_23_49 = 'zen2',
-    GenuineIntel_6_62  = 'ivybridge',
-    GenuineIntel_6_79  = 'broadwell',
-    GenuineIntel_6_85  = 'skylake',
-}
-
-local cpustring_to_shorttarget = {
-    AuthenticAMD_23_49 = 'zen2',
-    GenuineIntel_6_62  = 'IVB',
-    GenuineIntel_6_79  = 'BRW',
-    GenuineIntel_6_85  = 'SKLX',
-}
-
-local osname_to_longos = {
-    CentOS_Linux = 'redhat',
-}
-
-local osname_to_shortos = {
-    CentOS_Linux = 'RH',
-}
-
-local accelerator_to_longacc = {
-    AMD_MI100    = 'arcturus',
-    NVIDIA_GA100 = 'ampere',
-    NVIDIA_GP100 = 'pascal',
-    NVIDIA_GP104 = 'P5000',
-    NEC_aurora1  = 'aurora1',
-}
-
-local accelerator_to_shortacc = {
-    AMD_MI100    = 'GFX908',
-    NVIDIA_GA100 = 'NVCC80',
-    NVIDIA_GP100 = 'NVCC60',
-    NVIDIA_GP104 = 'NVCC61GL',
-    NEC_aurora1  = 'NEC1',
-}
 
 
 -- -----------------------------------------------------------------------------
