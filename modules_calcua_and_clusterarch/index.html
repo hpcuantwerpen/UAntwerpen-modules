@@ -1,0 +1,1139 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the UAntwerpen-modules repository">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.5">
+    
+    
+      
+        <title>The generic calcua and clusterarch modules - UAntwerpen-modules documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2d9f7617.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-generic-calcua-and-clusterarch-modules" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="UAntwerpen-modules documentation" class="md-header__button md-logo" aria-label="UAntwerpen-modules documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            UAntwerpen-modules documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The generic calcua and clusterarch modules
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent=""  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+          
+        
+      </form>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="UAntwerpen-modules documentation" class="md-nav__button md-logo" aria-label="UAntwerpen-modules documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    UAntwerpen-modules documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design_decisions/" class="md-nav__link">
+        Design decisions
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design_considerations/" class="md-nav__link">
+        Design considerations
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modules_calcua-init/" class="md-nav__link">
+        The CalcUA-init module
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          The generic calcua and clusterarch modules
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        The generic calcua and clusterarch modules
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-calcua-generic-module" class="md-nav__link">
+    The calcua generic module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-clusterarch-generic-module" class="md-nav__link">
+    The clusterarch generic module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clusterarch" class="md-nav__link">
+    Clusterarch
+  </a>
+  
+    <nav class="md-nav" aria-label="Clusterarch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#possible-names-for-cluster-modules" class="md-nav__link">
+    Possible names for cluster modules
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#node-detection" class="md-nav__link">
+    Node detection
+  </a>
+  
+    <nav class="md-nav" aria-label="Node detection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#based-on-names" class="md-nav__link">
+    Based on names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#based-on-vsc_-variables" class="md-nav__link">
+    Based on VSC_ variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-information-in-proc-etc" class="md-nav__link">
+    Reading information in /proc etc.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#final-solution" class="md-nav__link">
+    Final solution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binary-versions-loaded-by-the-cluster-and-arch-modules" class="md-nav__link">
+    Binary versions loaded by the cluster and arch modules
+  </a>
+  
+    <nav class="md-nav" aria-label="Binary versions loaded by the cluster and arch modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-1-maximal-common-installations" class="md-nav__link">
+    Option 1: Maximal common installations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-2-only-common-installations-for-software-such-as-matlab-or-maybe-system-toolchain" class="md-nav__link">
+    Option 2: Only common installations for software such as Matlab or maybe system toolchain
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SitePackage/" class="md-nav__link">
+        The SitePackage.lua file and its included LUA files
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../directory_structure/" class="md-nav__link">
+        Directory structure of the repositories and software stack
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../procedures/" class="md-nav__link">
+        Procedures
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-calcua-generic-module" class="md-nav__link">
+    The calcua generic module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-clusterarch-generic-module" class="md-nav__link">
+    The clusterarch generic module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clusterarch" class="md-nav__link">
+    Clusterarch
+  </a>
+  
+    <nav class="md-nav" aria-label="Clusterarch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#possible-names-for-cluster-modules" class="md-nav__link">
+    Possible names for cluster modules
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#node-detection" class="md-nav__link">
+    Node detection
+  </a>
+  
+    <nav class="md-nav" aria-label="Node detection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#based-on-names" class="md-nav__link">
+    Based on names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#based-on-vsc_-variables" class="md-nav__link">
+    Based on VSC_ variables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-information-in-proc-etc" class="md-nav__link">
+    Reading information in /proc etc.
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#final-solution" class="md-nav__link">
+    Final solution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binary-versions-loaded-by-the-cluster-and-arch-modules" class="md-nav__link">
+    Binary versions loaded by the cluster and arch modules
+  </a>
+  
+    <nav class="md-nav" aria-label="Binary versions loaded by the cluster and arch modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-1-maximal-common-installations" class="md-nav__link">
+    Option 1: Maximal common installations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-2-only-common-installations-for-software-such-as-matlab-or-maybe-system-toolchain" class="md-nav__link">
+    Option 2: Only common installations for software such as Matlab or maybe system toolchain
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="the-generic-calcua-and-clusterarch-modules">The generic calcua and clusterarch modules</h1>
+<p>The calcua and clusterarch modules work together to load a version of the
+software stack for the right architecture. Moreover they ensure that the
+EasyBuild-config module can recover all the information it needs to install
+software in the right directories.</p>
+<p>The calcua module is loaded first. This module sets the version of the software
+stack. The version of the software stack is of the form year followed by the letter
+a or b.</p>
+<p><strong>TODO</strong>: Think about support for yyyy.mm also as this is used during the development
+of new toolchains in EasyBuild itself, and also for EESSI.</p>
+<p>The calcua modules will automatically load the best fitting clusterarch module
+for the node on which the module is loaded. However, it is always possible to
+overwrite that option later on.</p>
+<p>Instances of the generic clusterarch module come in two shapes:
+  * cluster/<name> or cluster/<name>-<OS> or cluster/<name>-<target> or
+    cluster/<name>-<OS>-<target> or any other special designator: This is because
+    users will typically be more familiar with the name of the cluster than with
+    the CPU architecture. The mapping to CPU architecture is coded internally.
+  * arch/<target> or arch/<OS>-<target>: This is a direct mapping
+    to the underlying directory structure.
+The <target> and <OS> fields correspond to what would be used in Spack,
+with the exception that we use skylake instead of skylake_avx512.</p>
+<h2 id="the-calcua-generic-module">The calcua generic module</h2>
+<h2 id="the-clusterarch-generic-module">The clusterarch generic module</h2>
+<h2 id="clusterarch">Clusterarch</h2>
+<p>This is a very complete list. Certainly initially some clusterarchs will be mapped
+on others (e.g., no specific stacks on the GPU nodes) but this may be revised
+over time.</p>
+<p>Note for the long names:
+  * The CPU target is based on the target that spack would report (or for that
+    reason the archspec tool), except that we use skylake instead of
+    skylake_avx512 and don't distinguish with Cascade Lake as that is just
+    a different stepping fo the same CPU family and model.
+  * The OS name is also based on what spack would report
+In doing so, we hopefully ensure that the stack is future-proof and will
+use similar naming as what would be used in Spack or in EESSI, as that also
+follows these conventions for CPU targets. For the accelerators we've chosen
+user-friendly names rather than their technical names.</p>
+<p>Note for the short names:
+  * For the AMD processors we simply refer to the zen name as that is
+    already a very short name.
+  * For the Intel processors we use established abbreviations: IVB for
+    Ivy Bridge, BRW for Broadwell and SKLX for Skylake (in fact, the more
+    often used abbreviation for Skylake with AVX512 is SKL-X but we want
+    to avoid dashes in the name).
+  * For the AMD GPUs we refer to their internal GFX code which is often
+    used in architecture strings for compilers with OpenMP offload.
+  * For NVIDIA GPUs we refer to their Compute Capability as that is
+    a parameter that needs to be set when compiling. Furthermore we add "GL"
+    to the string if it is a GPU for OpenGL visualisation. Hence:
+      * The Ampere A100 becomes NVCC80 as it has compute capability 8.0.
+      * The Tesla P100 becomes NVCC60 as it has compute capability 6.0.
+      * The Quadro P5000 which is based on the GP104 chip becomes
+        NVCC61GL as it has compute capability 6.1 and is also meant for
+        visualisation with OpenGL.</p>
+<p>These names are fixed in a function in <code>SitePackage.lua</code>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">long</th>
+<th align="left">short</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">redhat8-x86_64</td>
+<td align="left">RH8-x86_64</td>
+</tr>
+<tr>
+<td align="left">redhat8-zen2</td>
+<td align="left">RH8-zen2</td>
+</tr>
+<tr>
+<td align="left">redhat8-zen2-noaccel</td>
+<td align="left">RH8-zen2-host</td>
+</tr>
+<tr>
+<td align="left">redhat8-zen2-ampere</td>
+<td align="left">RH8-zen2-NVCC80</td>
+</tr>
+<tr>
+<td align="left">redhat8-zen2-arcturus</td>
+<td align="left">RH8-zen2-GFX908</td>
+</tr>
+<tr>
+<td align="left">redhat8-broadwell</td>
+<td align="left">RH8-BRW</td>
+</tr>
+<tr>
+<td align="left">redhat8-broadwell-noaccel</td>
+<td align="left">RH8-BRW-host</td>
+</tr>
+<tr>
+<td align="left">redhat8-broadwell-P5000</td>
+<td align="left">RH8-BRW-NVGP61GL</td>
+</tr>
+<tr>
+<td align="left">redhat8-broadwell-pascal</td>
+<td align="left">RH8-BRW-NVCC60</td>
+</tr>
+<tr>
+<td align="left">redhat8-ivybridge</td>
+<td align="left">RH8-IVB</td>
+</tr>
+<tr>
+<td align="left">redhat8-skylake</td>
+<td align="left">RH8-SKLX</td>
+</tr>
+<tr>
+<td align="left">redhat8-skylake-noaccel</td>
+<td align="left">RH8-SKLX-host</td>
+</tr>
+<tr>
+<td align="left">redhat8-skylake-aurora1</td>
+<td align="left">RH8-SKLX-NEC1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="possible-names-for-cluster-modules">Possible names for cluster modules</h3>
+<ul>
+<li>
+<p>cluster/hopper = arch/redhat8-ivybridge</p>
+</li>
+<li>
+<p>cluster/leibniz = arch/redhat8-broadwell or arch/redhat8-broadwell-noaccel (depending
+    on choices discussed further down)</p>
+</li>
+<li>
+<p>cluster/leibniz-viz = arch/redhat8-broadwell-P5000</p>
+</li>
+<li>
+<p>cluster/leibniz-nvidia = arch/redhat8-broadwell-pascal</p>
+</li>
+<li>
+<p>cluster/vaughan = arch/redhat8-zen2 or arch/cents8-rome-noaccel</p>
+</li>
+<li>
+<p>cluster/vaughn-amd = arch/redhat8-zen2-arcturus</p>
+</li>
+<li>
+<p>cluster/vaughan-nvidia = arch/redhat8-zen2-ampere</p>
+</li>
+<li>
+<p>cluster/biomina = arch/redhat8-skylake or arch/redhat8-skylake-noaccel depending
+    on choices discussed further down</p>
+</li>
+<li>
+<p>cluster/aurora = arch/redhat8-skylake-aurora1</p>
+</li>
+</ul>
+<h2 id="node-detection">Node detection</h2>
+<h3 id="based-on-names">Based on names</h3>
+<p>It is difficult to get hostname and domain in one. <code>hostname -f</code> does not have the
+desired effect on vaughan. One workaround is to use</p>
+<div class="highlight"><pre><span></span><code>host <span class="k">$(</span>hostname -i<span class="k">)</span> <span class="p">|</span> awk <span class="s1">&#39;{print $NF }&#39;</span>
+</code></pre></div>
+<p>Results:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Node type</th>
+<th align="left"><code>host $(hostname -i) \| awk '{print $NF }'</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">login node vaughan</td>
+<td align="left">lnX.vaughan.antwerpenb.vsc</td>
+</tr>
+<tr>
+<td align="left">compute node vaughan</td>
+<td align="left">rXcYYcnZ.vaughan.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">NVIDIA node vaughan</td>
+<td align="left">nvam1.vaughan.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">MI100 node vaughan</td>
+<td align="left">amdarcX.vaughan.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">login node leibniz</td>
+<td align="left">lnX.leibniz.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">visualisation node leibniz</td>
+<td align="left">vizX.leibniz.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">compute node leibniz</td>
+<td align="left">rXcYYcnZ.leibniz.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">compute node hopper</td>
+<td align="left">rXcYYcnZ.hopper.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">Pascal node leibniz</td>
+<td align="left">paX.leibniz.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">Aurora node leibniz</td>
+<td align="left">aurora.leibniz.antwerpen.vsc</td>
+</tr>
+<tr>
+<td align="left">Biomina node leibniz</td>
+<td align="left">r0c03cZ.leibniz.antwerpen.vsc</td>
+</tr>
+</tbody>
+</table>
+<h3 id="based-on-vsc_-variables">Based on VSC_ variables</h3>
+<ul>
+<li>
+<p>Variables:</p>
+<ul>
+<li>
+<p>VSC_ARCH_LOCAL: Currently ivybridge, broadwell or rome.</p>
+<ul>
+<li>
+<p>The BioMina node also returns VSC_ARCH_LOCAL=broadwell...</p>
+</li>
+<li>
+<p>What about the aurora node?</p>
+</li>
+</ul>
+</li>
+<li>
+<p>VSC_OS_LOCAL: centos7 or redhat8</p>
+</li>
+</ul>
+</li>
+<li>
+<p>It is not possible to detect the accelerator type</p>
+</li>
+</ul>
+<h3 id="reading-information-in-proc-etc">Reading information in /proc etc.</h3>
+<ul>
+<li>
+<p>Get the CPU type:</p>
+<div class="highlight"><pre><span></span><code>cat /proc/cpuinfo <span class="p">|</span> grep -m <span class="m">1</span> <span class="s2">&quot;model name&quot;</span>  <span class="p">|</span> cut -d : -f <span class="m">2</span>
+</code></pre></div>
+<p>The only problem with this one is that it will still have a leading space but that
+is easily dealt with in the subsequent pattern matching to find the CPU family.</p>
+</li>
+<li>
+<p>Instead of extracting the "model name" line one could also extract the "vendor_id",
+    "cpu family" and "model" lines.</p>
+<p>E.g.,</p>
+<ul>
+<li>AMD Rome: CPU family 23, model 49.</li>
+<li>Intel Ivy Bridge: CPU family 6, model 62</li>
+<li>Intel Broadwell: CPU family 6, model 79</li>
+<li>Intel Skylake: CPU family 6, model 85</li>
+<li>Intel Cascade Lake: Actually also CPU family 6, model 85, just a different
+    stepping: 7 versus 4 for our Skylake CPUs</li>
+</ul>
+</li>
+<li>
+<p>Accelerators can be detected by looking in the output of the lspci command</p>
+</li>
+<li>
+<p>The OS can be detected from the variables that can be set through /etc/os-release,
+    and in particular the NAME and VERSION_ID lines.</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Node type</th>
+<th align="left">vendor_id</th>
+<th align="left">cpu family</th>
+<th align="left">model</th>
+<th align="left">lspci</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">login node vaughan</td>
+<td align="left">AuthenticAMD</td>
+<td align="left">23</td>
+<td align="left">49</td>
+<td align="left">/</td>
+</tr>
+<tr>
+<td align="left">compute node vaughan</td>
+<td align="left">AuthenticAMD</td>
+<td align="left">23</td>
+<td align="left">49</td>
+<td align="left">/</td>
+</tr>
+<tr>
+<td align="left">NVIDIA node vaughan</td>
+<td align="left">AuthenticAMD</td>
+<td align="left">23</td>
+<td align="left">49</td>
+<td align="left">/</td>
+</tr>
+<tr>
+<td align="left">MI100 node vaughan</td>
+<td align="left">AuthenticAMD</td>
+<td align="left">23</td>
+<td align="left">49</td>
+<td align="left">MI100</td>
+</tr>
+<tr>
+<td align="left">login node leibniz</td>
+<td align="left">GenuineIntel</td>
+<td align="left">6</td>
+<td align="left">79</td>
+<td align="left">GA100</td>
+</tr>
+<tr>
+<td align="left">visualisation node leibniz</td>
+<td align="left">GenuineIntel</td>
+<td align="left">6</td>
+<td align="left">79</td>
+<td align="left">GP104GL</td>
+</tr>
+<tr>
+<td align="left">compute node leibniz</td>
+<td align="left">GenuineIntel</td>
+<td align="left">6</td>
+<td align="left">79</td>
+<td align="left">/</td>
+</tr>
+<tr>
+<td align="left">compute node hopper</td>
+<td align="left">GenuineIntel</td>
+<td align="left">6</td>
+<td align="left">62</td>
+<td align="left">/</td>
+</tr>
+<tr>
+<td align="left">Pascal node leibniz</td>
+<td align="left">GenuineIntel</td>
+<td align="left">6</td>
+<td align="left">79</td>
+<td align="left">GP100GL</td>
+</tr>
+<tr>
+<td align="left">Aurora node leibniz</td>
+<td align="left">GenuineIntel</td>
+<td align="left">6</td>
+<td align="left">85</td>
+<td align="left">NEC</td>
+</tr>
+<tr>
+<td align="left">Biomina node leibniz</td>
+<td align="left">GenuineIntel</td>
+<td align="left">6</td>
+<td align="left">85</td>
+<td align="left">/</td>
+</tr>
+</tbody>
+</table>
+<h3 id="final-solution">Final solution</h3>
+<p>The solution chosen was the last one, reading information from <code>/proc/cpuinfo</code>, <code>/etc/os-release</code>
+and the output of <code>lspci</code>.</p>
+<h2 id="binary-versions-loaded-by-the-cluster-and-arch-modules">Binary versions loaded by the cluster and arch modules</h2>
+<h3 id="option-1-maximal-common-installations">Option 1: Maximal common installations</h3>
+<p>There are almost always three levels:</p>
+<ul>
+<li>
+<p>Level 1: Unoptimized generic x86 64-bit CPU</p>
+</li>
+<li>
+<p>Level 2: Specific CPU architecture, but the package is fully GPU agnostic</p>
+</li>
+<li>
+<p>Level 3: Specific CPU architecture and the package may have accelerated versions
+    that we need to install with the same name.</p>
+</li>
+</ul>
+<p>Combinations:</p>
+<ul>
+<li>
+<p>login nodes and regular compute nodes vaughan: redhat8-zen2-noaccel, redhat8-zen2, redhat8-x86_64</p>
+</li>
+<li>
+<p>NVIDIA nodes vaughan: redhat8-zen2-ampere, redhat8-zen2, redhat8-x86_64</p>
+</li>
+<li>
+<p>MI100 nodes vaughan: redhat8-zen2-arcturus, redhat8-zen2, redhat8-x86_64</p>
+</li>
+<li>
+<p>Regular login and compute nodes leibniz: redhat8-broadwell-noaccel, redhat8-broadwell, redhat8-x86_64</p>
+</li>
+<li>
+<p>Visualisation node leibniz: redhat8-broadwell-P5000, redhat8-broadwell, redhat8-x86_64</p>
+</li>
+<li>
+<p>Pascal node leibniz: redhat8-broadwell-pascal, redhat8-broadwell, redhat8-x86_64</p>
+</li>
+<li>
+<p>BioMina node leibniz: redhat8-skylake-noaccel, redhat8-skylake, redhat8-x86_64</p>
+</li>
+<li>
+<p>Aurora node leibniz: redhat8-skylake-aurora1, redhat8-skylake, redhat8-x86_64</p>
+</li>
+<li>
+<p>Hopper node: redhat8-ivybridge, redhat8-x86_64</p>
+</li>
+</ul>
+<p>Advantages:</p>
+<ul>
+<li>Minimal number of duplicated installations</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>
+<p>Very easy to make mistakes about what to install where. No package should be installed with the same
+    full name (name + version + versionsuffix) at multiple levels. No package can have
+    dependencies at a higher level.</p>
+</li>
+<li>
+<p>As it would be dangerous to have both an OpenMPI with and without accelerator support loaded, it means
+    we have to install OpenMPI and all packages that depend on it at level 3, so we need to be very careful
+    here.</p>
+<ul>
+<li>
+<p>Everything installed with Intel that does not need a GPU can be installed at level 2 as there is
+    no GPU-specific Intel MPI.</p>
+</li>
+<li>
+<p>With FOSS and its subtoolchains the situation is different. GCCcore and GCC can be installed at level
+    1 or 2 but as long as we do not know if the EasyBuild community will succeed at building a single
+    MPI module that works for everything, gompi and foss software should be installed at level 3.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="option-2-only-common-installations-for-software-such-as-matlab-or-maybe-system-toolchain">Option 2: Only common installations for software such as Matlab or maybe system toolchain</h3>
+<p>Now there are two levels:</p>
+<ul>
+<li>
+<p>Level 1: Unoptimized generic x86 64-bit CPU</p>
+</li>
+<li>
+<p>Level 2: Optimised software</p>
+</li>
+</ul>
+<p>Combinations:</p>
+<ul>
+<li>
+<p>login nodes and regular compute nodes vaughan: redhat8-zen2-noaccel or redhat8-zen2, redhat8-x86_64</p>
+</li>
+<li>
+<p>NVIDIA nodes vaughan: redhat8-zen2-ampere, redhat8-x86_64</p>
+</li>
+<li>
+<p>MI100 nodes vaughan: redhat8-zen2-arcturus, redhat8-x86_64</p>
+</li>
+<li>
+<p>Regular login and compute nodes leibniz: redhat8-broadwell-noaccel or redhat8-broadwell, redhat8-x86_64</p>
+</li>
+<li>
+<p>Visualisation node leibniz: redhat8-broadwell-P5000, redhat8-x86_64</p>
+</li>
+<li>
+<p>Pascal node leibniz: redhat8-broadwell-pascal, redhat8-x86_64</p>
+</li>
+<li>
+<p>BioMina node leibniz: redhat8-skylake-noaccel or redhat8-skylake, redhat8-x86_64</p>
+</li>
+<li>
+<p>Aurora node leibniz: redhat8-skylake-aurora1, redhat8-x86_64</p>
+</li>
+<li>
+<p>Hopper node: redhat8-ivybridge, redhat8-x86_64</p>
+</li>
+</ul>
+<p>Users could in principle still use software from another architecture within the stack
+by loading the appropriate clusterarch module so we could still be fairly selective
+about what we provide for the "special" nodes with accelerators. However, many of the
+often recurring dependencies like alternatives for what are often basic OS libraries
+would have to be installed multiple times.</p>
+<p>In this case the "noaccel" architecture isn't really needed unless we want all names
+to have three components if they are on level 2 (which may ease a transition to option
+1 later on).</p>
+<p>Advantages</p>
+<ul>
+<li>Conceptually certainly simpler as there is little doubt about where to install a module</li>
+</ul>
+<p>Disadvantages</p>
+<ul>
+<li>Larger volume of the overall software stack as more modules will be duplicated.</li>
+</ul>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 8, 2022</span>
+      
+    
+  </small>
+</div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../modules_calcua-init/" class="md-footer__link md-footer__link--prev" aria-label="Previous: The CalcUA-init module" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              The CalcUA-init module
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../SitePackage/" class="md-footer__link md-footer__link--next" aria-label="Next: The SitePackage.lua file and its included LUA files" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              The SitePackage.lua file and its included LUA files
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    <a href="https://github.com/hpcuantwerpen" target="_blank" rel="noopener" title="HPC-UAntwerpen on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.indexes", "header.autohide", "toc.follow", "content.code.annotate"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.467223ff.min.js"></script>
+      
+    
+  </body>
+</html>
