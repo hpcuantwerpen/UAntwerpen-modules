@@ -268,16 +268,51 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#clusterarch" class="md-nav__link">
-    Clusterarch
+  <a href="#naming-the-cluster-architecture-clusterarch" class="md-nav__link">
+    Naming the cluster architecture (clusterarch)
   </a>
   
-    <nav class="md-nav" aria-label="Clusterarch">
+    <nav class="md-nav" aria-label="Naming the cluster architecture (clusterarch)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#possible-names-for-cluster-modules" class="md-nav__link">
-    Possible names for cluster modules
+  <a href="#preliminary-notes" class="md-nav__link">
+    Preliminary notes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#os-names" class="md-nav__link">
+    OS names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-names" class="md-nav__link">
+    CPU names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accelerator-names" class="md-nav__link">
+    Accelerator names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-architecture-strings" class="md-nav__link">
+    Cluster architecture strings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#possible-names-for-arch-modules-based-on-the-cluster-name" class="md-nav__link">
+    Possible names for arch modules based on the cluster name
   </a>
   
 </li>
@@ -288,11 +323,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#node-detection" class="md-nav__link">
-    Node detection
+  <a href="#determining-the-architecture-string" class="md-nav__link">
+    Determining the architecture string
   </a>
   
-    <nav class="md-nav" aria-label="Node detection">
+    <nav class="md-nav" aria-label="Determining the architecture string">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -386,6 +421,21 @@
   
   
     <li class="md-nav__item">
+      <a href="../easybuild/" class="md-nav__link">
+        EasyBuild configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../directory_structure/" class="md-nav__link">
         Directory structure of the repositories and software stack
       </a>
@@ -449,16 +499,51 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#clusterarch" class="md-nav__link">
-    Clusterarch
+  <a href="#naming-the-cluster-architecture-clusterarch" class="md-nav__link">
+    Naming the cluster architecture (clusterarch)
   </a>
   
-    <nav class="md-nav" aria-label="Clusterarch">
+    <nav class="md-nav" aria-label="Naming the cluster architecture (clusterarch)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#possible-names-for-cluster-modules" class="md-nav__link">
-    Possible names for cluster modules
+  <a href="#preliminary-notes" class="md-nav__link">
+    Preliminary notes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#os-names" class="md-nav__link">
+    OS names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-names" class="md-nav__link">
+    CPU names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accelerator-names" class="md-nav__link">
+    Accelerator names
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-architecture-strings" class="md-nav__link">
+    Cluster architecture strings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#possible-names-for-arch-modules-based-on-the-cluster-name" class="md-nav__link">
+    Possible names for arch modules based on the cluster name
   </a>
   
 </li>
@@ -469,11 +554,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#node-detection" class="md-nav__link">
-    Node detection
+  <a href="#determining-the-architecture-string" class="md-nav__link">
+    Determining the architecture string
   </a>
   
-    <nav class="md-nav" aria-label="Node detection">
+    <nav class="md-nav" aria-label="Determining the architecture string">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -564,48 +649,229 @@ of new toolchains in EasyBuild itself, and also for EESSI.</p>
 for the node on which the module is loaded. However, it is always possible to
 overwrite that option later on.</p>
 <p>Instances of the generic clusterarch module come in two shapes:
-  * cluster/<name> or cluster/<name>-<OS> or cluster/<name>-<target> or
+-   cluster/<name> or cluster/<name>-<OS> or cluster/<name>-<target> or
     cluster/<name>-<OS>-<target> or any other special designator: This is because
     users will typically be more familiar with the name of the cluster than with
     the CPU architecture. The mapping to CPU architecture is coded internally.
-  * arch/<target> or arch/<OS>-<target>: This is a direct mapping
+-   arch/<target> or arch/<OS>-<target>: This is a direct mapping
     to the underlying directory structure.
 The <target> and <OS> fields correspond to what would be used in Spack,
 with the exception that we use skylake instead of skylake_avx512.</p>
 <h2 id="the-calcua-generic-module">The calcua generic module</h2>
+<p>What the module does:</p>
+<ul>
+<li>Declare itself a sticky module from the family <code>CalcUA_SoftwareStack</code>.</li>
+<li>Determine its name and version from the module name and version</li>
+<li>Determine the architecture of the node on which it is executing taking
+    into account the architectures supported byt the current version of
+    the calcua stack.<ul>
+<li>Determine the architecture of the node</li>
+<li>Then look for the best match for the software stack that is being
+    loaded.</li>
+</ul>
+</li>
+<li>Enable loading of the architecture modules supported by the specific
+    version of the software stack.</li>
+<li>Load the most suitable clusterarch module</li>
+</ul>
 <h2 id="the-clusterarch-generic-module">The clusterarch generic module</h2>
-<h2 id="clusterarch">Clusterarch</h2>
-<p>This is a very complete list. Certainly initially some clusterarchs will be mapped
+<p>In the current implementation we only support architecture strings as the version of the module.
+Instead we use a <code>.modulerc.lua</code> file in the the <code>arch</code> module subdirectory for each software
+stack to define synonyms based on the cluster names. This file is prepared as one of the steps
+in the <code>prepare_calcua_stack.lua</code> script.</p>
+<p>What the module does:</p>
+<ul>
+<li>Declare itself a sticky module from the family <code>CalcUA_clusterarch</code>.</li>
+<li>TO BE IMPLEMENTED!</li>
+<li>Determine suitable architecture strings:<ul>
+<li>Highest-level architecture string for the current version of the software stack is
+    determined from the version of the module.</li>
+<li>When we are not loading for the <code>system</code> version of the software stack, we also need
+    to determine the highest level version of that stack that should be loaded.</li>
+</ul>
+</li>
+<li>Check if a user software stack is also available.</li>
+<li>Determine the list of directories of EasyBuild-generated module files to load. Keep in mind
+    that later on we will have to synchronise that with a list of directories in the EasyBuild
+    installation repository. All user modules take a higher priority than any 
+    EasyBuild-generated module.</li>
+<li>Determine the infrastructure module directory to load.</li>
+<li>
+<p>There are no user versions of infrastructure modules.</p>
+</li>
+<li>
+<p>FUTURE EXTENSION: Determine the manually generated modules directory/is to load.</p>
+<p>We may provide a placeholder for user-build manual modules also
+-   Generate <code>prepend_path</code> statements in reverse order<br />
+-   So first for the system modules, in the order
+    -   Manual (when implemented)
+    -   Infrastructure
+    -   <code>system</code> dummy stack from generic to specific
+    -   Stack version from generic to specific
+-   Then for the user modules
+    -   Manual (when implemented)
+    -   <code>system</code> dummy stack from generic to specific
+    -   Stack version from generic to specific</p>
+</li>
+</ul>
+<h2 id="naming-the-cluster-architecture-clusterarch">Naming the cluster architecture (clusterarch)</h2>
+<h3 id="preliminary-notes">Preliminary notes</h3>
+<p>The lists below are very complete lists, and certainly at the moment we do
+no have a separate software stack for them and some clusterarchs will be mapped
 on others (e.g., no specific stacks on the GPU nodes) but this may be revised
 over time.</p>
-<p>Note for the long names:
-  * The CPU target is based on the target that spack would report (or for that
+<p>Depending on where they are used, there are long and short names.</p>
+<p>Each name consists of three components:</p>
+<ol>
+<li>Operating system + version</li>
+<li>CPU architecture</li>
+<li>(Optional) the accelerator, where we also have a term for no accelerator.</li>
+</ol>
+<p>The thre components are spearated by dashes.</p>
+<p>Note for the long names:</p>
+<ul>
+<li>The CPU target is based on the target that spack would report (or for that
     reason the archspec tool), except that we use skylake instead of
     skylake_avx512 and don't distinguish with Cascade Lake as that is just
-    a different stepping fo the same CPU family and model.
-  * The OS name is also based on what spack would report
-In doing so, we hopefully ensure that the stack is future-proof and will
+    a different stepping fo the same CPU family and model.</li>
+<li>The OS name is also based on what spack would report</li>
+</ul>
+<p>In doing so, we hopefully ensure that the stack is future-proof and will
 use similar naming as what would be used in Spack or in EESSI, as that also
 follows these conventions for CPU targets. For the accelerators we've chosen
 user-friendly names rather than their technical names.</p>
-<p>Note for the short names:
-  * For the AMD processors we simply refer to the zen name as that is
-    already a very short name.
-  * For the Intel processors we use established abbreviations: IVB for
+<p>Note for the short names:</p>
+<ul>
+<li>For the AMD processors we simply refer to the zen name as that is
+    already a very short name.</li>
+<li>For the Intel processors we use established abbreviations: IVB for
     Ivy Bridge, BRW for Broadwell and SKLX for Skylake (in fact, the more
     often used abbreviation for Skylake with AVX512 is SKL-X but we want
-    to avoid dashes in the name).
-  * For the AMD GPUs we refer to their internal GFX code which is often
-    used in architecture strings for compilers with OpenMP offload.
-  * For NVIDIA GPUs we refer to their Compute Capability as that is
+    to avoid dashes in the name).</li>
+<li>For the AMD GPUs we refer to their internal GFX code which is often
+    used in architecture strings for compilers with OpenMP offload.</li>
+<li>For NVIDIA GPUs we refer to their Compute Capability as that is
     a parameter that needs to be set when compiling. Furthermore we add "GL"
-    to the string if it is a GPU for OpenGL visualisation. Hence:
-      * The Ampere A100 becomes NVCC80 as it has compute capability 8.0.
-      * The Tesla P100 becomes NVCC60 as it has compute capability 6.0.
-      * The Quadro P5000 which is based on the GP104 chip becomes
-        NVCC61GL as it has compute capability 6.1 and is also meant for
-        visualisation with OpenGL.</p>
-<p>These names are fixed in a function in <code>SitePackage.lua</code>.</p>
+    to the string if it is a GPU for OpenGL visualisation. Hence:<ul>
+<li>The Ampere A100 becomes NVCC80 as it has compute capability 8.0.</li>
+<li>The Tesla P100 becomes NVCC60 as it has compute capability 6.0.</li>
+<li>The Quadro P5000 which is based on the GP104 chip becomes
+    NVCC61GL as it has compute capability 6.1 and is also meant for
+    visualisation with OpenGL.</li>
+</ul>
+</li>
+</ul>
+<h3 id="os-names">OS names</h3>
+<p>Currently supported for the OS component of the name:</p>
+<table>
+<thead>
+<tr>
+<th align="left">long</th>
+<th align="left">short</th>
+<th align="left">What?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">redhat7</td>
+<td align="left">RH7</td>
+<td align="left">Red Hat 7-compatible OS</td>
+</tr>
+<tr>
+<td align="left">redhat8</td>
+<td align="left">RH8</td>
+<td align="left">Red Hat 8-compatible OS</td>
+</tr>
+</tbody>
+</table>
+<p>These names are defined in <code>SitePAckage_arch_hierarchy.lua</code>.</p>
+<h3 id="cpu-names">CPU names</h3>
+<p>Currently supported for the CPU component of the name:</p>
+<table>
+<thead>
+<tr>
+<th align="left">long</th>
+<th align="left">short</th>
+<th align="left">What?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">ivybridge</td>
+<td align="left">IVB</td>
+<td align="left">Intel Ivy Bridge generation (E5-XXXX v2)</td>
+</tr>
+<tr>
+<td align="left">broadwell</td>
+<td align="left">BRW</td>
+<td align="left">Intel Broadwell generation (E5-XXXX v4)</td>
+</tr>
+<tr>
+<td align="left">skylake</td>
+<td align="left">SKLX</td>
+<td align="left">Intel Skylake and Cascadelake server CPUs</td>
+</tr>
+<tr>
+<td align="left">zen2</td>
+<td align="left">zen2</td>
+<td align="left">AMD Zen2 generation</td>
+</tr>
+<tr>
+<td align="left">x86_64</td>
+<td align="left">x86_64</td>
+<td align="left">Generic x86 64-bit CPU</td>
+</tr>
+</tbody>
+</table>
+<p>These names are defined in <code>SitePAckage_arch_hierarchy.lua</code>.</p>
+<h3 id="accelerator-names">Accelerator names</h3>
+<p>Here the short name isn't always shorter, but tells more about the
+architecture. at least for the GPU accelerators.</p>
+<table>
+<thead>
+<tr>
+<th align="left">long</th>
+<th align="left">short</th>
+<th align="left">What?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">noaccel</td>
+<td align="left">host</td>
+<td align="left">No accelerator in the node</td>
+</tr>
+<tr>
+<td align="left">ampere</td>
+<td align="left">NVCC80</td>
+<td align="left">NVIDIA A100</td>
+</tr>
+<tr>
+<td align="left">pascal</td>
+<td align="left">NVCC60</td>
+<td align="left">NVIDIA P100</td>
+</tr>
+<tr>
+<td align="left">P5000</td>
+<td align="left">NVGP61GL</td>
+<td align="left">NVIDIA P5000 visualisation node</td>
+</tr>
+<tr>
+<td align="left">arcturus</td>
+<td align="left">GFX908</td>
+<td align="left">AMD MI100</td>
+</tr>
+<tr>
+<td align="left">aurora1</td>
+<td align="left">NEC1</td>
+<td align="left">NEC Aurora 1st gen vector board</td>
+</tr>
+</tbody>
+</table>
+<p>These names are defined in <code>SitePAckage_arch_hierarchy.lua</code>.</p>
+<h3 id="cluster-architecture-strings">Cluster architecture strings</h3>
+<p>These combinations that are supported for each software stack version are defined in
+<code>etc/SystemDefinition.lua</code>.</p>
 <table>
 <thead>
 <tr>
@@ -668,39 +934,47 @@ user-friendly names rather than their technical names.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="possible-names-for-cluster-modules">Possible names for cluster modules</h3>
+<h3 id="possible-names-for-arch-modules-based-on-the-cluster-name">Possible names for arch modules based on the cluster name</h3>
 <ul>
 <li>
-<p>cluster/hopper = arch/redhat8-ivybridge</p>
+<p>arch/hopper = arch/redhat8-ivybridge</p>
 </li>
 <li>
-<p>cluster/leibniz = arch/redhat8-broadwell or arch/redhat8-broadwell-noaccel (depending
+<p>arch/leibniz = arch/redhat8-broadwell or arch/redhat8-broadwell-noaccel (depending
     on choices discussed further down)</p>
 </li>
 <li>
-<p>cluster/leibniz-viz = arch/redhat8-broadwell-P5000</p>
+<p>arch/leibniz-viz = arch/redhat8-broadwell-P5000</p>
 </li>
 <li>
-<p>cluster/leibniz-nvidia = arch/redhat8-broadwell-pascal</p>
+<p>arch/leibniz-nvidia = arch/redhat8-broadwell-pascal</p>
 </li>
 <li>
-<p>cluster/vaughan = arch/redhat8-zen2 or arch/cents8-rome-noaccel</p>
+<p>arch/vaughan = arch/redhat8-zen2 or arch/cents8-rome-noaccel</p>
 </li>
 <li>
-<p>cluster/vaughn-amd = arch/redhat8-zen2-arcturus</p>
+<p>arch/vaughn-amd = arch/redhat8-zen2-arcturus</p>
 </li>
 <li>
-<p>cluster/vaughan-nvidia = arch/redhat8-zen2-ampere</p>
+<p>arch/vaughan-nvidia = arch/redhat8-zen2-ampere</p>
 </li>
 <li>
-<p>cluster/biomina = arch/redhat8-skylake or arch/redhat8-skylake-noaccel depending
+<p>arch/biomina = arch/redhat8-skylake or arch/redhat8-skylake-noaccel depending
     on choices discussed further down</p>
 </li>
 <li>
-<p>cluster/aurora = arch/redhat8-skylake-aurora1</p>
+<p>arch/aurora = arch/redhat8-skylake-aurora1</p>
 </li>
 </ul>
-<h2 id="node-detection">Node detection</h2>
+<p>There is a mapping per software stack version defined in
+<code>etc/SystemDefinition.lua</code>.</p>
+<h2 id="determining-the-architecture-string">Determining the architecture string</h2>
+<p>There are three options to determine the architecture string:</p>
+<ol>
+<li>Based on the name of the node</li>
+<li>Based on VSC_ environment variables</li>
+<li>Determine by reading some OS files and pseudo-files</li>
+</ol>
 <h3 id="based-on-names">Based on names</h3>
 <p>It is difficult to get hostname and domain in one. <code>hostname -f</code> does not have the
 desired effect on vaughan. One workaround is to use</p>
@@ -717,7 +991,7 @@ desired effect on vaughan. One workaround is to use</p>
 <tbody>
 <tr>
 <td align="left">login node vaughan</td>
-<td align="left">lnX.vaughan.antwerpenb.vsc</td>
+<td align="left">lnX.vaughan.antwerpen.vsc</td>
 </tr>
 <tr>
 <td align="left">compute node vaughan</td>
@@ -761,6 +1035,7 @@ desired effect on vaughan. One workaround is to use</p>
 </tr>
 </tbody>
 </table>
+<p>TODO: Is this still valid after the upgrade? No!</p>
 <h3 id="based-on-vsc_-variables">Based on VSC_ variables</h3>
 <ul>
 <li>
@@ -909,6 +1184,7 @@ is easily dealt with in the subsequent pattern matching to find the CPU family.<
 <h3 id="final-solution">Final solution</h3>
 <p>The solution chosen was the last one, reading information from <code>/proc/cpuinfo</code>, <code>/etc/os-release</code>
 and the output of <code>lspci</code>.</p>
+<p>The detection is implemented in <code>LMOD/SitePackage_system_info.lua</code>. </p>
 <h2 id="binary-versions-loaded-by-the-cluster-and-arch-modules">Binary versions loaded by the cluster and arch modules</h2>
 <h3 id="option-1-maximal-common-installations">Option 1: Maximal common installations</h3>
 <p>There are almost always three levels:</p>
@@ -925,35 +1201,74 @@ and the output of <code>lspci</code>.</p>
 </li>
 </ul>
 <p>Combinations:</p>
-<ul>
-<li>
-<p>login nodes and regular compute nodes vaughan: redhat8-zen2-noaccel, redhat8-zen2, redhat8-x86_64</p>
-</li>
-<li>
-<p>NVIDIA nodes vaughan: redhat8-zen2-ampere, redhat8-zen2, redhat8-x86_64</p>
-</li>
-<li>
-<p>MI100 nodes vaughan: redhat8-zen2-arcturus, redhat8-zen2, redhat8-x86_64</p>
-</li>
-<li>
-<p>Regular login and compute nodes leibniz: redhat8-broadwell-noaccel, redhat8-broadwell, redhat8-x86_64</p>
-</li>
-<li>
-<p>Visualisation node leibniz: redhat8-broadwell-P5000, redhat8-broadwell, redhat8-x86_64</p>
-</li>
-<li>
-<p>Pascal node leibniz: redhat8-broadwell-pascal, redhat8-broadwell, redhat8-x86_64</p>
-</li>
-<li>
-<p>BioMina node leibniz: redhat8-skylake-noaccel, redhat8-skylake, redhat8-x86_64</p>
-</li>
-<li>
-<p>Aurora node leibniz: redhat8-skylake-aurora1, redhat8-skylake, redhat8-x86_64</p>
-</li>
-<li>
-<p>Hopper node: redhat8-ivybridge, redhat8-x86_64</p>
-</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Node</th>
+<th align="left">L1 (generic)</th>
+<th align="left">L2</th>
+<th align="left">L3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">login/compute vaughan</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-zen2</td>
+<td align="left">redhat8-zen2-noaccel</td>
+</tr>
+<tr>
+<td align="left">vaughan Ampere node</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-zen2</td>
+<td align="left">redhat8-zen2-ampere</td>
+</tr>
+<tr>
+<td align="left">vaughan MI100</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-zen2</td>
+<td align="left">redhat8-zen2-arcturus</td>
+</tr>
+<tr>
+<td align="left">login/compute leibniz</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-broadwell</td>
+<td align="left">redhat8-broadwell-noaccel</td>
+</tr>
+<tr>
+<td align="left">leibniz visualisation</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-broadwell</td>
+<td align="left">redhat8-broadwell-P5000</td>
+</tr>
+<tr>
+<td align="left">leibniz Pascal</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-broadwell</td>
+<td align="left">redhat8-broadwell-pascal</td>
+</tr>
+<tr>
+<td align="left">BioMina node</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-skylake</td>
+<td align="left">redhat8-skylake-noaccel</td>
+</tr>
+<tr>
+<td align="left">Leibniz aurora</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-skylake</td>
+<td align="left">redhat8-skylake-aurora1</td>
+</tr>
+<tr>
+<td align="left">Hopper node</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-ivybridge</td>
+<td align="left">/</td>
+</tr>
+</tbody>
+</table>
+<p>For Hopper we could drop the highest level as we only have nodes without accelerator
+and no new nodes with this CPU will ever come in.</p>
 <p>Advantages:</p>
 <ul>
 <li>Minimal number of duplicated installations</li>
@@ -992,36 +1307,72 @@ and the output of <code>lspci</code>.</p>
 <p>Level 2: Optimised software</p>
 </li>
 </ul>
-<p>Combinations:</p>
-<ul>
-<li>
-<p>login nodes and regular compute nodes vaughan: redhat8-zen2-noaccel or redhat8-zen2, redhat8-x86_64</p>
-</li>
-<li>
-<p>NVIDIA nodes vaughan: redhat8-zen2-ampere, redhat8-x86_64</p>
-</li>
-<li>
-<p>MI100 nodes vaughan: redhat8-zen2-arcturus, redhat8-x86_64</p>
-</li>
-<li>
-<p>Regular login and compute nodes leibniz: redhat8-broadwell-noaccel or redhat8-broadwell, redhat8-x86_64</p>
-</li>
-<li>
-<p>Visualisation node leibniz: redhat8-broadwell-P5000, redhat8-x86_64</p>
-</li>
-<li>
-<p>Pascal node leibniz: redhat8-broadwell-pascal, redhat8-x86_64</p>
-</li>
-<li>
-<p>BioMina node leibniz: redhat8-skylake-noaccel or redhat8-skylake, redhat8-x86_64</p>
-</li>
-<li>
-<p>Aurora node leibniz: redhat8-skylake-aurora1, redhat8-x86_64</p>
-</li>
-<li>
-<p>Hopper node: redhat8-ivybridge, redhat8-x86_64</p>
-</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Node</th>
+<th align="left">L1 (generic)</th>
+<th align="left">L2 (shortest)</th>
+<th align="left">L2 (3-component)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">login/compute vaughan</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-zen2</td>
+<td align="left">redhat8-zen2-noaccel</td>
+</tr>
+<tr>
+<td align="left">vaughan Ampere node</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-zen2-ampere</td>
+<td align="left">redhat8-zen2-ampere</td>
+</tr>
+<tr>
+<td align="left">vaughan MI100</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-zen2-arcturus</td>
+<td align="left">redhat8-zen2-arcturus</td>
+</tr>
+<tr>
+<td align="left">login/compute leibniz</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-broadwell</td>
+<td align="left">redhat8-broadwell-noaccel</td>
+</tr>
+<tr>
+<td align="left">leibniz visualisation</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-broadwell-P5000</td>
+<td align="left">redhat8-broadwell-P5000</td>
+</tr>
+<tr>
+<td align="left">leibniz Pascal</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-broadwell-pascal</td>
+<td align="left">redhat8-broadwell-pascal</td>
+</tr>
+<tr>
+<td align="left">BioMina node</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-skylake</td>
+<td align="left">redhat8-skylake-noaccel</td>
+</tr>
+<tr>
+<td align="left">Leibniz aurora</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-skylake-aurora1</td>
+<td align="left">redhat8-skylake-aurora1</td>
+</tr>
+<tr>
+<td align="left">Hopper node</td>
+<td align="left">redhat8-x86_64</td>
+<td align="left">redhat8-ivybridge</td>
+<td align="left">redhat8-ivybridge-noaccel</td>
+</tr>
+</tbody>
+</table>
 <p>Users could in principle still use software from another architecture within the stack
 by loading the appropriate clusterarch module so we could still be fairly selective
 about what we provide for the "special" nodes with accelerators. However, many of the

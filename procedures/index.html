@@ -250,6 +250,21 @@
   
   
     <li class="md-nav__item">
+      <a href="../easybuild/" class="md-nav__link">
+        EasyBuild configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../directory_structure/" class="md-nav__link">
         Directory structure of the repositories and software stack
       </a>
@@ -319,6 +334,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#upgrading-the-os" class="md-nav__link">
+    Upgrading the OS
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -374,6 +396,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#upgrading-the-os" class="md-nav__link">
+    Upgrading the OS
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -418,6 +447,17 @@ things and hence should be done with care and proper testing.</p>
 <p>The following files/routines may need changes: <strong>TODO</strong></p>
 <ul>
 <li>Tables in <code>LMOD/SitePackage_arch_hierarchy.lua</code></li>
+<li>Tables in <code>LMOD/SitePackage_system_info.lua</code> to be able to detect the hardware.</li>
+<li>Check if the code for <code>get_Accelerator_info()</code> in <code>LMOD/SitePackage_system_info.lua</code>
+    is still suitable. The <code>scripts-dev</code> directory contains the script <code>test_sysinfo.lua</code>
+    which is perfect for this purpose.</li>
+<li>System definition in <code>etc/SystemDefinition.lua</code> (really more to determine which 
+    software stacks are available).</li>
+</ul>
+<h2 id="upgrading-the-os">Upgrading the OS</h2>
+<ul>
+<li>Check the tables for the translation of the OS name as reported by the system to
+    supported names in <code>LMOD/SitePackage_system_info.lua</code></li>
 </ul>
 
   <hr>

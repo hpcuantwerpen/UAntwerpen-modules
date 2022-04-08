@@ -215,47 +215,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#full-layout" class="md-nav__link">
-    Full layout
-  </a>
-  
-    <nav class="md-nav" aria-label="Full layout">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#repository-part-of-the-tree" class="md-nav__link">
-    Repository part of the tree
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#module-part-of-the-tree" class="md-nav__link">
-    Module part of the tree
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#software-part-of-the-tree" class="md-nav__link">
-    Software part of the tree
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#management-part-of-the-tree" class="md-nav__link">
-    Management part of the tree
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -332,6 +291,21 @@
   
   
     <li class="md-nav__item">
+      <a href="../easybuild/" class="md-nav__link">
+        EasyBuild configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../directory_structure/" class="md-nav__link">
         Directory structure of the repositories and software stack
       </a>
@@ -387,47 +361,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#full-layout" class="md-nav__link">
-    Full layout
-  </a>
-  
-    <nav class="md-nav" aria-label="Full layout">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#repository-part-of-the-tree" class="md-nav__link">
-    Repository part of the tree
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#module-part-of-the-tree" class="md-nav__link">
-    Module part of the tree
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#software-part-of-the-tree" class="md-nav__link">
-    Software part of the tree
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#management-part-of-the-tree" class="md-nav__link">
-    Management part of the tree
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -459,6 +392,23 @@
 without reducing the readability of the names of the module file directories, and 
 as such also to keep the size of shebang lines with full pahts under control to not
 hit kernel-imposed limits.</p>
+<p><strong><em>Repository part of the tree</em></strong><br />
+<div class="highlight"><pre><span></span><code>apps
+└─ antwerpen
+   └─ CalcUA
+      ├─ UAntwerpen-modules <span class="c1">#(1)</span>
+      └─ UAntwerpen-easybuild <span class="c1">#(2)</span>
+         └─ easybuild
+            ├─ easyconfigs
+            ├─ easyblocks
+            ├─ Customisations to naming schemes etc
+            └─ config <span class="c1">#(3)</span>
+</code></pre></div></p>
+<ol>
+<li>Repository with LMOD configuration and generic modules</li>
+<li>EasyBuild setup</li>
+<li>Configuration files for some settings not done via environment</li>
+</ol>
 </li>
 <li>
 <p>We distinguish between two types of system-wide installed software:</p>
@@ -482,9 +432,17 @@ hit kernel-imposed limits.</p>
 <p>The hierarchy is build using the long names for the architecture string</p>
 </li>
 <li>
+<p><code>init-UAntwerpen-modules</code>: Outside the hierarchy: Subdirectory for the module(s) that 
+    initialises the whole module setup.</p>
+<p>Loading the initialisation module enables loading of the next level, the software
+stack modules.</p>
+</li>
+<li>
 <p><code>stacks</code> subdirectory contains the modules for the software stack, currently only
     <code>calcua</code> modules, but that leaves room for a different software stack, e.g., EESSI, 
     later onn.</p>
+<p>Loading of a <code>calcua</code> module enables the next level, loading of an architecture
+module.</p>
 </li>
 <li>
 <p><code>arch</code> subdirectory contains the architecture modules (or cluster modules).</p>
@@ -497,7 +455,12 @@ hit kernel-imposed limits.</p>
 <p>Version of the stack</p>
 </li>
 </ol>
-<p><strong>TODO</strong>: Do we need separate cluster modules or is it better to work with aliases?</p>
+<p>Modules named after the cluster could be easier to recognise for some users. However,
+it may also be tricky to implement. Instead we can also use cluster names as the version
+of the <code>arch</code> modules, and this is organised via <code>.modulerc.lua</code> files for each software
+stack in the <code>arch</code> module subdirectory.</p>
+<p>Loading an architecture module enables the next step in the hierarchy, loading the 
+infrastructure modules and software modules.</p>
 </li>
 <li>
 <p><code>infrastructure</code> subdirectory then contains the specific infrastructure modules, e.g.,
@@ -517,10 +480,6 @@ hit kernel-imposed limits.</p>
 <p>Long name string of the architecture (OS-CPU-Accelerator except for OS-x86_64).</p>
 </li>
 </ol>
-</li>
-<li>
-<p><code>init-UAntwerpen-modules</code>: Outside the hierarchy: Subdirectory for the module(s) that 
-    initialises the whole module setup.</p>
 </li>
 </ul>
 </li>
@@ -544,6 +503,57 @@ generic architecture subdirectory.</p>
 <p>Manually managed modules: <code>modules-manual</code></p>
 <p>A space to put modules for the manually installed software in case we want to hand-code 
 these modules rather then inject them elsewhere via EasyBuild.</p>
+<p>The precise structure will be determined when the need arrises.</p>
+</li>
+<li>
+<p>This leads to the following view on the modules tree:</p>
+<div class="highlight"><pre><span></span><code>apps
+└─ antwerpen
+   └─ CalcUA
+      ├─ modules-infrastructure <span class="c1">#(1)</span>
+      │  ├─ init-UAntwerpen-modules <span class="c1">#(2)</span>
+      │  ├─ stacks <span class="c1">#(3)</span>
+      │  │  └─ calcua
+      │  │     └─ 2021b.lua <span class="c1">#(4)</span>
+      │  ├─ arch <span class="c1">#(5)</span>
+      │  │  └─ calcua
+      │  │     └─ 2021b
+      │  │        └─ arch
+      │  │           ├─ redhat8-x86_64
+      │  │           ├─ redhat8-broadwell-noaccel
+      │  │           └─ redhat8-broadwell-quadro
+      │  └─ infrastructure <span class="c1">#(6)</span>
+      │     └─ CalcUA
+      │        └─ 2021b
+      │           └─ arch
+      │               └─ redhat8-ivybridge-noaccel
+      │                  ├─ EasyBuild-production
+      │                  ├─ EasyBuild-infrastructure
+      │                  └─ EasyBuild-user
+      ├─ modules-easybuild <span class="c1">#(7)</span>
+      │  ├─ CalcUA-2021b
+      │  │  ├─ redhat8_x86_64 <span class="c1">#(8)</span>
+      │  │  ├─ redhat8-broadwell-noaccel
+      │  │  └─ redhat8-broadwell-quadro
+      │  └─ system* <span class="c1">#(9)!</span>
+      │     ├─ redhat8-x86_64 <span class="c1">#(10)</span>
+      │     └─ redhat8-ivybridge-noaccel <span class="c1">#(11)</span>
+      └─ modules-manual <span class="c1">#(12)!</span>
+</code></pre></div>
+<ol>
+<li>Lmod hierarchy as the framework of the module system </li>
+<li>Subdirectory for the startup module</li>
+<li>First level: Software stack modules</li>
+<li>Symbolic link to a generic module!</li>
+<li>Second level: Architecture of the stack</li>
+<li>Third level: Infrastructure modules, e.g., EasyBuild configuration</li>
+<li>Modules generated with EasyBuild</li>
+<li>Directory for potential generic builds if performance does not matter</li>
+<li>Modules outside the regular software stacks</li>
+<li>No specific processor versions, e.g., Matlab</li>
+<li>Specific processor version, e.g., Gaussian</li>
+<li>Manually generated modules - OPTIONAL</li>
+</ol>
 </li>
 <li>
 <p>Software directory <code>SW</code></p>
@@ -558,6 +568,24 @@ with two differences:</p>
 <p>This directory has no corresponding modules directory in the EasyBuild-managed directory
 as it is not managed at all by EasyBuild.</p>
 </li>
+</ol>
+<p><strong><em>Resulting structure of the software directory</em></strong><br />
+<div class="highlight"><pre><span></span><code>apps
+└─ antwerpen
+   └─ CalcUA
+      └─ SW
+         ├─ CalcUA-2021b
+         │  ├─ RH8-x86_64
+         │  ├─ RH8-BRW-host
+         │  └─ RH8-BRW-NVGP61GL
+         ├─ system <span class="c1">#(1)</span>
+         │  ├─ RH8-x86_64
+         │  └─ RH8-IVB-host
+         └─ MNL <span class="c1">#(2)</span>
+</code></pre></div></p>
+<ol>
+<li>Sometimes relatively empty subdirs if EasyBuild only creates a module...</li>
+<li>Manually installed software</li>
 </ol>
 </li>
 <li>
@@ -575,100 +603,7 @@ file per module subdirectory, or does this become too much? We can also go for o
 result in a single file per ( software stack, architecture) combination.</p>
 </li>
 </ul>
-</li>
-</ul>
-<h2 id="full-layout">Full layout</h2>
-<p><strong>To be corrected!!!</strong></p>
-<h3 id="repository-part-of-the-tree">Repository part of the tree</h3>
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-   └─ CalcUA
-      ├─ UAntwerpen-modules <span class="c1">#(1)</span>
-      └─ UAntwerpen-easybuild <span class="c1">#(2)</span>
-         └─ easybuild
-            ├─ easyconfigs
-            ├─ easyblocks
-            ├─ Customisations to naming schemes etc
-            └─ config <span class="c1">#(3)</span>
-</code></pre></div>
-<ol>
-<li>Repository with LMOD configuration and generic modules</li>
-<li>EasyBuild setup</li>
-<li>Configuration files for some settings not done via environment</li>
-</ol>
-<h3 id="module-part-of-the-tree">Module part of the tree</h3>
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-   └─ CalcUA
-      ├─ modules-infrastructure <span class="c1">#(1)</span>
-      │  ├─ init-UAntwerpen-modules <span class="c1">#(2)</span>
-      │  ├─ stacks <span class="c1">#(3)</span>
-      │  │  └─ calcua
-      │  │     └─ 2021b.lua <span class="c1">#(4)</span>
-      │  ├─ arch <span class="c1">#(5)</span>
-      │  │  └─ calcua
-      │  │     └─ 2021b
-      │  │        ├─ cluster
-      │  │        │  ├─ hopper.lua <span class="c1">#(6)</span>
-      │  │        │  ├─ leibniz.lua
-      │  │        │  ├─ leibniz-skl.lua
-      │  │        │  └─ vaughan.lua
-      │  │        └─ arch
-      │  │           ├─ redhat8-x86_64
-      │  │           ├─ redhat8-broadwell-noaccel
-      │  │           └─ redhat8-broadwell-quadro
-      │  └─ infrastructure <span class="c1">#(7)</span>
-      │     └─ CalcUA
-      │        └─ 2021b
-      │           └─ arch
-      │               └─ redhat8-ivybridge-noaccel
-      │                  ├─ EasyBuild-production
-      │                  ├─ EasyBuild-infrastructure
-      │                  └─ EasyBuild-user
-      ├─ modules-easybuild <span class="c1">#(8)</span>
-      │  ├─ CalcUA-2021b
-      │  │  ├─ redhat8_x86_64 <span class="c1">#(9)</span>
-      │  │  ├─ redhat8-broadwell-noaccel
-      │  │  └─ redhat8-broadwell-quadro
-      │  └─ system* <span class="c1">#(10)!</span>
-      │     ├─ redhat8-x86_64 <span class="c1">#(11)</span>
-      │     └─ redhat8-ivybridge-noaccel <span class="c1">#(12)</span>
-      └─ modules-manual <span class="c1">#(13)!</span>
-</code></pre></div>
-<ol>
-<li>Lmod hierarchy as the framework of the module system </li>
-<li>Subdirectory for the startup module</li>
-<li>First level: Software stack modules</li>
-<li>Symbolic link to a generic module!</li>
-<li>Second level: Architecture of the stack</li>
-<li>Symbolic link to a generic module!</li>
-<li>Third level: Infrastructure modules, e.g., EasyBuild configuration</li>
-<li>Modules generated with EasyBuild</li>
-<li>Directory for potential generic builds if performance does not matter</li>
-<li>Modules outside the regular software stacks</li>
-<li>No specific processor versions, e.g., Matlab</li>
-<li>Specific processor version, e.g., Gaussian</li>
-<li>Manually generated modules - OPTIONAL</li>
-</ol>
-<h3 id="software-part-of-the-tree">Software part of the tree</h3>
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-   └─ CalcUA
-      └─ SW
-         ├─ CalcUA-2021b
-         │  ├─ RH8-x86_64
-         │  ├─ RH8-BRW-host
-         │  └─ RH8-BRW-NVGP61GL
-         ├─ system <span class="c1">#(1)</span>
-         │  ├─ RH8-x86_64
-         │  └─ RH8-IVB-host
-         └─ MNL <span class="c1">#(2)</span>
-</code></pre></div>
-<ol>
-<li>Sometimes relatively empty subdirs if EasyBuild only creates a module...</li>
-<li>Manually installed software</li>
-</ol>
-<h3 id="management-part-of-the-tree">Management part of the tree</h3>
+<p><strong><em>Resulting structure of the management directory</em></strong><br />
 <div class="highlight"><pre><span></span><code>apps
 └─ antwerpen
    └─ CalcUA
@@ -680,11 +615,13 @@ result in a single file per ( software stack, architecture) combination.</p>
          │  └─ system <span class="c1">#(1)</span>
          │     └─ redhat8-x86_64 <span class="c1">#(2)</span>
          └─ lmod_cache
-</code></pre></div>
+</code></pre></div></p>
 <ol>
 <li>Modules outside the regular software stacks</li>
 <li>No specific processor versions, e.g., Matlab</li>
 </ol>
+</li>
+</ul>
 
   <hr>
 <div class="md-source-file">
