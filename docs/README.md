@@ -1,15 +1,6 @@
 # UAntwerpen-modules documentation overview
 
--   [Design decisions](design_decisions.md)
+See [the index.md file](docs-mkdocs/index.md) or the
+[GitHub pages for this repository](https://hpcuantwerpen.github.io/UAntwerpen-modules).
 
-    -    [Design considerations](design_considerations.md) that led to those decisions
-
--   [The CalcUA-init module](modules_calcua-init.md)
-
--   [The generic calcua and clusterarch modules](modules_calcua_and_clusterarch.md)
-
--   [The SitePackage.lua file and its included LUA files](SitePAckage.md)
-
--   [Directory structure of the repositories and software stack](directory_structure.md)
-
--   [Procedures](procedures.md)
+(For now the [GitHub pages are on the klust GitHub account](https://klust.github.io/UAntwerpen-modules))

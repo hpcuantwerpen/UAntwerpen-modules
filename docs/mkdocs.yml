@@ -1,0 +1,65 @@
+site_name: "UAntwerpen-modules documentation"
+#site_url: https://klust.github.io/
+site_dir: site
+site_description: >-
+  Documentation for the UAntwerpen-modules repository
+docs_dir: docs-mkdocs
+
+theme:
+  name: material
+  # We'll customise the team (basically a simpler footer)
+  # custom_dir: overrides
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.top
+    - navigation.indexes
+    - header.autohide
+    - toc.follow
+  palette:
+    - primary: black
+
+#hide:
+#  - toc
+
+nav:
+  - Overview: index.md 
+  - Design decisions: design_decisions.md
+  - Design considerations: design_considerations.md
+  - The CalcUA-init module: modules_calcua-init.md
+  - The generic calcua and clusterarch modules: modules_calcua_and_clusterarch.md
+  - The SitePackage.lua file and its included LUA files: SitePackage.md
+  - Directory structure of the repositories and software stack: directory_structure.md
+  - Procedures: procedures.md
+
+plugins:
+  # show revision date at bottom of each page
+  - git-revision-date-localized
+
+markdown_extensions:
+  - meta
+  # Nicer tables
+  - tables
+  # notes, warnings, hints, ...
+  - admonition
+  # code blocks with syntax highlighting, graphs
+  - pymdownx.superfences:
+        custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  # clickable details
+  - pymdownx.details
+  # tabbed contents
+  - pymdownx.tabbed
+  - toc:
+      permalink: false
+      toc_depth: 3
+
+extra:
+  # add links in bottom right
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/hpcuantwerpen
+      name: HPC-UAntwerpen on GitHub
