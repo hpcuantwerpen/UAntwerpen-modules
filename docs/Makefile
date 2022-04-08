@@ -9,5 +9,5 @@ deploy:
 check test:
 	mkdocs build --strict
 
-preview:
+serve preview:
 	mkdocs serve
