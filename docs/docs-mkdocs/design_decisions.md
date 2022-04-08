@@ -45,7 +45,7 @@
        
         **TODO**: Do we need separate cluster modules or is it better to work with aliases?
 
-    -   `infrastructrue` subdirectory then contains the specific infrastructure modules, e.g.,
+    -   `infrastructure` subdirectory then contains the specific infrastructure modules, e.g.,
         the EasyBuild configuration modules.
 
         4 levels of subdirectories before you reach the infrastructure modules
@@ -116,13 +116,13 @@
 apps
 └─ antwerpen
    └─ CalcUA
-      ├─ UAntwerpen-modules #(1)!
-      └─ UAntwerpen-easybuild #(2)!
+      ├─ UAntwerpen-modules #(1)
+      └─ UAntwerpen-easybuild #(2)
          └─ easybuild
             ├─ easyconfigs
             ├─ easyblocks
             ├─ Customisations to naming schemes etc
-            └─ config #(3)!
+            └─ config #(3)
 ```
 
 1.  Repository with LMOD configuration and generic modules
@@ -138,16 +138,16 @@ apps
 apps
 └─ antwerpen
    └─ CalcUA
-      ├─ modules-infrastructure #(1)!
-      │  ├─ init-UAntwerpen-modules #(2)!
-      │  ├─ stacks #(3)!
+      ├─ modules-infrastructure #(1)
+      │  ├─ init-UAntwerpen-modules #(2)
+      │  ├─ stacks #(3)
       │  │  └─ calcua
-      │  │     └─ 2021b.lua #(4)!
-      │  ├─ arch #(5)!
+      │  │     └─ 2021b.lua #(4)
+      │  ├─ arch #(5)
       │  │  └─ calcua
       │  │     └─ 2021b
       │  │        ├─ cluster
-      │  │        │  ├─ hopper.lua #(6)!
+      │  │        │  ├─ hopper.lua #(6)
       │  │        │  ├─ leibniz.lua
       │  │        │  ├─ leibniz-skl.lua
       │  │        │  └─ vaughan.lua
@@ -155,7 +155,7 @@ apps
       │  │           ├─ redhat8-x86_64
       │  │           ├─ redhat8-broadwell-noaccel
       │  │           └─ redhat8-broadwell-quadro
-      │  └─ infrastructure #(7)!
+      │  └─ infrastructure #(7)
       │     └─ CalcUA
       │        └─ 2021b
       │           └─ arch
@@ -163,14 +163,14 @@ apps
       │                  ├─ EasyBuild-production
       │                  ├─ EasyBuild-infrastructure
       │                  └─ EasyBuild-user
-      ├─ modules-easybuild #(8)!
+      ├─ modules-easybuild #(8)
       │  ├─ CalcUA-2021b
-      │  │  ├─ redhat8_x86_64 #(9)!
+      │  │  ├─ redhat8_x86_64 #(9)
       │  │  ├─ redhat8-broadwell-noaccel
       │  │  └─ redhat8-broadwell-quadro
       │  └─ system* #(10)!
-      │     ├─ redhat8-x86_64 #(11)!
-      │     └─ redhat8-ivybridge-noaccel #(12)!
+      │     ├─ redhat8-x86_64 #(11)
+      │     └─ redhat8-ivybridge-noaccel #(12)
       └─ modules-manual #(13)!
 ```
 
@@ -200,10 +200,10 @@ apps
          │  ├─ RH8-x86_64
          │  ├─ RH8-BRW-host
          │  └─ RH8-BRW-NVGP61GL
-         ├─ system #(1)!
+         ├─ system #(1)
          │  ├─ RH8-x86_64
          │  └─ RH8-IVB-host
-         └─ MNL #(2)!
+         └─ MNL #(2)
 ```
 
 1.  Sometimes relatively empty subdirs if EasyBuild only creates a module...
@@ -220,8 +220,8 @@ apps
          │  ├─ CalcUA-2021b
          │  │ ├─ redhat8-x86_64
          │  │ └─ redhat8-broadwell-noaccel
-         │  └─ system #(1)!
-         │     └─ redhat8-x86_64 #(2)!
+         │  └─ system #(1)
+         │     └─ redhat8-x86_64 #(2)
          └─ lmod_cache
 ```
 
