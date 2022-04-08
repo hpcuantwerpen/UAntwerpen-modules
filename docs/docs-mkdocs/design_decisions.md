@@ -16,6 +16,24 @@
     as such also to keep the size of shebang lines with full pahts under control to not
     hit kernel-imposed limits.
 
+    ***Repository part of the tree***  
+    ``` bash
+    apps
+    └─ antwerpen
+       └─ CalcUA
+          ├─ UAntwerpen-modules #(1)
+          └─ UAntwerpen-easybuild #(2)
+             └─ easybuild
+                ├─ easyconfigs
+                ├─ easyblocks
+                ├─ Customisations to naming schemes etc
+                └─ config #(3)
+    ```
+
+    1.  Repository with LMOD configuration and generic modules
+    2.  EasyBuild setup
+    3.  Configuration files for some settings not done via environment
+
 -   We distinguish between two types of system-wide installed software:
 
     -   Software installed via EasyBuild (though with some tricks)  That software appears
@@ -31,9 +49,18 @@
 
     -  The hierarchy is build using the long names for the architecture string
 
+    -   `init-UAntwerpen-modules`: Outside the hierarchy: Subdirectory for the module(s) that 
+        initialises the whole module setup.
+
+        Loading the initialisation module enables loading of the next level, the software
+        stack modules.
+
     -   `stacks` subdirectory contains the modules for the software stack, currently only
         `calcua` modules, but that leaves room for a different software stack, e.g., EESSI, 
         later onn.
+
+        Loading of a `calcua` module enables the next level, loading of an architecture
+        module.
 
     -   `arch` subdirectory contains the architecture modules (or cluster modules).
 
@@ -43,7 +70,13 @@
   
         2.  Version of the stack
        
-        **TODO**: Do we need separate cluster modules or is it better to work with aliases?
+        Modules named after the cluster could be easier to recognise for some users. However,
+        it may also be tricky to implement. Instead we can also use cluster names as the version
+        of the `arch` modules, and this is organised via `.modulerc.lua` files for each software
+        stack in the `arch` module subdirectory.
+
+        Loading an architecture module enables the next step in the hierarchy, loading the 
+        infrastructure modules and software modules.
 
     -   `infrastructure` subdirectory then contains the specific infrastructure modules, e.g.,
         the EasyBuild configuration modules.
@@ -57,9 +90,6 @@
         3.  `arch`
 
         4.  Long name string of the architecture (OS-CPU-Accelerator except for OS-x86_64).
-
-    -   `init-UAntwerpen-modules`: Outside the hierarchy: Subdirectory for the module(s) that 
-        initialises the whole module setup.
 
 
 -   EasyBuild-managed modules: `modules-easybuild`
@@ -80,6 +110,60 @@
     A space to put modules for the manually installed software in case we want to hand-code 
     these modules rather then inject them elsewhere via EasyBuild.
 
+    The precise structure will be determined when the need arrises.
+
+-   This leads to the following view on the modules tree:
+
+    ``` bash
+    apps
+    └─ antwerpen
+       └─ CalcUA
+          ├─ modules-infrastructure #(1)
+          │  ├─ init-UAntwerpen-modules #(2)
+          │  ├─ stacks #(3)
+          │  │  └─ calcua
+          │  │     └─ 2021b.lua #(4)
+          │  ├─ arch #(5)
+          │  │  └─ calcua
+          │  │     └─ 2021b
+          │  │        └─ arch
+          │  │           ├─ redhat8-x86_64
+          │  │           ├─ redhat8-broadwell-noaccel
+          │  │           └─ redhat8-broadwell-quadro
+          │  └─ infrastructure #(6)
+          │     └─ CalcUA
+          │        └─ 2021b
+          │           └─ arch
+          │               └─ redhat8-ivybridge-noaccel
+          │                  ├─ EasyBuild-production
+          │                  ├─ EasyBuild-infrastructure
+          │                  └─ EasyBuild-user
+          ├─ modules-easybuild #(7)
+          │  ├─ CalcUA-2021b
+          │  │  ├─ redhat8_x86_64 #(8)
+          │  │  ├─ redhat8-broadwell-noaccel
+          │  │  └─ redhat8-broadwell-quadro
+          │  └─ system* #(9)!
+          │     ├─ redhat8-x86_64 #(10)
+          │     └─ redhat8-ivybridge-noaccel #(11)
+          └─ modules-manual #(12)!
+    ```
+    
+    1.  Lmod hierarchy as the framework of the module system 
+    2.  Subdirectory for the startup module
+    3.  First level: Software stack modules
+    4.  Symbolic link to a generic module!
+    5.  Second level: Architecture of the stack
+    6.  Third level: Infrastructure modules, e.g., EasyBuild configuration
+    7.  Modules generated with EasyBuild
+    8.  Directory for potential generic builds if performance does not matter
+    9.  Modules outside the regular software stacks
+    10. No specific processor versions, e.g., Matlab
+    11. Specific processor version, e.g., Gaussian
+    12. Manually generated modules - OPTIONAL
+
+
+
 -   Software directory `SW`
 
     This directory follows the same layout as the one for the EasyBuild-installed software,
@@ -91,6 +175,26 @@
 
         This directory has no corresponding modules directory in the EasyBuild-managed directory
         as it is not managed at all by EasyBuild.
+
+    ***Resulting structure of the software directory***  
+    ``` bash
+    apps
+    └─ antwerpen
+       └─ CalcUA
+          └─ SW
+             ├─ CalcUA-2021b
+             │  ├─ RH8-x86_64
+             │  ├─ RH8-BRW-host
+             │  └─ RH8-BRW-NVGP61GL
+             ├─ system #(1)
+             │  ├─ RH8-x86_64
+             │  └─ RH8-IVB-host
+             └─ MNL #(2)
+    ```
+    
+    1.  Sometimes relatively empty subdirs if EasyBuild only creates a module...
+    2.  Manually installed software
+
 
 -   `mgmt` subdirectory for all files that are somehow system-generated.
 
@@ -105,129 +209,23 @@
         file per module subdirectory, or does this become too much? We can also go for one corresponding to each software stack and cluster architecture combination which would
         result in a single file per ( software stack, architecture) combination.
 
-
-## Full layout
-
-**To be corrected!!!**
-
-### Repository part of the tree
-
-``` bash
-apps
-└─ antwerpen
-   └─ CalcUA
-      ├─ UAntwerpen-modules #(1)
-      └─ UAntwerpen-easybuild #(2)
-         └─ easybuild
-            ├─ easyconfigs
-            ├─ easyblocks
-            ├─ Customisations to naming schemes etc
-            └─ config #(3)
-```
-
-1.  Repository with LMOD configuration and generic modules
-2.  EasyBuild setup
-3.  Configuration files for some settings not done via environment
-
-
-
-
-### Module part of the tree
-
-``` bash
-apps
-└─ antwerpen
-   └─ CalcUA
-      ├─ modules-infrastructure #(1)
-      │  ├─ init-UAntwerpen-modules #(2)
-      │  ├─ stacks #(3)
-      │  │  └─ calcua
-      │  │     └─ 2021b.lua #(4)
-      │  ├─ arch #(5)
-      │  │  └─ calcua
-      │  │     └─ 2021b
-      │  │        ├─ cluster
-      │  │        │  ├─ hopper.lua #(6)
-      │  │        │  ├─ leibniz.lua
-      │  │        │  ├─ leibniz-skl.lua
-      │  │        │  └─ vaughan.lua
-      │  │        └─ arch
-      │  │           ├─ redhat8-x86_64
-      │  │           ├─ redhat8-broadwell-noaccel
-      │  │           └─ redhat8-broadwell-quadro
-      │  └─ infrastructure #(7)
-      │     └─ CalcUA
-      │        └─ 2021b
-      │           └─ arch
-      │               └─ redhat8-ivybridge-noaccel
-      │                  ├─ EasyBuild-production
-      │                  ├─ EasyBuild-infrastructure
-      │                  └─ EasyBuild-user
-      ├─ modules-easybuild #(8)
-      │  ├─ CalcUA-2021b
-      │  │  ├─ redhat8_x86_64 #(9)
-      │  │  ├─ redhat8-broadwell-noaccel
-      │  │  └─ redhat8-broadwell-quadro
-      │  └─ system* #(10)!
-      │     ├─ redhat8-x86_64 #(11)
-      │     └─ redhat8-ivybridge-noaccel #(12)
-      └─ modules-manual #(13)!
-```
-
-1.  Lmod hierarchy as the framework of the module system 
-2.  Subdirectory for the startup module
-3.  First level: Software stack modules
-4.  Symbolic link to a generic module!
-5.  Second level: Architecture of the stack
-6.  Symbolic link to a generic module!
-7.  Third level: Infrastructure modules, e.g., EasyBuild configuration
-8.  Modules generated with EasyBuild
-9.  Directory for potential generic builds if performance does not matter
-10. Modules outside the regular software stacks
-11. No specific processor versions, e.g., Matlab
-12. Specific processor version, e.g., Gaussian
-13. Manually generated modules - OPTIONAL
-
-
-### Software part of the tree
-
-``` bash
-apps
-└─ antwerpen
-   └─ CalcUA
-      └─ SW
-         ├─ CalcUA-2021b
-         │  ├─ RH8-x86_64
-         │  ├─ RH8-BRW-host
-         │  └─ RH8-BRW-NVGP61GL
-         ├─ system #(1)
-         │  ├─ RH8-x86_64
-         │  └─ RH8-IVB-host
-         └─ MNL #(2)
-```
-
-1.  Sometimes relatively empty subdirs if EasyBuild only creates a module...
-2.  Manually installed software
-
-### Management part of the tree
-
-``` bash
-apps
-└─ antwerpen
-   └─ CalcUA
-      └─ mgmt
-         ├─ ebrepo_files
-         │  ├─ CalcUA-2021b
-         │  │ ├─ redhat8-x86_64
-         │  │ └─ redhat8-broadwell-noaccel
-         │  └─ system #(1)
-         │     └─ redhat8-x86_64 #(2)
-         └─ lmod_cache
-```
-
-1.  Modules outside the regular software stacks
-2.  No specific processor versions, e.g., Matlab
-
+    ***Resulting structure of the management directory***  
+    ``` bash
+    apps
+    └─ antwerpen
+       └─ CalcUA
+          └─ mgmt
+             ├─ ebrepo_files
+             │  ├─ CalcUA-2021b
+             │  │ ├─ redhat8-x86_64
+             │  │ └─ redhat8-broadwell-noaccel
+             │  └─ system #(1)
+             │     └─ redhat8-x86_64 #(2)
+             └─ lmod_cache
+    ```
+    
+    1.  Modules outside the regular software stacks
+    2.  No specific processor versions, e.g., Matlab
 
 
 
