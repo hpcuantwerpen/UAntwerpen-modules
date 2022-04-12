@@ -1300,6 +1300,15 @@ recomputing that data.</p>
     the largest key in <code>CalcUA_map_arch_hierarchy</code> not larger than the given version.</p>
 </li>
 <li>
+<p><code>is_Stack_SystemTable</code>: Check if a given stack version corresponds to a key in
+    <code>CalcUA_SystemTable</code>. We have to do this through a function that is then exported
+    to the sandbox as module files do not have access to the data itself.</p>
+<p>The main purpose of this function is simply to give more precise error messages
+in case the data structures aren't updated properly after installing a new toolchain.
+This problem should not occur as the routines to prepare the stack would fail themselves,
+but you'll never know.</p>
+</li>
+<li>
 <p><code>mkDir</code>: Create a directory, using the Lua <code>lfs</code> package. It really has the effect
     effect of <code>mkdir -p</code>, so it can create multiple levels from the given directory if
     needed.</p>
