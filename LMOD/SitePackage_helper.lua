@@ -34,6 +34,17 @@ function get_matching_archmap_key( version )
 
 end
 
+-- -----------------------------------------------------------------------------
+--
+-- Functions to check data structures
+--
+
+function is_Stack_SystemTable( stack_version )
+
+    return ( CalcUA_SystemTable[stack_version] ~= nil )
+
+end
+
 
 -- -----------------------------------------------------------------------------
 --

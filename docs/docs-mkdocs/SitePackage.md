@@ -448,6 +448,15 @@ recomputing that data.
 -   `get_matching_archmap_key`: For a given numeric (i.e., yyyymm) version, returns
     the largest key in `CalcUA_map_arch_hierarchy` not larger than the given version.
 
+-   `is_Stack_SystemTable`: Check if a given stack version corresponds to a key in
+    `CalcUA_SystemTable`. We have to do this through a function that is then exported
+    to the sandbox as module files do not have access to the data itself.
+
+    The main purpose of this function is simply to give more precise error messages
+    in case the data structures aren't updated properly after installing a new toolchain.
+    This problem should not occur as the routines to prepare the stack would fail themselves,
+    but you'll never know.
+
 -   `mkDir`: Create a directory, using the Lua `lfs` package. It really has the effect
     effect of `mkdir -p`, so it can create multiple levels from the given directory if
     needed.
