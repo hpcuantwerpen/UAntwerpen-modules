@@ -1,4 +1,4 @@
-all: build
+all: preview
 
 build:
 	mkdocs build
