@@ -253,21 +253,16 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_generic_current( stack_version )
+-- Function get_calcua_generic( clusterarch, stack_version )
 --
--- Input argument:
+-- Input arguments:
+--   * clusterarch: clusterarch string in the long format compatible with the
+--     software stack.
 --   * stack_version: Version of the calcua stack, can be system.
 --
 -- Output: The most generic architecture for the current node.
 --
-function get_calcua_generic_current( stack_version )
-
-    local clusterarch
-    if CalcUA_SystemProperties[stack_version] == '2L_short' then
-        _, clusterarch, _, _ = get_clusterarch()
-    else
-        _, _, _, clusterarch = get_clusterarch()
-    end
+function get_calcua_generic( clusterarch, stack_version )
 
     local osname = extract_os( clusterarch )
     local archname = extract_arch( clusterarch )
@@ -287,7 +282,29 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_top_current( stack_version )
+-- Function get_calcua_generic_current( stack_version )
+--
+-- Input argument:
+--   * stack_version: Version of the calcua stack, can be system.
+--
+-- Output: The most generic architecture for the current node.
+--
+function get_calcua_generic_current( stack_version )
+
+    local clusterarch
+    if CalcUA_SystemProperties[stack_version] == '2L_short' then
+        _, clusterarch, _, _ = get_clusterarch()
+    else
+        _, _, _, clusterarch = get_clusterarch()
+    end
+
+    return get_calcua_generic( clusterarch, stack_version )
+
+end
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_calcua_longosarch_current( stack_version )
 --
 -- Input argument:
 --   * stack_version: Version of the calcua stack, can be system.
@@ -321,24 +338,26 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_top_current( stack_version, long_osarch )
+-- Function get_calcua_top( stack_version, long_osarch )
 --
 -- Input arguments:
---   * stack_version: Version of the calcua stack, can be system.
 --   * long_osarch: os and architecture with long names and in a format 
 --     compatible with the indicated version of the software stack (so respecting
 --     the hierarchy types 2L_short, 2L_long or 3L).
+--   * stack_version: Version of the calcua stack, can be system.
 --
--- Output: The most specific od-architecture for the current node in the indicated
+-- Output: The most specific os-architecture for the current node in the indicated
 -- version of the CalcUA software stacks.
 --
 
-function get_calcua_top_current( stack_version, long_osarch )
+function get_calcua_top( long_osarch, stack_version )
 
     --
     -- -  Some initialisations ot use the data structures of etc/SystemDefinition.lua
     --
-    local matching_version = get_matching_archmap_key( stack_version )
+    local numversion = map_toolchain( stack_version )
+    local matching_version = get_matching_toparchreduction_key( stack_version )
+
     local use_arch = extract_arch( long_osarch )
     local use_os = extract_os( long_osarch )
 
@@ -361,11 +380,11 @@ function get_calcua_top_current( stack_version, long_osarch )
     end
 
     --
-    -- -  Now walk down the CalcUA_map_arch_hierarchy searching for an
+    -- -  Now walk down the CalcUA_reduce_top_architecture searching for an
     --    architecture supported by the software stack.
     --
-    while stack_os_archs[use_arch] == nil and CalcUA_map_arch_hierarchy[matching_version][use_arch] ~= nil do
-        use_arch = CalcUA_map_arch_hierarchy[matching_version][use_arch]
+    while stack_os_archs[use_arch] == nil and CalcUA_reduce_top_architecture[matching_version][use_arch] ~= nil do
+        use_arch = CalcUA_reduce_top_architecture[matching_version][use_arch]
     end
 
     --

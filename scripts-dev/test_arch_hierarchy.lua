@@ -1,7 +1,197 @@
 #! /usr/bin/env lua
 
 dofile( '../scripts/calcua_tools/lmod_emulation.lua' )
-dofile( '../etc/SystemDefinition.lua' )
+
+--
+-- Instead of readint etc/SystemDefnition.lua. we put a test example hre
+--
+
+--
+-- SystemTable defines the setup of the module system. For each toolchain it
+-- indicates which OSes are supported for which architectures.
+--
+-- It is sufficient to only specify the "top" architectures (the leaves
+-- of the tree). The other ones will be completed automatically based on
+-- the architecture hierarchy structure.
+--
+
+CalcUA_SystemTable = {
+    ['system'] = {
+        ['redhat7'] = {
+            'x86_64',
+        },
+        ['redhat8'] = {
+            'x86_64',
+        },
+    },
+    ['manual'] = {
+        ['redhat7'] = {
+            'x86_64',
+        },
+        ['redhat8'] = {
+            'x86_64',
+        },
+    },
+    ['2020a'] = {
+        ['redhat7'] = {
+            'ivybridge-noaccel',
+            'broadwell-noaccel',
+        },
+        ['redhat8'] = {
+            'zen2-noaccel',
+            'skylake-noaccel',
+        }
+    },
+    ['2021b'] = {
+        ['redhat7'] = {
+            'ivybridge-noaccel',
+        },
+        ['redhat8'] = {
+            'broadwell-noaccel',
+            'zen2-noaccel',
+            'skylake-noaccel',
+        }
+    },
+}
+
+--
+-- SystemProperties defines other properties of the system, e.g.,
+--   * ['EasyBuild']: Version of EasyBuild to use.
+--   * ['hierarchy']: Type of hierarchy, 3 values though not all are implemented
+--       * 2L_long:  2 levels, all names on the second level include accelerator
+--       * 2L_short: 2 levels, but no -host or -noaccel for archs without accelerator
+--                   NOT IMPLEMENTED
+--       * 3L      : 3 levels
+--                   NOT IMPLEMENTED 
+--
+CalcUA_SystemProperties = {
+    ['system'] = {
+        ['EasyBuild'] = '4.5.3',
+        ['hierarchy'] = '2L_long',  -- Doesn't really matter as we use only one level
+    },
+    ['manual'] = {  -- This is not an EasyBuild-managed stack.
+        ['hierarchy'] = '2L_long',  -- Doesn't really matter as we use only one level
+    },
+    ['2020a'] = {
+        ['EasyBuild'] = '4.2.2',
+        ['hierarchy'] = '2L_long',
+    },
+    ['2021b'] = {
+        ['EasyBuild'] = '4.5.3',
+        ['hierarchy'] = '2L_long',
+    },
+}
+
+
+--
+-- CalcUA_ClusterMap is a structure that maps names of clusters onto
+-- architectures.
+--
+-- This mapping is not defined for the 'manual' toolchain as that is not
+-- one that users should be able to load via calcua modules.
+--
+
+CalcUA_ClusterMap = {
+    ['system'] = {
+        ['hopper'] =      'redhat7-x86_64',
+        ['leibniz'] =     'redhat8-x86_64',
+        ['leibniz-skl'] = 'redhat8-x86_64',
+        ['vaughan'] =     'redhat8-x86_64',
+    },
+    ['2020a'] = {
+        ['hopper'] =      'redhat7-ivybridge-noaccel',
+        ['leibniz'] =     'redhat7-broadwell-noaccel',
+        ['leibniz-skl'] = 'redhat8-skylake-noaccel',
+        ['vaughan'] =     'redhat8-zen2-noaccel',
+    },
+    ['2021b'] = {
+        ['hopper'] =      'redhat7-ivybridge-noaccel',
+        ['leibniz'] =     'redhat8-broadwell-noaccel',
+        ['leibniz-skl'] = 'redhat8-skylake-noaccel',
+        ['vaughan'] =     'redhat8-zen2-noaccel',
+    },
+}
+
+
+--
+-- SystemTable defines the setup of the module system. For each toolchain in
+-- yyyy[a|b] format it gives the matching toolchain in yyyymm format that should
+-- be used in version comparisons.
+--
+
+CalcUA_toolchain_map = {
+    ['system'] = '200000',
+    ['manual'] = '200000',
+    ['2020a']  = '202001',
+    ['2020b']  = '202007',
+    ['2021a']  = '202101',
+    ['2021b']  = '202107',
+    ['2022a']  = '202201',
+}
+
+
+--
+-- The architecture hierarchy is something that we might want to change over
+-- time, in particular the choice of whether we go for two or for three
+-- levels. Adding architectures is not a problem, that shouldn't break
+-- anything and for that we do not need a new version of the architecture
+-- hierarchy tables.
+--
+-- Note that in the map we use yyyymm version numbers without the dot so that
+-- no additional transformations is needed in the LUA code to not slow down
+-- things further.
+--
+
+CalcUA_map_arch_hierarchy = {
+   -- We start with a 2-level map
+   ['200000'] = {
+       ['zen2-ampere']       = 'x86_64',
+       ['zen2-arcturus']     = 'x86_64',
+       ['zen2-noaccel']      = 'x86_64',
+       ['skylake-aurora1']   = 'x86_64',
+       ['skylake-noaccel']   = 'x86_64',
+       ['broadwell-P5000']   = 'x86_64',
+       ['broadwell-pascal']  = 'x86_64',
+       ['broadwell-noaccel'] = 'x86_64',
+       ['ivybridge-noaccel'] = 'x86_64',
+       ['x86_64']            = nil,
+   }
+}
+   
+   
+--
+-- The following table defines the order of architectures to search if there is
+-- no stack for a particular architecture. It is used to find the closest matching
+-- top CPU + accelerator architecture if there is no support for an architecture
+-- in a given software stack.
+--
+-- We support changes over time in this table as insight grows so we add again
+-- an additional level based on a yyyymm representation of the software stacks
+--
+
+CalcUA_reduce_top_architecture = {
+    ['200000'] = {
+        ['zen2-ampere']       = 'zen2-noaccel',
+        ['zen2-arcturus']     = 'zen2-noaccel',
+        ['zen2-noaccel']      = 'broadwell-noaccel',
+        ['skylake-aurora1']   = 'skylake-noaccel',
+        ['skylake-noaccel']   = 'broadwell-noaccel',
+        ['broadwell-noaccel'] = 'ivybridge-noaccel',
+        ['broadwell-P5000']   = 'broadwell-noaccel',
+        ['broadwell-pascal']  = 'broadwell-noaccel',
+        ['ivybridge-noaccel'] = 'x86_64',
+        ['x86_64']            = nil,
+    },
+}
+   
+   
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Other included files
+--
+
 dofile( '../LMOD/SitePackage_helper.lua' )
 dofile( '../LMOD/SitePackage_system_info.lua' )
 dofile( '../LMOD/SitePackage_map_toolchain.lua' )
@@ -66,15 +256,42 @@ do
 end
 
 --
+-- Testing get_calcua_generic
+--
+
+print( '\nTesting get_calcua_generic function\n' )
+
+local inputdata = {
+    {   
+       ['stack_version'] = '2021b',
+       ['cluster_arch'] =  'redhat8-zen2-noaccel',
+       ['expected'] =      'redhat8-x86_64',
+    },
+    {   
+       ['stack_version'] = '2021b',
+       ['cluster_arch'] =  'redhat8-zen2-arcturus',
+       ['expected'] =      'redhat8-x86_64',
+    },            
+}
+
+for index, data in ipairs( inputdata ) do
+    local got = get_calcua_generic( data['cluster_arch'], data['stack_version'] )
+    local expected = data['expected']
+    print( 'Generic for calcua/' .. data['stack_version'] .. ': ' ..
+           got .. ', expected: ' .. data['expected'] .. ' so ' .. 
+           ( got == expected and 'OK' or 'NOT OK' ) )
+end
+              
+--
 -- Testing get_calcua_generic_current
 --
 
 print( '\nTesting get_calcua_generic_current function\n' )
 
 for stack,_ in pairs( CalcUA_ClusterMap ) do
-    print( 'Generic for ' .. stack .. ': ' .. get_calcua_generic_current( stack ) )
+       print( 'Generic for ' .. stack .. ' on the current node: ' .. get_calcua_generic_current( stack ) )
 end
-       
+              
 --
 -- Testing get_calcua_longosarch_current
 --
@@ -82,17 +299,38 @@ end
 print( '\nTesting get_calcua_longosarch_current function\n' )
 
 for stack,_ in pairs( CalcUA_ClusterMap ) do
-    print( 'Generic for ' .. stack .. ': ' .. get_calcua_longosarch_current( stack ) )
+    print( 'Architecture of the current node in the format for ' .. stack .. ': ' .. get_calcua_longosarch_current( stack ) )
 end
 
 --
--- Testing get_calcua_top_current
+-- Testing get_calcua_top
 --
 
-print( '\nTesting get_calcua_top_current function\n' )
+print( '\nTesting get_calcua_top function\n' )
+
+local inputdata = {
+    {   
+       ['stack_version'] = '2021b',
+       ['cluster_arch'] =  'redhat8-zen2-noaccel',
+       ['expected'] =      'redhat8-zen2-noaccel',
+    },
+    {   
+       ['stack_version'] = '2021b',
+       ['cluster_arch'] =  'redhat8-zen2-arcturus',
+       ['expected'] =      'redhat8-zen2-noaccel',
+    },            
+}
+
+for index, data in ipairs( inputdata ) do
+    local got = get_calcua_top( data['cluster_arch'], data['stack_version'] )
+    local expected = data['expected']
+    print( 'Top architecture for ' .. data['cluster_arch'] .. ' in ' .. data['stack_version'] .. ' is ' ..
+           got .. ', expected: ' .. data['expected'] .. ' so ' .. 
+           ( got == expected and 'OK' or 'NOT OK' ) )
+end
 
 for stack,_ in pairs( CalcUA_ClusterMap ) do
-    print( 'Generic for ' .. stack .. ': ' .. get_calcua_top_current( stack, get_calcua_longosarch_current( stack ) ) )
+    print( 'Used architecture for this node for ' .. stack .. ': ' .. get_calcua_top( get_calcua_longosarch_current( stack ), stack ) )
 end
        
 --

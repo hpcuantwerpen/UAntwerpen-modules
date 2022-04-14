@@ -62,7 +62,7 @@ local os_version_type = {
 
 -- -----------------------------------------------------------------------------
 --
--- function get_hostname
+-- function get_hostname()
 --
 -- Gets the hostname from the system.
 --
@@ -88,7 +88,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- get_cpu_info
+-- get_cpu_info()
 --
 -- Get information about the host. The function returns 1 value:
 --  1. The CPU type in the form <vendpr_id>_<family>_<model>
@@ -119,7 +119,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- get_os_info
+-- get_os_info()
 --
 -- Get information about the host. The function returns 2 values:
 --  1. The name of the OS
@@ -158,7 +158,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- get_accelerator_info
+-- get_accelerator_info()
 --
 -- Get information about the host. The function returns 1 value:
 --  1. The type of the accelerator:
@@ -268,7 +268,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- get_fullos
+-- get_fullos()
 --
 -- Returns the long OS name including the version
 --

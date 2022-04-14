@@ -30,9 +30,9 @@ end
 -- Detect the software stack from the name and version of the module
 local stack_name    = myModuleName()
 local stack_version = myModuleVersion()
-
+ 
 -- Detect the architecture of the current node. 
-local long_osarch_current = get_calcua_top_current( stack_version, get_calcua_longosarch_current( stack_version ) )
+local long_osarch_current = get_calcua_top( get_calcua_longosarch_current( stack_version ), stack_version )
 if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleName() .. '/' .. myModuleVersion() .. 
                  ', stack name/version is  ' .. stack_name .. '/' .. stack_version ..

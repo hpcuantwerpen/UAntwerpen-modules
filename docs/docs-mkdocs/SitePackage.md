@@ -148,6 +148,7 @@ CalcUA_toolchain_map = {
 }
 ```
 
+
 ### `CalcUA_map_arch_hierarchy`
 
 `CalcUA_map_arch_hierarchy` is an associative table of associative tables with for each supported
@@ -180,6 +181,44 @@ CalcUA_map_arch_hierarchy = {
     }
 }
 ```
+
+
+### `CalcUA_reduce_top_architecture`
+
+`CalcUA_reduce_top_architecture` is an associative table of associative tables with for each supported
+OS a table that can be used to walk a chain of compatible but less specific architectures when 
+looking for an architecture that is supported for a particular version of a software stack.
+
+As we forsee that this may change in incompatible ways in the future, there is a level that indexes
+with a yyyymm starting version of the software stacks.
+
+-   First level: The keys are the yyyymm versions of software stacks, the values the matching
+    associative table. These toolchain versions are "starting from", so not every toolchain
+    needs to be specified.
+
+-   Second level: Associative table with as keys the parten CPU/GPU architecture
+    string and as value the child-GPU/architecture string or sub-architecture, 
+    or `nil` if it is the top (= most generic) architecture.
+
+
+Example:
+```lua
+CalcUA_reduce_top_architecture = {
+    ['200000'] = {
+        ['zen2-ampere']       = 'zen2-noaccel',
+        ['zen2-arcturus']     = 'zen2-noaccel',
+        ['zen2-noaccel']      = 'broadwell-noaccel',
+        ['skylake-aurora1']   = 'skylake-noaccel',
+        ['skylake-noaccel']   = 'broadwell-noaccel',
+        ['broadwell-noaccel'] = 'ivybridge-noaccel',
+        ['broadwell-P5000']   = 'broadwell-noaccel',
+        ['broadwell-pascal']  = 'broadwell-noaccel',
+        ['ivybridge-noaccel'] = 'x86_64',
+        ['x86_64']            = nil,
+    },
+}
+```
+
 
 ## SitePackage_map_toolchain.lua
 
@@ -293,6 +332,30 @@ map_accel_long_to_short = {
     is no accelerator part.
 
 
+#### Computing matching architectures in software stacks
+
+-   `get_calcua_longosarch_current( stack_version )`
+
+    **Input argument:**
+
+    -   stack_version: Version of the calcua stack, can be `system`.
+
+    **Output:** The architecture of the current node with long names and in a
+    format compatible with the indicated software stack (so taking into 
+    account the hierarchy types 2L_long, 2L_short or 3L).
+
+-   `get_calcua_generic( clusterarch, stack_version )`: Compute the most generic
+    architecture for the given verion of the CalcUA stack on the given clusterarch
+    architecture. The clusterarch argument has to be in the long format compatible
+    with the CalcUA stack version.
+
+-   `get_calcua_generic_current( stack_version )`: Compute the most generic
+    architecture for the given version of the CalcUA stack on the current
+    architecture.
+
+TODO: get_calcua_top
+
+
 #### Computing directories
 
 -   `get_system_module_dir`: Compute the module directory from the three input arguments:
@@ -400,31 +463,67 @@ tables from long to short names as defined in `SitePackage_arch_hierarchy.lua`.
 
 ### Routines
 
--   `get_hostname`: Request the name of the host. The routine calls `/bin/hostname`.
 
--   `get_cpu_info`: Returns the CPU string read from `/proc/cpuinfo`, by combining 
-    information from the `vendor_id`, `family` and `model` lines (separated by an
-    underscore).
+#### `get_hostname()`
 
--   `get_os_info` returns 2 values: name and version of the OS. The name is extracted
-    from the `NAME` line of `/etc/os-release`, the version from the `VERSION_ID` line
-    but it may be converted from major.minor to major format if told so by the 
-    `os_version_type` table.
+Request the name of the host. The routine calls `/bin/hostname`.
 
--   `get_accelerator_info` extracts the accelerator type, returning `nil` if no accelerator
-    is found. The names returned are the long accelerator names used in the data structures.
+#### `get_cpu_info()`
 
--   `get_clusterarch` returns the cluster architecture in four possible formats for the 
-    module system. It is then to the module system to select which one of the four it needs
-    for which purpose (and that depends on the `hierarchy` field in `CalcUA_SystemProperties`
-    in `/etc/SysteDefinition.lua`). The four formats are two with long names and two with
-    short names, each time with three components or with only two components if there is no
+Returns the CPU string read from `/proc/cpuinfo`, by combining 
+information from the `vendor_id`, `family` and `model` lines (separated by an
+underscore).
+
+
+#### `get_os_info()`
+
+returns 2 values: name and version of the OS. The name is extracted
+from the `NAME` line of `/etc/os-release`, the version from the `VERSION_ID` line
+but it may be converted from major.minor to major format if told so by the 
+`os_version_type` table.
+
+
+#### `get_accelerator_info` 
+
+Extracts the accelerator type, returning `nil` if no accelerator
+is found. The names returned are the long accelerator names used in the data structures.
+
+Current return value:
+
+-   AMD_MI100    (vaughan AMD Instinct nodes)
+-   NVIDIA_GP100 (leibniz Pascal nodes)
+-   NVIDIA_GP104 (leibniz visualization node)
+-   NVIDIA_GA100 (vaughan Ampere node)
+-   NEC_aurora1  (leibniz Aurora node)
+
+
+#### `get_clusterarch()`
+
+`get_clusterarch` returns the cluster architecture in four possible formats for the 
+module system. It is then to the module system to select which one of the four it needs
+for which purpose (and that depends on the `hierarchy` field in `CalcUA_SystemProperties`
+in `/etc/SysteDefinition.lua`). The four formats are two with long names and two with
+short names, each time with three components or with only two components if there is no
+accelerator.
+
+Return values:
+
+1.  Short minimal name, i.e., no `-host` is added for nodes without
     accelerator.
+2.  Long minimal name, i.e., no `-noaccel` is added for nodes without
+    accelerator.
+3.  Short maximal name, with `-host` added for nodes without accelerator
+4.  Long maximal name, with `-noaccel` added for nodes without accelerator
+    e.g., `RH8-zen2, redhat8-zen2, RH8-zen2-host, redhat8-zen2-noaccel` or
+    `RH8-SKLX-NEC1, redhat8-skylake-aurora1, RH8-SKLX-NEC1, redhat8-skylake-aurora1`
 
--   `get_fullos`: Returns the long OS name including the version (so the first component
-    of the formats with long names of `get_clusterarch`)
 
-    Example return value: `redhat8` on systems with CentOS 8.x or Rocky Linux 8.x.
+#### `get_fullos()`
+
+Returns the long OS name including the version (so the first component
+of the formats with long names of `get_clusterarch`)
+
+Example return value: `redhat8` on systems with CentOS 8.x or Rocky Linux 8.x.
 
 
 ## SitePackage_helper.lua
@@ -443,10 +542,21 @@ This data structure is a sorted list of the level 1 keys used in the
 Its main purpose is to speed up a search routine in this file, to avoid always 
 recomputing that data.
 
+#### `CalcUA_sorted_toparchreduction_keys`
+
+This data structure is a sorted list of the level 1 keys used in the 
+[`CalcUA_reduce_top_architecture`](#calcua_reduce_top_architecture) data structure.
+Its main purpose is to speed up a search routine in this file, to avoid always 
+recomputing that data.
+
+
 ### Routines
 
--   `get_matching_archmap_key`: For a given numeric (i.e., yyyymm) version, returns
+-   `get_matching_archmap_key(version)`: For a given numeric (i.e., yyyymm) version, returns
     the largest key in `CalcUA_map_arch_hierarchy` not larger than the given version.
+
+-   `get_matching_toparchreduction_key( version )`: For a given numeric (i.e., yyyymm) version, returns
+    the largest key in `CalcUA_reduce_top_architecture` not larger than the given version.
 
 -   `is_Stack_SystemTable`: Check if a given stack version corresponds to a key in
     `CalcUA_SystemTable`. We have to do this through a function that is then exported

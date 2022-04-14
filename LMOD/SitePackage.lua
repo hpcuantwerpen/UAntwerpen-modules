@@ -131,7 +131,7 @@ sandbox_registration{
     ['get_clusterarch']               = get_clusterarch,
     [ 'map_toolchain']                = map_toolchain,
     ['get_calcua_longosarch_current'] = get_calcua_longosarch_current,
-    ['get_calcua_top_current']        = get_calcua_top_current,
+    ['get_calcua_top']                = get_calcua_top,
     ['is_Stack_SystemTable']          = is_Stack_SystemTable,
 }
 

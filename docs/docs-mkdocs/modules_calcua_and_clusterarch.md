@@ -54,14 +54,14 @@ in the `prepare_calcua_stack.lua` script.
 What the module does:
 
 -   Declare itself a sticky module from the family `CalcUA_clusterarch`.
+-   Check location for the user stack via EBU_USER_PREFIX or the default, turn off by setting
+    EBU_USER_PREFIX to an empty value. The default location is $VSC_DATA/EasyBuild
 -   TO BE IMPLEMENTED!
 -   Determine suitable architecture strings:
     -   Highest-level architecture string for the current version of the software stack is
         determined from the version of the module.
     -   When we are not loading for the `system` version of the software stack, we also need
         to determine the highest level version of that stack that should be loaded.
--   Check location for the user stack via EBU_USER_PREFIX or the default, turn off by setting
-    EBU_USER_PREFIX to an empty value. The default location is $VSC_DATA/EasyBuild
 -   Determine the list of directories of EasyBuild-generated module files to load. Keep in mind
     that later on we will have to synchronise that with a list of directories in the EasyBuild
     installation repository. All user modules take a higher priority than any 

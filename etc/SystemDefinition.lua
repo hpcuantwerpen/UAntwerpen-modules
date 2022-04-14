@@ -54,7 +54,7 @@ CalcUA_SystemTable = {
 --   * ['hierarchy']: Type of hierarchy, 3 values though not all are implemented
 --       * 2L_long:  2 levels, all names on the second level include accelerator
 --       * 2L_short: 2 levels, but no -host or -noaccel for archs without accelerator
---                   NOT IMPLEMENTED
+--                   NOT IMPLEMENTED AND WILL LIKELY REQUIRE SIGNIFICANT CHANGES
 --       * 3L      : 3 levels
 --                   NOT IMPLEMENTED 
 --
@@ -168,16 +168,44 @@ CalcUA_toolchain_map = {
 CalcUA_map_arch_hierarchy = {
     -- We start with a 2-level map
     ['200000'] = {
-        ['zen2-noaccel']      = 'x86_64',
         ['zen2-ampere']       = 'x86_64',
         ['zen2-arcturus']     = 'x86_64',
-        ['broadwell-noaccel'] = 'x86_64',
+        ['zen2-noaccel']      = 'x86_64',
+        ['skylake-aurora1']   = 'x86_64',
+        ['skylake-noaccel']   = 'x86_64',
         ['broadwell-P5000']   = 'x86_64',
         ['broadwell-pascal']  = 'x86_64',
-        ['skylake-noaccel']   = 'x86_64',
-        ['skylake-aurora1']   = 'x86_64',
+        ['broadwell-noaccel'] = 'x86_64',
         ['ivybridge-noaccel'] = 'x86_64',
         ['x86_64']            = nil,
     }
 }
+
+
+-- -----------------------------------------------------------------------------
+--
+-- The following table defines the order of architectures to search if there is
+-- no stack for a particular architecture. It is used to find the closest matching
+-- top CPU + accelerator architecture if there is no support for an architecture
+-- in a given software stack.
+--
+-- We support changes over time in this table as insight grows so we add again
+-- an additional level based on a yyyymm representation of the software stacks
+--
+
+CalcUA_reduce_top_architecture = {
+    ['200000'] = {
+        ['zen2-ampere']       = 'zen2-noaccel',
+        ['zen2-arcturus']     = 'zen2-noaccel',
+        ['zen2-noaccel']      = 'broadwell-noaccel',
+        ['skylake-aurora1']   = 'skylake-noaccel',
+        ['skylake-noaccel']   = 'broadwell-noaccel',
+        ['broadwell-noaccel'] = 'ivybridge-noaccel',
+        ['broadwell-P5000']   = 'broadwell-noaccel',
+        ['broadwell-pascal']  = 'broadwell-noaccel',
+        ['ivybridge-noaccel'] = 'x86_64',
+        ['x86_64']            = nil,
+    },
+}
+
 
