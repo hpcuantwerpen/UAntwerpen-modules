@@ -460,3 +460,6 @@ recomputing that data.
 -   `mkDir`: Create a directory, using the Lua `lfs` package. It really has the effect
     effect of `mkdir -p`, so it can create multiple levels from the given directory if
     needed.
+
+-   'get_user_prefix_EasyBuild': Compute the directory for the EasyBuild user installation,
+    or nil if that is explicitly turned off by setting `EBU_USER_PREFIX` to an empty string.

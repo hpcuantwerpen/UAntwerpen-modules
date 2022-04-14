@@ -126,6 +126,7 @@ sandbox_registration{
 --    ['get_user_prefix_EasyBuild'] = get_user_prefix_EasyBuild,
     ['get_motd']                      = get_motd,
     ['get_fortune']                   = get_fortune,
+    ['get_user_prefix_EasyBuild']     = get_user_prefix_EasyBuild,
     ['is_interactive']                = is_interactive,
     ['get_clusterarch']               = get_clusterarch,
     [ 'map_toolchain']                = map_toolchain,
