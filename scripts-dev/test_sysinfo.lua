@@ -23,8 +23,8 @@ local clusterarch_short_maximal
 local clusterarch_long_maximal
 clusterarch_short_minimal, clusterarch_long_minimal, clusterarch_short_maximal, clusterarch_long_maximal = get_clusterarch()
 print( '- Short minimal clusterarch: ' .. clusterarch_short_minimal )
-print( '- Long minimal clusterarch:  ' .. clusterarch_long_maximal )
-print( '- Short maximal clusterarch: ' .. clusterarch_short_minimal )
+print( '- Long minimal clusterarch:  ' .. clusterarch_long_minimal )
+print( '- Short maximal clusterarch: ' .. clusterarch_short_maximal )
 print( '- Long maximal clusterarch:  ' .. clusterarch_long_maximal )
   
 
