@@ -224,6 +224,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#more-detailed-layout" class="md-nav__link">
     More detailed layout
   </a>
@@ -375,6 +382,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#more-detailed-layout" class="md-nav__link">
     More detailed layout
   </a>
@@ -416,12 +430,13 @@
 
 
 <h1 id="design-considerations">Design considerations</h1>
+<h2 id="options">Options</h2>
 <ul>
 <li>
 <p>EasyBuild-managed software:</p>
 <ul>
 <li>
-<p>Option 1: modules, software and ebrepo at the bottom of the
+<p><strong>Option 1</strong>: modules, software and ebrepo at the bottom of the
     directory hierarchy. So each of these directories than have
     subdirectories for the various versions of the stack and various
     hardware/OS architectures.</p>
@@ -438,11 +453,11 @@
 </ul>
 </li>
 <li>
-<p>Option 2a: First subdirectories per version of the stack,
+<p><strong> Option 2a</strong>: First subdirectories per version of the stack,
     hardware/OS and then modules/software/ebrepo_files</p>
 </li>
 <li>
-<p>Option 2b: hardware/OS, then version of the stack, then
+<p><strong>Option 2b</strong>: hardware/OS, then version of the stack, then
     modules/software/ebrepo_files</p>
 <ul>
 <li>This goes contrary to the LMOD hierarchy, though this
@@ -458,7 +473,11 @@
 </li>
 <li>
 <p>Note that besides the EasyBuild modules, we still need the
-    infrastructure tree to get everything to work correctly.</p>
+    infrastructure tree (as on LUMI) to get everything to work correctly.</p>
+<p>The infrastructure module tree follows a strict Lmod hierarchy whereas the
+tree with EasyBuild-generated modules does not. The infrastructure tree does,
+e.g., contain the EasyBuild configuration modules and only one subdirectory of 
+it can be in the <code>MODULEPATH</code> at any given time.</p>
 </li>
 <li>
 <p>Which elements determine the architecture string?</p>
@@ -526,107 +545,107 @@
 </ul>
 <h2 id="more-detailed-layout">More detailed layout</h2>
 <h3 id="option-1">Option 1</h3>
-<div class="highlight"><pre><span></span><code>/apps    
-+ /antwerpen  
-. +-/CalcUA  
-. . |-/**UAntwerpen-modules**: Repository with LMOD configuration and generic modules  
-. . |-/**UAntwerpen-easybuild:** EasyBuild setup  
-. . | +-/*easybuild*  
-. . | . |-/easyconfigs  
-. . | . |-/easyblocks  
-. . | . |…Customisations to naming schemes etc.  
-. . | . +-/config: Configuration files for some settings not done via environment  
-. . |-/**modules-infrastructure**: The structure of modules to select the version etc., in a LMOD hierarchy  
-. . | |-/*stacks*  
-. . | | |-/calcua  
-. . | | . |-/2021b.lua: Symbolic link to a generic module!  
-. . | |-/*arch*  
-. . | | |-/calcua  
-. . | | . |-/2021b  
-. . | | . . |-/cluster  
-. . | | . . | |-/hopper.lua: Symbolic link to a generic module!  
-. . | | . . | |-/leibniz.lua  
-. . | | . . | |-/leibniz-skl.lua  
-. . | | . . | |-/vaughan.lua  
-. . | | . . | +-/generic.lua  
-. . | | . . +-/arch  
-. . | | . . . |-redhat8  
-. . | | . . . |-redhat8-broadwell  
-. . | | . . . +-redhat8-broadwell-quadro  
-. . | |-/*infrastructure*  
-. . | . |-/CalcUA  
-. . | . . |-/2021b  
-. . | . . . |-/arch  
-. . | . . . . |-/redhat8-ivybridge  
-. . | . . . . . |-/EasyBuild-production  
-. . | . . . . . |-/EasyBuild-infrastructure  
-. . | . . . . . |-/EasyBuild-user  
-. . |-/**modules-easybuild**  
-. . | |-/*CalcUA-2021b*  
-. . | | |-redhat8_x86_64 : Directory for potential generic builds if performance does not matter  
-. . | | |-redhat8-broadwell  
-. . | | +-redhat8-broadwell-quadro  
-. . | +-/*system*: Modules outside the regular software stacks  
-. . | . |-redhat8 : No specific processor versions, e.g., Matlab  
-. . | . +-redhat8-ivybridge : Specific processor version, e.g., Gaussian  
-. . +-/**SW**  
-. . . |-*CalcUA-2021b*  
-. . . | |-RH8-x86_64  
-. . . | |-RH8-BRW  
-. . . | +-RH8-BRW-NVGP61GL  
-. . . |-/*system*: Sometimes relatively empty subdirs if EasyBuild only creates a module.  
-. . . | |-RH8  
-. . . | +-RH8-IVB  
-. . . +-/*MNL*: Manually installed software. Do we need an OS level?  Probably best  
-. . . . +-RH8-x86_86  
+<div class="highlight"><pre><span></span><code>apps    
+└─ antwerpen  
+   └─ CalcUA  
+      ├─ UAntwerpen-modules**: Repository with LMOD configuration and generic modules  
+      ├─ UAntwerpen-easybuild: EasyBuild setup  
+      │  └─ easybuild  
+      │     ├─ easyconfigs  
+      │     ├─ easyblocks  
+      │     ├─ Customisations to naming schemes etc.  
+      │     └─ config: Configuration files <span class="k">for</span> some settings not <span class="k">done</span> via environment  
+      ├─ modules-infrastructure: The structure of modules to <span class="k">select</span> the version etc., <span class="k">in</span> a LMOD hierarchy  
+      │  ├─ stacks  
+      │  │  └─ calcua  
+      │  │     └─ 2021b.lua: Symbolic link to a generic module!  
+      │  ├─ arch  
+      │  │  └─ calcua  
+      │  │     └─ 2021b  
+      │  │        ├─ cluster  
+      │  │        │  ├─ hopper.lua: Symbolic link to a generic module!  
+      │  │        │  ├─ leibniz.lua  
+      │  │        │  ├─ leibniz-skl.lua  
+      │  │        │  ├─ vaughan.lua  
+      │  │        │  └─ generic.lua  
+      │  │        └─ arch  
+      │  │           ├─ redhat8  
+      │  │           ├─ redhat8-broadwell  
+      │  │           └─ redhat8-broadwell-quadro  
+      │  └─ infrastructure  
+      │     └─ CalcUA  
+      │        └─ 2021b  
+      │           └─ arch  
+      │              └─ redhat8-ivybridge  
+      │                 ├─ EasyBuild-production  
+      │                 ├─ EasyBuild-infrastructure  
+      │                 └─ EasyBuild-user  
+      ├─ modules-easybuild  
+      │  ├─ CalcUA-2021b  
+      │  │  ├─ redhat8_x86_64 : Directory <span class="k">for</span> potential generic builds <span class="k">if</span> performance does not matter  
+      │  │  ├─ redhat8-broadwell  
+      │  │  └─ redhat8-broadwell-quadro  
+      │  └─ system: Modules outside the regular software stacks  
+      │     ├─ redhat8 : No specific processor versions, e.g., Matlab  
+      │     └─ redhat8-ivybridge: Specific processor version, e.g., Gaussian  
+      └─ SW  
+         ├─ CalcUA-2021b  
+         │  ├─ RH8-x86_64  
+         │  ├─ RH8-BRW  
+         │  └─ RH8-BRW-NVGP61GL  
+         ├─ system : Sometimes relatively empty subdirs <span class="k">if</span> EasyBuild only creates a module.  
+         │  ├─ RH8  
+         │  └─ RH8-IVB  
+         └─ MNL : Manually installed software. Do we need an OS level?  Probably best  
+            └─ RH8-x86_86  
 </code></pre></div>
 <h3 id="option-2a">Option 2a</h3>
-<div class="highlight"><pre><span></span><code>/apps
-+ /antwerpen  
-. +-/CalcUA  
-. . |-/**UAntwerpen-modules**: Repository with LMOD configuration and generic modules  
-. . |-/**UAntwerpen-easybuild**: EasyBuild setup  
-. . | +-/easybuild  
-. . | . |-/easyconfigs  
-. . | . |-/easyblocks  
-. . | . |…Customisations to naming schemes etc.  
-. . | . +-/config: Configuration files for some settings not done via environment  
-. . |-/**modules-infrastructure**: The structure of modules to select the version etc.  
-. . | |-/*stacks*  
-. . | | +-/calcua  
-. . | | . +-/2021b.lua: Symbolic link to a generic module!  
-. . | |-/*arch*  
-. . | | +-/calcua  
-. . | | . +-/2021b  
-. . | | . . +-/cluster  
-. . | | . . . |-/hopper.lua: Symbolic link to a generic module!  
-. . | | . . . |-/leibniz.lua  
-. . | | . . . |-/leibniz-skl.lua  
-. . | | . . . |-/vaughan.lua  
-. . | | . . . +-/generic.lua  
-. . | |-/*infrastructure*  
-. . | . +-/CalcUA  
-. . | . . +-/2021b  
-. . | . . . |-/arch  
-. . | . . . . |-/ivybridge-redhat8  
-. . | . . . . . |-/EasyBuild-production  
-. . | . . . . . |-/EasyBuild-infrastructure  
-. . | . . . . . |-/EasyBuild-user  
-. . +-/**2021b**  
-. . . |-/*ivybridge-redhat8*  
-. . . | |-/software  
-. . . | |-/modules  
-. . . | |-/ebrepo_files  
-. . . |-/*haswell-redhat8*  
-. . . |-/*skylake-redhat8*: Not exactly archspec, then it should be skylake_avx512-redhat8  
-. . . |-/*zen2-redhat8*  
-. . . |-/*x86_64-redhat8* ????? (In archspecL x86_64_v2 for IVB, x86_64_v3 for rome/BDW  
+<div class="highlight"><pre><span></span><code>apps
+└─ antwerpen  
+   └─ CalcUA  
+      ├─ UAntwerpen-modules: Repository with LMOD configuration and generic modules  
+      ├─ UAntwerpen-easybuild: EasyBuild setup  
+      │  └─ easybuild  
+      │     ├─ easyconfigs  
+      │     ├─ easyblocks  
+      │     ├─ Customisations to naming schemes etc.  
+      │     └─ config: Configuration files <span class="k">for</span> some settings not <span class="k">done</span> via environment  
+      ├─ modules-infrastructure: The structure of modules to <span class="k">select</span> the version etc.  
+      │  ├─ stacks  
+      │  │  └─ calcua  
+      │  │     └─ 2021b.lua: Symbolic link to a generic module!  
+      │  ├- arch  
+      │  │  └─ calcua  
+      │  │       └─ 2021b  
+      │  │          └─ cluster  
+      │  │             ├─ hopper.lua: Symbolic link to a generic module!  
+      │  │             ├─ leibniz.lua  
+      │  │             ├─ leibniz-skl.lua  
+      │  │             ├─ vaughan.lua  
+      │  │             └─ generic.lua  
+      │  └─ infrastructure  
+      │     └─ CalcUA  
+      │          └─ 2021b  
+      │             └─ arch  
+      │                └─ ivybridge-redhat8  
+      │                   ├─ EasyBuild-production  
+      │                   ├─ EasyBuild-infrastructure  
+      │                   └─ EasyBuild-user  
+      └─ 2021b  
+          ├─ ivybridge-redhat8*  
+          │  ├─ software  
+          │  ├─ modules  
+          │  └─ ebrepo_files  
+          ├─ haswell-redhat8  
+          ├─ skylake-redhat8 : Not exactly archspec, <span class="k">then</span> it should be skylake_avx512-redhat8  
+          ├─ zen2-redhat8  
+          └─ 86_64-redhat8 ????? <span class="o">(</span>In archspecL x86_64_v2 <span class="k">for</span> IVB, x86_64_v3 <span class="k">for</span> rome/BDW  
 </code></pre></div>
 <p>And we may need a directory for automatically generated files (needed on
 LUMI but may not be needed in Antwerp)</p>
 <ul>
 <li>
-<p>Note for the /cluster modules: Should we also include the OS in the
+<p>Note for the <code>cluster</code> modules: Should we also include the OS in the
     naming scheme (e.g., to keep software for an old OS available at
     your own risk)? So far we have seen that MPI software for CentOS 7
     breaks on CentOS 8 so it is probably a support nightmare…</p>
@@ -644,7 +663,7 @@ LUMI but may not be needed in Antwerp)</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 12, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 7, 2022</span>
       
     
   </small>

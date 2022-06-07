@@ -682,6 +682,8 @@ in the <code>prepare_calcua_stack.lua</code> script.</p>
 <p>What the module does:</p>
 <ul>
 <li>Declare itself a sticky module from the family <code>CalcUA_clusterarch</code>.</li>
+<li>Check location for the user stack via EBU_USER_PREFIX or the default, turn off by setting
+    EBU_USER_PREFIX to an empty value. The default location is $VSC_DATA/EasyBuild</li>
 <li>TO BE IMPLEMENTED!</li>
 <li>Determine suitable architecture strings:<ul>
 <li>Highest-level architecture string for the current version of the software stack is
@@ -690,7 +692,6 @@ in the <code>prepare_calcua_stack.lua</code> script.</p>
     to determine the highest level version of that stack that should be loaded.</li>
 </ul>
 </li>
-<li>Check if a user software stack is also available.</li>
 <li>Determine the list of directories of EasyBuild-generated module files to load. Keep in mind
     that later on we will have to synchronise that with a list of directories in the EasyBuild
     installation repository. All user modules take a higher priority than any 
@@ -1395,7 +1396,7 @@ to have three components if they are on level 2 (which may ease a transition to 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 8, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 14, 2022</span>
       
     
   </small>
