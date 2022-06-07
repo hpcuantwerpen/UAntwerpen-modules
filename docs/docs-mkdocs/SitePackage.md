@@ -11,6 +11,20 @@ new toolchain and really define the setup of the system, are not in the LMOD sub
 but instead in the file `etc/SystemDefinition.lua`.
 
 
+## Naming conventions
+
+There is a lot of work on implementation of this...
+
+-   Full 3-component architecture: `osarch` (where possible)
+-   Full 2-component architecture without OS: `arch` (where possible)
+-   Supported OS as name + version: `os` 
+-   1- or 2-component architecture depending on the convention for the software stack:
+    `modarch`
+
+Internally, in the routines, we do not work with the `2L_short` top level names, but with
+the top level names as they would be used in the `3L` or `2L_long` format. The conversion
+is only done when directory names are generated.
+
 ## etc/SystemDefinition.lua
 
 ### `CalcUA_SystemTable`
@@ -182,10 +196,25 @@ CalcUA_map_arch_hierarchy = {
 }
 ```
 
+TODO: Can we get rid of the above data structure?
 
-### `CalcUA_reduce_top_architecture`
 
-`CalcUA_reduce_top_architecture` is an associative table of associative tables with for each supported
+#### `CalcUA_map_cpu_to_gen`
+
+`CalcUA_map_cpu_to_gen` is an associative table of associative tables with for each supported
+OS a table that can be used to determine the generic architecture for every CPU.
+
+-   First level: The keys are the yyyymm versions of toolchains, the values the matching
+    associative table. These toolchain versions are "starting from", so not every toolchain
+    needs to be specified.
+
+-   Second level: Associative table with as keys the CPU names and as the value
+    the generic CPU type for this CPU, or nil if it is already a generic one.
+
+
+### `CalcUA_reduce_top_arch`
+
+`CalcUA_reduce_top_arch` is an associative table of associative tables with for each supported
 OS a table that can be used to walk a chain of compatible but less specific architectures when 
 looking for an architecture that is supported for a particular version of a software stack.
 
@@ -203,7 +232,7 @@ with a yyyymm starting version of the software stacks.
 
 Example:
 ```lua
-CalcUA_reduce_top_architecture = {
+CalcUA_reduce_top_arch = {
     ['200000'] = {
         ['zen2-ampere']       = 'zen2-noaccel',
         ['zen2-arcturus']     = 'zen2-noaccel',
@@ -330,6 +359,8 @@ map_accel_long_to_short = {
 -   `extract_arch` : Extracts the second and (optional) third part of the
     os-cpu-accelerator argument, i.e., returns cpu-accelerator or just cpu if there
     is no accelerator part.
+
+-   `extract_cpu_friom_arch`: Extracts the first part of the cpu-accelerator argument
 
 
 #### Computing matching architectures in software stacks
@@ -512,10 +543,14 @@ Return values:
     accelerator.
 2.  Long minimal name, i.e., no `-noaccel` is added for nodes without
     accelerator.
-3.  Short maximal name, with `-host` added for nodes without accelerator
+3.  Short maximal name, with `-host` added for nodes without accelerator.
+    This is the format that in our naming conventions would be denoted as
+    `short_osarch`.
 4.  Long maximal name, with `-noaccel` added for nodes without accelerator
     e.g., `RH8-zen2, redhat8-zen2, RH8-zen2-host, redhat8-zen2-noaccel` or
-    `RH8-SKLX-NEC1, redhat8-skylake-aurora1, RH8-SKLX-NEC1, redhat8-skylake-aurora1`
+    `RH8-SKLX-NEC1, redhat8-skylake-aurora1, RH8-SKLX-NEC1, redhat8-skylake-aurora1`.
+    This is the format that in our naming conventions would be denoted as
+    `long_osarch`.
 
 
 #### `get_fullos()`
@@ -542,10 +577,21 @@ This data structure is a sorted list of the level 1 keys used in the
 Its main purpose is to speed up a search routine in this file, to avoid always 
 recomputing that data.
 
+TODO: GET RID OF THIS STRUCTURE
+
+
+#### `CalcUA_sorted_cputogen_keys`
+
+This data structure is a sorted list of the level 1 keys used in the 
+[`CalcUA_map_cpu_to_gen`](#calcua_map_cpu_to_gen) data structure.
+Its main purpose is to speed up a search routine in this file, to avoid always 
+recomputing that data.
+
+
 #### `CalcUA_sorted_toparchreduction_keys`
 
 This data structure is a sorted list of the level 1 keys used in the 
-[`CalcUA_reduce_top_architecture`](#calcua_reduce_top_architecture) data structure.
+[`CalcUA_reduce_top_arch`](#calcua_reduce_top_arch) data structure.
 Its main purpose is to speed up a search routine in this file, to avoid always 
 recomputing that data.
 
@@ -556,7 +602,7 @@ recomputing that data.
     the largest key in `CalcUA_map_arch_hierarchy` not larger than the given version.
 
 -   `get_matching_toparchreduction_key( version )`: For a given numeric (i.e., yyyymm) version, returns
-    the largest key in `CalcUA_reduce_top_architecture` not larger than the given version.
+    the largest key in `CalcUA_reduce_top_arch` not larger than the given version.
 
 -   `is_Stack_SystemTable`: Check if a given stack version corresponds to a key in
     `CalcUA_SystemTable`. We have to do this through a function that is then exported

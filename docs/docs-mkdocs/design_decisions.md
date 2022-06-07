@@ -1,6 +1,71 @@
 # Design decisions
 
-## Overview of decisions
+## Software stack modules
+
+-   The software stack has two levels:
+
+    1.  Version of the software stack: `calcua` module.
+    2.  Hardware architecture
+
+    However, when loading a module from the first level we try to automatically 
+    determine the most suitable module for the second level.
+
+-   A hardware architecture can have subarchitectures, see the discussion in 
+    the ["The generic calcua and clusterarch modules" page](modules_calcua_and_clusterarch.md).
+
+    The final decision is to go for only two levels: a generic one and one
+    specialised for the full architecture (including the accelerator) though
+    the implementation is done such that this could be changed for a later
+    version of the software stack. It will create a lot more files as a lot more
+    packages will be installed multiple times, but it reduces complexity and the
+    chance for error of installing a package at the wrong level.
+
+-   The latter implies that we will need a double tree of modules
+
+    -   One follows very strictly the Lmod hierarchy rules. Only one module at any level
+        of this tree can be present in the `MODULEPATH`. This tree is called the
+        **infrastructure modules**.
+
+    -   The second tree contains the actual software. Multiple subdirectories from
+        this tree can be in the `MODULEPATH` at the same time, e.g., the directory
+        for modules compiled with generic options and directory with modules 
+        optimised for a specific node type.
+
+    To ensure that module swapping works correctly in Lmod (with Lmod trying to find
+    equivalent versions when changing the hardware architecture), it is important
+    that each software package is installed at one and only one level in the architecture
+    hierarchy.
+
+-   The module `calcua/system` is a special version of the `calcua` module for software
+    that fulfills two requirements:
+
+    1.  We want it to be available for any regular version of the `calcua` stack
+    2.  It is build using the `SYSTEM` toolchain
+
+    This is basically the tree to install software from binaries or to create modules for
+    manually installed software (e.g., MATLAB and MAPLE).
+
+    The code of the module tree is largely prepared to have an architecture hierarchy
+    there too, but we may not use it initially. The tree could be used to, e.g.,
+    accomodate Gaussian and automatically offer the right version rather than have multiple
+    versions with versionsuffix for the architecture.
+
+-   3 modules are needed to configure EasyBuild (though they are implemented as one generic
+    module):
+
+    -   `EasyBuild-infrastructure` for the few modules that need to be installed in the 
+        infrastructure tree (if any as on LUMI where this approach is also used basically
+        only the toolchains are installed with EasyBuild, and they only belong in the
+        infrastructure tree tp be ab;e tp a;waus ;pad tje correct target modules as
+        needed by the HPE Cray Programming Environment).
+
+    -   `EasyBuild-production` for installing software with EasyBuild in the central software
+        stack
+
+    -   `EasyBuild-user` for installing software with EasyBuild in the user's directories.
+
+
+## Directory structure
 
 -   Separate module roots for infrastructure modules that follow a strict
     Lmod hierarchy and for the easybuild-managed modules that are arranged 
