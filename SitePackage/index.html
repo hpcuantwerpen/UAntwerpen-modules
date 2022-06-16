@@ -190,21 +190,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../design_considerations/" class="md-nav__link">
-        Note :design considerations
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../modules_calcua-init/" class="md-nav__link">
         The CalcUA-init module
       </a>
@@ -222,6 +207,21 @@
     <li class="md-nav__item">
       <a href="../modules_calcua_and_clusterarch/" class="md-nav__link">
         The generic calcua and clusterarch modules
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scripts/" class="md-nav__link">
+        Scripts
       </a>
     </li>
   
@@ -282,6 +282,13 @@
   
     <nav class="md-nav" aria-label="etc/SystemDefinition.lua">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calcua_nodetypes" class="md-nav__link">
+    CalcUA_NodeTypes
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#calcua_systemtable" class="md-nav__link">
@@ -675,6 +682,86 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_10" type="checkbox" id="__nav_10" >
+      
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../Development/">Development</a>
+          
+            <label for="__nav_10">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Development" data-md-level="1">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Development
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Development/debug_scripts/" class="md-nav__link">
+        Test scripts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Development/design_considerations/" class="md-nav__link">
+        Design considerations
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -715,6 +802,13 @@
   
     <nav class="md-nav" aria-label="etc/SystemDefinition.lua">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calcua_nodetypes" class="md-nav__link">
+    CalcUA_NodeTypes
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#calcua_systemtable" class="md-nav__link">
@@ -1102,11 +1196,36 @@ the top level names as they would be used in the <code>3L</code> or <code>2L_lon
 is only done when directory names are generated.</p>
 <h2 id="etcsystemdefinitionlua">etc/SystemDefinition.lua</h2>
 <p><strong>TODO: Some clean-up. Some of these tables could be generated automatically in <code>SitePackage_helper.lua</code>?</strong></p>
+<h3 id="calcua_nodetypes"><code>CalcUA_NodeTypes</code></h3>
+<p>CalcUA_NodeTypes is simply n array of nodes in the system, specified using
+the long os-CPU-accelerator names.</p>
+<p>As this is a description of the current hardware in the cluster, it is not
+for a specific version of the software stack. The table is used to produce
+output for debug purposes of this configuration file, e.g., to list which
+software stacks for which architectures will be available on which node 
+types.</p>
+<p>Example: At the time of writing, the CalcUA cluster description would have been:
+<div class="highlight"><pre><span></span><code><span class="n">CalcUA_NodeTypes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;redhat7-ivybridge-noaccel&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat7-broadwell-noaccel&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-boradwell-noaccel&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-broadwell-pascal&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-broadwell-P5000&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-skylake-noaccel&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-skylake-aurora1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-zen2-noaccel&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-zen2-ampere&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-zen2-arcturus&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></p>
 <h3 id="calcua_systemtable"><code>CalcUA_SystemTable</code></h3>
 <p><code>CalcUA_SystemTable</code> defines the whole structure of the software tree, including the manually
 installed software and system-wide EasyBuild managed software. Note that the table will be
 completed automatically with more generic os-cpu-accelerator architecture strings based
 on the other tables in this file.</p>
+<p>All names used should be for the 3L scheme, even for toolchains that would use the 2L_short
+naming scheme. However, the middle level should not be used for versions that will use 
+a 2L_long or 2L_short naming scheme.</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">CalcUA_SystemTable</span> <span class="o">=</span> <span class="p">{</span>
     <span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="p">[</span><span class="s1">&#39;redhat7&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
@@ -1442,11 +1561,14 @@ generic one.</p>
 <p><code>get_calcua_longosarch_current( stack_version )</code></p>
 <p><strong>Input argument:</strong></p>
 <ul>
-<li>stack_version: Version of the calcua stack, can be <code>system</code>.</li>
+<li><code>stack_version</code>: Version of the calcua stack, can be <code>system</code>.</li>
 </ul>
-<p><strong>Output:</strong> The architecture of the current node with long names and in a
-format compatible with the indicated software stack (so taking into 
-account the hierarchy types 2L_long, 2L_short or 3L).</p>
+<p><strong>Return value:</strong> </p>
+<ul>
+<li>The architecture of the current node with long names and in a
+    format compatible with the indicated software stack (so taking into 
+    account the hierarchy types 2L_long, 2L_short or 3L).</li>
+</ul>
 </li>
 <li>
 <p><code>get_calcua_generic( clusterarch, stack_version )</code>: Compute the most generic
@@ -1459,8 +1581,26 @@ account the hierarchy types 2L_long, 2L_short or 3L).</p>
     architecture for the given version of the CalcUA stack on the current
     architecture.</p>
 </li>
+<li>
+<p><code>get_calcua_top( long_osarch, stack_version )</code>:</p>
+<p><strong>Input arguments:</strong></p>
+<ul>
+<li>
+<p><code>long_osarch</code>: os and architecture with long names and in a format 
+    compatible with the indicated version of the software stack (so respecting
+    the hierarchy types 2L_short, 2L_long or 3L).</p>
+</li>
+<li>
+<p><code>stack_version</code>: Version of the calcua stack, can be system.</p>
+</li>
 </ul>
-<p>TODO: get_calcua_top</p>
+<p><strong>Return value:</strong></p>
+<ul>
+<li>The most specific os-architecture for the current node in the indicated
+    version of the CalcUA software stacks.</li>
+</ul>
+</li>
+</ul>
 <h4 id="computing-directories">Computing directories</h4>
 <ul>
 <li>
@@ -1681,7 +1821,7 @@ but you'll never know.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../modules_calcua_and_clusterarch/" class="md-footer__link md-footer__link--prev" aria-label="Previous: The generic calcua and clusterarch modules" rel="prev">
+        <a href="../scripts/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Scripts" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1690,7 +1830,7 @@ but you'll never know.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              The generic calcua and clusterarch modules
+              Scripts
             </div>
           </div>
         </a>
