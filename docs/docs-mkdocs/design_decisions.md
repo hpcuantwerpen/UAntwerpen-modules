@@ -22,7 +22,7 @@
 
 -   The latter implies that we will need a double tree of modules
 
-    -   One follows very strictly the Lmod hierarchy rules. Only one module at any level
+    -   One follows very strictly the Lmod hierarchy rules. Only one directory at any level
         of this tree can be present in the `MODULEPATH`. This tree is called the
         **infrastructure modules**.
 
@@ -34,13 +34,15 @@
     To ensure that module swapping works correctly in Lmod (with Lmod trying to find
     equivalent versions when changing the hardware architecture), it is important
     that each software package is installed at one and only one level in the architecture
-    hierarchy.
+    hierarchy. So one should install a package either only for the generic architecture,
+    or for all relevant specific architectures, but not in a generic way and some specific
+    architectures.
 
--   The module `calcua/system` is a special version of the `calcua` module for software
+-   The module `calcua/system` is a *special version* of the `calcua` module for software
     that fulfills two requirements:
 
     1.  We want it to be available for any regular version of the `calcua` stack
-    2.  It is build using the `SYSTEM` toolchain
+    2.  It is build using the `SYSTEM` toolchain (or installed in an equivalent way)
 
     This is basically the tree to install software from binaries or to create modules for
     manually installed software (e.g., MATLAB and MAPLE).
@@ -56,7 +58,7 @@
     -   `EasyBuild-infrastructure` for the few modules that need to be installed in the 
         infrastructure tree (if any as on LUMI where this approach is also used basically
         only the toolchains are installed with EasyBuild, and they only belong in the
-        infrastructure tree tp be ab;e tp a;waus ;pad tje correct target modules as
+        infrastructure tree tp be able to always load the correct target modules as
         needed by the HPE Cray Programming Environment).
 
     -   `EasyBuild-production` for installing software with EasyBuild in the central software
@@ -78,7 +80,7 @@
 
     We have chosen this option to be able to use short names for software directories
     without reducing the readability of the names of the module file directories, and 
-    as such also to keep the size of shebang lines with full pahts under control to not
+    as such also to keep the size of shebang lines with full paths under control to not
     hit kernel-imposed limits.
 
     ***Repository part of the tree***  
@@ -99,7 +101,8 @@
     2.  EasyBuild setup
     3.  Configuration files for some settings not done via environment
 
--   We distinguish between two types of system-wide installed software:
+-   We distinguish between two types of system-wide installed software that is not using
+    EasyBuild toolchains (except `SYSTEM`):
 
     -   Software installed via EasyBuild (though with some tricks)  That software appears
         in the EasyBuild-managed modules and EasyBuild repo also.
@@ -190,11 +193,15 @@
           │  │     └─ 2021b.lua #(4)
           │  ├─ arch #(5)
           │  │  └─ calcua
-          │  │     └─ 2021b
+          │  │     ├─ 2021b
+          │  │     │  └─ arch
+          │  │     │     ├─ redhat8-x86_64
+          │  │     │     ├─ redhat8-broadwell-noaccel
+          │  │     │     └─ redhat8-broadwell-quadro
+          │  │     └─ system
           │  │        └─ arch
           │  │           ├─ redhat8-x86_64
-          │  │           ├─ redhat8-broadwell-noaccel
-          │  │           └─ redhat8-broadwell-quadro
+          │  │           └─ redhat8-ivybridge-noaccel
           │  └─ infrastructure #(6)
           │     └─ CalcUA
           │        └─ 2021b

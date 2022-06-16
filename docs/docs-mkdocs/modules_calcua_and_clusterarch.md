@@ -17,14 +17,19 @@ for the node on which the module is loaded. However, it is always possible to
 overwrite that option later on.
 
 Instances of the generic clusterarch module come in two shapes:
--   cluster/<name> or cluster/<name>-<OS> or cluster/<name>-<target> or
-    cluster/<name>-<OS>-<target> or any other special designator: This is because
+
+-   `arch/<target>` or `arch/<OS>-<target>`: This is a direct mapping
+    to the underlying directory structure.
+
+-   `cluster/<name>` or `cluster/<name>-<OS>` or `cluster/<name>-<target>` or
+    `cluster/<name>-<OS>-<target>` or any other special designator: This is because
     users will typically be more familiar with the name of the cluster than with
     the CPU architecture. The mapping to CPU architecture is coded internally.
--   arch/<target> or arch/<OS>-<target>: This is a direct mapping
-    to the underlying directory structure.
+
+    We currently implement those through module name aliases.
+
 The <target> and <OS> fields correspond to what would be used in Spack,
-with the exception that we use skylake instead of skylake_avx512.
+with the exception that we use `skylake` instead of `skylake_avx512`.
 
 
 ## The calcua generic module
@@ -32,9 +37,9 @@ with the exception that we use skylake instead of skylake_avx512.
 What the module does:
 
 -   Declare itself a sticky module from the family `CalcUA_SoftwareStack`.
--   Determine its name and version from the module name and version
+-   Determine its name and version of the software stack from the module name and version
 -   Determine the architecture of the node on which it is executing taking
-    into account the architectures supported byt the current version of
+    into account the architectures supported by the current version of
     the calcua stack.
     -   Determine the architecture of the node
     -   Then look for the best match for the software stack that is being
@@ -54,35 +59,52 @@ in the `prepare_calcua_stack.lua` script.
 What the module does:
 
 -   Declare itself a sticky module from the family `CalcUA_clusterarch`.
+
 -   Check location for the user stack via EBU_USER_PREFIX or the default, turn off by setting
     EBU_USER_PREFIX to an empty value. The default location is $VSC_DATA/EasyBuild
--   TO BE IMPLEMENTED!
+
+-   REMAiNDER YET TO BE IMPLEMENTED!
+
 -   Determine suitable architecture strings:
+
     -   Highest-level architecture string for the current version of the software stack is
         determined from the version of the module.
+
     -   When we are not loading for the `system` version of the software stack, we also need
         to determine the highest level version of that stack that should be loaded.
+
 -   Determine the list of directories of EasyBuild-generated module files to load. Keep in mind
     that later on we will have to synchronise that with a list of directories in the EasyBuild
     installation repository. All user modules take a higher priority than any 
     EasyBuild-generated module.
+
 -   Determine the infrastructure module directory to load.
--   
+   
     There are no user versions of infrastructure modules.
+
 -   FUTURE EXTENSION: Determine the manually generated modules directory/is to load.
     
     We may provide a placeholder for user-build manual modules also
+
 -   Generate `prepend_path` statements in reverse order  
+
     -   So first for the system modules, in the order
+
         -   Manual (when implemented)
+
         -   Infrastructure
+
         -   `system` dummy stack from generic to specific
-        -   Stack version from generic to specific
-    -   Then for the user modules
-        -   Manual (when implemented)
-        -   `system` dummy stack from generic to specific
+
         -   Stack version from generic to specific
 
+    -   Then for the user modules
+
+        -   Manual (when implemented)
+
+        -   `system` dummy stack from generic to specific
+
+        -   Stack version from generic to specific
 
 
 ## Naming the cluster architecture (clusterarch)
@@ -108,9 +130,10 @@ The thre components are spearated by dashes.
 Note for the long names:
 
 -   The CPU target is based on the target that spack would report (or for that
-    reason the archspec tool), except that we use skylake instead of
-    skylake_avx512 and don't distinguish with Cascade Lake as that is just
+    reason the archspec tool), except that we use `skylake` instead of
+    `skylake_avx512` and don't distinguish with Cascade Lake as that is just
     a different stepping fo the same CPU family and model.
+
 -   The OS name is also based on what spack would report
 
 In doing so, we hopefully ensure that the stack is future-proof and will
@@ -122,17 +145,23 @@ Note for the short names:
 
 -   For the AMD processors we simply refer to the zen name as that is
     already a very short name.
+
 -   For the Intel processors we use established abbreviations: IVB for
     Ivy Bridge, BRW for Broadwell and SKLX for Skylake (in fact, the more
     often used abbreviation for Skylake with AVX512 is SKL-X but we want
     to avoid dashes in the name).
+
 -   For the AMD GPUs we refer to their internal GFX code which is often
     used in architecture strings for compilers with OpenMP offload.
+
 -   For NVIDIA GPUs we refer to their Compute Capability as that is
     a parameter that needs to be set when compiling. Furthermore we add "GL"
     to the string if it is a GPU for OpenGL visualisation. Hence:
+
     -   The Ampere A100 becomes NVCC80 as it has compute capability 8.0.
+
     -   The Tesla P100 becomes NVCC60 as it has compute capability 6.0.
+
     -   The Quadro P5000 which is based on the GP104 chip becomes
         NVCC61GL as it has compute capability 6.1 and is also meant for
         visualisation with OpenGL.
@@ -147,7 +176,7 @@ Currently supported for the OS component of the name:
 | redhat7 | RH7   | Red Hat 7-compatible OS |
 | redhat8 | RH8   | Red Hat 8-compatible OS |
 
-These names are defined in `SitePAckage_arch_hierarchy.lua`.
+These names are defined in `SitePackage_arch_hierarchy.lua`.
 
 ### CPU names
 
@@ -161,7 +190,7 @@ Currently supported for the CPU component of the name:
 | zen2      | zen2   | AMD Zen2 generation                       |
 | x86_64    | x86_64 | Generic x86 64-bit CPU                    |
 
-These names are defined in `SitePAckage_arch_hierarchy.lua`.
+These names are defined in `SitePackage_arch_hierarchy.lua`.
 
 
 ### Accelerator names
@@ -178,7 +207,7 @@ architecture. at least for the GPU accelerators.
 | arcturus | GFX908   | AMD MI100                       |
 | aurora1  | NEC1     | NEC Aurora 1st gen vector board |
 
-These names are defined in `SitePAckage_arch_hierarchy.lua`.
+These names are defined in `SitePackage_arch_hierarchy.lua`.
 
 
 ### Cluster architecture strings
@@ -203,7 +232,7 @@ These combinations that are supported for each software stack version are define
 | redhat8-skylake-aurora1   | RH8-SKLX-NEC1    |
 
 
-### Possible names for arch modules based on the cluster name
+### Possible names for arch (or alternative cluster) modules based on the cluster name
 
 -   arch/hopper = arch/redhat8-ivybridge
 
@@ -262,7 +291,7 @@ Results:
 | Aurora node leibniz        | aurora.leibniz.antwerpen.vsc                |
 | Biomina node leibniz       | r0c03cZ.leibniz.antwerpen.vsc               |
 
-TODO: Is this still valid after the upgrade? No!
+**TODO:** Is this still valid after the upgrade? No!
 
 
 ### Based on VSC_ variables
@@ -303,7 +332,7 @@ TODO: Is this still valid after the upgrade? No!
     -   Intel Cascade Lake: Actually also CPU family 6, model 85, just a different
         stepping: 7 versus 4 for our Skylake CPUs
 
--   Accelerators can be detected by looking in the output of the lspci command
+-   Accelerators can be detected by looking in the output of the `lspci` command
 
 -   The OS can be detected from the variables that can be set through /etc/os-release,
     and in particular the NAME and VERSION_ID lines.
@@ -312,7 +341,7 @@ TODO: Is this still valid after the upgrade? No!
 | Node type                  | vendor_id    | cpu family | model | lspci   |
 |:---------------------------|:-------------|:-----------|:------|:--------|
 | login node vaughan         | AuthenticAMD | 23         | 49    | /       |
-| compute node vaughan       | AuthenticAMD | 23         | 49    | /       |
+| Rome compute node vaughan  | AuthenticAMD | 23         | 49    | /       |
 | NVIDIA node vaughan        | AuthenticAMD | 23         | 49    | /       |
 | MI100 node vaughan         | AuthenticAMD | 23         | 49    | MI100   |
 | login node leibniz         | GenuineIntel | 6          | 79    | GA100   |
@@ -333,6 +362,12 @@ The detection is implemented in `LMOD/SitePackage_system_info.lua`.
 
 
 ## Binary versions loaded by the cluster and arch modules
+
+**It is possible to implement the generic CalcUA module in such a way that one can
+change to a different scheme for a different toolchain version, but one should take
+into account that this might lead to confusion for users. However, from a user's 
+perspective, option 1 and option 2 with the three-component names are not that
+different as they see the same architectures.**
 
 ### Option 1: Maximal common installations
 
@@ -390,7 +425,10 @@ Now there are two levels:
 
 -   Level 1: Unoptimized generic x86 64-bit CPU
 
--   Level 2: Optimised software
+-   Level 2: Optimised software, with 2 options for naming: 
+   
+     1. use the shortest name possible or
+     2. always use three components in the name: OS, CPU and accelerator.
 
 | Node                  | L1 (generic)   | L2 (shortest)            | L2 (3-component)          |
 |:----------------------|:---------------|:-------------------------|:--------------------------|

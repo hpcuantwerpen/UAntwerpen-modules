@@ -1,10 +1,14 @@
 # The SitePackage.lua file and its included routines
 
-  * SitePackage_map_toolchain.lua : Mapping regular toolchain names onto yyy.mm for
+  * `SitePackage_map_toolchain.lua` : Mapping regular toolchain names onto yyy.mm for
     comparisons to find matching versions of some files.
 
-  * SitePackage_arch_hierarchy.lua : Routines to work with the hierarchy of
+  * `SitePackage_arch_hierarchy.lua` : Routines to work with the hierarchy of
     architectures and map between long and short names.
+
+  * `SitePackage_system_info.lua`: Routines to gather information about the system.
+
+  * `SitePackage_helper.lua`: Other routines and data structures.
 
 Some of the data structures, in particular those that need to be extended with each
 new toolchain and really define the setup of the system, are not in the LMOD subdirectory
@@ -12,8 +16,6 @@ but instead in the file `etc/SystemDefinition.lua`.
 
 
 ## Naming conventions
-
-There is a lot of work on implementation of this...
 
 -   Full 3-component architecture: `osarch` (where possible)
 -   Full 2-component architecture without OS: `arch` (where possible)
@@ -26,6 +28,8 @@ the top level names as they would be used in the `3L` or `2L_long` format. The c
 is only done when directory names are generated.
 
 ## etc/SystemDefinition.lua
+
+**TODO: Some clean-up. Some of these tables could be generated automatically in `SitePackage_helper.lua`?**
 
 ### `CalcUA_SystemTable`
 
@@ -109,7 +113,7 @@ software stack has the following entries:
 ### `CalcUA_ClusterMap`
 
 `CalcUA_ClusterMap` contains for each version of the calcua toolchains, including
-the dymmy system version, a mapping from cluster names to os-architecture strings.
+the dummy system version, a mapping from cluster names to os-architecture strings.
 
 ```lua
 CalcUA_ClusterMap = {
@@ -199,7 +203,7 @@ CalcUA_map_arch_hierarchy = {
 TODO: Can we get rid of the above data structure?
 
 
-#### `CalcUA_map_cpu_to_gen`
+### `CalcUA_map_cpu_to_gen`
 
 `CalcUA_map_cpu_to_gen` is an associative table of associative tables with for each supported
 OS a table that can be used to determine the generic architecture for every CPU.
@@ -211,6 +215,19 @@ OS a table that can be used to determine the generic architecture for every CPU.
 -   Second level: Associative table with as keys the CPU names and as the value
     the generic CPU type for this CPU, or nil if it is already a generic one.
 
+Example:
+```lua
+CalcUA_map_cpu_to_gen = {
+    ['200000'] = {
+        ['zen3']      = 'x86_64',
+        ['zen2']      = 'x86_64',
+        ['skylake']   = 'x86_64',
+        ['broadwell'] = 'x86_64',
+        ['ivybridge'] = 'x86_64',
+        ['x86_64']    = nil,
+    }
+}
+```
 
 ### `CalcUA_reduce_top_arch`
 
@@ -257,14 +274,15 @@ CalcUA_reduce_top_arch = {
 
 ### Routines
 
--   `map_toolchain`:  Returns the matching yyyy.mm toolchain for any toolchain. The
+-   `map_toolchain`:  Returns the matching yyyymm toolchain for any toolchain. The
     input argument can be either a yyyy.mm toolchain version (in which case the
     routine simply returns that version without the dot) or a yyyy[a|b] version in
     which case the routine uses the `CalcUA_toolchain_map` to compute the matching
     yyyymm version or falls back to a default rule (where a becomes 01 and b becomes
     07).
     
--   `get_versionedfile`: Finds the most recent file with version not younger than a
+-   `get_versionedfile`: Finds the most recent file (in terms of version encoded in the
+    name of the file) with version not older than a
     given toolchain, with the file matching a particular pattern given as a directory,
     part before the version and part after the version. The version can be in any
     format supported by `map_toolchain`: yyyy[a|b], yyyy.mm, yyyymm, `system`.
@@ -273,6 +291,8 @@ CalcUA_reduce_top_arch = {
 ## SitePackage_arch_hierarchy.lua
 
 ### Data structures
+
+#### From other files
 
 -   Uses `CalcUA_map_arch_hierarchy` from `etc/SystemDefinition.lua`.
 
@@ -297,6 +317,7 @@ Example:
 ``` lua
 map_cpu_long_to_short = {
     ['x86_64']    = 'x86_64',
+    ['zen3']      = 'zen3',
     ['zen2']      = 'zen2',
     ['ivybridge'] = 'IVB',
     ['broadwell'] = 'BRW',
@@ -360,7 +381,7 @@ map_accel_long_to_short = {
     os-cpu-accelerator argument, i.e., returns cpu-accelerator or just cpu if there
     is no accelerator part.
 
--   `extract_cpu_friom_arch`: Extracts the first part of the cpu-accelerator argument
+-   `extract_cpu_from_arch`: Extracts the first part of the cpu-accelerator argument
 
 
 #### Computing matching architectures in software stacks
@@ -376,7 +397,7 @@ map_accel_long_to_short = {
     account the hierarchy types 2L_long, 2L_short or 3L).
 
 -   `get_calcua_generic( clusterarch, stack_version )`: Compute the most generic
-    architecture for the given verion of the CalcUA stack on the given clusterarch
+    architecture for the given version of the CalcUA stack on the given clusterarch
     architecture. The clusterarch argument has to be in the long format compatible
     with the CalcUA stack version.
 
@@ -444,7 +465,7 @@ short names, and this has to be consistent with the various `map_*` tables in
     }
     ```
 
--   `accelerator_to_shortacc` is a more tricky table. It is used in the mapping from data
+-   `accelerator_to_longacc` is a more tricky table. It is used in the mapping from data
     read from the output of `lspci` to accelerator names, but the keys are not currently the
     values read with `lspci`. These values are hard coded in the routine that does detect
     the accelerator.
@@ -501,7 +522,7 @@ Request the name of the host. The routine calls `/bin/hostname`.
 
 #### `get_cpu_info()`
 
-Returns the CPU string read from `/proc/cpuinfo`, by combining 
+Returns the CPU string derived from the data in `/proc/cpuinfo`, by combining 
 information from the `vendor_id`, `family` and `model` lines (separated by an
 underscore).
 
@@ -547,10 +568,11 @@ Return values:
     This is the format that in our naming conventions would be denoted as
     `short_osarch`.
 4.  Long maximal name, with `-noaccel` added for nodes without accelerator
-    e.g., `RH8-zen2, redhat8-zen2, RH8-zen2-host, redhat8-zen2-noaccel` or
-    `RH8-SKLX-NEC1, redhat8-skylake-aurora1, RH8-SKLX-NEC1, redhat8-skylake-aurora1`.
-    This is the format that in our naming conventions would be denoted as
-    `long_osarch`.
+   
+e.g., `RH8-zen2, redhat8-zen2, RH8-zen2-host, redhat8-zen2-noaccel` or
+`RH8-SKLX-NEC1, redhat8-skylake-aurora1, RH8-SKLX-NEC1, redhat8-skylake-aurora1`.
+This is the format that in our naming conventions would be denoted as
+`long_osarch`.
 
 
 #### `get_fullos()`

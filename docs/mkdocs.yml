@@ -27,7 +27,7 @@ theme:
 nav:
   - Overview: index.md 
   - Design decisions: design_decisions.md
-  - Design considerations: design_considerations.md
+  - Note :design considerations: design_considerations.md
   - The CalcUA-init module: modules_calcua-init.md
   - The generic calcua and clusterarch modules: modules_calcua_and_clusterarch.md
   - The SitePackage.lua file and its included LUA files: SitePackage.md
