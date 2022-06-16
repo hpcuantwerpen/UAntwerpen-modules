@@ -1,7 +1,6 @@
 # UAntwerpen-modules documentation overview
 
 -   [Design decisions](design_decisions.md)
-    -    [Design considerations](design_considerations.md) that led to those decisions
 -   [The CalcUA-init module](modules_calcua-init.md)
 -   [The generic calcua and clusterarch modules](modules_calcua_and_clusterarch.md)
 -   [Scripts](scripts.md)
@@ -9,3 +8,7 @@
 -   [EasyBuild configuration](easybuild.md)
 -   [Directory structure of the repositories and software stack](directory_structure.md)
 -   [Procedures](procedures.md)
+-   [Development](Development/index.md)
+    -   [Test scripts](Development/debug_scripts.md)
+    -   [Design considerations](Development/design_considerations.md) that led to the design decisions.
+   
