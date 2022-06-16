@@ -31,12 +31,43 @@ is only done when directory names are generated.
 
 **TODO: Some clean-up. Some of these tables could be generated automatically in `SitePackage_helper.lua`?**
 
+### `CalcUA_NodeTypes`
+
+CalcUA_NodeTypes is simply n array of nodes in the system, specified using
+the long os-CPU-accelerator names.
+
+As this is a description of the current hardware in the cluster, it is not
+for a specific version of the software stack. The table is used to produce
+output for debug purposes of this configuration file, e.g., to list which
+software stacks for which architectures will be available on which node 
+types.
+
+Example: At the time of writing, the CalcUA cluster description would have been:
+```lua
+CalcUA_NodeTypes = {
+    'redhat7-ivybridge-noaccel',
+    'redhat7-broadwell-noaccel',
+    'redhat8-boradwell-noaccel',
+    'redhat8-broadwell-pascal',
+    'redhat8-broadwell-P5000',
+    'redhat8-skylake-noaccel',
+    'redhat8-skylake-aurora1',
+    'redhat8-zen2-noaccel',
+    'redhat8-zen2-ampere',
+    'redhat8-zen2-arcturus',
+}
+```
+
 ### `CalcUA_SystemTable`
 
 `CalcUA_SystemTable` defines the whole structure of the software tree, including the manually
 installed software and system-wide EasyBuild managed software. Note that the table will be
 completed automatically with more generic os-cpu-accelerator architecture strings based
 on the other tables in this file.
+
+All names used should be for the 3L scheme, even for toolchains that would use the 2L_short
+naming scheme. However, the middle level should not be used for versions that will use 
+a 2L_long or 2L_short naming scheme.
 
 ```lua
 CalcUA_SystemTable = {
@@ -390,11 +421,13 @@ map_accel_long_to_short = {
 
     **Input argument:**
 
-    -   stack_version: Version of the calcua stack, can be `system`.
+    -   `stack_version`: Version of the calcua stack, can be `system`.
 
-    **Output:** The architecture of the current node with long names and in a
-    format compatible with the indicated software stack (so taking into 
-    account the hierarchy types 2L_long, 2L_short or 3L).
+    **Return value:** 
+
+    -   The architecture of the current node with long names and in a
+        format compatible with the indicated software stack (so taking into 
+        account the hierarchy types 2L_long, 2L_short or 3L).
 
 -   `get_calcua_generic( clusterarch, stack_version )`: Compute the most generic
     architecture for the given version of the CalcUA stack on the given clusterarch
@@ -405,7 +438,20 @@ map_accel_long_to_short = {
     architecture for the given version of the CalcUA stack on the current
     architecture.
 
-TODO: get_calcua_top
+-   `get_calcua_top( long_osarch, stack_version )`:
+
+    **Input arguments:**
+
+    -   `long_osarch`: os and architecture with long names and in a format 
+        compatible with the indicated version of the software stack (so respecting
+        the hierarchy types 2L_short, 2L_long or 3L).
+
+    -   `stack_version`: Version of the calcua stack, can be system.
+
+    **Return value:**
+    
+    -   The most specific os-architecture for the current node in the indicated
+        version of the CalcUA software stacks.
 
 
 #### Computing directories

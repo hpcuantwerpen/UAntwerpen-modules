@@ -1,11 +1,40 @@
 -- -----------------------------------------------------------------------------
 --
+-- CalcUA_NodeTypes is simply n array of nodes in the system, specified using
+-- the long os-CPU-accelerator names.
+--
+-- As this is a description of the current hardware in the cluster, it is not
+-- for a specific version of the software stack. The table is used to produce
+-- output for debug purposes of this configuration file, e.g., to list which
+-- software stacks for which architectures will be available on which node 
+-- types.
+--
+
+CalcUA_NodeTypes = {
+    'redhat7-ivybridge-noaccel',
+    'redhat7-broadwell-noaccel',
+    'redhat8-boradwell-noaccel',
+    'redhat8-broadwell-pascal',
+    'redhat8-broadwell-P5000',
+    'redhat8-skylake-noaccel',
+    'redhat8-skylake-aurora1',
+    'redhat8-zen2-noaccel',
+    'redhat8-zen2-ampere',
+    'redhat8-zen2-arcturus',
+}
+
 -- SystemTable defines the setup of the module system. For each toolchain it
 -- indicates which OSes are supported for which architectures.
 --
 -- It is sufficient to only specify the "main" architectures (the leaves
 -- of the tree). The other ones will be completed automatically based on
 -- the architecture hierarchy structure.
+--
+-- This data structure should always use names from the 3L scheme to 
+-- avoid any confusion. However, it is advised to not use the middle level
+-- from the 3L scheme in the table, or to be extremely careful that that 
+-- name is not used for toolchains that use a 2L_long or 2L_short naming
+-- scheme.
 --
 
 CalcUA_SystemTable = {
@@ -181,6 +210,25 @@ CalcUA_map_arch_hierarchy = {
     }
 }
 
+-- -----------------------------------------------------------------------------
+--
+--  Mapping of CPU architectures to their generic ones, just in case we ever
+--  get ARM or want to switch to two generic architectures otherwise.
+--
+--  Note that generic architectures are also in the table, but then get a nil
+--  as a value.
+--
+
+CalcUA_map_cpu_to_gen = {
+    ['200000'] = {
+        ['zen2']      = 'x86_64',
+        ['skylake']   = 'x86_64',
+        ['broadwell'] = 'x86_64',
+        ['ivybridge'] = 'x86_64',
+        ['x86_64']    = nil,
+    }
+}
+
 
 -- -----------------------------------------------------------------------------
 --
@@ -193,8 +241,9 @@ CalcUA_map_arch_hierarchy = {
 -- an additional level based on a yyyymm representation of the software stacks
 --
 
-CalcUA_reduce_top_architecture = {
+CalcUA_reduce_top_arch = {
     ['200000'] = {
+        ['zen3-noaccel']      = 'zen2-noaccel',
         ['zen2-ampere']       = 'zen2-noaccel',
         ['zen2-arcturus']     = 'zen2-noaccel',
         ['zen2-noaccel']      = 'broadwell-noaccel',

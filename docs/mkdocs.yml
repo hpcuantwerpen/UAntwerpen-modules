@@ -27,7 +27,6 @@ theme:
 nav:
   - Overview: index.md 
   - Design decisions: design_decisions.md
-  - Note :design considerations: design_considerations.md
   - The CalcUA-init module: modules_calcua-init.md
   - The generic calcua and clusterarch modules: modules_calcua_and_clusterarch.md
   - Scripts: scripts.md
@@ -35,6 +34,10 @@ nav:
   - EasyBuild configuration: easybuild.md
   - Directory structure of the repositories and software stack: directory_structure.md
   - Procedures: procedures.md
+  - Development:
+    - Development/index.md
+    - Test scripts: Development/debug_scripts.md
+    - Design considerations: Development/design_considerations.md
 
 plugins:
   # show revision date at bottom of each page
