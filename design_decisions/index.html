@@ -239,7 +239,7 @@
   
     <li class="md-nav__item">
       <a href="../design_considerations/" class="md-nav__link">
-        Design considerations
+        Note :design considerations
       </a>
     </li>
   
@@ -415,7 +415,7 @@ chance for error of installing a package at the wrong level.</p>
 <p>The latter implies that we will need a double tree of modules</p>
 <ul>
 <li>
-<p>One follows very strictly the Lmod hierarchy rules. Only one module at any level
+<p>One follows very strictly the Lmod hierarchy rules. Only one directory at any level
     of this tree can be present in the <code>MODULEPATH</code>. This tree is called the
     <strong>infrastructure modules</strong>.</p>
 </li>
@@ -429,14 +429,16 @@ chance for error of installing a package at the wrong level.</p>
 <p>To ensure that module swapping works correctly in Lmod (with Lmod trying to find
 equivalent versions when changing the hardware architecture), it is important
 that each software package is installed at one and only one level in the architecture
-hierarchy.</p>
+hierarchy. So one should install a package either only for the generic architecture,
+or for all relevant specific architectures, but not in a generic way and some specific
+architectures.</p>
 </li>
 <li>
-<p>The module <code>calcua/system</code> is a special version of the <code>calcua</code> module for software
+<p>The module <code>calcua/system</code> is a <em>special version</em> of the <code>calcua</code> module for software
     that fulfills two requirements:</p>
 <ol>
 <li>We want it to be available for any regular version of the <code>calcua</code> stack</li>
-<li>It is build using the <code>SYSTEM</code> toolchain</li>
+<li>It is build using the <code>SYSTEM</code> toolchain (or installed in an equivalent way)</li>
 </ol>
 <p>This is basically the tree to install software from binaries or to create modules for
 manually installed software (e.g., MATLAB and MAPLE).</p>
@@ -453,7 +455,7 @@ versions with versionsuffix for the architecture.</p>
 <p><code>EasyBuild-infrastructure</code> for the few modules that need to be installed in the 
     infrastructure tree (if any as on LUMI where this approach is also used basically
     only the toolchains are installed with EasyBuild, and they only belong in the
-    infrastructure tree tp be ab;e tp a;waus ;pad tje correct target modules as
+    infrastructure tree tp be able to always load the correct target modules as
     needed by the HPE Cray Programming Environment).</p>
 </li>
 <li>
@@ -480,7 +482,7 @@ versions with versionsuffix for the architecture.</p>
     packages tree, and the EasyBuild repo of installed software.</p>
 <p>We have chosen this option to be able to use short names for software directories
 without reducing the readability of the names of the module file directories, and 
-as such also to keep the size of shebang lines with full pahts under control to not
+as such also to keep the size of shebang lines with full paths under control to not
 hit kernel-imposed limits.</p>
 <p><strong><em>Repository part of the tree</em></strong><br />
 <div class="highlight"><pre><span></span><code>apps
@@ -501,7 +503,8 @@ hit kernel-imposed limits.</p>
 </ol>
 </li>
 <li>
-<p>We distinguish between two types of system-wide installed software:</p>
+<p>We distinguish between two types of system-wide installed software that is not using
+    EasyBuild toolchains (except <code>SYSTEM</code>):</p>
 <ul>
 <li>
 <p>Software installed via EasyBuild (though with some tricks)  That software appears
@@ -607,11 +610,15 @@ these modules rather then inject them elsewhere via EasyBuild.</p>
       │  │     └─ 2021b.lua <span class="c1">#(4)</span>
       │  ├─ arch <span class="c1">#(5)</span>
       │  │  └─ calcua
-      │  │     └─ 2021b
+      │  │     ├─ 2021b
+      │  │     │  └─ arch
+      │  │     │     ├─ redhat8-x86_64
+      │  │     │     ├─ redhat8-broadwell-noaccel
+      │  │     │     └─ redhat8-broadwell-quadro
+      │  │     └─ system
       │  │        └─ arch
       │  │           ├─ redhat8-x86_64
-      │  │           ├─ redhat8-broadwell-noaccel
-      │  │           └─ redhat8-broadwell-quadro
+      │  │           └─ redhat8-ivybridge-noaccel
       │  └─ infrastructure <span class="c1">#(6)</span>
       │     └─ CalcUA
       │        └─ 2021b
@@ -718,7 +725,7 @@ result in a single file per ( software stack, architecture) combination.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 7, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 16, 2022</span>
       
     
   </small>
@@ -757,13 +764,13 @@ result in a single file per ( software stack, architecture) combination.</p>
       
       
         
-        <a href="../design_considerations/" class="md-footer__link md-footer__link--next" aria-label="Next: Design considerations" rel="next">
+        <a href="../design_considerations/" class="md-footer__link md-footer__link--next" aria-label="Next: Note :design considerations" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Design considerations
+              Note :design considerations
             </div>
           </div>
           <div class="md-footer__button md-icon">

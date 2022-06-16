@@ -191,7 +191,7 @@
   
     <li class="md-nav__item">
       <a href="../design_considerations/" class="md-nav__link">
-        Design considerations
+        Note :design considerations
       </a>
     </li>
   
@@ -311,8 +311,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#possible-names-for-arch-modules-based-on-the-cluster-name" class="md-nav__link">
-    Possible names for arch modules based on the cluster name
+  <a href="#possible-names-for-arch-or-alternative-cluster-modules-based-on-the-cluster-name" class="md-nav__link">
+    Possible names for arch (or alternative cluster) modules based on the cluster name
   </a>
   
 </li>
@@ -542,8 +542,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#possible-names-for-arch-modules-based-on-the-cluster-name" class="md-nav__link">
-    Possible names for arch modules based on the cluster name
+  <a href="#possible-names-for-arch-or-alternative-cluster-modules-based-on-the-cluster-name" class="md-nav__link">
+    Possible names for arch (or alternative cluster) modules based on the cluster name
   </a>
   
 </li>
@@ -648,22 +648,29 @@ of new toolchains in EasyBuild itself, and also for EESSI.</p>
 <p>The calcua modules will automatically load the best fitting clusterarch module
 for the node on which the module is loaded. However, it is always possible to
 overwrite that option later on.</p>
-<p>Instances of the generic clusterarch module come in two shapes:
--   cluster/<name> or cluster/<name>-<OS> or cluster/<name>-<target> or
-    cluster/<name>-<OS>-<target> or any other special designator: This is because
+<p>Instances of the generic clusterarch module come in two shapes:</p>
+<ul>
+<li>
+<p><code>arch/&lt;target&gt;</code> or <code>arch/&lt;OS&gt;-&lt;target&gt;</code>: This is a direct mapping
+    to the underlying directory structure.</p>
+</li>
+<li>
+<p><code>cluster/&lt;name&gt;</code> or <code>cluster/&lt;name&gt;-&lt;OS&gt;</code> or <code>cluster/&lt;name&gt;-&lt;target&gt;</code> or
+    <code>cluster/&lt;name&gt;-&lt;OS&gt;-&lt;target&gt;</code> or any other special designator: This is because
     users will typically be more familiar with the name of the cluster than with
-    the CPU architecture. The mapping to CPU architecture is coded internally.
--   arch/<target> or arch/<OS>-<target>: This is a direct mapping
-    to the underlying directory structure.
-The <target> and <OS> fields correspond to what would be used in Spack,
-with the exception that we use skylake instead of skylake_avx512.</p>
+    the CPU architecture. The mapping to CPU architecture is coded internally.</p>
+<p>We currently implement those through module name aliases.</p>
+</li>
+</ul>
+<p>The <target> and <OS> fields correspond to what would be used in Spack,
+with the exception that we use <code>skylake</code> instead of <code>skylake_avx512</code>.</p>
 <h2 id="the-calcua-generic-module">The calcua generic module</h2>
 <p>What the module does:</p>
 <ul>
 <li>Declare itself a sticky module from the family <code>CalcUA_SoftwareStack</code>.</li>
-<li>Determine its name and version from the module name and version</li>
+<li>Determine its name and version of the software stack from the module name and version</li>
 <li>Determine the architecture of the node on which it is executing taking
-    into account the architectures supported byt the current version of
+    into account the architectures supported by the current version of
     the calcua stack.<ul>
 <li>Determine the architecture of the node</li>
 <li>Then look for the best match for the software stack that is being
@@ -681,38 +688,78 @@ stack to define synonyms based on the cluster names. This file is prepared as on
 in the <code>prepare_calcua_stack.lua</code> script.</p>
 <p>What the module does:</p>
 <ul>
-<li>Declare itself a sticky module from the family <code>CalcUA_clusterarch</code>.</li>
-<li>Check location for the user stack via EBU_USER_PREFIX or the default, turn off by setting
-    EBU_USER_PREFIX to an empty value. The default location is $VSC_DATA/EasyBuild</li>
-<li>TO BE IMPLEMENTED!</li>
-<li>Determine suitable architecture strings:<ul>
-<li>Highest-level architecture string for the current version of the software stack is
-    determined from the version of the module.</li>
-<li>When we are not loading for the <code>system</code> version of the software stack, we also need
-    to determine the highest level version of that stack that should be loaded.</li>
+<li>
+<p>Declare itself a sticky module from the family <code>CalcUA_clusterarch</code>.</p>
+</li>
+<li>
+<p>Check location for the user stack via EBU_USER_PREFIX or the default, turn off by setting
+    EBU_USER_PREFIX to an empty value. The default location is $VSC_DATA/EasyBuild</p>
+</li>
+<li>
+<p>REMAiNDER YET TO BE IMPLEMENTED!</p>
+</li>
+<li>
+<p>Determine suitable architecture strings:</p>
+<ul>
+<li>
+<p>Highest-level architecture string for the current version of the software stack is
+    determined from the version of the module.</p>
+</li>
+<li>
+<p>When we are not loading for the <code>system</code> version of the software stack, we also need
+    to determine the highest level version of that stack that should be loaded.</p>
+</li>
 </ul>
 </li>
-<li>Determine the list of directories of EasyBuild-generated module files to load. Keep in mind
+<li>
+<p>Determine the list of directories of EasyBuild-generated module files to load. Keep in mind
     that later on we will have to synchronise that with a list of directories in the EasyBuild
     installation repository. All user modules take a higher priority than any 
-    EasyBuild-generated module.</li>
-<li>Determine the infrastructure module directory to load.</li>
+    EasyBuild-generated module.</p>
+</li>
 <li>
+<p>Determine the infrastructure module directory to load.</p>
 <p>There are no user versions of infrastructure modules.</p>
 </li>
 <li>
 <p>FUTURE EXTENSION: Determine the manually generated modules directory/is to load.</p>
-<p>We may provide a placeholder for user-build manual modules also
--   Generate <code>prepend_path</code> statements in reverse order<br />
--   So first for the system modules, in the order
-    -   Manual (when implemented)
-    -   Infrastructure
-    -   <code>system</code> dummy stack from generic to specific
-    -   Stack version from generic to specific
--   Then for the user modules
-    -   Manual (when implemented)
-    -   <code>system</code> dummy stack from generic to specific
-    -   Stack version from generic to specific</p>
+<p>We may provide a placeholder for user-build manual modules also</p>
+</li>
+<li>
+<p>Generate <code>prepend_path</code> statements in reverse order  </p>
+<ul>
+<li>
+<p>So first for the system modules, in the order</p>
+<ul>
+<li>
+<p>Manual (when implemented)</p>
+</li>
+<li>
+<p>Infrastructure</p>
+</li>
+<li>
+<p><code>system</code> dummy stack from generic to specific</p>
+</li>
+<li>
+<p>Stack version from generic to specific</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Then for the user modules</p>
+<ul>
+<li>
+<p>Manual (when implemented)</p>
+</li>
+<li>
+<p><code>system</code> dummy stack from generic to specific</p>
+</li>
+<li>
+<p>Stack version from generic to specific</p>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 <h2 id="naming-the-cluster-architecture-clusterarch">Naming the cluster architecture (clusterarch)</h2>
@@ -731,11 +778,15 @@ over time.</p>
 <p>The thre components are spearated by dashes.</p>
 <p>Note for the long names:</p>
 <ul>
-<li>The CPU target is based on the target that spack would report (or for that
-    reason the archspec tool), except that we use skylake instead of
-    skylake_avx512 and don't distinguish with Cascade Lake as that is just
-    a different stepping fo the same CPU family and model.</li>
-<li>The OS name is also based on what spack would report</li>
+<li>
+<p>The CPU target is based on the target that spack would report (or for that
+    reason the archspec tool), except that we use <code>skylake</code> instead of
+    <code>skylake_avx512</code> and don't distinguish with Cascade Lake as that is just
+    a different stepping fo the same CPU family and model.</p>
+</li>
+<li>
+<p>The OS name is also based on what spack would report</p>
+</li>
 </ul>
 <p>In doing so, we hopefully ensure that the stack is future-proof and will
 use similar naming as what would be used in Spack or in EESSI, as that also
@@ -743,22 +794,36 @@ follows these conventions for CPU targets. For the accelerators we've chosen
 user-friendly names rather than their technical names.</p>
 <p>Note for the short names:</p>
 <ul>
-<li>For the AMD processors we simply refer to the zen name as that is
-    already a very short name.</li>
-<li>For the Intel processors we use established abbreviations: IVB for
+<li>
+<p>For the AMD processors we simply refer to the zen name as that is
+    already a very short name.</p>
+</li>
+<li>
+<p>For the Intel processors we use established abbreviations: IVB for
     Ivy Bridge, BRW for Broadwell and SKLX for Skylake (in fact, the more
     often used abbreviation for Skylake with AVX512 is SKL-X but we want
-    to avoid dashes in the name).</li>
-<li>For the AMD GPUs we refer to their internal GFX code which is often
-    used in architecture strings for compilers with OpenMP offload.</li>
-<li>For NVIDIA GPUs we refer to their Compute Capability as that is
+    to avoid dashes in the name).</p>
+</li>
+<li>
+<p>For the AMD GPUs we refer to their internal GFX code which is often
+    used in architecture strings for compilers with OpenMP offload.</p>
+</li>
+<li>
+<p>For NVIDIA GPUs we refer to their Compute Capability as that is
     a parameter that needs to be set when compiling. Furthermore we add "GL"
-    to the string if it is a GPU for OpenGL visualisation. Hence:<ul>
-<li>The Ampere A100 becomes NVCC80 as it has compute capability 8.0.</li>
-<li>The Tesla P100 becomes NVCC60 as it has compute capability 6.0.</li>
-<li>The Quadro P5000 which is based on the GP104 chip becomes
+    to the string if it is a GPU for OpenGL visualisation. Hence:</p>
+<ul>
+<li>
+<p>The Ampere A100 becomes NVCC80 as it has compute capability 8.0.</p>
+</li>
+<li>
+<p>The Tesla P100 becomes NVCC60 as it has compute capability 6.0.</p>
+</li>
+<li>
+<p>The Quadro P5000 which is based on the GP104 chip becomes
     NVCC61GL as it has compute capability 6.1 and is also meant for
-    visualisation with OpenGL.</li>
+    visualisation with OpenGL.</p>
+</li>
 </ul>
 </li>
 </ul>
@@ -785,7 +850,7 @@ user-friendly names rather than their technical names.</p>
 </tr>
 </tbody>
 </table>
-<p>These names are defined in <code>SitePAckage_arch_hierarchy.lua</code>.</p>
+<p>These names are defined in <code>SitePackage_arch_hierarchy.lua</code>.</p>
 <h3 id="cpu-names">CPU names</h3>
 <p>Currently supported for the CPU component of the name:</p>
 <table>
@@ -824,7 +889,7 @@ user-friendly names rather than their technical names.</p>
 </tr>
 </tbody>
 </table>
-<p>These names are defined in <code>SitePAckage_arch_hierarchy.lua</code>.</p>
+<p>These names are defined in <code>SitePackage_arch_hierarchy.lua</code>.</p>
 <h3 id="accelerator-names">Accelerator names</h3>
 <p>Here the short name isn't always shorter, but tells more about the
 architecture. at least for the GPU accelerators.</p>
@@ -869,7 +934,7 @@ architecture. at least for the GPU accelerators.</p>
 </tr>
 </tbody>
 </table>
-<p>These names are defined in <code>SitePAckage_arch_hierarchy.lua</code>.</p>
+<p>These names are defined in <code>SitePackage_arch_hierarchy.lua</code>.</p>
 <h3 id="cluster-architecture-strings">Cluster architecture strings</h3>
 <p>These combinations that are supported for each software stack version are defined in
 <code>etc/SystemDefinition.lua</code>.</p>
@@ -935,7 +1000,7 @@ architecture. at least for the GPU accelerators.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="possible-names-for-arch-modules-based-on-the-cluster-name">Possible names for arch modules based on the cluster name</h3>
+<h3 id="possible-names-for-arch-or-alternative-cluster-modules-based-on-the-cluster-name">Possible names for arch (or alternative cluster) modules based on the cluster name</h3>
 <ul>
 <li>
 <p>arch/hopper = arch/redhat8-ivybridge</p>
@@ -1036,7 +1101,7 @@ desired effect on vaughan. One workaround is to use</p>
 </tr>
 </tbody>
 </table>
-<p>TODO: Is this still valid after the upgrade? No!</p>
+<p><strong>TODO:</strong> Is this still valid after the upgrade? No!</p>
 <h3 id="based-on-vsc_-variables">Based on VSC_ variables</h3>
 <ul>
 <li>
@@ -1085,7 +1150,7 @@ is easily dealt with in the subsequent pattern matching to find the CPU family.<
 </ul>
 </li>
 <li>
-<p>Accelerators can be detected by looking in the output of the lspci command</p>
+<p>Accelerators can be detected by looking in the output of the <code>lspci</code> command</p>
 </li>
 <li>
 <p>The OS can be detected from the variables that can be set through /etc/os-release,
@@ -1111,7 +1176,7 @@ is easily dealt with in the subsequent pattern matching to find the CPU family.<
 <td align="left">/</td>
 </tr>
 <tr>
-<td align="left">compute node vaughan</td>
+<td align="left">Rome compute node vaughan</td>
 <td align="left">AuthenticAMD</td>
 <td align="left">23</td>
 <td align="left">49</td>
@@ -1187,6 +1252,11 @@ is easily dealt with in the subsequent pattern matching to find the CPU family.<
 and the output of <code>lspci</code>.</p>
 <p>The detection is implemented in <code>LMOD/SitePackage_system_info.lua</code>. </p>
 <h2 id="binary-versions-loaded-by-the-cluster-and-arch-modules">Binary versions loaded by the cluster and arch modules</h2>
+<p><strong>It is possible to implement the generic CalcUA module in such a way that one can
+change to a different scheme for a different toolchain version, but one should take
+into account that this might lead to confusion for users. However, from a user's 
+perspective, option 1 and option 2 with the three-component names are not that
+different as they see the same architectures.</strong></p>
 <h3 id="option-1-maximal-common-installations">Option 1: Maximal common installations</h3>
 <p>There are almost always three levels:</p>
 <ul>
@@ -1305,7 +1375,11 @@ and no new nodes with this CPU will ever come in.</p>
 <p>Level 1: Unoptimized generic x86 64-bit CPU</p>
 </li>
 <li>
-<p>Level 2: Optimised software</p>
+<p>Level 2: Optimised software, with 2 options for naming: </p>
+<ol>
+<li>use the shortest name possible or</li>
+<li>always use three components in the name: OS, CPU and accelerator.</li>
+</ol>
 </li>
 </ul>
 <table>
@@ -1396,7 +1470,7 @@ to have three components if they are on level 2 (which may ease a transition to 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 14, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 16, 2022</span>
       
     
   </small>
