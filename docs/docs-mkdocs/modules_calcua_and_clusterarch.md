@@ -430,17 +430,20 @@ Now there are two levels:
      1. use the shortest name possible or
      2. always use three components in the name: OS, CPU and accelerator.
 
-| Node                  | L1 (generic)   | L2 (shortest)            | L2 (3-component)          |
-|:----------------------|:---------------|:-------------------------|:--------------------------|
-| login/compute vaughan | redhat8-x86_64 | redhat8-zen2             | redhat8-zen2-noaccel      |
-| vaughan Ampere node   | redhat8-x86_64 | redhat8-zen2-ampere      | redhat8-zen2-ampere       |
-| vaughan MI100         | redhat8-x86_64 | redhat8-zen2-arcturus    | redhat8-zen2-arcturus     |
-| login/compute leibniz | redhat8-x86_64 | redhat8-broadwell        | redhat8-broadwell-noaccel |
-| leibniz visualisation | redhat8-x86_64 | redhat8-broadwell-P5000  | redhat8-broadwell-P5000   |
-| leibniz Pascal        | redhat8-x86_64 | redhat8-broadwell-pascal | redhat8-broadwell-pascal  |
-| BioMina node          | redhat8-x86_64 | redhat8-skylake          | redhat8-skylake-noaccel   |
-| Leibniz aurora        | redhat8-x86_64 | redhat8-skylake-aurora1  | redhat8-skylake-aurora1   |
-| Hopper node           | redhat8-x86_64 | redhat8-ivybridge        | redhat8-ivybridge-noaccel |
+We will **not** implement the first option for Level 2 as this would only create confusion if we would
+ever want to mix schemes and switch to the first option for a new version of the software stack.
+
+| Node                  | L1 (generic)   | L2 (shortest - not implemented) | L2 (3-component)          |
+|:----------------------|:---------------|:--------------------------------|:--------------------------|
+| login/compute vaughan | redhat8-x86_64 | redhat8-zen2                    | redhat8-zen2-noaccel      |
+| vaughan Ampere node   | redhat8-x86_64 | redhat8-zen2-ampere             | redhat8-zen2-ampere       |
+| vaughan MI100         | redhat8-x86_64 | redhat8-zen2-arcturus           | redhat8-zen2-arcturus     |
+| login/compute leibniz | redhat8-x86_64 | redhat8-broadwell               | redhat8-broadwell-noaccel |
+| leibniz visualisation | redhat8-x86_64 | redhat8-broadwell-P5000         | redhat8-broadwell-P5000   |
+| leibniz Pascal        | redhat8-x86_64 | redhat8-broadwell-pascal        | redhat8-broadwell-pascal  |
+| BioMina node          | redhat8-x86_64 | redhat8-skylake                 | redhat8-skylake-noaccel   |
+| Leibniz aurora        | redhat8-x86_64 | redhat8-skylake-aurora1         | redhat8-skylake-aurora1   |
+| Hopper node           | redhat8-x86_64 | redhat8-ivybridge               | redhat8-ivybridge-noaccel |
 
 
 Users could in principle still use software from another architecture within the stack

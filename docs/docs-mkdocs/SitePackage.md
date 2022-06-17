@@ -20,12 +20,12 @@ but instead in the file `etc/SystemDefinition.lua`.
 -   Full 3-component architecture: `osarch` (where possible)
 -   Full 2-component architecture without OS: `arch` (where possible)
 -   Supported OS as name + version: `os` 
--   1- or 2-component architecture depending on the convention for the software stack:
-    `modarch`
+-   2-component architecture (CPU + accelerator): `modarch`
 
-Internally, in the routines, we do not work with the `2L_short` top level names, but with
-the top level names as they would be used in the `3L` or `2L_long` format. The conversion
-is only done when directory names are generated.
+Note that we discussed a 2-level scheme where we always use the shortest name possible
+(hence avoiding `-noaccel`) but this is not implemented as we feel it may create confusion
+and as it also complicates the implementation.
+
 
 ## etc/SystemDefinition.lua
 
@@ -65,9 +65,8 @@ installed software and system-wide EasyBuild managed software. Note that the tab
 completed automatically with more generic os-cpu-accelerator architecture strings based
 on the other tables in this file.
 
-All names used should be for the 3L scheme, even for toolchains that would use the 2L_short
-naming scheme. However, the middle level should not be used for versions that will use 
-a 2L_long or 2L_short naming scheme.
+All names used should be for the 3L scheme. However, the middle level should not be used 
+for versions that will use a 2L_long naming scheme.
 
 ```lua
 CalcUA_SystemTable = {
@@ -133,12 +132,9 @@ software stack has the following entries:
 -   `hierarchy`: Type of architecture hierarchy used for this software stack. Currently only 
     the first option is implemented:
 
-    1.  `2L_long`: two levels, the least generic level always includes an accelerator field
+    1.  `2L`: two levels, the least generic level always includes an accelerator field
 
-    2.  `2L_short`: two levels, but the least generic level does not include an accelerator
-        field if there is no accelerator
-
-    3. `3L`: 3 levels in the architecture hierarchy.
+    2. `3L`: 3 levels in the architecture hierarchy.
 
 
 ### `CalcUA_ClusterMap`
@@ -427,7 +423,7 @@ map_accel_long_to_short = {
 
     -   The architecture of the current node with long names and in a
         format compatible with the indicated software stack (so taking into 
-        account the hierarchy types 2L_long, 2L_short or 3L).
+        account the hierarchy types 2L or 3L).
 
 -   `get_calcua_generic( clusterarch, stack_version )`: Compute the most generic
     architecture for the given version of the CalcUA stack on the given clusterarch
@@ -444,7 +440,7 @@ map_accel_long_to_short = {
 
     -   `long_osarch`: os and architecture with long names and in a format 
         compatible with the indicated version of the software stack (so respecting
-        the hierarchy types 2L_short, 2L_long or 3L).
+        the hierarchy types 2L or 3L).
 
     -   `stack_version`: Version of the calcua stack, can be system.
 

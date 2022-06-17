@@ -35,11 +35,40 @@ function get_matching_archmap_key( version )
 end
 
 --
--- Build a table with the keys from CalcUA_reduce_top_architecture
+-- Build a table with the keys from CalcUA_map_cpu_to_gen sorted
+--
+CalcUA_sorted_cputogen_keys = {}
+
+for key in pairs( CalcUA_map_cpu_to_gen )
+do
+    table.insert( CalcUA_sorted_cputogen_keys, key )
+end
+table.sort( CalcUA_sorted_cputogen_keys )
+
+function get_matching_cputogen_key( version )
+
+    if version < CalcUA_sorted_cputogen_keys[1]
+    then
+        return nil
+    end
+
+    local index = #CalcUA_sorted_cputogen_keys
+
+    while CalcUA_sorted_cputogen_keys[index] > version
+    do
+        index = index - 1
+    end
+
+    return CalcUA_sorted_cputogen_keys[index]
+
+end
+
+--
+-- Build a table with the keys from CalcUA_reduce_top_arch
 --
 CalcUA_sorted_toparchreduction_keys = {}
 
-for key in pairs( CalcUA_reduce_top_architecture )
+for key in pairs( CalcUA_reduce_top_arch )
 do
     table.insert( CalcUA_sorted_toparchreduction_keys, key )
 end

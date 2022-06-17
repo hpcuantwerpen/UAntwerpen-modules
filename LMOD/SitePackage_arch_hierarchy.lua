@@ -15,6 +15,7 @@ map_os_long_to_short = {
 
 map_cpu_long_to_short = {
     ['x86_64']    = 'x86_64',
+    ['zen3']      = 'zen3',
     ['zen2']      = 'zen2',
     ['ivybridge'] = 'IVB',
     ['broadwell'] = 'BRW',
@@ -32,6 +33,49 @@ map_accel_long_to_short = {
 
 
 -- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+--
+-- Functions to work with long or short full names
+--
+-- extract_os( name )    : Extract the first part, the OS
+-- extract_cpu( name )   : Extract the second part, the CPU
+-- extract_accel( name ) : Extract the third part, the accelerator, or nil if not
+--                         present
+-- extract_arch( name )  : Extract CPU + accelerator
+-- extract_cpu_from_arch( name ) : Extract the CPU part from the arch string.
+
+function extract_os( name )
+
+    return name:match( '([^-]+)-' )
+
+end
+
+function extract_cpu( name )
+
+    return name:match( '[^-]+-([^-]+)' )
+
+end
+
+function extract_accel( name )
+
+    return name:match( '[^-]+-[^-]+-(.*)' )
+
+end
+
+function extract_arch( name )
+
+    return name:match( '[^-]+-(.*)' )
+
+end
+
+function extract_cpu_from_arch( name )
+
+    return name:match( '([^-]+)' )
+
+end
+
+
+-- -----------------------------------------------------------------------------
 --
 -- get_long_osarchs
 --
@@ -39,8 +83,8 @@ map_accel_long_to_short = {
 --   * stack_version: Version of the software stack (or `system` for the
 --     software installed against the system or in manual mode).
 --     The routine also accpets versions in yyyymm format.
---   * osname: Name (with version) of the OS (currently only redhat8)
---   * archname: Architecture, e.g., zen2-noaccel or x86_64.
+--   * long_os: Name (with version) of the OS (currently only redhat8)
+--   * long_arch: Architecture, e.g., zen2-noaccel or x86_64.
 --
 -- Output: A table with the chain of architectures, each a string with two or
 -- three dash-separated entities: OS (+version), base CPU architecture and
@@ -48,7 +92,7 @@ map_accel_long_to_short = {
 --
 -- The order is from the least generic to the most generic one.
 --
-function get_long_osarchs( stack_version, osname, archname )
+function get_long_osarchs( stack_version, long_os, long_arch )
 
     local result = {}
     local version = map_toolchain( stack_version )
@@ -59,12 +103,25 @@ function get_long_osarchs( stack_version, osname, archname )
         return nil
     end
 
-    local matching_version = get_matching_archmap_key( stack_version )
+    local matching_version = get_matching_cputogen_key( stack_version )
 
-    while archname ~= nil
-    do
-        table.insert( result, osname .. '-' .. archname )
-        archname = CalcUA_map_arch_hierarchy[matching_version][archname]
+    if CalcUA_SystemProperties[stack_version]['hierarchy'] == '3L' then
+        local cpu = extract_cpu_from_arch( long_arch )
+        local gencpu = CalcUA_map_cpu_to_gen[matching_version][cpu]
+        table.insert( result, long_os .. '-' .. long_arch )
+        if cpu ~= long_arch then
+            table.insert( result, long_os .. '-' .. cpu )
+        end
+        if gencpu ~= nil then
+            table.insert( result, long_os .. '-' .. gencpu )
+        end
+    else
+        local cpu = extract_cpu_from_arch( long_arch )
+        local gencpu = CalcUA_map_cpu_to_gen[matching_version][cpu]
+        table.insert( result, long_os .. '-' .. long_arch )
+        if gencpu ~= nil then
+            table.insert( result, long_os .. '-' .. gencpu )
+        end
     end
 
     return result
@@ -74,14 +131,15 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_long_osarchs_reverse
+-- Function get_long_osarchs_reverse( stack_version, long_os, long_arch )
 --
 -- Input arguments:
 --   * stack_version: Version of the software stack (or `system` for the
 --     software installed against the system or or 'manual' for  manual mode).
---     The routine also accepts versions in yyyymm format.
---   * osname: Name (with version) of the OS
---   * archname: Architecture, e.g., zen2-noaccel or x86_64.
+--     It must be a valid software stack version defined in CalcUA_SystemTable
+--     etc. in etc/SystemDefinition.lua
+--   * long_os: Name (with version) of the OS
+--   * long_arch: Architecture, e.g., zen2-noaccel or x86_64.
 --
 -- Output: A table with the chain of architectures, each a string with two or
 -- three dash-separated entities: OS (+version), base CPU architecture and
@@ -89,9 +147,9 @@ end
 --
 -- The order is from the most generic to the least generic one.
 --
-function get_long_osarchs_reverse( stack_version, osname, archname )
+function get_long_osarchs_reverse( stack_version, long_os, long_arch )
 
-    result = {}
+    local result = {}
     local version = map_toolchain( stack_version )
 
     if version == nil then
@@ -100,12 +158,25 @@ function get_long_osarchs_reverse( stack_version, osname, archname )
         return nil
     end
 
-    local matching_version = get_matching_archmap_key( stack_version )
+    local matching_version = get_matching_cputogen_key( stack_version )
 
-    while archname ~= nil
-    do
-        table.insert( result, 1, osname .. '-' .. archname )
-        archname = CalcUA_map_arch_hierarchy[matching_version][archname]
+    if CalcUA_SystemProperties[stack_version]['hierarchy'] == '3L' then
+        local cpu = extract_cpu_from_arch( long_arch )
+        local gencpu = CalcUA_map_cpu_to_gen[matching_version][cpu]
+        if gencpu ~= nil then
+            table.insert( result, long_os .. '-' .. gencpu )
+        end
+        if cpu ~= long_arch then
+            table.insert( result, long_os .. '-' .. cpu )
+        end
+        table.insert( result, long_os .. '-' .. long_arch )
+    else
+        local cpu = extract_cpu_from_arch( long_arch )
+        local gencpu = CalcUA_map_cpu_to_gen[matching_version][cpu]
+        if gencpu ~= nil then
+            table.insert( result, long_os .. '-' .. gencpu )
+        end
+        table.insert( result, long_os .. '-' .. long_arch )
     end
 
     return result
@@ -114,15 +185,15 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function map_long_to_short( longname )
+-- Function map_long_to_short( long_osarch )
 --
 -- Input arguments: 1
---   * longname: The full os-and-architecture string in long format
+--   * long_osarch: The full os-and-architecture string in long format
 --
 -- Return arguments: 1
 --   * The full os-and-architecture string in short format
 --
-function map_long_to_short( longname )
+function map_long_to_short( long_osarch )
 
     function string.easysplit( self, delimiter )
         local result = {}
@@ -132,7 +203,7 @@ function map_long_to_short( longname )
         return result;
     end
 
-    local elements = longname:easysplit( '-' )
+    local elements = long_osarch:easysplit( '-' )
 
     local returnlist = {}
 
@@ -157,15 +228,15 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function map_short_to_long( shortname )
+-- Function map_short_to_long( short_osarch )
 --
 -- Input arguments: 1
---   * shortname: The full os-and-architecture string in short format
+--   * short_osarch: The full os-and-architecture string in short format
 --
 -- Return arguments: 1
 --   * The full os-and-architecture string in long format
 --
-function map_short_to_long( shortname )
+function map_short_to_long( short_osarch )
 
     -- Create the reverse tables
 
@@ -195,7 +266,7 @@ function map_short_to_long( shortname )
 
     -- Main block of the function
 
-    local elements = shortname:split( '-' )
+    local elements = short_osarch:split( '-' )
 
     local returnlist = {}
 
@@ -216,67 +287,30 @@ function map_short_to_long( shortname )
 end
 
 -- -----------------------------------------------------------------------------
--- -----------------------------------------------------------------------------
 --
--- Functions to work with long or short full names
---
--- extract_os( name )    : Extract the first part, the OS
--- extract_cpu( name )   : Extract the second part, the CPU
--- extract_accel( name ) : Extract the third part, teh accelerator, or nil if not
---                         present
--- extract_arch( name )  : Extract CPU + accelerator
-
-function extract_os( name )
-
-    return name:match( '([^-]+)-' )
-
-end
-
-function extract_cpu( name )
-
-    return name:match( '[^-]+-([^-]+)' )
-
-end
-
-function extract_accel( name )
-
-    return name:match( '[^-]+-[^-]+-(.*)' )
-
-end
-
-function extract_arch( name )
-
-    return name:match( '[^-]+-(.*)' )
-
-end
-
-
--- -----------------------------------------------------------------------------
---
--- Function get_calcua_generic( clusterarch, stack_version )
+-- Function get_calcua_generic( long_osarch, stack_version )
 --
 -- Input arguments:
---   * clusterarch: clusterarch string in the long format compatible with the
---     software stack.
+--   * long_osarch: long_osarch string in the long format
 --   * stack_version: Version of the calcua stack, can be system.
 --
 -- Output: The most generic architecture for the current node.
 --
-function get_calcua_generic( clusterarch, stack_version )
+function get_calcua_generic( long_osarch, stack_version )
 
-    local osname = extract_os( clusterarch )
-    local archname = extract_arch( clusterarch )
+    local long_os = extract_os( long_osarch )
+    local long_cpu = extract_cpu( long_osarch )
 
-    local matching_version = get_matching_archmap_key( stack_version )
+    local matching_version = get_matching_cputogen_key( stack_version )
 
-    local last_archname = archname
-    while archname ~= nil
-    do
-        last_archname = archname
-        archname = CalcUA_map_arch_hierarchy[matching_version][archname]
+    local long_osgeneric = CalcUA_map_cpu_to_gen[matching_version][long_cpu]
+    if long_osgeneric == nil then
+        long_osgeneric = long_os .. '-' .. long_cpu
+    else
+        long_osgeneric = long_os .. '-' .. long_osgeneric
     end
 
-    return osname .. '-' .. last_archname
+    return long_osgeneric
 
 end
 
@@ -291,14 +325,10 @@ end
 --
 function get_calcua_generic_current( stack_version )
 
-    local clusterarch
-    if CalcUA_SystemProperties[stack_version] == '2L_short' then
-        _, clusterarch, _, _ = get_clusterarch()
-    else
-        _, _, _, clusterarch = get_clusterarch()
-    end
+    local long_osarch
+    _, _, _, long_osarch = get_clusterarch()
 
-    return get_calcua_generic( clusterarch, stack_version )
+    return get_calcua_generic( long_osarch, stack_version )
 
 end
 
@@ -309,9 +339,7 @@ end
 -- Input argument:
 --   * stack_version: Version of the calcua stack, can be system.
 --
--- Output: The architecture of the current node with long names and in a
--- format compatible with the indicated software stack (so taking into 
--- account the hierarchy types 2L_long, 2L_short or 3L).
+-- Output: The architecture of the current node with long names.
 --
 
 function get_calcua_longosarch_current( stack_version )
@@ -324,11 +352,7 @@ function get_calcua_longosarch_current( stack_version )
     end
 
     local current_osarch
-    if hierarchy_type == '2L_short' then
-        d1, current_osarch, d2, d3 = get_clusterarch()
-    else
-        d1, d2, d3, current_osarch = get_clusterarch()
-    end
+    d1, d2, d3, current_osarch = get_clusterarch()
 
     return current_osarch
 
@@ -338,12 +362,12 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_top( stack_version, long_osarch )
+-- Function get_calcua_top( long_osarch, stack_version )
 --
 -- Input arguments:
 --   * long_osarch: os and architecture with long names and in a format 
 --     compatible with the indicated version of the software stack (so respecting
---     the hierarchy types 2L_short, 2L_long or 3L).
+--     the hierarchy types 2L or 3L).
 --   * stack_version: Version of the calcua stack, can be system.
 --
 -- Output: The most specific os-architecture for the current node in the indicated
@@ -359,11 +383,11 @@ function get_calcua_top( long_osarch, stack_version )
     local matching_version = get_matching_toparchreduction_key( stack_version )
 
     local use_arch = extract_arch( long_osarch )
-    local use_os = extract_os( long_osarch )
+    local use_os   = extract_os( long_osarch )
 
     --
     -- -  Build a table that helps to quickly detect if an architecture is
-    --    available as a for the software stack. 
+    --    available as a top architecture or generic architecture for the software stack. 
     -- 
     local stack_os_archs = {}
     if CalcUA_SystemTable[stack_version][use_os] == nil then
@@ -380,11 +404,11 @@ function get_calcua_top( long_osarch, stack_version )
     end
 
     --
-    -- -  Now walk down the CalcUA_reduce_top_architecture searching for an
+    -- -  Now walk down the CalcUA_reduce_top_arch searching for an
     --    architecture supported by the software stack.
     --
-    while stack_os_archs[use_arch] == nil and CalcUA_reduce_top_architecture[matching_version][use_arch] ~= nil do
-        use_arch = CalcUA_reduce_top_architecture[matching_version][use_arch]
+    while stack_os_archs[use_arch] == nil and CalcUA_reduce_top_arch[matching_version][use_arch] ~= nil do
+        use_arch = CalcUA_reduce_top_arch[matching_version][use_arch]
     end
 
     --
@@ -401,8 +425,8 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_module_dir( longname, stack_name, stack_version )
--- Function get_system_module_dirs( longname, stack_name, stack_version )
+-- Function get_system_module_dir( long_osarch, stack_name, stack_version )
+-- Function get_system_module_dirs( long_osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -419,7 +443,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_system_module_dir_worker( longname, stack_version )
+function get_system_module_dir_worker( long_osarch, stack_version )
 
     -- Worker function without any error control. The error control is done
     -- by get_system_module_dir and get_system_module_dirs.
@@ -430,11 +454,11 @@ function get_system_module_dir_worker( longname, stack_version )
         prefix = 'modules-easybuild/CalcUA-' .. stack_version .. '/'
     end
 
-    return prefix .. longname
+    return prefix .. long_osarch
 
 end
 
-function get_system_module_dir( longname, stack_name, stack_version )
+function get_system_module_dir( long_osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -452,11 +476,11 @@ function get_system_module_dir( longname, stack_name, stack_version )
         return nil
     end
 
-    return get_system_module_dir_worker( longname, use_version )
+    return get_system_module_dir_worker( long_osarch, use_version )
 
 end
 
-function get_system_module_dirs( longname, stack_name, stack_version )
+function get_system_module_dirs( long_osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local result
@@ -476,7 +500,7 @@ function get_system_module_dirs( longname, stack_name, stack_version )
         return nil
     end
 
-    all_archs = get_long_osarchs_reverse( use_version, extract_os( longname ), extract_arch( longname ) )
+    all_archs = get_long_osarchs_reverse( use_version, extract_os( long_osarch ), extract_arch( long_osarch ) )
 
     result = {}
     for index, os_arch_accel in ipairs( all_archs )
@@ -491,7 +515,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_inframodule_dir( longname, stack_name, stack_version )
+-- Function get_system_inframodule_dir( long_osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -505,7 +529,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_system_inframodule_dir( longname, stack_name, stack_version )
+function get_system_inframodule_dir( long_osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -529,13 +553,13 @@ function get_system_inframodule_dir( longname, stack_name, stack_version )
         prefix = 'modules-infrastructure/infrastructure/CalcUA-' .. use_version .. '/'
     end
 
-    return prefix .. longname
+    return prefix .. long_osarch
 
 end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_SW_dir( longname, stack_name, stack_version )
+-- Function get_system_SW_dir( long_osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -549,7 +573,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_system_SW_dir( longname, stack_name, stack_version )
+function get_system_SW_dir( long_osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -574,14 +598,14 @@ function get_system_SW_dir( longname, stack_name, stack_version )
         prefix = 'SW/CalcUA-' .. use_version .. '/'
     end
 
-    return prefix .. map_long_to_short( longname )
+    return prefix .. map_long_to_short( long_osarch )
 
 end
 
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_EBrepo_dir( longname, stack_name, stack_version )
+-- Function get_system_EBrepo_dir( long_osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -595,7 +619,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_system_EBrepo_dir( longname, stack_name, stack_version )
+function get_system_EBrepo_dir( long_osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -619,7 +643,7 @@ function get_system_EBrepo_dir( longname, stack_name, stack_version )
         prefix = 'EBrepo_files/CalcUA-' .. use_version .. '/'
     end
 
-    return prefix .. longname
+    return prefix .. long_osarch
 
 end
 

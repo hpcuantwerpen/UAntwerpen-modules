@@ -6,6 +6,31 @@ dofile( '../scripts/calcua_tools/lmod_emulation.lua' )
 -- Instead of readint etc/SystemDefnition.lua. we put a test example hre
 --
 
+-- -----------------------------------------------------------------------------
+--
+-- CalcUA_NodeTypes is simply n array of nodes in the system, specified using
+-- the long os-CPU-accelerator names.
+--
+-- As this is a description of the current hardware in the cluster, it is not
+-- for a specific version of the software stack. The table is used to produce
+-- output for debug purposes of this configuration file, e.g., to list which
+-- software stacks for which architectures will be available on which node 
+-- types.
+--
+
+CalcUA_NodeTypes = {
+    'redhat7-ivybridge-noaccel',
+    'redhat7-broadwell-noaccel',
+    'redhat8-boradwell-noaccel',
+    'redhat8-broadwell-pascal',
+    'redhat8-broadwell-P5000',
+    'redhat8-skylake-noaccel',
+    'redhat8-skylake-aurora1',
+    'redhat8-zen2-noaccel',
+    'redhat8-zen2-ampere',
+    'redhat8-zen2-arcturus',
+}
+
 --
 -- SystemTable defines the setup of the module system. For each toolchain it
 -- indicates which OSes are supported for which architectures.
@@ -13,6 +38,12 @@ dofile( '../scripts/calcua_tools/lmod_emulation.lua' )
 -- It is sufficient to only specify the "top" architectures (the leaves
 -- of the tree). The other ones will be completed automatically based on
 -- the architecture hierarchy structure.
+--
+-- This data structure should always use names from the 3L scheme to 
+-- avoid any confusion. However, it is advised to not use the middle level
+-- from the 3L scheme in the table, or to be extremely careful that that 
+-- name is not used for toolchains that use a 2L naming
+-- scheme.
 --
 
 CalcUA_SystemTable = {
@@ -48,7 +79,27 @@ CalcUA_SystemTable = {
         },
         ['redhat8'] = {
             'broadwell-noaccel',
+            'zen2-arcturus',
             'zen2-noaccel',
+            'skylake-noaccel',
+        }
+    },
+    ['3000a'] = {
+        ['redhat7'] = {
+            'ivybridge',
+        },
+        ['redhat8'] = {
+            'broadwell-noaccel',
+            'zen2-noaccel',
+            'zen2-arcturus',
+            'skylake-noaccel',
+        }
+    },
+    ['4000a'] = {
+        ['redhat8'] = {
+            'broadwell-noaccel',
+            'zen2-noaccel',
+            'zen2-arcturus',
             'skylake-noaccel',
         }
     },
@@ -58,27 +109,32 @@ CalcUA_SystemTable = {
 -- SystemProperties defines other properties of the system, e.g.,
 --   * ['EasyBuild']: Version of EasyBuild to use.
 --   * ['hierarchy']: Type of hierarchy, 3 values though not all are implemented
---       * 2L_long:  2 levels, all names on the second level include accelerator
---       * 2L_short: 2 levels, but no -host or -noaccel for archs without accelerator
---                   NOT IMPLEMENTED
---       * 3L      : 3 levels
---                   NOT IMPLEMENTED 
+--       * 2L:  2 levels, all names on the second level include accelerator
+--       * 3L: 3 levels
 --
 CalcUA_SystemProperties = {
     ['system'] = {
         ['EasyBuild'] = '4.5.3',
-        ['hierarchy'] = '2L_long',  -- Doesn't really matter as we use only one level
+        ['hierarchy'] = '2L',  -- Doesn't really matter as we use only one level
     },
     ['manual'] = {  -- This is not an EasyBuild-managed stack.
-        ['hierarchy'] = '2L_long',  -- Doesn't really matter as we use only one level
+        ['hierarchy'] = '2L',  -- Doesn't really matter as we use only one level
     },
     ['2020a'] = {
         ['EasyBuild'] = '4.2.2',
-        ['hierarchy'] = '2L_long',
+        ['hierarchy'] = '2L',
     },
     ['2021b'] = {
         ['EasyBuild'] = '4.5.3',
-        ['hierarchy'] = '2L_long',
+        ['hierarchy'] = '2L',
+    },
+    ['3000a'] = {
+        ['EasyBuild'] = '4.5.3',
+        ['hierarchy'] = '3L',
+    },
+    ['4000a'] = {
+        ['EasyBuild'] = '4.5.3',
+        ['hierarchy'] = '3L',
     },
 }
 
@@ -110,6 +166,18 @@ CalcUA_ClusterMap = {
         ['leibniz-skl'] = 'redhat8-skylake-noaccel',
         ['vaughan'] =     'redhat8-zen2-noaccel',
     },
+    ['3000a'] = {
+        ['hopper'] =      'redhat7-ivybridge',
+        ['leibniz'] =     'redhat8-broadwell-noaccel',
+        ['leibniz-skl'] = 'redhat8-skylake-noaccel',
+        ['vaughan'] =     'redhat8-zen2-noaccel',
+    },
+    ['4000a'] = {
+        ['hopper'] =      'redhat7-ivybridge-noaccel',
+        ['leibniz'] =     'redhat8-broadwell-noaccel',
+        ['leibniz-skl'] = 'redhat8-skylake-noaccel',
+        ['vaughan'] =     'redhat8-zen2-noaccel',
+    },
 }
 
 
@@ -127,6 +195,8 @@ CalcUA_toolchain_map = {
     ['2021a']  = '202101',
     ['2021b']  = '202107',
     ['2022a']  = '202201',
+    ['3000a']  = '300000',
+    ['4000a']  = '400000',
 }
 
 
@@ -158,7 +228,23 @@ CalcUA_map_arch_hierarchy = {
    }
 }
    
-   
+--
+--  Mapping of CPU architectures to their generic ones, just in case we ever
+--  get ARM or want to switch to two generic architectures otherwise.
+--
+--  Note that generic architectures are also in the table, but then get a nil
+--  as a value.
+--
+CalcUA_map_cpu_to_gen = {
+    ['200000'] = {
+        ['zen2']      = 'x86_64',
+        ['skylake']   = 'x86_64',
+        ['broadwell'] = 'x86_64',
+        ['ivybridge'] = 'x86_64',
+        ['x86_64']    = nil,
+    }
+}
+ 
 --
 -- The following table defines the order of architectures to search if there is
 -- no stack for a particular architecture. It is used to find the closest matching
@@ -169,7 +255,7 @@ CalcUA_map_arch_hierarchy = {
 -- an additional level based on a yyyymm representation of the software stacks
 --
 
-CalcUA_reduce_top_architecture = {
+CalcUA_reduce_top_arch = {
     ['200000'] = {
         ['zen2-ampere']       = 'zen2-noaccel',
         ['zen2-arcturus']     = 'zen2-noaccel',
@@ -197,26 +283,62 @@ dofile( '../LMOD/SitePackage_system_info.lua' )
 dofile( '../LMOD/SitePackage_map_toolchain.lua' )
 dofile( '../LMOD/SitePackage_arch_hierarchy.lua' )
 
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Some "constants"
+--
+
+local mssg_sysdep = '\27[34mSystem-dependend!\27[0m'
+
+--
+-- Testing extract_*(name) functions
+--
+
+print( '\nTesting extract_* functions\n' )
+for index, longname in ipairs( { 'redhat8-zen2-arcturus', 'redhat8-x86_64' } )
+do
+    print( longname .. ': os is ' .. extract_os( longname ) ..
+            ', CPU is ' .. extract_cpu( longname ) ..
+            ', accelerator is ' .. ( extract_accel( longname ) or '' ) ..
+            ', arch is ' .. extract_arch( longname ) )
+end
+
 --
 -- Testing get_long_osarchs and get_long_osarchs_reverse
 --
 
 print( '\ntesting get_long_osarch and get_long_osarch_reverse\n' )
 
-stack_version = '202001'
-osname = 'redhat8'
-archname = 'x86_64'
-result = get_long_osarchs( stack_version, osname, archname )
-print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
-result = get_long_osarchs_reverse( stack_version, osname, archname )
-print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+stack_versions = { '2020a', '3000a', '4000a' }
+for _, stack_version in ipairs( stack_versions ) do
 
-osname = 'redhat8'
-archname = 'zen2-arcturus'
-result = get_long_osarchs( stack_version, osname, archname )
-print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
-result = get_long_osarchs_reverse( stack_version, osname, archname )
-print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+    print( 'Hierarchy type of toolchain version ' .. stack_version.. ': ' .. 
+           CalcUA_SystemProperties[stack_version]['hierarchy'] )
+
+    osname = 'redhat8'
+    archname = 'x86_64'
+    result = get_long_osarchs( stack_version, osname, archname )
+    print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+    result = get_long_osarchs_reverse( stack_version, osname, archname )
+    print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+
+    osname = 'redhat8'
+    archname = 'zen2-noaccel'
+    result = get_long_osarchs( stack_version, osname, archname )
+    print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+    result = get_long_osarchs_reverse( stack_version, osname, archname )
+    print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+
+    osname = 'redhat8'
+    archname = 'zen2-arcturus'
+    result = get_long_osarchs( stack_version, osname, archname )
+    print( 'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+    result = get_long_osarchs_reverse( stack_version, osname, archname )
+    print( 'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
+
+end
 
 --
 -- Testing map_long_to_short
@@ -243,19 +365,6 @@ long = 'RH8-IVB'
 print( long .. ' converts to ' .. map_short_to_long( long ) )
 
 --
--- Testing extract_*(name) functions
---
-
-print( '\nTesting extract_* functions\n' )
-for index, longname in ipairs( { 'redhat8-zen2-arcturus', 'redhat8-x86_64' } )
-do
-    print( longname .. ': os is ' .. extract_os( longname ) ..
-            ', CPU is ' .. extract_cpu( longname ) ..
-            ', accelerator is ' .. ( extract_accel( longname ) or '' ) ..
-            ', arch is ' .. extract_arch( longname ) )
-end
-
---
 -- Testing get_calcua_generic
 --
 
@@ -279,7 +388,7 @@ for index, data in ipairs( inputdata ) do
     local expected = data['expected']
     print( 'Generic for calcua/' .. data['stack_version'] .. ': ' ..
            got .. ', expected: ' .. data['expected'] .. ' so ' .. 
-           ( got == expected and 'OK' or 'NOT OK' ) )
+           ( got == expected and 'OK' or '\27[31mNOT OK\27[0m' ) )
 end
               
 --
@@ -310,12 +419,12 @@ print( '\nTesting get_calcua_top function\n' )
 
 local inputdata = {
     {   
-       ['stack_version'] = '2021b',
+       ['stack_version'] = '2020a',
        ['cluster_arch'] =  'redhat8-zen2-noaccel',
        ['expected'] =      'redhat8-zen2-noaccel',
     },
     {   
-       ['stack_version'] = '2021b',
+       ['stack_version'] = '2020a',
        ['cluster_arch'] =  'redhat8-zen2-arcturus',
        ['expected'] =      'redhat8-zen2-noaccel',
     },            
@@ -326,11 +435,15 @@ for index, data in ipairs( inputdata ) do
     local expected = data['expected']
     print( 'Top architecture for ' .. data['cluster_arch'] .. ' in ' .. data['stack_version'] .. ' is ' ..
            got .. ', expected: ' .. data['expected'] .. ' so ' .. 
-           ( got == expected and 'OK' or 'NOT OK' ) )
+           ( got == expected and 'OK' or '\27[31mNOT OK\27[0m' ) )
 end
 
 for stack,_ in pairs( CalcUA_ClusterMap ) do
-    print( 'Used architecture for this node for ' .. stack .. ': ' .. get_calcua_top( get_calcua_longosarch_current( stack ), stack ) )
+    local current_osarch
+   _, _, _, current_osarch = get_clusterarch()
+    print( mssg_sysdep .. ' Used architecture for ' .. current_osarch  .. 
+           ' (this node) for ' .. stack .. ': ' .. 
+           ( get_calcua_top( current_osarch, stack ) or '\27[31mPROBLEM, GOT NIL\27[0m' ) )
 end
        
 --
@@ -373,7 +486,7 @@ result = get_system_module_dirs( longname, stack_name, stack_version )
 if result == nil then
     print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
 else
-    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' DID NOT RETURN NIL!\n' )
+    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' \27[31mDID NOT RETURN NIL!\27[0m\n' )
 end
 
 
@@ -407,7 +520,7 @@ longname = 'redhat8-zen2-arcturus'
 if get_system_inframodule_dir( longname, stack_name, stack_version ) == nil then
     print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
 else
-    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' DID NOT RETURN NIL!\n' )
+    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' \27[31mDID NOT RETURN NIL!\27[0m\n' )
 end
 
 
@@ -475,5 +588,5 @@ longname = 'redhat8-zen2-arcturus'
 if get_system_EBrepo_dir( longname, stack_name, stack_version ) == nil then
     print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
 else
-    print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' DID NOT RETURN NIL!\n' )
+    print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' \27[31mDID NOT RETURN NIL!\27[0m\n' )
 end
