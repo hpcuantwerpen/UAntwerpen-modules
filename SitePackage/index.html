@@ -1188,12 +1188,11 @@ but instead in the file <code>etc/SystemDefinition.lua</code>.</p>
 <li>Full 3-component architecture: <code>osarch</code> (where possible)</li>
 <li>Full 2-component architecture without OS: <code>arch</code> (where possible)</li>
 <li>Supported OS as name + version: <code>os</code> </li>
-<li>1- or 2-component architecture depending on the convention for the software stack:
-    <code>modarch</code></li>
+<li>2-component architecture (CPU + accelerator): <code>modarch</code></li>
 </ul>
-<p>Internally, in the routines, we do not work with the <code>2L_short</code> top level names, but with
-the top level names as they would be used in the <code>3L</code> or <code>2L_long</code> format. The conversion
-is only done when directory names are generated.</p>
+<p>Note that we discussed a 2-level scheme where we always use the shortest name possible
+(hence avoiding <code>-noaccel</code>) but this is not implemented as we feel it may create confusion
+and as it also complicates the implementation.</p>
 <h2 id="etcsystemdefinitionlua">etc/SystemDefinition.lua</h2>
 <p><strong>TODO: Some clean-up. Some of these tables could be generated automatically in <code>SitePackage_helper.lua</code>?</strong></p>
 <h3 id="calcua_nodetypes"><code>CalcUA_NodeTypes</code></h3>
@@ -1223,9 +1222,8 @@ types.</p>
 installed software and system-wide EasyBuild managed software. Note that the table will be
 completed automatically with more generic os-cpu-accelerator architecture strings based
 on the other tables in this file.</p>
-<p>All names used should be for the 3L scheme, even for toolchains that would use the 2L_short
-naming scheme. However, the middle level should not be used for versions that will use 
-a 2L_long or 2L_short naming scheme.</p>
+<p>All names used should be for the 3L scheme. However, the middle level should not be used 
+for versions that will use a 2L_long naming scheme.</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">CalcUA_SystemTable</span> <span class="o">=</span> <span class="p">{</span>
     <span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="p">[</span><span class="s1">&#39;redhat7&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
@@ -1290,11 +1288,7 @@ software stack has the following entries:</p>
     the first option is implemented:</p>
 <ol>
 <li>
-<p><code>2L_long</code>: two levels, the least generic level always includes an accelerator field</p>
-</li>
-<li>
-<p><code>2L_short</code>: two levels, but the least generic level does not include an accelerator
-    field if there is no accelerator</p>
+<p><code>2L</code>: two levels, the least generic level always includes an accelerator field</p>
 </li>
 <li>
 <p><code>3L</code>: 3 levels in the architecture hierarchy.</p>
@@ -1567,7 +1561,7 @@ generic one.</p>
 <ul>
 <li>The architecture of the current node with long names and in a
     format compatible with the indicated software stack (so taking into 
-    account the hierarchy types 2L_long, 2L_short or 3L).</li>
+    account the hierarchy types 2L or 3L).</li>
 </ul>
 </li>
 <li>
@@ -1588,7 +1582,7 @@ generic one.</p>
 <li>
 <p><code>long_osarch</code>: os and architecture with long names and in a format 
     compatible with the indicated version of the software stack (so respecting
-    the hierarchy types 2L_short, 2L_long or 3L).</p>
+    the hierarchy types 2L or 3L).</p>
 </li>
 <li>
 <p><code>stack_version</code>: Version of the calcua stack, can be system.</p>
@@ -1798,7 +1792,7 @@ but you'll never know.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 16, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 17, 2022</span>
       
     
   </small>
