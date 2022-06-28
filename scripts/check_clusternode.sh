@@ -12,4 +12,4 @@
 cd $(dirname $0)
 scriptdir=$PWD
 
-$scriptdir/calcua_tools/check_cluster.lua
+$scriptdir/calcua_tools/check_clusternode.lua

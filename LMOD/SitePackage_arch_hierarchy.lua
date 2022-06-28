@@ -371,7 +371,8 @@ end
 --   * stack_version: Version of the calcua stack, can be system.
 --
 -- Output: The most specific os-architecture for the current node in the indicated
--- version of the CalcUA software stacks.
+-- version of the CalcUA software stacks, or nil if there is no support for the 
+-- calcua stack for long_osarch.
 --
 
 function get_calcua_top( long_osarch, stack_version )
@@ -391,9 +392,7 @@ function get_calcua_top( long_osarch, stack_version )
     -- 
     local stack_os_archs = {}
     if CalcUA_SystemTable[stack_version][use_os] == nil then
-        LmodError( 'Something is wrong with the CalcUA_SystemTable structure in etc/SystemDefinition.lua: ' ..
-                   'No stack version ' .. stack_version .. ' found for OS ' .. use_os )
-        return nil
+        return nil -- There is no support for this stack on this OS.
     end
     for index,value in ipairs( CalcUA_SystemTable[stack_version][use_os] ) do
         stack_os_archs[value] = true

@@ -1,8 +1,8 @@
 # Scripts
 
-## check_cluster.sh
+## check_clusternode.sh
 
-The `check_cluster.sh` script prints information about the node it is running on and 
+The `check_clusternode.sh` script prints information about the node it is running on and 
 can also be used to check if the node is properly supported by the CalcUA stacks,
 or if certain settings need to be adjusted.
 
