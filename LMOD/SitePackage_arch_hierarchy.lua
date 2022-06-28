@@ -393,6 +393,7 @@ function get_calcua_top( long_osarch, stack_version )
     if CalcUA_SystemTable[stack_version][use_os] == nil then
         LmodError( 'Something is wrong with the CalcUA_SystemTable structure in etc/SystemDefinition.lua: ' ..
                    'No stack version ' .. stack_version .. ' found for OS ' .. use_os )
+        return nil
     end
     for index,value in ipairs( CalcUA_SystemTable[stack_version][use_os] ) do
         stack_os_archs[value] = true
@@ -448,7 +449,7 @@ function get_system_module_dir_worker( long_osarch, stack_version )
     -- Worker function without any error control. The error control is done
     -- by get_system_module_dir and get_system_module_dirs.
 
-    if stack_version == 'system' then
+    if stack_version == 'system' or stack_version == 'manual' then
         prefix = 'modules-easybuild/' .. stack_version .. '/'
     else
         prefix = 'modules-easybuild/CalcUA-' .. stack_version .. '/'
@@ -472,8 +473,15 @@ function get_system_module_dir( long_osarch, stack_name, stack_version )
         use_version = stack_name
     else
         -- Error condition, not known how to treat this stack
-        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
-        return nil
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
+        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
+    end
+
+    -- Check if the input long_osarch is valid in the cluster definition.
+    if get_calcua_top( long_osarch, use_version ) ~= long_osarch then
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: ' .. (long_osarch or 'nil') .. 
+                   ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
+        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
     return get_system_module_dir_worker( long_osarch, use_version )
@@ -498,6 +506,13 @@ function get_system_module_dirs( long_osarch, stack_name, stack_version )
         -- Error condition, not known how to treat this stack
         io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: Illegal input arguments\n' )
         return nil
+    end
+
+    -- Check if the input long_osarch is valid in the cluster definition.
+    if get_calcua_top( long_osarch, use_version ) ~= long_osarch then
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: ' .. (long_osarch or 'nil') .. 
+                   ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
+        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
     all_archs = get_long_osarchs_reverse( use_version, extract_os( long_osarch ), extract_arch( long_osarch ) )

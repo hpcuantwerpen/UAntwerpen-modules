@@ -104,7 +104,7 @@ CalcUA_SystemTable = {
     },
     ['3000a'] = {
         ['redhat7'] = {
-            'ivybridge',
+            'ivybridge-noaccel',
         },
         ['redhat8'] = {
             'broadwell-noaccel',
@@ -275,6 +275,7 @@ CalcUA_map_cpu_to_gen = {
 
 CalcUA_reduce_top_arch = {
     ['200000'] = {
+        ['zen3-noaccel']      = 'zen2-noaccel',
         ['zen2-ampere']       = 'zen2-noaccel',
         ['zen2-arcturus']     = 'zen2-noaccel',
         ['zen2-noaccel']      = 'broadwell-noaccel',
@@ -485,16 +486,312 @@ end
 print( colour_title .. '\nTesting get_calcua_top function\n' .. colour_reset )
 
 local inputdata = {
+    -- Manual test cases (2L)
     {   
-       ['stack_version'] = '2020a',
-       ['cluster_arch'] =  'redhat8-zen2-noaccel',
-       ['expected'] =      'redhat8-zen2-noaccel',
-    },
-    {   
-       ['stack_version'] = '2020a',
-       ['cluster_arch'] =  'redhat8-zen2-arcturus',
-       ['expected'] =      'redhat8-zen2-noaccel',
-    },            
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+        ['expected'] =      'redhat7-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+        ['expected'] =      'redhat7-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat8-broadwell-pascal',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat8-broadwell-P5000',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat8-skylake-noaccel',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat8-skylake-aurora1',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat8-zen2-noaccel',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat8-zen2-ampere',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['cluster_arch'] =  'redhat8-zen2-arcturus',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     -- System test cases (2L)
+     {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+         ['expected'] =      'redhat7-x86_64',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+         ['expected'] =      'redhat7-x86_64',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat8-broadwell-pascal',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat8-broadwell-P5000',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat8-skylake-noaccel',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat8-skylake-aurora1',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat8-zen2-noaccel',
+         ['expected'] =      'redhat8-zen2-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat8-zen2-ampere',
+         ['expected'] =      'redhat8-zen2-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['cluster_arch'] =  'redhat8-zen2-arcturus',
+         ['expected'] =      'redhat8-zen2-noaccel',
+      },
+     -- 2020a test cases (2L)
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+        ['expected'] =      'redhat7-ivybridge-noaccel',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+        ['expected'] =      'redhat7-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat8-broadwell-pascal',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat8-broadwell-P5000',
+        ['expected'] =      'redhat8-x86_64',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat8-skylake-noaccel',
+        ['expected'] =      'redhat8-skylake-noaccel',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat8-skylake-aurora1',
+        ['expected'] =      'redhat8-skylake-noaccel',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat8-zen2-noaccel',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat8-zen2-ampere',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['cluster_arch'] =  'redhat8-zen2-arcturus',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     -- 2021b test cases (2L)
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+        ['expected'] =      'redhat7-ivybridge-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+        ['expected'] =      'redhat7-ivybridge-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat8-broadwell-pascal',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat8-broadwell-P5000',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat8-skylake-noaccel',
+        ['expected'] =      'redhat8-skylake-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat8-skylake-aurora1',
+        ['expected'] =      'redhat8-skylake-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat8-zen2-noaccel',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat8-zen2-ampere',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['cluster_arch'] =  'redhat8-zen2-arcturus',
+        ['expected'] =      'redhat8-zen2-arcturus',
+     },
+     -- 3000a test cases (3L)
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+        ['expected'] =      'redhat7-ivybridge-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+        ['expected'] =      'redhat7-ivybridge-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat8-broadwell-pascal',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat8-broadwell-P5000',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat8-skylake-noaccel',
+        ['expected'] =      'redhat8-skylake-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat8-skylake-aurora1',
+        ['expected'] =      'redhat8-skylake-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat8-zen2-noaccel',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat8-zen2-ampere',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['cluster_arch'] =  'redhat8-zen2-arcturus',
+        ['expected'] =      'redhat8-zen2-arcturus',
+     },
+     -- 4000a test cases (3L)
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+        ['expected'] =      nil,
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+        ['expected'] =      nil,
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat8-broadwell-pascal',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat8-broadwell-P5000',
+        ['expected'] =      'redhat8-broadwell-noaccel',
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat8-skylake-noaccel',
+        ['expected'] =      'redhat8-skylake-noaccel',
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat8-skylake-aurora1',
+        ['expected'] =      'redhat8-skylake-noaccel',
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat8-zen2-noaccel',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat8-zen2-ampere',
+        ['expected'] =      'redhat8-zen2-noaccel',
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['cluster_arch'] =  'redhat8-zen2-arcturus',
+        ['expected'] =      'redhat8-zen2-arcturus',
+     },
 }
 
 for index, data in ipairs( inputdata ) do
@@ -502,7 +799,7 @@ for index, data in ipairs( inputdata ) do
     local expected = data['expected']
     print( testresult( got == expected ) ..
            'Top architecture for ' .. data['cluster_arch'] .. ' in ' .. data['stack_version'] .. ' is ' ..
-           got .. ', expected: ' .. data['expected']  )
+           ( got or 'nil' ) .. ', expected: ' .. ( data['expected'] or 'nil' ) )
 end
 
 -- -----------------------------------------------------------------------------
@@ -513,47 +810,172 @@ end
 print( colour_title .. '\nTesting get_system_module_dirs\n' .. colour_reset )
 
 local tests = {
+    -- system
     { 
-      ['stack_name'] =    'calcua',
-      ['stack_version'] = '2021b',
-      ['longname'] =      'redhat8-zen2-arcturus',
-      ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-zen2-arcturus',
-      ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-zen2-arcturus'
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = 'system',
+        ['longname'] =      'redhat7-x86_64',
+        ['own_modules'] =   'modules-easybuild/system/redhat7-x86_64',
+        ['full_modules'] =  'modules-easybuild/system/redhat7-x86_64'
     },
     { 
-      ['stack_name'] =    'calcua',
-      ['stack_version'] = '2021b',
-      ['longname'] =      'redhat8-x86_64',
-      ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-x86_64',
-      ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64'
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = 'system',
+        ['longname'] =      'redhat8-broadwell-noaccel',
+        ['own_modules'] =   'modules-easybuild/system/redhat8-broadwell-noaccel', -- system for redhat8 has specific CPU support
+        ['full_modules'] =  'modules-easybuild/system/redhat8-x86_64,modules-easybuild/system/redhat8-broadwell-noaccel'
     },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = 'system',
+        ['longname'] =      'redhat8-zen2-noaccel',
+        ['own_modules'] =   'modules-easybuild/system/redhat8-zen2-noaccel', -- system for redhat8 has specific CPU support
+        ['full_modules'] =  'modules-easybuild/system/redhat8-x86_64,modules-easybuild/system/redhat8-zen2-noaccel'
+    },
+    -- 2020a
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2020a',
+        ['longname'] =      'redhat7-ivybridge-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2020a/redhat7-ivybridge-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2020a/redhat7-x86_64,modules-easybuild/CalcUA-2020a/redhat7-ivybridge-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2020a',
+        ['longname'] =      'redhat7-broadwell-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2020a/redhat7-broadwell-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2020a/redhat7-x86_64,modules-easybuild/CalcUA-2020a/redhat7-broadwell-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2020a',
+        ['longname'] =      'redhat8-zen2-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2020a/redhat8-zen2-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2020a/redhat8-x86_64,modules-easybuild/CalcUA-2020a/redhat8-zen2-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2020a',
+        ['longname'] =      'redhat8-skylake-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2020a/redhat8-skylake-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2020a/redhat8-x86_64,modules-easybuild/CalcUA-2020a/redhat8-skylake-noaccel'
+    },
+    -- 2021b
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2021b',
+        ['longname'] =      'redhat7-ivybridge-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat7-ivybridge-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat7-x86_64,modules-easybuild/CalcUA-2021b/redhat7-ivybridge-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2021b',
+        ['longname'] =      'redhat8-broadwell-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-broadwell-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-broadwell-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2021b',
+        ['longname'] =      'redhat8-zen2-arcturus',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-zen2-arcturus',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-zen2-arcturus'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2021b',
+        ['longname'] =      'redhat8-zen2-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-zen2-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-zen2-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2021b',
+        ['longname'] =      'redhat8-skylake-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-skylake-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-skylake-noaccel'
+    },
+    -- 3000a
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '3000a',
+        ['longname'] =      'redhat7-ivybridge-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat7-ivybridge-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat7-x86_64,modules-easybuild/CalcUA-3000a/redhat7-ivybridge,modules-easybuild/CalcUA-3000a/redhat7-ivybridge-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '3000a',
+        ['longname'] =      'redhat8-broadwell-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat8-broadwell-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat8-x86_64,modules-easybuild/CalcUA-3000a/redhat8-broadwell,modules-easybuild/CalcUA-3000a/redhat8-broadwell-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '3000a',
+        ['longname'] =      'redhat8-zen2-arcturus',
+        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat8-zen2-arcturus',
+        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat8-x86_64,modules-easybuild/CalcUA-3000a/redhat8-zen2,modules-easybuild/CalcUA-3000a/redhat8-zen2-arcturus'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '3000a',
+        ['longname'] =      'redhat8-zen2-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat8-zen2-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat8-x86_64,modules-easybuild/CalcUA-3000a/redhat8-zen2,modules-easybuild/CalcUA-3000a/redhat8-zen2-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '3000a',
+        ['longname'] =      'redhat8-skylake-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat8-skylake-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat8-x86_64,modules-easybuild/CalcUA-3000a/redhat8-skylake,modules-easybuild/CalcUA-3000a/redhat8-skylake-noaccel'
+    },
+    -- 4000a
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '4000a',
+        ['longname'] =      'redhat8-broadwell-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-broadwell-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-broadwell,modules-easybuild/CalcUA-4000a/redhat8-broadwell-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '4000a',
+        ['longname'] =      'redhat8-zen2-arcturus',
+        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-zen2-arcturus',
+        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-zen2,modules-easybuild/CalcUA-4000a/redhat8-zen2-arcturus'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '4000a',
+        ['longname'] =      'redhat8-zen2-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-zen2-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-zen2,modules-easybuild/CalcUA-4000a/redhat8-zen2-noaccel'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '4000a',
+        ['longname'] =      'redhat8-skylake-noaccel',
+        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-skylake-noaccel',
+        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-skylake,modules-easybuild/CalcUA-4000a/redhat8-skylake-noaccel'
+    },
+    -- Cases that should print error messages.
     { 
       ['stack_name'] =    'calcua',
       ['stack_version'] = 'system',
       ['longname'] =      'redhat7-broadwell-noaccel',
-      ['own_modules'] =   'modules-easybuild/system/redhat7-x86_86', -- system for redhat7 exists only in an x86_64 version.
-      ['full_modules'] =  'modules-easybuild/system/redhat7-x86_64'
-    },
-    { 
-      ['stack_name'] =    'calcua',
-      ['stack_version'] = 'system',
-      ['longname'] =      'redhat8-broadwell-noaccel',
-      ['own_modules'] =   'modules-easybuild/system/redhat8-broadwell-noaccel', -- system for redhat8 has specific CPU support
-      ['full_modules'] =  'modules-easybuild/system/redhat8-x86_64,modules-easybuild/system/redhat8-broadwell-noaccel'
+      ['own_modules'] =   nil, -- system for redhat7 exists only in an x86_64 version.
+      ['full_modules'] =  nil
     },
     { 
       ['stack_name'] =    'calcua',
       ['stack_version'] = 'system',
       ['longname'] =      'redhat8-zen2-arcturus',
-      ['own_modules'] =   'modules-easybuild/system/redhat8-zen2_noaccel', -- system for redhat8 has specific CPU support but no GPU support.
-      ['full_modules'] =  'modules-easybuild/system/redhat8-x86_64,modules-easybuild/system/redhat8-zen2-noaccel'
-    },
-    { 
-      ['stack_name'] =    'calcua',
-      ['stack_version'] = 'system',
-      ['longname'] =      'redhat8-skylake-aurora1',
-      ['own_modules'] =   'modules-easybuild/system/redhat8-broadwell-noaccel', -- No support for SkyLake in system.
-      ['full_modules'] =  'modules-easybuild/system/redhat8-x86_64,modules-easybuild/system/redhat8-broadwell-noaccel'
+      ['own_modules'] =   nil, -- system for redhat8 has specific CPU support but no GPU support.
+      ['full_modules'] =  nil
     },
 } 
 
@@ -562,17 +984,28 @@ do
     local hierarchy =          CalcUA_SystemProperties[test['stack_version']]['hierarchy'] 
     local system_module_dir =  get_system_module_dir(  test['longname'], test['stack_name'], test['stack_version'] )
     local system_module_dirs = get_system_module_dirs( test['longname'], test['stack_name'], test['stack_version'] )
-    print( testresult( system_module_dir == test['own_modules'] and table.concat( system_module_dirs, ',') == test['full_modules'] ) ..
+    local string_system_module_dirs
+    if system_module_dirs == nil then
+        string_system_module_dirs = nil
+    else
+        string_system_module_dirs = table.concat( system_module_dirs, ',')
+    end
+    print( testresult( system_module_dir == test['own_modules'] and string_system_module_dirs == test['full_modules'] ) ..
            'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] ..
            ' (' .. hierarchy .. ') for arch ' .. test['longname'] .. 
-           ' are in \n      ' .. system_module_dir ..
-           '\n    Full hierarchy (lowest priority first):\n      ' ..
-           table.concat( system_module_dirs, '\n      ') )
-    if system_module_dir ~= test['own_modules'] then
-        print( '    Expected module dir: ' .. test['own_modules'] )
+           ' are in \n      ' .. ( system_module_dir or 'nil' ) )
+           
+    if system_module_dirs == nil then
+        print(  '    Full hierarchy (lowest priority first):\n      nil' )
+    else
+        print(  '    Full hierarchy (lowest priority first):\n      ' ..
+                table.concat( system_module_dirs, '\n      ') )
     end
-    if system_module_dirs ~= test['full_modules'] then
-        print( '    Expected full hierarchy: ' .. test['full_modules']:gsub(',', ', ') )
+    if system_module_dir ~= test['own_modules'] then
+        print( '    Expected module dir: ' .. ( test['own_modules'] or 'nil' )  )
+    end
+    if string_system_module_dirs ~= test['full_modules'] then
+        print( '    Expected full hierarchy: ' .. (test['full_modules'] or ''):gsub(',', ', ') )
     end
     print( '\n' )
          
@@ -586,9 +1019,9 @@ stack_version = ''
 longname = 'redhat8-zen2-arcturus'
 result = get_system_module_dirs( longname, stack_name, stack_version )
 if result == nil then
-    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
+    print( testresult( result == nil )  .. 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
 else
-    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' \27[31mDID NOT RETURN NIL!\27[0m\n' )
+    print( testresult( result == nil )  .. 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' \27[31mDID NOT RETURN NIL!\27[0m\n' )
 end
 
 
@@ -599,31 +1032,38 @@ end
 
 print( colour_title .. '\nTesting get_system_inframodule_dirs\n' .. colour_reset )
 
-stack_name =    'calcua'
-stack_version = '2021b'
-longname = 'redhat8-zen2-arcturus'
-print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_inframodule_dir( longname, stack_name, stack_version ) ..'\n' )
+tests = {
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'modules-infrastructure/infrastructure/CalcUA-2021b/redhat8-zen2-arcturus',
+    },
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-x86_64',
+        ['expected']      = 'modules-infrastructure/infrastructure/CalcUA-2021b/redhat8-x86_64',
+    },
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = 'system',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'modules-infrastructure/infrastructure/system/redhat8-zen2-arcturus',
+    },
+    {
+        ['stack_name']    = 'manual',
+        ['stack_version'] = '',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = nil,
+    },
+}
 
-stack_name =    'calcua'
-stack_version = '2021b'
-longname = 'redhat8-x86_64'
-print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_inframodule_dir( longname, stack_name, stack_version ) .. '\n' )
-
-stack_name =    'calcua'
-stack_version = 'system'
-longname = 'redhat8-zen2-arcturus'
-print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_inframodule_dir( longname, stack_name, stack_version ) .. '\n' )
-
-stack_name =    'manual'
-stack_version = ''
-longname = 'redhat8-zen2-arcturus'
-if get_system_inframodule_dir( longname, stack_name, stack_version ) == nil then
-    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
-else
-    print( 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' \27[31mDID NOT RETURN NIL!\27[0m\n' )
+for _,test in ipairs( tests )
+do
+    local got = get_system_inframodule_dir( test['longname'], test['stack_name'], test['stack_version'] )
+    print( testresult( got == test['expected']  ) ..
+           'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
 end
 
 
@@ -634,29 +1074,39 @@ end
 
 print( colour_title .. '\nTesting get_system_SW_dirs\n' .. colour_reset )
 
-stack_name =    'calcua'
-stack_version = '2021b'
-longname = 'redhat8-zen2-arcturus'
-print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_SW_dir( longname, stack_name, stack_version ) ..'\n' )
+tests = {
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'SW/CalcUA-2021b/RH8-zen2-GFX908',
+    },
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-x86_64',
+        ['expected']      = 'SW/CalcUA-2021b/RH8-x86_64',
+    },
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = 'system',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'SW/system/RH8-zen2-GFX908',
+    },
+    {
+        ['stack_name']    = 'manual',
+        ['stack_version'] = '',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'SW/MNL/RH8-zen2-GFX908',
+    },
+}
 
-stack_name =    'calcua'
-stack_version = '2021b'
-longname = 'redhat8-x86_64'
-print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_SW_dir( longname, stack_name, stack_version ) .. '\n' )
-
-stack_name =    'calcua'
-stack_version = 'system'
-longname = 'redhat8-zen2-arcturus'
-print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_SW_dir( longname, stack_name, stack_version ) .. '\n' )
-
-stack_name =    'manual'
-stack_version = ''
-longname = 'redhat8-zen2-arcturus'
-print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_SW_dir( longname, stack_name, stack_version ) .. '\n' )
+for _,test in ipairs( tests )
+do
+    local got = get_system_SW_dir( test['longname'], test['stack_name'], test['stack_version'] )
+    print( testresult( got == test['expected']  ) ..
+           'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
+end
 
 
 -- -----------------------------------------------------------------------------
@@ -666,35 +1116,40 @@ print( 'Software of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. l
 
 print( colour_title .. '\nTesting get_system_EBrepo_dirs\n' .. colour_reset )
 
-stack_name =    'calcua'
-stack_version = '2021b'
-longname = 'redhat8-zen2-arcturus'
-print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_EBrepo_dir( longname, stack_name, stack_version ) ..'\n' )
+tests = {
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'EBrepo_files/CalcUA-2021b/redhat8-zen2-arcturus',
+    },
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-x86_64',
+        ['expected']      = 'EBrepo_files/CalcUA-2021b/redhat8-x86_64',
+    },
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = 'system',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'EBrepo_files/system/redhat8-zen2-arcturus',
+    },
+    {
+        ['stack_name']    = 'manual',
+        ['stack_version'] = '',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = nil,
+    },
+}
 
-stack_name =    'calcua'
-stack_version = '2021b'
-longname = 'redhat8-x86_64'
-print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_EBrepo_dir( longname, stack_name, stack_version ) .. '\n' )
-
-stack_name =    'calcua'
-stack_version = 'system'
-longname = 'redhat8-zen2-arcturus'
-print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' are in \n  ' ..
-       get_system_EBrepo_dir( longname, stack_name, stack_version ) .. '\n' )
-
-stack_name =    'manual'
-stack_version = ''
-longname = 'redhat8-zen2-arcturus'
-stack_name =    'manual'
-stack_version = ''
-longname = 'redhat8-zen2-arcturus'
-if get_system_EBrepo_dir( longname, stack_name, stack_version ) == nil then
-    print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
-else
-    print( 'EBrepo files of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' \27[31mDID NOT RETURN NIL!\27[0m\n' )
+for _,test in ipairs( tests )
+do
+    local got = get_system_EBrepo_dir( test['longname'], test['stack_name'], test['stack_version'] )
+    print( testresult( got == test['expected']  ) ..
+           'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
 end
+
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------

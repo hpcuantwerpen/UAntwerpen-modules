@@ -185,3 +185,16 @@ function isDir( dir )
 
 end
 
+
+--------------------------------------------------------------------------
+--
+-- LmodError - Print an error message
+--
+-- This implementation will simply print an error message but currently 
+-- does not interrupt the execution
+--
+function LmodError( error_string )
+
+    io.write( error_string .. '\n' )
+
+end

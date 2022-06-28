@@ -66,6 +66,25 @@
 
     -   `EasyBuild-user` for installing software with EasyBuild in the user's directories.
 
+-   We support a 3-level and a 2-level naming scheme.
+
+    -   At the top level and the bottom level (most generic level) there is no difference 
+        between both schemes.
+
+        -   Top level always uses 3-component names: OS-CPU-Accelerator.
+
+        -   Generic level names do not include an accelerator.
+
+    -   In the `CalcUA_SystemTable` that defines which architectures have software stacks 
+        for which stack version, only generic CPU names or CPU-Accelerator pairs are
+        supported
+
+        Impact of omitting that restriction and supporting a module and software hierarchy 
+
+        -   Changes to the `get_calcua_top` function needed.
+
+        -   Needs changes to `get_long_osarchs` and `get_long_osarchs_reverse`.
+
 
 ## Directory structure
 
