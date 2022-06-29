@@ -128,6 +128,7 @@ sandbox_registration{
     ['get_fortune']                   = get_fortune,
     ['get_user_prefix_EasyBuild']     = get_user_prefix_EasyBuild,
     ['is_interactive']                = is_interactive,
+    ['get_cluster_longosarch']        = get_cluster_longosarch,
     ['get_clusterarch']               = get_clusterarch,
     [ 'map_toolchain']                = map_toolchain,
     ['get_calcua_longosarch_current'] = get_calcua_longosarch_current,

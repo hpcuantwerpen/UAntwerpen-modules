@@ -193,6 +193,138 @@ end
 
 -- -----------------------------------------------------------------------------
 --
+-- get_cluster_longosarch
+--
+-- Returns the cluster architecture for use in the clusterarch modules in the
+-- long os-cpu-acclerator format, e.g., redhat2-zen2-noaccel.
+--
+function get_cluster_longosarch()
+
+    local cpustring         = get_cpu_info()
+    local osname, osversion = get_os_info()
+    local accelerator       = get_accelerator_info()
+
+    if cpustring == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch/get_cpu_info: Failed to determine the CPU type.\n' )
+        return nil, nil
+    end
+
+    if osname == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch/get_os_info: Failed to determine the OS name.\n' )
+        return nil, nil
+    end
+
+    if osversion == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch/get_os_info: Failed to determine the OS version.\n' )
+        return nil, nil
+    end
+
+    if cpustring_to_longtarget[cpustring] == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch: The target ' .. cpustring .. ' is unknown.\n' )
+        return nil, nil
+    end
+
+    if osname_to_longos[osname] == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch: The OS name ' .. osname .. ' is unknown.\n' )
+        return nil, nil
+    end
+
+    if accelerator ~= nil and accelerator_to_longacc[accelerator] == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch: The accelerator ' .. accelerator .. ' is unknown.\n' )
+        return nil, nil
+    end
+
+    local cluster_longosarch = osname_to_longos[osname] .. osversion .. '-' ..
+                               cpustring_to_longtarget[cpustring]
+
+    if accelerator == nil then
+        cluster_longosarch  = cluster_longosarch  .. '-noaccel'
+    else
+        cluster_longosarch  = cluster_longosarch  .. '-' .. accelerator_to_longacc[accelerator]
+    end
+
+    return cluster_longosarch
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- get_clusterarch
+--
+-- Returns the cluster architecture for use in the clusterarch modules in
+-- different ways.
+--
+-- The function returns 4 values:
+--  1. Short minimal name, i.e., no `-host` is added for nodes without
+--     accelerator.
+--  2. Long minimal name, i.e., no `-noaccel` is added for nodes without
+--     accelerator.
+--  3. Short maximal name, with `-host` added for nodes without accelerator
+--  4. Long maximal name, with `-noaccel` added for nodes without accelerator
+-- e.g., `RH8-zen2, redhat8-zen2, RH8-zen2-host, redhat8-zen2-noaccel` or
+-- `RH8-SKLX-NEC1, redhat8-skylake-aurora1, RH8-SKLX-NEC1, redhat8-skylake-aurora1`
+--
+function get_clusterarch()
+
+    local cpustring         = get_cpu_info()
+    local osname, osversion = get_os_info()
+    local accelerator       = get_accelerator_info()
+
+    if cpustring == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_clusterarch/get_cpu_info: Failed to determine the CPU type.\n' )
+        return nil, nil
+    end
+
+    if osname == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_clusterarch/get_os_info: Failed to determine the OS name.\n' )
+        return nil, nil
+    end
+
+    if osversion == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_clusterarch/get_os_info: Failed to determine the OS version.\n' )
+        return nil, nil
+    end
+
+    if cpustring_to_longtarget[cpustring] == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_clusterarch: The target ' .. cpustring .. ' is unknown.\n' )
+        return nil, nil
+    end
+
+    if osname_to_longos[osname] == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_clusterarch: The OS name ' .. osname .. ' is unknown.\n' )
+        return nil, nil
+    end
+
+    if accelerator ~= nil and accelerator_to_longacc[accelerator] == nil then
+        io.stderr:write( 'SitePackage_system_info.lua get_clusterarch: The accelerator ' .. accelerator .. ' is unknown.\n' )
+        return nil, nil
+    end
+
+    local clusterarch_short_minimal = osname_to_shortos[osname] .. osversion  .. '-' ..
+                                      cpustring_to_shorttarget[cpustring]
+    local clusterarch_long_minimal  = osname_to_longos[osname] .. osversion .. '-' ..
+                                      cpustring_to_longtarget[cpustring]
+    local clusterarch_short_maximal
+    local clusterarch_long_maximal
+
+    if accelerator == nil then
+        clusterarch_short_maximal = clusterarch_short_minimal .. '-host'
+        clusterarch_long_maximal  = clusterarch_long_minimal  .. '-noaccel'
+    else
+        clusterarch_short_minimal = clusterarch_short_minimal .. '-' .. accelerator_to_shortacc[accelerator]
+        clusterarch_long_minimal  = clusterarch_long_minimal  .. '-' .. accelerator_to_longacc[accelerator]
+        clusterarch_short_maximal = clusterarch_short_minimal
+        clusterarch_long_maximal  = clusterarch_long_minimal
+    end
+
+    return clusterarch_short_minimal, clusterarch_long_minimal, clusterarch_short_maximal, clusterarch_long_maximal
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
 -- get_clusterarch
 --
 -- Returns the cluster architecture for use in the clusterarch modules in

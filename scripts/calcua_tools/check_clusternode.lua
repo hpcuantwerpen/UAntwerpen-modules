@@ -21,7 +21,7 @@ dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
 -- Detected system information.
 --
 
-print( '\nInformation about this system:' )
+print( '\nInformation about this node:' )
 
 print( '- The host name is ' .. get_hostname() )
 
@@ -34,15 +34,8 @@ print( '- The CPU string is ' .. get_cpu_info() )
 
 print( '- Detected accelerator is ' .. ( get_accelerator_info() or 'none detected' ) )
 
-local clusterarch_short_minimal
-local clusterarch_long_minimal
-local clusterarch_short_maximal
-local clusterarch_long_maximal
-clusterarch_short_minimal, clusterarch_long_minimal, clusterarch_short_maximal, clusterarch_long_maximal = get_clusterarch()
-print( '- Short minimal clusterarch: ' .. clusterarch_short_minimal )
-print( '- Long minimal clusterarch:  ' .. clusterarch_long_minimal )
-print( '- Short maximal clusterarch: ' .. clusterarch_short_maximal )
-print( '- Long maximal clusterarch:  ' .. clusterarch_long_maximal )
+local clusternode_long_osarch = get_cluster_longosarch()
+print( '- Detected node architecture: ' .. clusternode_long_osarch )
 
 -- -----------------------------------------------------------------------------
 --

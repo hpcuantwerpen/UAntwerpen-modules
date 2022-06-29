@@ -591,7 +591,18 @@ Current return value:
 -   NEC_aurora1  (leibniz Aurora node)
 
 
+#### `get_cluster_longosarch()`
+
+`get_clusterarch_longosarch` returns the cluster architecture in the os-cpu-accelerator
+format with long names, e.g., `redhat8-zen2-noaccel` or `redhat8-skylake-aurora1`.
+This is the format that in our naming conventions would be denoted as
+`long_osarch`.
+
+
 #### `get_clusterarch()`
+
+**This function may not be needed in the final implementation and may be eliminated
+in favor of `get_cluster_longosarch()`.**
 
 `get_clusterarch` returns the cluster architecture in four possible formats for the 
 module system. It is then to the module system to select which one of the four it needs
