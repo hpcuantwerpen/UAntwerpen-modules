@@ -93,25 +93,6 @@ CalcUA_SystemTable = {
             'skylake-noaccel',
         }
     },
-    ['3000a'] = {
-        ['redhat7'] = {
-            'ivybridge-noaccel',
-        },
-        ['redhat8'] = {
-            'broadwell-noaccel',
-            'zen2-noaccel',
-            'zen2-arcturus',
-            'skylake-noaccel',
-        }
-    },
-    ['4000a'] = {
-        ['redhat8'] = {
-            'broadwell-noaccel',
-            'zen2-noaccel',
-            'zen2-arcturus',
-            'skylake-noaccel',
-        }
-    },
 }
 
 --
@@ -224,7 +205,6 @@ CalcUA_toolchain_map = {
 CalcUA_map_arch_hierarchy = {
    -- We start with a 2-level map
    ['200000'] = {
-       ['zen3-noaccel']      = 'x86_64',
        ['zen2-ampere']       = 'x86_64',
        ['zen2-arcturus']     = 'x86_64',
        ['zen2-noaccel']      = 'x86_64',
@@ -235,26 +215,7 @@ CalcUA_map_arch_hierarchy = {
        ['broadwell-noaccel'] = 'x86_64',
        ['ivybridge-noaccel'] = 'x86_64',
        ['x86_64']            = nil,
-   },
-   -- From 3000a on we need a 3-level map
-   ['300000'] = {
-       ['zen3-noaccel']      = 'zen3',
-       ['zen3']              = 'x86_64',
-       ['zen2-ampere']       = 'zen2',
-       ['zen2-arcturus']     = 'zen2',
-       ['zen2-noaccel']      = 'zen2',
-       ['zen2']              = 'x86_64',
-       ['skylake-aurora1']   = 'skylake',
-       ['skylake-noaccel']   = 'skylake',
-       ['skylake']           = 'x86_64',
-       ['broadwell-P5000']   = 'broadwell',
-       ['broadwell-pascal']  = 'broadwell',
-       ['broadwell-noaccel'] = 'broadwell',
-       ['broadwel']          = 'x86_64',
-       ['ivybridge-noaccel'] = 'ivybridge',
-       ['ivybridge']         = 'x86_64',
-       ['x86_64']            = nil,
-   },
+   }
 }
    
 --
@@ -266,7 +227,6 @@ CalcUA_map_arch_hierarchy = {
 --
 CalcUA_map_cpu_to_gen = {
     ['200000'] = {
-        ['zen3']      = 'x86_64',
         ['zen2']      = 'x86_64',
         ['skylake']   = 'x86_64',
         ['broadwell'] = 'x86_64',

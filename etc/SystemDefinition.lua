@@ -166,6 +166,7 @@ CalcUA_toolchain_map = {
 --
 -- Note:
 --   - Current 2-level map:
+--         ['zen3-noaccel']      = 'x86_64',
 --         ['zen2-noaccel']      = 'x86_64',
 --         ['zen2-ampere']       = 'x86_64',
 --         ['zen2-arcturus']     = 'x86_64',
@@ -177,9 +178,11 @@ CalcUA_toolchain_map = {
 --         ['ivybridge-noaccel'] = 'x86_64',
 --         ['x86_64']            = nil,
 --  - Current 3-level map:
+--         ['zen3-noaccel']      = 'zen3',
 --         ['zen2-noaccel']      = 'zen2',
 --         ['zen2-ampere']       = 'zen2',
 --         ['zen2-arcturus']     = 'zen2',
+--         ['zen3']              = 'x86_64',
 --         ['zen2']              = 'x86_64',
 --         ['broadwell-noaccel'] = 'broadwell',
 --         ['broadwell-P5000']   = 'broadwell',
@@ -194,6 +197,7 @@ CalcUA_toolchain_map = {
 CalcUA_map_arch_hierarchy = {
     -- We start with a 2-level map
     ['200000'] = {
+        ['zen3-noaccel']      = 'x86_64',
         ['zen2-ampere']       = 'x86_64',
         ['zen2-arcturus']     = 'x86_64',
         ['zen2-noaccel']      = 'x86_64',
@@ -218,6 +222,7 @@ CalcUA_map_arch_hierarchy = {
 
 CalcUA_map_cpu_to_gen = {
     ['200000'] = {
+        ['zen3']      = 'x86_64',
         ['zen2']      = 'x86_64',
         ['skylake']   = 'x86_64',
         ['broadwell'] = 'x86_64',
