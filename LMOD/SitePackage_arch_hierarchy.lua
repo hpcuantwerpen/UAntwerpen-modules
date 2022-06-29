@@ -325,8 +325,7 @@ end
 --
 function get_calcua_generic_current( stack_version )
 
-    local long_osarch
-    _, _, _, long_osarch = get_clusterarch()
+    local long_osarch = get_cluster_longosarch()
 
     return get_calcua_generic( long_osarch, stack_version )
 
@@ -351,8 +350,7 @@ function get_calcua_longosarch_current( stack_version )
         LmodError( 'Likely an error in CalcUA_SystemProperties in etc/SystemDefinition.lua, no hierarchy entry found for stack ' .. stack_version )
     end
 
-    local current_osarch
-    d1, d2, d3, current_osarch = get_clusterarch()
+    local current_osarch = get_cluster_longosarch()
 
     return current_osarch
 

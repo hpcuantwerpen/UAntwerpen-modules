@@ -19,14 +19,14 @@ print( '- (get_accelerator_info) Detected accelerator is ' .. ( get_accelerator_
 
 print( '- (get_cluster_longosarch) Detected node architecture: ' .. ( get_cluster_longosarch() or 'RETURNED NIL') )
 
-local clusterarch_short_minimal
-local clusterarch_long_minimal
-local clusterarch_short_maximal
-local clusterarch_long_maximal
-clusterarch_short_minimal, clusterarch_long_minimal, clusterarch_short_maximal, clusterarch_long_maximal = get_clusterarch()
-print( '- (get_clusterarch) Short minimal clusterarch: ' .. clusterarch_short_minimal )
-print( '- (get_clusterarch) Long minimal clusterarch:  ' .. clusterarch_long_minimal )
-print( '- (get_clusterarch) Short maximal clusterarch: ' .. clusterarch_short_maximal )
-print( '- (get_clusterarch) Long maximal clusterarch:  ' .. clusterarch_long_maximal )
+-- local clusterarch_short_minimal
+-- local clusterarch_long_minimal
+-- local clusterarch_short_maximal
+-- local clusterarch_long_maximal
+-- clusterarch_short_minimal, clusterarch_long_minimal, clusterarch_short_maximal, clusterarch_long_maximal = get_clusterarch()
+-- print( '- (get_clusterarch) Short minimal clusterarch: ' .. clusterarch_short_minimal )
+-- print( '- (get_clusterarch) Long minimal clusterarch:  ' .. clusterarch_long_minimal )
+-- print( '- (get_clusterarch) Short maximal clusterarch: ' .. clusterarch_short_maximal )
+-- print( '- (get_clusterarch) Long maximal clusterarch:  ' .. clusterarch_long_maximal )
 
 print()

@@ -1186,10 +1186,10 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Testing get_calcua_top with get_clusterarch
+-- Testing get_calcua_top with get_cluster_longosarch
 --
 
-print( colour_title .. '\nTesting get_calcua_top function with get_clusterarch\n' .. colour_reset )
+print( colour_title .. '\nTesting get_calcua_top function with get_cluster_longosarch\n' .. colour_reset )
 
 local inputdata = {
     {   
@@ -1206,8 +1206,7 @@ local inputdata = {
 
 for stack,_ in pairs( CalcUA_SystemTable ) do
     local hierarchy = CalcUA_SystemProperties[stack]['hierarchy'] 
-    local current_osarch
-    _, _, _, current_osarch = get_clusterarch()
+    local current_osarch = get_cluster_longosarch()
     print( mssg_sysdep .. ' Used architecture for ' .. current_osarch  .. 
            ' (this node) for ' .. stack .. ' (' .. hierarchy .. '): ' .. 
            ( get_calcua_top( current_osarch, stack ) or '\27[31mPROBLEM, GOT NIL\27[0m' ) )
