@@ -828,7 +828,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Testing get_system_EBrepo_dir() longname, stack_name, stack_version )
+-- Testing get_system_EBrepo_dir( longname, stack_name, stack_version )
 --
 
 print( colour_title .. '\nTesting get_system_EBrepo_dirs\n' .. colour_reset )

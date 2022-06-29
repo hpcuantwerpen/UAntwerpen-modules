@@ -42,6 +42,12 @@ output for debug purposes of this configuration file, e.g., to list which
 software stacks for which architectures will be available on which node 
 types.
 
+Note that one should distinguish between the generic processor types and 
+the real processor types. No node type in the table below should have a 
+generic processor type in its name as that would cause problems with 
+the 3-level software architecture schemes (and make coding more difficult even for the
+2-level software architecture scheme).
+
 Example: At the time of writing, the CalcUA cluster description would have been:
 ```lua
 CalcUA_NodeTypes = {
@@ -134,7 +140,7 @@ software stack has the following entries:
 
     1.  `2L`: two levels, the least generic level always includes an accelerator field
 
-    2. `3L`: 3 levels in the architecture hierarchy.
+    2.  `3L`: 3 levels in the architecture hierarchy.
 
 
 ### `CalcUA_ClusterMap`
