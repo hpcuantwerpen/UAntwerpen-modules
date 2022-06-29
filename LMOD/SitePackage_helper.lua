@@ -92,6 +92,14 @@ function get_matching_toparchreduction_key( version )
 
 end
 
+--
+-- Table to cache supported archs and subarchs for each stack, filled in as
+-- needed.
+--
+
+CalcUA_cache_subarchs = nil
+
+
 -- -----------------------------------------------------------------------------
 --
 -- Functions to check data structures

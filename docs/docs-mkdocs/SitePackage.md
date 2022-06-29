@@ -416,6 +416,8 @@ map_accel_long_to_short = {
 
 -   `extract_cpu_from_arch`: Extracts the first part of the cpu-accelerator argument
 
+-   `extract_accel_from_arch`: Extracts the second part of the cpu-accelerator argument
+
 
 #### Computing matching architectures in software stacks
 
@@ -472,6 +474,25 @@ map_accel_long_to_short = {
 
     The directory names returned are relative from the installation root, with the most
     generic one first.
+
+
+#### Miscellaneous functions
+
+-   `get_calcua_subarchs( long_osarch, stack_version )`: Compute a list containing
+    the given long_osarch and its subarchs in
+    the hierarchy of the naming scheme for the stack. So the list can
+    be at most 3 elements long. The most generic one is at the front of
+    the list.
+
+    This is a helper function to `get_system_module_dirs`.
+
+-   `populate_cache_subarchs( stack_version )`: Populate a part of the cache variable
+    `CalcUA_cache_subarchs` initialized in `SitePackage_helper.lua` with the other 
+    helper variables that are used throughout.
+
+    For each stack version, the cache variable will return `true` for each valid 
+    architecture string in the software architecture hierarchy for that stack
+    version.
 
 
 ## SitePackage_system_info.lua

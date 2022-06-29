@@ -56,12 +56,16 @@ do
     local found_cpu   = extract_cpu( longname )
     local found_accel = extract_accel( longname ) or 'None'
     local found_arch  = extract_arch( longname )
+
+    local found_cpu_from_arch = extract_cpu_from_arch( found_arch )
+    local found_accel_from_arch = extract_accel_from_arch( found_arch ) or 'None'
     
     print( testresult( found_os == testtable[longname]['OS'] and found_cpu == testtable[longname]['CPU'] and 
-                       found_accel == testtable[longname]['accel'] and found_arch == testtable[longname]['arch'] )  .. 
+                       found_accel == testtable[longname]['accel'] and found_arch == testtable[longname]['arch'] and
+                       found_cpu_from_arch == testtable[longname]['CPU'] and found_accel_from_arch == testtable[longname]['accel'] )  .. 
            longname .. ': os is ' .. found_os ..
-           ', CPU is ' .. found_cpu ..
-           ', accelerator is ' .. found_accel ..
+           ', CPU is ' .. found_cpu .. ' and from arch ' .. found_cpu_from_arch ..
+           ', accelerator is ' .. found_accel .. ' and from arch ' .. found_accel_from_arch .. 
            ', arch is ' .. found_arch )
     
 end
