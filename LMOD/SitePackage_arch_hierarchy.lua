@@ -423,6 +423,84 @@ end
 
 -- -----------------------------------------------------------------------------
 --
+-- Function get_calcua_subarchs( long_osarch, stack_version )
+--
+-- Input arguments:
+--   * long_osarch: os and architecture with long names and in a format 
+--     compatible with the indicated version of the software stack (so respecting
+--     the hierarchy types 2L or 3L).
+--   * stack_version: Version of the calcua stack, can be system.
+--
+-- Output: A list containing the given long_osarch and its subarchs in
+-- the hierarchy of the naming scheme for the stack. So the list can
+-- be at most 3 elements long. The most generic one is at the front of
+-- the list.
+--
+-- The function could be made a bit shorter but that would not improve
+-- readability at all.
+--
+
+function get_calcua_subarchs( long_osarch, stack_version )
+
+    local result = {}
+
+    local long_osgeneric = get_calcua_generic( long_osarch, stack_version )
+
+    if long_osarch == long_osgeneric then
+
+        -- The function was called with long_osarch pointing to the
+        -- generic level of a 2L or 3L hierarchy, so only one element
+        -- in the return list.
+        table.insert( result, long_osgeneric )
+
+    else
+        -- We did not call the function with long_osarch pointing to the 
+        -- generic level of the software stack so we need to continue.
+
+        if CalcUA_SystemProperties[stack_version]['hierarchy'] == '3L' then
+            
+            -- 3L software hierarchy
+
+            if extract_cpu( long_osarch ) == extract_arch( long_osarch ) then
+
+                -- long_osarch has only two compoonents so it must be the middle level
+                -- in a 3L hierarchy. The result has two elements: the middle level
+                -- and generic level.
+                table.insert( result, long_osgeneric )
+                table.insert( result, long_osarch )
+
+            else
+                
+                -- long_osarch has three components so it must be the top level in a
+                -- 3L hierarchy. The result has three elements: the given top level
+                -- architecture, the middle level obtained from omitting the accelerator
+                -- part, and the generic level.
+                table.insert( result, long_osgeneric )
+                table.insert( result, extract_os( long_osarch ) .. '-' .. extract_cpu( long_osarch ))
+                table.insert( result, long_osarch )
+
+            end
+
+        else
+
+            -- 2L software hierarchy, so unless the function was called with wrong arguments
+            -- (we will not check for it) long_osarch must be a top level architecture, and
+            -- the result consists of this top level architecture and the corresponding generic
+            -- one.
+            table.insert( result, long_osgeneric )
+            table.insert( result, long_osarch )
+
+        end
+
+    end
+
+    return result
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
 -- Function get_system_module_dir( long_osarch, stack_name, stack_version )
 -- Function get_system_module_dirs( long_osarch, stack_name, stack_version )
 --
@@ -466,7 +544,7 @@ function get_system_module_dir( long_osarch, stack_name, stack_version )
         return nil
     elseif stack_name == 'calcua' then
         use_version = stack_version
-    elseif ( stack_name == 'system' ) or ( stack_name == 'manual' ) then
+    elseif ( stack_name == 'system' ) then
         use_version = stack_name
     else
         -- Error condition, not known how to treat this stack
@@ -474,12 +552,8 @@ function get_system_module_dir( long_osarch, stack_name, stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
-    -- Check if the input long_osarch is valid in the cluster definition.
-    if get_calcua_top( long_osarch, use_version ) ~= long_osarch then
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: ' .. (long_osarch or 'nil') .. 
-                   ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
-        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
-    end
+    -- TODO: Check if long_osarch is valid for stack_name/stack_version to 
+    -- improve robustness of the system.
 
     return get_system_module_dir_worker( long_osarch, use_version )
 
@@ -505,17 +579,11 @@ function get_system_module_dirs( long_osarch, stack_name, stack_version )
         return nil
     end
 
-    -- Check if the input long_osarch is valid in the cluster definition.
-    if get_calcua_top( long_osarch, use_version ) ~= long_osarch then
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: ' .. (long_osarch or 'nil') .. 
-                   ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
-        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
-    end
-
-    all_archs = get_long_osarchs_reverse( use_version, extract_os( long_osarch ), extract_arch( long_osarch ) )
+    -- TODO: Check if long_osarch is valid for stack_name/stack_version to 
+    -- improve robustness of the system.
 
     result = {}
-    for index, os_arch_accel in ipairs( all_archs )
+    for index, os_arch_accel in ipairs( get_calcua_subarchs( long_osarch, use_version ) )
     do
         table.insert( result, get_system_module_dir_worker( os_arch_accel, use_version ) )
     end

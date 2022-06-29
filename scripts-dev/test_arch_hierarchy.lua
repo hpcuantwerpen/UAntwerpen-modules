@@ -47,6 +47,7 @@ end
 print( colour_title .. '\nTesting extract_* functions\n' .. colour_reset )
 local testtable = { 
     ['redhat8-zen2-arcturus'] = { ['OS'] = 'redhat8', ['CPU'] = 'zen2',   ['accel'] = 'arcturus', ['arch'] = 'zen2-arcturus' },
+    ['redhat8-zen2-noaccel']  = { ['OS'] = 'redhat8', ['CPU'] = 'zen2',   ['accel'] = 'noaccel',  ['arch'] = 'zen2-noaccel' },
     ['redhat8-x86_64']        = { ['OS'] = 'redhat8', ['CPU'] = 'x86_64', ['accel'] = 'None',     ['arch'] = 'x86_64' },
 } 
 for longname,value in pairs(testtable) 
@@ -522,9 +523,10 @@ end
 -- -----------------------------------------------------------------------------
 --
 -- Testing get_system_module_dirs( longname, stack_name, stack_version )
+-- and through it get_calcua_subarchs( longname, stack_version )
 --
 
-print( colour_title .. '\nTesting get_system_module_dirs\n' .. colour_reset )
+print( colour_title .. '\nTesting get_system_module_dirs and hence get_calcua_subarchs\n' .. colour_reset )
 
 local tests = {
     -- system
@@ -534,6 +536,13 @@ local tests = {
         ['longname'] =      'redhat7-x86_64',
         ['own_modules'] =   'modules-easybuild/system/redhat7-x86_64',
         ['full_modules'] =  'modules-easybuild/system/redhat7-x86_64'
+    },
+    {   -- This one should work as we must also be able to generate the module directories for subarchitectures.
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = 'system',
+        ['longname'] =      'redhat8-x86_64',
+        ['own_modules'] =   'modules-easybuild/system/redhat8-x86_64',
+        ['full_modules'] =  'modules-easybuild/system/redhat8-x86_64'
     },
     { 
         ['stack_name'] =    'calcua',

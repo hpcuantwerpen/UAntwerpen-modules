@@ -239,6 +239,9 @@ CalcUA_map_cpu_to_gen = {
 -- top CPU + accelerator architecture if there is no support for an architecture
 -- in a given software stack.
 --
+-- Instead of this approach, we could go for separate reduction maps for CPU
+-- and accelerators (landing with some generic accelerators also) 
+--
 -- We support changes over time in this table as insight grows so we add again
 -- an additional level based on a yyyymm representation of the software stacks
 --
