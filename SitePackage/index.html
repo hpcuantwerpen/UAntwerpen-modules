@@ -463,6 +463,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#miscellaneous-functions" class="md-nav__link">
+    Miscellaneous functions
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -547,6 +554,13 @@
           <li class="md-nav__item">
   <a href="#get_accelerator_info" class="md-nav__link">
     get_accelerator_info
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_cluster_longosarch" class="md-nav__link">
+    get_cluster_longosarch()
   </a>
   
 </li>
@@ -983,6 +997,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#miscellaneous-functions" class="md-nav__link">
+    Miscellaneous functions
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1067,6 +1088,13 @@
           <li class="md-nav__item">
   <a href="#get_accelerator_info" class="md-nav__link">
     get_accelerator_info
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_cluster_longosarch" class="md-nav__link">
+    get_cluster_longosarch()
   </a>
   
 </li>
@@ -1203,6 +1231,11 @@ for a specific version of the software stack. The table is used to produce
 output for debug purposes of this configuration file, e.g., to list which
 software stacks for which architectures will be available on which node 
 types.</p>
+<p>Note that one should distinguish between the generic processor types and 
+the real processor types. No node type in the table below should have a 
+generic processor type in its name as that would cause problems with 
+the 3-level software architecture schemes (and make coding more difficult even for the
+2-level software architecture scheme).</p>
 <p>Example: At the time of writing, the CalcUA cluster description would have been:
 <div class="highlight"><pre><span></span><code><span class="n">CalcUA_NodeTypes</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;redhat7-ivybridge-noaccel&#39;</span><span class="p">,</span>
@@ -1548,6 +1581,9 @@ generic one.</p>
 <li>
 <p><code>extract_cpu_from_arch</code>: Extracts the first part of the cpu-accelerator argument</p>
 </li>
+<li>
+<p><code>extract_accel_from_arch</code>: Extracts the second part of the cpu-accelerator argument</p>
+</li>
 </ul>
 <h4 id="computing-matching-architectures-in-software-stacks">Computing matching architectures in software stacks</h4>
 <ul>
@@ -1610,6 +1646,25 @@ system installation, versus the user installation.</p>
     arguments: long os-and-architecture name, stack name and stack version.</p>
 <p>The directory names returned are relative from the installation root, with the most
 generic one first.</p>
+</li>
+</ul>
+<h4 id="miscellaneous-functions">Miscellaneous functions</h4>
+<ul>
+<li>
+<p><code>get_calcua_subarchs( long_osarch, stack_version )</code>: Compute a list containing
+    the given long_osarch and its subarchs in
+    the hierarchy of the naming scheme for the stack. So the list can
+    be at most 3 elements long. The most generic one is at the front of
+    the list.</p>
+<p>This is a helper function to <code>get_system_module_dirs</code>.</p>
+</li>
+<li>
+<p><code>populate_cache_subarchs( stack_version )</code>: Populate a part of the cache variable
+    <code>CalcUA_cache_subarchs</code> initialized in <code>SitePackage_helper.lua</code> with the other 
+    helper variables that are used throughout.</p>
+<p>For each stack version, the cache variable will return <code>true</code> for each valid 
+architecture string in the software architecture hierarchy for that stack
+version.</p>
 </li>
 </ul>
 <h2 id="sitepackage_system_infolua">SitePackage_system_info.lua</h2>
@@ -1710,7 +1765,14 @@ is found. The names returned are the long accelerator names used in the data str
 <li>NVIDIA_GA100 (vaughan Ampere node)</li>
 <li>NEC_aurora1  (leibniz Aurora node)</li>
 </ul>
+<h4 id="get_cluster_longosarch"><code>get_cluster_longosarch()</code></h4>
+<p><code>get_clusterarch_longosarch</code> returns the cluster architecture in the os-cpu-accelerator
+format with long names, e.g., <code>redhat8-zen2-noaccel</code> or <code>redhat8-skylake-aurora1</code>.
+This is the format that in our naming conventions would be denoted as
+<code>long_osarch</code>.</p>
 <h4 id="get_clusterarch"><code>get_clusterarch()</code></h4>
+<p><strong>This function may not be needed in the final implementation and may be eliminated
+in favor of <code>get_cluster_longosarch()</code>.</strong></p>
 <p><code>get_clusterarch</code> returns the cluster architecture in four possible formats for the 
 module system. It is then to the module system to select which one of the four it needs
 for which purpose (and that depends on the <code>hierarchy</code> field in <code>CalcUA_SystemProperties</code>
@@ -1792,7 +1854,7 @@ but you'll never know.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 17, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 29, 2022</span>
       
     
   </small>

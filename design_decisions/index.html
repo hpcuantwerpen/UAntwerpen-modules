@@ -547,6 +547,37 @@ versions with versionsuffix for the architecture.</p>
 </li>
 </ul>
 </li>
+<li>
+<p>We support a 3-level and a 2-level naming scheme.</p>
+<ul>
+<li>
+<p>At the top level and the bottom level (most generic level) there is no difference 
+    between both schemes.</p>
+<ul>
+<li>
+<p>Top level always uses 3-component names: OS-CPU-Accelerator.</p>
+</li>
+<li>
+<p>Generic level names do not include an accelerator.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>In the <code>CalcUA_SystemTable</code> that defines which architectures have software stacks 
+    for which stack version, only generic CPU names or CPU-Accelerator pairs are
+    supported</p>
+<p>Impact of omitting that restriction and supporting a module and software hierarchy </p>
+<ul>
+<li>
+<p>Changes to the <code>get_calcua_top</code> function needed.</p>
+</li>
+<li>
+<p>Needs changes to <code>get_long_osarchs</code> and <code>get_long_osarchs_reverse</code>.</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h2 id="directory-structure">Directory structure</h2>
 <ul>
@@ -805,7 +836,7 @@ result in a single file per ( software stack, architecture) combination.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 16, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 28, 2022</span>
       
     
   </small>
