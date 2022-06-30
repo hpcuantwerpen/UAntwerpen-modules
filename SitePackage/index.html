@@ -326,8 +326,22 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#calcua_def_cpu" class="md-nav__link">
+    CalcUA_def_cpu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#calcua_map_cpu_to_gen" class="md-nav__link">
     CalcUA_map_cpu_to_gen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calcua_reduce_cpu" class="md-nav__link">
+    CalcUA_reduce_cpu
   </a>
   
 </li>
@@ -860,8 +874,22 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#calcua_def_cpu" class="md-nav__link">
+    CalcUA_def_cpu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#calcua_map_cpu_to_gen" class="md-nav__link">
     CalcUA_map_cpu_to_gen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calcua_reduce_cpu" class="md-nav__link">
+    CalcUA_reduce_cpu
   </a>
   
 </li>
@@ -1240,7 +1268,7 @@ the 3-level software architecture schemes (and make coding more difficult even f
 <div class="highlight"><pre><span></span><code><span class="n">CalcUA_NodeTypes</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;redhat7-ivybridge-noaccel&#39;</span><span class="p">,</span>
     <span class="s1">&#39;redhat7-broadwell-noaccel&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;redhat8-boradwell-noaccel&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;redhat8-broadwell-noaccel&#39;</span><span class="p">,</span>
     <span class="s1">&#39;redhat8-broadwell-pascal&#39;</span><span class="p">,</span>
     <span class="s1">&#39;redhat8-broadwell-P5000&#39;</span><span class="p">,</span>
     <span class="s1">&#39;redhat8-skylake-noaccel&#39;</span><span class="p">,</span>
@@ -1410,6 +1438,36 @@ architecture.</p>
 <span class="p">}</span>
 </code></pre></div></p>
 <p>TODO: Can we get rid of the above data structure?</p>
+<h3 id="calcua_def_cpu"><code>CalcUA_def_cpu</code></h3>
+<p><code>CalcUA_def_cpu</code> is an associative table of associative tables defining
+the  CPU architectures and whether they are generic or not.</p>
+<ul>
+<li>
+<p>First level: The keys are the yyyymm versions of toolchains, the values the matching
+    associative table. These toolchain versions are "starting from", so not every toolchain
+    needs to be specified.</p>
+</li>
+<li>
+<p>Second level: Associative table with as keys the CPU type (long names) and as value
+    <code>true</code> for generic CPU architectures and false otherwise.</p>
+</li>
+</ul>
+<p>The map is versioned, but do expect problems with finding the
+right version of the system stack for a regular stack if all of a
+sudden a regular CPU would become generic or vice-versa, so in 
+practice it is very likely only one version will ever be needed
+as it can be safely extended with new types.</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><span class="n">CalcUA_def_cpu</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="s1">&#39;zen4&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;zen3&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;zen2&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;skylake&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;broadwell&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;ivybridge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="p">[</span><span class="s1">&#39;x86_64&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div></p>
 <h3 id="calcua_map_cpu_to_gen"><code>CalcUA_map_cpu_to_gen</code></h3>
 <p><code>CalcUA_map_cpu_to_gen</code> is an associative table of associative tables with for each supported
 OS a table that can be used to determine the generic architecture for every CPU.</p>
@@ -1434,6 +1492,41 @@ OS a table that can be used to determine the generic architecture for every CPU.
         <span class="p">[</span><span class="s1">&#39;ivybridge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;x86_64&#39;</span><span class="p">,</span>
         <span class="p">[</span><span class="s1">&#39;x86_64&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h3 id="calcua_reduce_cpu"><code>CalcUA_reduce_cpu</code></h3>
+<p><code>CalcUA_reduce_cpu</code> is an associative table of associative tables with for each supported
+OS a table that can be used to determine a compatible but less capable version of the CPU,
+until we end at the generic architectures. If the key is a generic architecture, the value
+also has to be a generic architecture, or 'nil' if the tree/chain of architectures ends 
+there.</p>
+<ul>
+<li>
+<p>First level: The keys are the yyyymm versions of toolchains, the values the matching
+    associative table. These toolchain versions are "starting from", so not every toolchain
+    needs to be specified.</p>
+</li>
+<li>
+<p>Second level: Associative table with as keys the CPU names and as the value
+    the next compatible but less capable architecture, i.e., all software for the
+    CPU as value should also run on the CPU as key but not always the other way
+    around.</p>
+</li>
+</ul>
+<p>For each stack in CalcUA_SystemTable, these reduction rules have to be compatible
+with the matching ones in CalcUA_reduce_top_Arch. I.e., if somehow
+CPU1-Accel1 in CalcUA_reduce_top_arch reduces to CPU2-Accel2 then it must 
+also be possible to reduce CPU1 to CPU2 (in one or more steps) using the
+rules specified in the <code>CalcUA_reduce_top_arch</code> table below.</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><span class="n">CalcUA_reduce_cpu</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="s1">&#39;200000&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">[</span><span class="s1">&#39;zen3&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="s1">&#39;zen2&#39;</span><span class="p">,</span>
+        <span class="p">[</span><span class="s1">&#39;zen2&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="s1">&#39;broadwell&#39;</span><span class="p">,</span>
+        <span class="p">[</span><span class="s1">&#39;broadwell&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ivybridge&#39;</span><span class="p">,</span>
+        <span class="p">[</span><span class="s1">&#39;ivybridge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;x86_64&#39;</span><span class="p">,</span>
+        <span class="p">[</span><span class="s1">&#39;x86_64&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="p">},</span>
 <span class="p">}</span>
 </code></pre></div></p>
 <h3 id="calcua_reduce_top_arch"><code>CalcUA_reduce_top_arch</code></h3>
@@ -1630,6 +1723,58 @@ generic one.</p>
     version of the CalcUA software stacks.</li>
 </ul>
 </li>
+<li>
+<p><code>get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_version )</code>:</p>
+<p><strong>Input arguments:</strong></p>
+<ul>
+<li>
+<p><code>long_osarch</code>: os and architecture with long names and in a format 
+    compatible with the indicated version of the software stack (so respecting
+    the hierarchy types 2L or 3L).</p>
+</li>
+<li>
+<p><code>reduce_stack_version</code>: Stack version to use for the reduction rules of
+    both os-CPU-accel and os-CPU names.</p>
+</li>
+<li>
+<p><code>stack_version</code>: Version of the calcua stack, can be system for which the
+    best matching architecture should be returned. If <code>stack_version</code> is a 
+    3L hierarchy, this can be a middle level one if <code>long_osarch</code> is also a 
+    middle level name (which implies that <code>reduce_stack_version</code> is also a
+    3L hierarchy)</p>
+</li>
+</ul>
+<p><strong>Return value:</strong></p>
+<ul>
+<li>The most specific os-architecture for the current node in the indicated
+    version of the CalcUA software stacks.</li>
+</ul>
+<p>The precise rules for the matching are very tricky. The thing that makes this
+routine very tricky is that it will also be used in middle level arch modules 
+for 3L stacks, and that there also one must be able to find a good module in 
+the <code>system</code> stack which may be 2L or 3L.</p>
+<p>Cases:
+-   <code>long_osarch</code> is of type OS-generic CPU. As we currently have no rules 
+    to reduce generic CPUs to an even less capable generic one, we produce
+    <code>nil</code> if <code>long_osarch</code> is not supported by <code>stack_version</code> and return
+    <code>long_osarch</code> otherwise.
+-   <code>long_osarch</code> is of type OS-CPU, i.e., a middle level architecture for a 
+    3L hierarchy. This implies that <code>reduce_stack_version</code> must be a 3L stack.</p>
+<pre><code>There are now 2 options:
+-   `stack_version` is also a 3L hierarchy: We use the reduction rules for 
+    CPUs for `reduce_stack_version` to find a middle level or bottom/generic
+    level supported by `stack_version`. 
+-   `stack_version` is a 2L hierarchy: We use the mapping to generic CPU 
+    defined by `CalcUA_map_cpu_to_gen` for `reduce_stackversion` to find
+    the matching generic CPU and then continue using the CPU chaining
+    rules defined by
+</code></pre>
+<ul>
+<li><code>long_osarch</code> is of type os-generic CPU: We follow the CPU reduction path
+    for <code>reduce_stack_version</code> to see if we can find a match in the generic
+    architectures supported by <code>stack_version</code>.</li>
+</ul>
+</li>
 </ul>
 <h4 id="computing-directories">Computing directories</h4>
 <ul>
@@ -1822,8 +1967,20 @@ recomputing that data.</p>
 <h3 id="routines_3">Routines</h3>
 <ul>
 <li>
-<p><code>get_matching_archmap_key(version)</code>: For a given numeric (i.e., yyyymm) version, returns
+<p><code>get_matching_archmap_key( version )</code>: For a given numeric (i.e., yyyymm) version, returns
     the largest key in <code>CalcUA_map_arch_hierarchy</code> not larger than the given version.</p>
+</li>
+<li>
+<p><code>get_matching_defcpu_key( version )</code>: For a given numeric (i.e., yyyymm) version, returns
+    the largest key in <code>CalcUA_map_def_cpu</code> not larger than the given version.</p>
+</li>
+<li>
+<p><code>get_matching_cputogen_key( version )</code>: For a given numeric (i.e., yyyymm) version, returns
+    the largest key in <code>CalcUA_map_cpu_to_gen</code> not larger than the given version.</p>
+</li>
+<li>
+<p><code>get_matching_reducecpu_key( version )</code>: For a given numeric (i.e., yyyymm) version, returns
+    the largest key in <code>CalcUA_reduce_cpu</code> not larger than the given version.</p>
 </li>
 <li>
 <p><code>get_matching_toparchreduction_key( version )</code>: For a given numeric (i.e., yyyymm) version, returns
@@ -1854,7 +2011,7 @@ but you'll never know.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 29, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 30, 2022</span>
       
     
   </small>
