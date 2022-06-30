@@ -28,27 +28,6 @@ CalcUA_map_arch_hierarchy = {
     }
 }
 
-CalcUA_def_cpu = {
-    ['200000'] = {
-        ['zen4']      = false,
-        ['zen3']      = false,
-        ['zen2']      = false,
-        ['skylake']   = false,
-        ['broadwell'] = false,
-        ['ivybridge'] = false,
-        ['x86_64']    = true,
-    },
-    ['202100'] = {
-        ['zen4']      = false,
-        ['zen3']      = false,
-        ['zen2']      = false,
-        ['skylake']   = false,
-        ['broadwell'] = false,
-        ['ivybridge'] = false,
-        ['x86_64']    = true,
-    },
-}
-
 CalcUA_map_cpu_to_gen = {
     ['200000'] = {
         ['zen3']      = 'x86_64',
@@ -182,25 +161,7 @@ do
 end
 
 --
--- Testing get_matching_defcpu_key
---
-
-print( colour_title .. '\nTesting get_matching_defcpu_key' .. colour_reset )
-
--- Same tests as previous function.
-
-for _,testcase in ipairs( tests )
-do
-    local testkey =  testcase['testkey']
-    local expected = testcase['expected']
-    local got =      get_matching_defcpu_key( testkey )
-    print( testresult( got == expected ) .. 
-           'get_matching_defcpu_key( ' .. testkey .. ') returned ' .. ( got or 'nil' ) .. 
-           ', expected ' .. ( expected or 'nil' ) .. '.' ) 
-end
-
---
--- Testing get_matching_defcpu_key
+-- Testing get_matching_cputogen_key
 --
 
 print( colour_title .. '\nTesting get_matching_cputogen_key' .. colour_reset )
@@ -217,8 +178,8 @@ do
            ', expected ' .. ( expected or 'nil' ) .. '.' ) 
 end
 
-
--- Testing get_matching_defcpu_key
+--
+-- Testing get_matching_reducecpu_key
 --
 
 print( colour_title .. '\nTesting get_matching_reducecpu_key' .. colour_reset )
@@ -236,7 +197,8 @@ do
 end
 
 
--- Testing get_matching_defcpu_key
+--
+-- Testing get_matching_toparchreduction_key
 --
 
 print( colour_title .. '\nTesting get_matching_toparchreduction_key' .. colour_reset )

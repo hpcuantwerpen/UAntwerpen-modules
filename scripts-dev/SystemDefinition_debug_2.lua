@@ -238,21 +238,19 @@ CalcUA_def_cpu = {
     }
 }
  
+-- -----------------------------------------------------------------------------
 --
---  Mapping of CPU architectures to their generic ones, just in case we ever
---  get ARM or want to switch to two generic architectures otherwise.
+-- Map defining the CPU architectures and whether they are generic or 
+-- not. 
 --
---  Note that generic architectures are also in the table, but then get a nil
---  as a value.
---
-CalcUA_map_cpu_to_gen = {
-    ['200000'] = {
-        ['zen2']      = 'x86_64',
-        ['skylake']   = 'x86_64',
-        ['broadwell'] = 'x86_64',
-        ['ivybridge'] = 'x86_64',
-        ['x86_64']    = nil,
-    }
+CalcUA_def_cpu = {
+    ['zen4']      = false,
+    ['zen3']      = false,
+    ['zen2']      = false,
+    ['skylake']   = false,
+    ['broadwell'] = false,
+    ['ivybridge'] = false,
+    ['x86_64']    = true,
 }
  
 -- -----------------------------------------------------------------------------

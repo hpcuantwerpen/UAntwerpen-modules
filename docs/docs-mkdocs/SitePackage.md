@@ -236,6 +236,37 @@ CalcUA_map_arch_hierarchy = {
 TODO: Can we get rid of the above data structure?
 
 
+### `CalcUA_def_cpu`
+
+`CalcUA_def_cpu` is an associative table of associative tables defining
+the  CPU architectures and whether they are generic or not.
+
+-   First level: The keys are the yyyymm versions of toolchains, the values the matching
+    associative table. These toolchain versions are "starting from", so not every toolchain
+    needs to be specified.
+
+-   Second level: Associative table with as keys the CPU type (long names) and as value
+    `true` for generic CPU architectures and false otherwise.
+
+The map is versioned, but do expect problems with finding the
+right version of the system stack for a regular stack if all of a
+sudden a regular CPU would become generic or vice-versa, so in 
+practice it is very likely only one version will ever be needed
+as it can be safely extended with new types.
+
+Example:
+```lua
+CalcUA_def_cpu = {
+    ['zen4']      = false,
+    ['zen3']      = false,
+    ['zen2']      = false,
+    ['skylake']   = false,
+    ['broadwell'] = false,
+    ['ivybridge'] = false,
+    ['x86_64']    = true,
+}
+```
+ 
 ### `CalcUA_map_cpu_to_gen`
 
 `CalcUA_map_cpu_to_gen` is an associative table of associative tables with for each supported
@@ -261,6 +292,44 @@ CalcUA_map_cpu_to_gen = {
     }
 }
 ```
+
+
+### `CalcUA_reduce_cpu`
+
+`CalcUA_reduce_cpu` is an associative table of associative tables with for each supported
+OS a table that can be used to determine a compatible but less capable version of the CPU,
+until we end at the generic architectures. If the key is a generic architecture, the value
+also has to be a generic architecture, or 'nil' if the tree/chain of architectures ends 
+there.
+
+-   First level: The keys are the yyyymm versions of toolchains, the values the matching
+    associative table. These toolchain versions are "starting from", so not every toolchain
+    needs to be specified.
+
+-   Second level: Associative table with as keys the CPU names and as the value
+    the next compatible but less capable architecture, i.e., all software for the
+    CPU as value should also run on the CPU as key but not always the other way
+    around.
+
+For each stack in CalcUA_SystemTable, these reduction rules have to be compatible
+with the matching ones in CalcUA_reduce_top_Arch. I.e., if somehow
+CPU1-Accel1 in CalcUA_reduce_top_arch reduces to CPU2-Accel2 then it must 
+also be possible to reduce CPU1 to CPU2 (in one or more steps) using the
+rules specified in the `CalcUA_reduce_top_arch` table below.
+
+Example:
+```lua
+CalcUA_reduce_cpu = {
+    ['200000'] = {
+        ['zen3']      = 'zen2',
+        ['zen2']      = 'broadwell',
+        ['broadwell'] = 'ivybridge',
+        ['ivybridge'] = 'x86_64',
+        ['x86_64']    = nil,
+    },
+}
+```
+
 
 ### `CalcUA_reduce_top_arch`
 
@@ -456,6 +525,51 @@ map_accel_long_to_short = {
     
     -   The most specific os-architecture for the current node in the indicated
         version of the CalcUA software stacks.
+
+
+-   `get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_version )`:
+
+    **Input arguments:**
+
+    -   `long_osarch`: os and architecture with long names and in a format 
+        compatible with the indicated version of the software stack (so respecting
+        the hierarchy types 2L or 3L).
+
+    -   `reduce_stack_version`: Stack version to use for the reduction rules of
+        both os-CPU-accel and os-CPU names.
+
+    -   `stack_version`: Version of the calcua stack, can be system for which the
+        best matching architecture should be returned. If `stack_version` is a 
+        3L hierarchy, this can be a middle level one if `long_osarch` is also a 
+        middle level name (which implies that `reduce_stack_version` is also a
+        3L hierarchy)
+
+    **Return value:**
+    
+    -   The most specific os-architecture for the current node in the indicated
+        version of the CalcUA software stacks.
+
+    The precise rules for the matching are very tricky. The thing that makes this
+    routine very tricky is that it will also be used in middle level arch modules 
+    for 3L stacks, and that there also one must be able to find a good module in 
+    the `system` stack which may be 2L or 3L.
+
+    Cases:
+    -   `long-osarch` is of type OS-generic CPU. As we currently have no rules 
+        to reduce generic CPUs to an even less capable generic one, we produce
+        `nil` if `long_osarch` is not supported by `stack_version` and return
+        `long_osarch` otherwise.
+    -   `long-osarch` is of type OS-CPU, i.e., a middle level architecture for a 
+        3L hierarchy. This implies that `reduce_stack_version` must be a 3L stack.
+
+        There are now 2 options:
+        -   `stack_version` is also a 3L hierarchy: We use the reduction rules for 
+            CPUs for `reduce_stack_version` to find a middle level or bottom/generic
+            level supported by `stack_version`. 
+        -   `stack_version` is a 2L hierarchy: We use the mapping to generic CPU 
+            defined by `CalcUA_map_cpu_to_gen` for `reduce_stackversion` to find
+            the matching generic CPU and then continue using the CPU chaining
+            rules defined by 
 
 
 #### Computing directories
@@ -700,8 +814,17 @@ recomputing that data.
 
 ### Routines
 
--   `get_matching_archmap_key(version)`: For a given numeric (i.e., yyyymm) version, returns
+-   `get_matching_archmap_key( version )`: For a given numeric (i.e., yyyymm) version, returns
     the largest key in `CalcUA_map_arch_hierarchy` not larger than the given version.
+
+-   `get_matching_defcpu_key( version )`: For a given numeric (i.e., yyyymm) version, returns
+    the largest key in `CalcUA_map_def_cpu` not larger than the given version.
+
+-   `get_matching_cputogen_key( version )`: For a given numeric (i.e., yyyymm) version, returns
+    the largest key in `CalcUA_map_cpu_to_gen` not larger than the given version.
+
+-   `get_matching_reducecpu_key( version )`: For a given numeric (i.e., yyyymm) version, returns
+    the largest key in `CalcUA_reduce_cpu` not larger than the given version.
 
 -   `get_matching_toparchreduction_key( version )`: For a given numeric (i.e., yyyymm) version, returns
     the largest key in `CalcUA_reduce_top_arch` not larger than the given version.

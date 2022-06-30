@@ -214,22 +214,16 @@ CalcUA_map_arch_hierarchy = {
 -- -----------------------------------------------------------------------------
 --
 -- Map defining the CPU architectures and whether they are generic or 
--- not. The map is versioned, but do expect problems with finding the
--- right version of the system stack for a regular stack if all of a
--- sudden a regular CPU would become generic or vice-versa, so in 
--- practice it is very likely only one version will ever be needed
--- as it can be safely extended with new types.
+-- not. 
 --
 CalcUA_def_cpu = {
-    ['200000'] = {
-        ['zen4']      = false,
-        ['zen3']      = false,
-        ['zen2']      = false,
-        ['skylake']   = false,
-        ['broadwell'] = false,
-        ['ivybridge'] = false,
-        ['x86_64']    = true,
-    }
+    ['zen4']      = false,
+    ['zen3']      = false,
+    ['zen2']      = false,
+    ['skylake']   = false,
+    ['broadwell'] = false,
+    ['ivybridge'] = false,
+    ['x86_64']    = true,
 }
  
 -- -----------------------------------------------------------------------------
@@ -243,6 +237,7 @@ CalcUA_def_cpu = {
 
 CalcUA_map_cpu_to_gen = {
     ['200000'] = {
+        ['zen4']      = 'x86_64',
         ['zen3']      = 'x86_64',
         ['zen2']      = 'x86_64',
         ['skylake']   = 'x86_64',
