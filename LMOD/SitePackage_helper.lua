@@ -8,15 +8,18 @@
 --
 -- Build a table with the keys from CalcUA_map_arch_hierarchy sorted
 --
-CalcUA_sorted_archmap_keys = {}
-
-for key in pairs( CalcUA_map_arch_hierarchy )
-do
-    table.insert( CalcUA_sorted_archmap_keys, key )
-end
-table.sort( CalcUA_sorted_archmap_keys )
+CalcUA_sorted_archmap_keys = nil
 
 function get_matching_archmap_key( version )
+
+    if CalcUA_sorted_archmap_keys == nil then
+        CalcUA_sorted_archmap_keys = {}
+        for key in pairs( CalcUA_map_arch_hierarchy )
+        do
+            table.insert( CalcUA_sorted_archmap_keys, key )
+        end
+        table.sort( CalcUA_sorted_archmap_keys )
+    end
 
     if version < CalcUA_sorted_archmap_keys[1]
     then
@@ -35,17 +38,53 @@ function get_matching_archmap_key( version )
 end
 
 --
+-- Build a table with the keys from CalcUA_def_cpu sorted
+--
+CalcUA_sorted_defcpu_keys = nil
+
+function get_matching_defcpu_key( version )
+
+    if CalcUA_sorted_defcpu_keys == nil then
+        CalcUA_sorted_defcpu_keys = {}
+        for key in pairs( CalcUA_def_cpu )
+        do
+            table.insert( CalcUA_sorted_defcpu_keys, key )
+        end
+        table.sort( CalcUA_sorted_defcpu_keys )
+    end
+
+    if version < CalcUA_sorted_defcpu_keys[1]
+    then
+        return nil
+    end
+
+    local index = #CalcUA_sorted_defcpu_keys
+
+    while CalcUA_sorted_defcpu_keys[index] > version
+    do
+        index = index - 1
+    end
+
+    return CalcUA_sorted_defcpu_keys[index]
+
+end
+
+--
 -- Build a table with the keys from CalcUA_map_cpu_to_gen sorted
 --
-CalcUA_sorted_cputogen_keys = {}
 
-for key in pairs( CalcUA_map_cpu_to_gen )
-do
-    table.insert( CalcUA_sorted_cputogen_keys, key )
-end
-table.sort( CalcUA_sorted_cputogen_keys )
+CalcUA_sorted_cputogen_keys = nil
 
 function get_matching_cputogen_key( version )
+
+    if CalcUA_sorted_cputogen_keys == nil then
+        CalcUA_sorted_cputogen_keys = {}
+        for key in pairs( CalcUA_map_cpu_to_gen )
+        do
+            table.insert( CalcUA_sorted_cputogen_keys, key )
+        end
+        table.sort( CalcUA_sorted_cputogen_keys )       
+    end
 
     if version < CalcUA_sorted_cputogen_keys[1]
     then
@@ -64,17 +103,52 @@ function get_matching_cputogen_key( version )
 end
 
 --
+-- Build a table with the keys from CalcUA_reduce_cpu sorted
+--
+CalcUA_sorted_reducecpu_keys = nil
+
+function get_matching_reducecpu_key( version )
+
+    if CalcUA_sorted_reducecpu_keys == nil then
+        CalcUA_sorted_reducecpu_keys = {}
+        for key in pairs( CalcUA_reduce_cpu )
+        do
+            table.insert( CalcUA_sorted_reducecpu_keys, key )
+        end
+        table.sort( CalcUA_sorted_reducecpu_keys )
+    end
+
+    if version < CalcUA_sorted_reducecpu_keys[1]
+    then
+        return nil
+    end
+
+    local index = #CalcUA_sorted_reducecpu_keys
+
+    while CalcUA_sorted_reducecpu_keys[index] > version
+    do
+        index = index - 1
+    end
+
+    return CalcUA_sorted_reducecpu_keys[index]
+
+end
+
+--
 -- Build a table with the keys from CalcUA_reduce_top_arch
 --
-CalcUA_sorted_toparchreduction_keys = {}
-
-for key in pairs( CalcUA_reduce_top_arch )
-do
-    table.insert( CalcUA_sorted_toparchreduction_keys, key )
-end
-table.sort( CalcUA_sorted_toparchreduction_keys )
+CalcUA_sorted_toparchreduction_keys = nil
 
 function get_matching_toparchreduction_key( version )
+
+    if CalcUA_sorted_toparchreduction_keys == nil then
+        CalcUA_sorted_toparchreduction_keys = {}
+        for key in pairs( CalcUA_reduce_top_arch )
+        do
+            table.insert( CalcUA_sorted_toparchreduction_keys, key )
+        end
+        table.sort( CalcUA_sorted_toparchreduction_keys )
+    end
 
     if version < CalcUA_sorted_toparchreduction_keys[1]
     then

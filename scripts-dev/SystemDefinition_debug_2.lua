@@ -219,6 +219,26 @@ CalcUA_map_arch_hierarchy = {
 }
    
 --
+-- Map defining the CPU architectures and whether they are generic or 
+-- not. The map is versioned, but do expect problems with finding the
+-- right version of the system stack for a regular stack if all of a
+-- sudden a regular CPU would become generic or vice-versa, so in 
+-- practice it is very likely only one version will ever be needed
+-- as it can be safely extended with new types.
+--
+CalcUA_def_cpu = {
+    ['200000'] = {
+        ['zen4']      = false,
+        ['zen3']      = false,
+        ['zen2']      = false,
+        ['skylake']   = false,
+        ['broadwell'] = false,
+        ['ivybridge'] = false,
+        ['x86_64']    = true,
+    }
+}
+ 
+--
 --  Mapping of CPU architectures to their generic ones, just in case we ever
 --  get ARM or want to switch to two generic architectures otherwise.
 --
@@ -235,6 +255,28 @@ CalcUA_map_cpu_to_gen = {
     }
 }
  
+-- -----------------------------------------------------------------------------
+--
+-- The following table defines reduction rules for CPUs.
+-- For each stack in CalcUA_SystemTable, these reduction rules have to be compatible
+-- with the matching ones in CalcUA_reduce_top_Arch. I.e., if somehow
+-- CPU1-Accel1 in CalcUA_reduce_top_arch reduces to CPU2-Accel2 then it must 
+-- also be possible to reduce CPU1 to CPU2 (in one or more steps) using the
+-- rules specified in the following table.
+--
+-- The chain 
+--
+
+CalcUA_reduce_cpu = {
+    ['200000'] = {
+        ['zen3']      = 'zen2',
+        ['zen2']      = 'broadwell',
+        ['broadwell'] = 'ivybridge',
+        ['ivybridge'] = 'x86_64',
+        ['x86_64']    = nil,
+    },
+}
+   
 --
 -- The following table defines the order of architectures to search if there is
 -- no stack for a particular architecture. It is used to find the closest matching
