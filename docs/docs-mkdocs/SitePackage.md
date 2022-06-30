@@ -53,7 +53,7 @@ Example: At the time of writing, the CalcUA cluster description would have been:
 CalcUA_NodeTypes = {
     'redhat7-ivybridge-noaccel',
     'redhat7-broadwell-noaccel',
-    'redhat8-boradwell-noaccel',
+    'redhat8-broadwell-noaccel',
     'redhat8-broadwell-pascal',
     'redhat8-broadwell-P5000',
     'redhat8-skylake-noaccel',
