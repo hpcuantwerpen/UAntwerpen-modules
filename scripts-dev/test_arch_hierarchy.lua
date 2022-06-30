@@ -631,6 +631,20 @@ local tests = {
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '3000a',
+        ['longname'] =      'redhat7-x86_64',
+        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat7-x86_64',
+        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat7-x86_64'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '3000a',
+        ['longname'] =      'redhat7-ivybridge',
+        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat7-ivybridge',
+        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat7-x86_64,modules-easybuild/CalcUA-3000a/redhat7-ivybridge'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '3000a',
         ['longname'] =      'redhat7-ivybridge-noaccel',
         ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat7-ivybridge-noaccel',
         ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat7-x86_64,modules-easybuild/CalcUA-3000a/redhat7-ivybridge,modules-easybuild/CalcUA-3000a/redhat7-ivybridge-noaccel'
@@ -667,6 +681,20 @@ local tests = {
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '4000a',
+        ['longname'] =      'redhat8-x86_64',
+        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-x86_64',
+        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '4000a',
+        ['longname'] =      'redhat8-broadwell',
+        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-broadwell',
+        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-broadwell'
+    },
+    { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '4000a',
         ['longname'] =      'redhat8-broadwell-noaccel',
         ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-broadwell-noaccel',
         ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-broadwell,modules-easybuild/CalcUA-4000a/redhat8-broadwell-noaccel'
@@ -694,24 +722,58 @@ local tests = {
     },
     -- Cases that should print error messages.
     { 
-      ['stack_name'] =    'calcua',
-      ['stack_version'] = 'system',
-      ['longname'] =      'redhat7-broadwell-noaccel',
-      ['own_modules'] =   nil, -- system for redhat7 exists only in an x86_64 version.
-      ['full_modules'] =  nil
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = 'system',
+        ['longname'] =      'redhat7-broadwell-noaccel',
+        ['own_modules'] =   nil, -- system for redhat7 exists only in an x86_64 version.
+        ['full_modules'] =  nil
     },
     { 
-      ['stack_name'] =    'calcua',
-      ['stack_version'] = 'system',
-      ['longname'] =      'redhat8-zen2-arcturus',
-      ['own_modules'] =   nil, -- system for redhat8 has specific CPU support but no GPU support.
-      ['full_modules'] =  nil
-    },
-} 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = 'system',
+        ['longname'] =      'redhat8-zen2-arcturus',
+        ['own_modules'] =   nil, -- system for redhat8 has specific CPU support but no GPU support.
+        ['full_modules'] =  nil
+     },
+     { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '2020a',
+        ['longname'] =      'redhat8-zen2',
+        ['own_modules'] =   nil, -- 2L scheme so this level is not present.
+        ['full_modules'] =  nil
+     },
+     { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = '4000a',
+        ['longname'] =      'redhat7-ivybridge-noaccel',
+        ['own_modules'] =   nil, -- No redhat7 software in 4000a.
+        ['full_modules'] =  nil
+     },
+     { 
+        ['stack_name'] =    'manual',
+        ['stack_version'] = '',
+        ['longname'] =      'redhat8-zen2-arcturus',
+        ['own_modules'] =   nil, -- No modules for manual.
+        ['full_modules'] =  nil
+     },
+     { 
+        ['stack_name'] =    'calcua',
+        ['stack_version'] = 'manual',
+        ['longname'] =      'redhat8-zen2-arcturus',
+        ['own_modules'] =   nil, -- No modules for manual.
+        ['full_modules'] =  nil
+     },
+ } 
 
 for _,test in ipairs( tests )
 do
-    local hierarchy =          CalcUA_SystemProperties[test['stack_version']]['hierarchy'] 
+    local hierarchy
+    if CalcUA_SystemProperties[test['stack_version']] == nil then
+        -- Needed for manual.
+        hierarchy = '*'
+    else
+        hierarchy =          CalcUA_SystemProperties[test['stack_version']]['hierarchy']
+    end
     local system_module_dir =  get_system_module_dir(  test['longname'], test['stack_name'], test['stack_version'] )
     local system_module_dirs = get_system_module_dirs( test['longname'], test['stack_name'], test['stack_version'] )
     local string_system_module_dirs
@@ -739,19 +801,6 @@ do
     end
     print( '\n' )
          
-end
-
---
--- Special case
--- 
-stack_name =    'manual'
-stack_version = ''
-longname = 'redhat8-zen2-arcturus'
-result = get_system_module_dirs( longname, stack_name, stack_version )
-if result == nil then
-    print( testresult( result == nil )  .. 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' returned nil as expected.\n' )
-else
-    print( testresult( result == nil )  .. 'Modules of ' .. stack_name .. '/' .. stack_version .. ' for arch ' .. longname .. ' \27[31mDID NOT RETURN NIL!\27[0m\n' )
 end
 
 
