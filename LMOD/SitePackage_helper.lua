@@ -140,6 +140,7 @@ end
 --
 
 CalcUA_cache_subarchs = nil
+CalcUA_cache_subosarchs = nil
 
 
 -- -----------------------------------------------------------------------------

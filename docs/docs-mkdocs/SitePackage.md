@@ -555,11 +555,11 @@ map_accel_long_to_short = {
     the `system` stack which may be 2L or 3L.
 
     Cases:
-    -   `long-osarch` is of type OS-generic CPU. As we currently have no rules 
+    -   `long_osarch` is of type OS-generic CPU. As we currently have no rules 
         to reduce generic CPUs to an even less capable generic one, we produce
         `nil` if `long_osarch` is not supported by `stack_version` and return
         `long_osarch` otherwise.
-    -   `long-osarch` is of type OS-CPU, i.e., a middle level architecture for a 
+    -   `long_osarch` is of type OS-CPU, i.e., a middle level architecture for a 
         3L hierarchy. This implies that `reduce_stack_version` must be a 3L stack.
 
         There are now 2 options:
@@ -570,6 +570,10 @@ map_accel_long_to_short = {
             defined by `CalcUA_map_cpu_to_gen` for `reduce_stackversion` to find
             the matching generic CPU and then continue using the CPU chaining
             rules defined by 
+
+    -   `long_osarch` is of type os-generic CPU: We follow the CPU reduction path
+        for `reduce_stack_version` to see if we can find a match in the generic
+        architectures supported by `stack_version`.
 
 
 #### Computing directories

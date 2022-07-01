@@ -213,105 +213,110 @@ local inputdata = {
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
         ['expected'] =      'redhat7-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat7-broadwell-noaccel',
         ['expected'] =      'redhat7-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat8-broadwell-noaccel',
         ['expected'] =      'redhat8-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat8-broadwell-pascal',
         ['expected'] =      'redhat8-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat8-broadwell-P5000',
         ['expected'] =      'redhat8-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat8-skylake-noaccel',
         ['expected'] =      'redhat8-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat8-skylake-aurora1',
         ['expected'] =      'redhat8-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat8-zen2-noaccel',
         ['expected'] =      'redhat8-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat8-zen2-ampere',
         ['expected'] =      'redhat8-x86_64',
-     },
-     {   
+    },
+    {   
         ['stack_version'] = 'manual',
         ['cluster_arch'] =  'redhat8-zen2-arcturus',
         ['expected'] =      'redhat8-x86_64',
-     },
-     -- System test cases (2L)
-     {   
+    },
+    -- System test cases (2L)
+    {   
+        ['stack_version'] = 'system',
+        ['cluster_arch'] =  'redhat7-x86_64',
+        ['expected'] =      'redhat7-x86_64',
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
          ['expected'] =      'redhat7-x86_64',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat7-broadwell-noaccel',
          ['expected'] =      'redhat7-x86_64',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat8-broadwell-noaccel',
          ['expected'] =      'redhat8-broadwell-noaccel',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat8-broadwell-pascal',
          ['expected'] =      'redhat8-broadwell-noaccel',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat8-broadwell-P5000',
          ['expected'] =      'redhat8-broadwell-noaccel',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat8-skylake-noaccel',
          ['expected'] =      'redhat8-broadwell-noaccel',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat8-skylake-aurora1',
          ['expected'] =      'redhat8-broadwell-noaccel',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat8-zen2-noaccel',
          ['expected'] =      'redhat8-zen2-noaccel',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat8-zen2-ampere',
          ['expected'] =      'redhat8-zen2-noaccel',
-      },
-      {   
+    },
+    {   
          ['stack_version'] = 'system',
          ['cluster_arch'] =  'redhat8-zen2-arcturus',
          ['expected'] =      'redhat8-zen2-noaccel',
-      },
-     -- 2020a test cases (2L)
-     {   
+    },
+    -- 2020a test cases (2L)
+    {   
         ['stack_version'] = '2020a',
         ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
         ['expected'] =      'redhat7-ivybridge-noaccel',
@@ -524,6 +529,757 @@ for index, data in ipairs( inputdata ) do
            ( got or 'nil' ) .. ', expected: ' .. ( data['expected'] or 'nil' ) )
 end
 
+-- -----------------------------------------------------------------------------
+--
+-- Testing get_calcua_matchingarch
+--
+
+print( colour_title .. '\nTesting get_calcua_matchingarch function\n' .. colour_reset )
+
+local inputdata = {
+   -- Manual test cases (2L)
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'manual',
+      ['red_version'] =   'manual',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   -- System test cases (2L)
+   {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+         ['expected'] =      'redhat7-x86_64',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+         ['expected'] =      'redhat7-x86_64',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat8-broadwell-pascal',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat8-broadwell-P5000',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat8-skylake-noaccel',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat8-skylake-aurora1',
+         ['expected'] =      'redhat8-broadwell-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat8-zen2-noaccel',
+         ['expected'] =      'redhat8-zen2-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat8-zen2-ampere',
+         ['expected'] =      'redhat8-zen2-noaccel',
+      },
+      {   
+         ['stack_version'] = 'system',
+         ['red_version'] =   'system',
+         ['cluster_arch'] =  'redhat8-zen2-arcturus',
+         ['expected'] =      'redhat8-zen2-noaccel',
+      },
+   -- 2020a test cases (2L)
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      'redhat7-ivybridge-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+      ['expected'] =      'redhat7-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   -- Irrelevant case in practice as there will be no redhat8-broadwell-noaccel arch module for calcua/2020a.
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {  -- Irrelevant case in practice as there will be no redhat8-broadwell-pascal or redhat8-broadwell-noaccel arch module for calcua/2020a.
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {  -- Irrelevant case in practice as there will be no redhat8-broadwell-P5000 or redhat8-broadwell-noaccel arch module for calcua/2020a.  
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-skylake-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-skylake-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '2020a',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2020a',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   -- 2021b test cases (2L)
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      'redhat7-ivybridge-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+      ['expected'] =      'redhat7-ivybridge-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-skylake-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-skylake-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '2021b',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-zen2-arcturus',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '2021b',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   -- 3000a test cases (3L)
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      'redhat7-ivybridge-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-ivybridge',
+      ['expected'] =      'redhat7-ivybridge',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-ivybridge',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-x86_64',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-x86_64',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+      ['expected'] =      'redhat7-ivybridge-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-broadwell',
+      ['expected'] =      'redhat7-ivybridge',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat7-broadwell',
+      ['expected'] =      'redhat7-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-x86_64',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-x86_64',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-broadwell',
+      ['expected'] =      'redhat8-broadwell',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-broadwell',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-skylake',
+      ['expected'] =      'redhat8-skylake',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-skylake',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-skylake-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-skylake-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-zen2',
+      ['expected'] =      'redhat8-zen2',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-zen2',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '3000a',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-zen2-arcturus',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '3000a',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   -- 4000a test cases (3L)
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      nil,
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat7-ivybridge-noaccel',
+      ['expected'] =      nil,
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat7-broadwell-noaccel',
+      ['expected'] =      nil,
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-x86_64',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-x86_64',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-broadwell',
+      ['expected'] =      'redhat8-broadwell',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-broadwell',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-broadwell-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-broadwell-pascal',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-broadwell-P5000',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-skylake',
+      ['expected'] =      'redhat8-skylake',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-skylake',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-skylake-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-skylake-noaccel',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-skylake-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-skylake-aurora1',
+      ['expected'] =      'redhat8-broadwell-noaccel',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-zen2',
+      ['expected'] =      'redhat8-zen2',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-zen2',
+      ['expected'] =      'redhat8-x86_64',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   'system',
+      ['cluster_arch'] =  'redhat8-zen2-noaccel',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-zen2-ampere',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+   {   
+      ['stack_version'] = '4000a',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-zen2-arcturus',
+   },
+   {   
+      ['stack_version'] = 'system',
+      ['red_version'] =   '4000a',
+      ['cluster_arch'] =  'redhat8-zen2-arcturus',
+      ['expected'] =      'redhat8-zen2-noaccel',
+   },
+}
+
+for index, data in ipairs( inputdata ) do
+   local got = get_calcua_matchingarch( data['cluster_arch'], data['red_version'], data['stack_version'] )
+   local expected = data['expected']
+   print( testresult( got == expected ) ..
+         'Matching architecture for ' .. data['cluster_arch'] .. ' for ' .. data['stack_version'] .. 
+         ' in calcua/' .. data['red_version'] .. ' is ' ..
+         ( got or 'nil' ) .. ', expected: ' .. ( data['expected'] or 'nil' ) )
+end
+    
 -- -----------------------------------------------------------------------------
 --
 -- Testing get_system_module_dirs( longname, stack_name, stack_version )
