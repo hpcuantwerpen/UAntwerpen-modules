@@ -27,7 +27,18 @@ dofile( repo_root .. '/LMOD/SitePackage_system_info.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
 
-print( 'System definition defined by ' .. systemdefinition_file .. '.\n\n' )
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
+--
+-- Checks of the system definition file
+--
+-- -----------------------------------------------------------------------------
+
+
+print( '\n1. Checks of the file' )
+print( '=====================\n' )
+print( 'Checking the system definition file ' .. systemdefinition_file .. '.' )
+print( 'These checks are by no means a guarantee that the file is correct and consistent but at least some problems can be detected.\n')
 
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
@@ -37,7 +48,7 @@ print( 'System definition defined by ' .. systemdefinition_file .. '.\n\n' )
 -- -----------------------------------------------------------------------------
 
 
-print( '1. Available stacks and supported architectures' )
+print( '2. Available stacks and supported architectures' )
 print( '===============================================\n' )
 
 -- -----------------------------------------------------------------------------
@@ -108,7 +119,7 @@ end
 -- -----------------------------------------------------------------------------
 
 print( '\n' )
-print( '2. Available node types with their stacks and supported architectures' )
+print( '3. Available node types with their stacks and supported architectures' )
 print( '=====================================================================\n' )
 
 
@@ -128,7 +139,8 @@ do
             
         else
         
-            local node_used_long_osarch = get_calcua_top( node_long_osarch, stack_version )
+            -- local node_used_long_osarch = get_calcua_top( node_long_osarch, stack_version )
+            local node_used_long_osarch = get_calcua_matchingarch( node_long_osarch, stack_version, stack_version )
         
             print( '  * Stack ' .. stack_version .. ' is offered through architecture ' ..  
                    node_used_long_osarch .. '.' )
@@ -151,7 +163,7 @@ end -- for _,node_long_osarch in ipairs( CalcUA_NodeTypes )
 -- -----------------------------------------------------------------------------
 
 print( '\n' )
-print( '3. Relevant directories per stack and arch module in the stack' )
+print( '4. Relevant directories per stack and arch module in the stack' )
 print( '==============================================================\n' )
 
 for _,stack_version in ipairs( stack_list )
@@ -189,14 +201,14 @@ do
         if #alternatives == 0 then
             print( '    + No cluster/* alternative names found.' )
         else
-            print( '    + Found cluster/* alterantives: ' .. table.concat( alternatives, ', ' ) )
+            print( '    + Found cluster/* alternatives: ' .. table.concat( alternatives, ', ' ) )
         end
         
         -- Check if there is an node/* alternative name for the architecture
         alternatives = {}
         for _,node_type in ipairs( CalcUA_NodeTypes )
         do
-            local use_long_osarch = get_calcua_top( node_type, stack_version )
+            local use_long_osarch = get_calcua_matchingarch( node_type, stack_version, stack_version )
             if use_long_osarch == long_osarch then
                 table.insert( alternatives, 'node/' .. node_type )
             end 
@@ -239,10 +251,10 @@ do
             -- First build in reverse order (which actually corresponds to the order of prepend_path
             -- calls in the module file)
 
-            local long_osarch_system = get_calcua_top( long_osarch, 'system' )
+            local long_osarch_system = get_calcua_matchingarch( long_osarch, stack_version, 'system' )
             local system_dirs = get_system_module_dirs( long_osarch_system, 'calcua', 'system' )
             if system_dirs == nil then
-                io.stderr.write( 'No system modules found for ' .. stack .. '. This points to an error in the module system or cluster definition.\n' )
+                io.stderr.write( 'No system modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
             else
                 for _,system_dir in ipairs( system_dirs ) do
                     table.insert( moduledirs, system_dir )
@@ -252,7 +264,7 @@ do
             if stack_version ~= 'system' then 
                 local stack_dirs = get_system_module_dirs( long_osarch, 'calcua', stack_version )
                 if stack_dirs == nil then
-                    io.stderr.write( 'No regular modules found for ' .. stack .. '. This points to an error in the module system or cluster definition.\n' )
+                    io.stderr.write( 'No regular modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
                 else
                     for _,stack_dir in ipairs( stack_dirs ) do
                         table.insert( moduledirs, stack_dir )
@@ -262,7 +274,7 @@ do
         
             local inframodule_dir = get_system_inframodule_dir( long_osarch, 'calcua', stack_version )
             if inframodule_dir == nil then
-                io.stderr.write( 'No infrastructure modules found for ' .. stack .. '. This points to an error in the module system or cluster definition.\n' )
+                io.stderr.write( 'No infrastructure modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
             else
                 table.insert( moduledirs, inframodule_dir )
             end
