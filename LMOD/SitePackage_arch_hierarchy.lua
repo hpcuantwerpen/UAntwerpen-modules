@@ -14,12 +14,13 @@ map_os_long_to_short = {
 }
 
 map_cpu_long_to_short = {
-    ['x86_64']    = 'x86_64',
-    ['zen3']      = 'zen3',
-    ['zen2']      = 'zen2',
-    ['ivybridge'] = 'IVB',
-    ['broadwell'] = 'BRW',
-    ['skylake']   = 'SKLX',
+    ['x86_64']      = 'x86_64',
+    ['zen3']        = 'zen3',
+    ['zen2']        = 'zen2',
+--    ['sandybridge'] = 'SNB',
+    ['ivybridge']   = 'IVB',
+    ['broadwell']   = 'BRW',
+    ['skylake']     = 'SKLX',
 }
 
 map_accel_long_to_short = {

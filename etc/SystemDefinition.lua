@@ -106,7 +106,8 @@ CalcUA_SystemProperties = {
 -- -----------------------------------------------------------------------------
 --
 -- CalcUA_ClusterMap is a structure that maps names of clusters onto
--- architectures.
+-- architectures. Each should be the topmost supported architecture for a 
+-- particular node type.
 --
 -- This mapping is not defined for the 'manual' toolchain as that is not
 -- one that users should be able to load via calcua modules.
@@ -264,6 +265,7 @@ CalcUA_reduce_cpu = {
     ['200000'] = {
         ['zen3']      = 'zen2',
         ['zen2']      = 'broadwell',
+        ['skylake']   = 'broadwell',
         ['broadwell'] = 'ivybridge',
         ['ivybridge'] = 'x86_64',
         ['x86_64']    = nil,

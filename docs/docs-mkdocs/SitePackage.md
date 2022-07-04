@@ -147,6 +147,8 @@ software stack has the following entries:
 
 `CalcUA_ClusterMap` contains for each version of the calcua toolchains, including
 the dummy system version, a mapping from cluster names to os-architecture strings.
+Each should be the topmost supported architecture for a particular node type.
+
 
 ```lua
 CalcUA_ClusterMap = {
