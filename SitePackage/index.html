@@ -1359,7 +1359,8 @@ software stack has the following entries:</p>
 </ul>
 <h3 id="calcua_clustermap"><code>CalcUA_ClusterMap</code></h3>
 <p><code>CalcUA_ClusterMap</code> contains for each version of the calcua toolchains, including
-the dummy system version, a mapping from cluster names to os-architecture strings.</p>
+the dummy system version, a mapping from cluster names to os-architecture strings.
+Each should be the topmost supported architecture for a particular node type.</p>
 <div class="highlight"><pre><span></span><code><span class="n">CalcUA_ClusterMap</span> <span class="o">=</span> <span class="p">{</span>
     <span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="p">[</span><span class="s1">&#39;hopper&#39;</span><span class="p">]</span> <span class="o">=</span>      <span class="s1">&#39;redhat7-x86_64&#39;</span><span class="p">,</span>
@@ -2011,7 +2012,7 @@ but you'll never know.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 1, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 4, 2022</span>
       
     
   </small>
