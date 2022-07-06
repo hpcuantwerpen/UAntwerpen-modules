@@ -88,37 +88,71 @@
 
 ## Directory structure
 
--   Separate module roots for infrastructure modules that follow a strict
-    Lmod hierarchy and for the easybuild-managed modules that are arranged 
-    by software stack and architecture.
+Separate module roots for infrastructure modules that follow a strict
+Lmod hierarchy and for the easybuild-managed modules that are arranged 
+by software stack and architecture.
 
--   At the top of the hierarchy, in the installation root, we find the GitHub
-    repositories with the module system and the EasyBuild configuration, the roots
-    of the infrastructure module system and the EasyBuild module system, the software
-    packages tree, and the EasyBuild repo of installed software.
+We also put software and modules build with EasyBuild in two fully
+separate trees in the installation root rather than always putting
+the software and its modules next to each other as is done in the
+default EasyBuild configuration.
+We have chosen this option to be able to use short names for software directories
+without reducing the readability of the names of the module file directories, and 
+as such also to keep the size of shebang lines with full paths under control to not
+hit kernel-imposed limits.
 
-    We have chosen this option to be able to use short names for software directories
-    without reducing the readability of the names of the module file directories, and 
-    as such also to keep the size of shebang lines with full paths under control to not
-    hit kernel-imposed limits.
+### Configuration part of the tree
 
-    ***Repository part of the tree***  
-    ``` bash
-    apps
-    └─ antwerpen
-       └─ CalcUA
-          ├─ UAntwerpen-modules #(1)
-          └─ UAntwerpen-easybuild #(2)
-             └─ easybuild
-                ├─ easyconfigs
-                ├─ easyblocks
-                ├─ Customisations to naming schemes etc
-                └─ config #(3)
-    ```
+At the top of the hierarchy, in the installation root, there is an
+`etc` subdirectory with currently only the `SoftwareStack.lua` configuration
+file which is created automatically by the software stack installation script
+and is used to point to a number of important files and (sub)directories:
 
-    1.  Repository with LMOD configuration and generic modules
-    2.  EasyBuild setup
-    3.  Configuration files for some settings not done via environment
+1.  The LUA system definition file that should be used
+2.  The repository with the LMOD configuration and generic modules (see below)
+3.  The repository with the whole EasyBuild setup, including custom EasyBlocks and
+    custom EasyConfigs.
+
+***Configuration part of the tree***
+``` bash
+apps
+└─ antwerpen
+    └─ CalcUA
+        └─ etc
+```
+
+### (Optional) repository part of the tree
+
+At the top of the hierarchy, in the installation root, we find the GitHub
+repositories with the module system and the EasyBuild configuration, the roots
+of the infrastructure module system and the EasyBuild module system, the software
+packages tree, and the EasyBuild repo of installed software.
+
+Though both repositories are needed for the stack to work, it is possible to have
+them elsewhere, which may be a good option for test stacks or for development
+where you may want the repositories in a place that works better with your 
+remote software development tools.
+
+***(Optional) repository part of the tree***  
+``` bash
+apps
+└─ antwerpen
+    └─ CalcUA
+        ├─ UAntwerpen-modules #(1)
+        └─ UAntwerpen-easybuild #(2)
+            └─ easybuild
+            ├─ easyconfigs
+            ├─ easyblocks
+            ├─ Customisations to naming schemes etc
+            └─ config #(3)
+```
+
+1.  Repository with LMOD configuration and generic modules
+2.  EasyBuild setup
+3.  Configuration files for some settings not done via environment
+
+
+### Module part of the tree
 
 -   We distinguish between two types of system-wide installed software that is not using
     EasyBuild toolchains (except `SYSTEM`):
@@ -254,69 +288,87 @@
     12. Manually generated modules - OPTIONAL
 
 
+### Software directory `SW`
 
--   Software directory `SW`
+This directory follows the same layout as the one for the EasyBuild-installed software,
+with two differences:
 
-    This directory follows the same layout as the one for the EasyBuild-installed software,
-    with two differences:
+1.  At the architecture level, the short architecture string is used to save space
 
-    1.  At the architecture level, the short architecture string is used to save space
+2.  There is yet another pseudo-stack for manually installed software, called `MNL`  
 
-    2.  There is yet another pseudo-stack for manually installed software, called `MNL`  
+    This directory has no corresponding modules directory in the EasyBuild-managed directory
+    as it is not managed at all by EasyBuild.
 
-        This directory has no corresponding modules directory in the EasyBuild-managed directory
-        as it is not managed at all by EasyBuild.
+***Resulting structure of the software directory***  
+``` bash
+apps
+└─ antwerpen
+    └─ CalcUA
+        └─ SW
+            ├─ CalcUA-2021b
+            │  ├─ RH8-x86_64
+            │  ├─ RH8-BRW-host
+            │  └─ RH8-BRW-NVGP61GL
+            ├─ system #(1)
+            │  ├─ RH8-x86_64
+            │  └─ RH8-IVB-host
+            └─ MNL #(2)
+```
 
-    ***Resulting structure of the software directory***  
-    ``` bash
-    apps
-    └─ antwerpen
-       └─ CalcUA
-          └─ SW
-             ├─ CalcUA-2021b
-             │  ├─ RH8-x86_64
-             │  ├─ RH8-BRW-host
-             │  └─ RH8-BRW-NVGP61GL
-             ├─ system #(1)
-             │  ├─ RH8-x86_64
-             │  └─ RH8-IVB-host
-             └─ MNL #(2)
-    ```
-    
-    1.  Sometimes relatively empty subdirs if EasyBuild only creates a module...
-    2.  Manually installed software
-
-
--   `mgmt` subdirectory for all files that are somehow system-generated.
-
-    Current subdirectories:
-
-    -   `ebrepo_files`: EasyBuild repository, structured the same way as the `modules-easybuild`
-        subdirectory.
-
-    -   `lmod-cache`: Placeholder for Lmod cache files.
-
-        Maybe we should follow the approach of TCL Environment Modules 5 and have a separate cache
-        file per module subdirectory, or does this become too much? We can also go for one corresponding to each software stack and cluster architecture combination which would
-        result in a single file per ( software stack, architecture) combination.
-
-    ***Resulting structure of the management directory***  
-    ``` bash
-    apps
-    └─ antwerpen
-       └─ CalcUA
-          └─ mgmt
-             ├─ ebrepo_files
-             │  ├─ CalcUA-2021b
-             │  │ ├─ redhat8-x86_64
-             │  │ └─ redhat8-broadwell-noaccel
-             │  └─ system #(1)
-             │     └─ redhat8-x86_64 #(2)
-             └─ lmod_cache
-    ```
-    
-    1.  Modules outside the regular software stacks
-    2.  No specific processor versions, e.g., Matlab
+1.  Sometimes relatively empty subdirs if EasyBuild only creates a module...
+2.  Manually installed software
 
 
+### Manangement subdirectory
+
+`mgmt` subdirectory for all (nearly) files that are somehow system-generated.
+
+Current subdirectories:
+
+-   `ebrepo_files`: EasyBuild repository, structured the same way as the `modules-easybuild`
+    subdirectory.
+
+-   `lmod-cache`: Placeholder for Lmod cache files.
+
+    Maybe we should follow the approach of TCL Environment Modules 5 and have a separate cache
+    file per module subdirectory, or does this become too much? We can also go for one corresponding to each software stack and cluster architecture combination which would
+    result in a single file per ( software stack, architecture) combination.
+
+***Resulting structure of the management directory***  
+``` bash
+apps
+└─ antwerpen
+    └─ CalcUA
+        └─ mgmt
+            ├─ ebrepo_files
+            │  ├─ CalcUA-2021b
+            │  │ ├─ redhat8-x86_64
+            │  │ └─ redhat8-broadwell-noaccel
+            │  └─ system #(1)
+            │     └─ redhat8-x86_64 #(2)
+            └─ lmod_cache
+```
+
+1.  Modules outside the regular software stacks
+2.  No specific processor versions, e.g., Matlab
+
+
+### Other subdirectories
+
+-   `sources` subdirectory to permanently store the sources. This directory is
+    further organised in the EasyBuild way. Downloads for manually installed
+    software can be added to it by putting it in the EasyBuild structure.
+
+    In the future we may need to add an additional level to distinguish between
+    EasyBuild and other build tools that we may use and that have a different
+    structure for storing source files.
+
+***Other subdirectories***
+``` bash
+apps
+└─ antwerpen
+    └─ CalcUA
+        └─ sources
+```
 

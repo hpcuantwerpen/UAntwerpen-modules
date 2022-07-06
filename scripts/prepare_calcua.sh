@@ -111,10 +111,26 @@ then
   fi
 fi
 
+#
+# Compute and check the root for the installation.
+#
 if [ $installroot_given -eq 0 ]
 then
   installroot="$script_installroot"
+else
+  if ! [[ $installroot =~ ^/ ]]
+  then # Relative path given, need to improve it.
+    installroot="$cur_dir/$installroot"
+  fi
 fi
+
+# Create installroot in a safe way as it might exist already, go to it and use PWD
+# to clean up the position.
+mkdir -p $installroot
+cd $installroot
+installroot="$PWD"
+cd $cur_dir
+
 
 if [ $repair -eq 0 ]
 then
@@ -122,6 +138,10 @@ then
   # Setting up a new installation.
 
   link_repo_modules="$script_installroot/$default_repo_modules_name"
+
+  #
+  # Check for the directory with EasyBuild configuration and EasyConfigs
+  #
 
   if [ $easybuild_given -eq 0 ]
   then
@@ -135,6 +155,22 @@ then
     fi
   fi
 
+  # link_repo_easybuild should be a valid directory so we can cd to it and then 
+  # use $PWD to clean up the value.
+  cd $link_repo_easybuild
+  if [[ $? == 0 ]]
+  then
+    link_repo_easybuild="$PWD"
+  else
+    >&2 echo -e "\nERROR: Failed to locate $link_repo_easybuild. This should be a directory.\n" 
+    exit 1 
+  fi
+  cd $cur_dir
+
+  #
+  # Check for the system definition file
+  #
+
   if [ $systemdefinition_given -eq 0 ]
   then
     link_systemdefinition="$script_installroot/$default_repo_modules_name/etc/SystemDefinition.lua"
@@ -146,6 +182,30 @@ then
       link_systemdefinition="$cur_dir/$systemdefinition"
     fi
   fi
+
+  # Check if the system definition file exists
+  if [ ! -f "$link_systemdefinition" ]
+  then
+    2>& echo "\nERROR: Could not find the system definition file $link_systemdefinition."
+    exit 1
+  fi
+
+  # Clean up the path
+  systemdefinition_file="${link_systemdefinition##*/}"
+  systemdefinition_dir="${link_systemdefinition%/*}"
+  cd $systemdefinition_dir
+  if [[ $? == 0 ]]
+  then
+    link_systemdefinition="$PWD/$systemdefinition_file"
+  else
+    >&2 echo "\nERROR: Failed to locate the direxctory for $link_systemdefinition.\n" 
+    exit 1
+  fi
+  cd $cur_dir
+
+  #
+  # Create the SoftwareStack.lua file and print some feedback.
+  #
 
   softwarestack="$installroot/etc/SoftwareStack.lua"
 
