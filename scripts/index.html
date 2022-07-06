@@ -502,16 +502,60 @@
 <p>The <code>check_clusternode.sh</code> script prints information about the node it is running on and 
 can also be used to check if the node is properly supported by the CalcUA stacks,
 or if certain settings need to be adjusted.</p>
+<p>Without command line arguments it will check the default file in <code>UAntwerpen-modules/etc/SystemDefinition.lua</code>,
+but it si also possible to point the script to a different system definition file on the command line.</p>
 <h2 id="prepare_calcuash">prepare_calcua.sh</h2>
+<p>This script is used to set up or extend the whole structure of the software stack.
+It should be run whenever new software stack versions are started or new nodes are added
+to the cluster. It tries to not be destructive to whatever files are already there, but
+will of course replace them when needed.</p>
+<p>The script will create the <code>etc/SoftwareStack.lua</code> file in the indicated install directory
+unless it is run in repair mode. This script is very essential in the whole module system:
+it helps many other components to find the location of other files.</p>
+<p>The script has several command line arguments:</p>
+<ul>
+<li>
+<p><code>-h</code> or <code>--help</code>: Print help information and exit.</p>
+</li>
+<li>
+<p><code>-i</code>or <code>--installroot</code>: Points to the directory where the software stack should be
+  installed. The default value is derived from the location of the script (i.e., two
+  directories towards the root in the hierarchy).</p>
+</li>
+<li>
+<p><code>-e</code> or <code>--easybuild</code>: The absolute or relative path (with respect to the current
+  directory) of the repository with all custom EasyBuild files.</p>
+</li>
+</ul>
+<p>The default is <code>UAntwerpen-easybuild</code> located two directories towards the root of
+  the directory in which the <code>prepare_calcua.sh</code> script is located.</p>
+<ul>
+<li><code>-s</code> or <code>--systemdefinition</code>: The system definition file, with an absolute path or
+   path relative to the current directory.</li>
+</ul>
+<p>The default is <code>etc/SystemDefinition.lua</code> located in the parent directory of the
+   directory where the <code>prepare_calcua.sh</code> script is found.</p>
+<ul>
+<li>'-r<code>or</code>--repair`: Runs the script in repair mode.</li>
+</ul>
+<p>One can still indicate the installation directory and the script will then search in that
+  directory to locate eth <code>etc/SoftwareStack.lua</code> file. However, the <code>-e</code>/<code>--easybuild</code>
+  and <code>-s</code>/<code>--systemdefinition</code> flags should not be used as that data comes from the
+  <code>etc/SoftwareStack.lua</code> file.</p>
+<ul>
+<li><code>-d</code> or <code>--debug</code>: Mostly useful during development, prints additional debug information.</li>
+</ul>
 <h2 id="prepare_calcua_stacksh">prepare_calcua_stack.sh</h2>
+<p>NOT NEEDED ANYMORE?</p>
 <h2 id="update_easybuildsh">update_easybuild.sh</h2>
+<p>TODO: First fix where we will install EasyBuild...</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 28, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 5, 2022</span>
       
     
   </small>

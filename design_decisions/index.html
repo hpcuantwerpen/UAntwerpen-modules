@@ -220,6 +220,54 @@
     Directory structure
   </a>
   
+    <nav class="md-nav" aria-label="Directory structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-part-of-the-tree" class="md-nav__link">
+    Configuration part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-repository-part-of-the-tree" class="md-nav__link">
+    (Optional) repository part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-part-of-the-tree" class="md-nav__link">
+    Module part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-directory-sw" class="md-nav__link">
+    Software directory SW
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manangement-subdirectory" class="md-nav__link">
+    Manangement subdirectory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-subdirectories" class="md-nav__link">
+    Other subdirectories
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -453,6 +501,54 @@
     Directory structure
   </a>
   
+    <nav class="md-nav" aria-label="Directory structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-part-of-the-tree" class="md-nav__link">
+    Configuration part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-repository-part-of-the-tree" class="md-nav__link">
+    (Optional) repository part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-part-of-the-tree" class="md-nav__link">
+    Module part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-directory-sw" class="md-nav__link">
+    Software directory SW
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manangement-subdirectory" class="md-nav__link">
+    Manangement subdirectory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-subdirectories" class="md-nav__link">
+    Other subdirectories
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -580,28 +676,50 @@ versions with versionsuffix for the architecture.</p>
 </li>
 </ul>
 <h2 id="directory-structure">Directory structure</h2>
-<ul>
-<li>
 <p>Separate module roots for infrastructure modules that follow a strict
-    Lmod hierarchy and for the easybuild-managed modules that are arranged 
-    by software stack and architecture.</p>
-</li>
-<li>
-<p>At the top of the hierarchy, in the installation root, we find the GitHub
-    repositories with the module system and the EasyBuild configuration, the roots
-    of the infrastructure module system and the EasyBuild module system, the software
-    packages tree, and the EasyBuild repo of installed software.</p>
-<p>We have chosen this option to be able to use short names for software directories
+Lmod hierarchy and for the easybuild-managed modules that are arranged 
+by software stack and architecture.</p>
+<p>We also put software and modules build with EasyBuild in two fully
+separate trees in the installation root rather than always putting
+the software and its modules next to each other as is done in the
+default EasyBuild configuration.
+We have chosen this option to be able to use short names for software directories
 without reducing the readability of the names of the module file directories, and 
 as such also to keep the size of shebang lines with full paths under control to not
 hit kernel-imposed limits.</p>
-<p><strong><em>Repository part of the tree</em></strong><br />
+<h3 id="configuration-part-of-the-tree">Configuration part of the tree</h3>
+<p>At the top of the hierarchy, in the installation root, there is an
+<code>etc</code> subdirectory with currently only the <code>SoftwareStack.lua</code> configuration
+file which is created automatically by the software stack installation script
+and is used to point to a number of important files and (sub)directories:</p>
+<ol>
+<li>The LUA system definition file that should be used</li>
+<li>The repository with the LMOD configuration and generic modules (see below)</li>
+<li>The repository with the whole EasyBuild setup, including custom EasyBlocks and
+    custom EasyConfigs.</li>
+</ol>
+<p><strong><em>Configuration part of the tree</em></strong>
 <div class="highlight"><pre><span></span><code>apps
 └─ antwerpen
-   └─ CalcUA
-      ├─ UAntwerpen-modules <span class="c1">#(1)</span>
-      └─ UAntwerpen-easybuild <span class="c1">#(2)</span>
-         └─ easybuild
+    └─ CalcUA
+        └─ etc
+</code></pre></div></p>
+<h3 id="optional-repository-part-of-the-tree">(Optional) repository part of the tree</h3>
+<p>At the top of the hierarchy, in the installation root, we find the GitHub
+repositories with the module system and the EasyBuild configuration, the roots
+of the infrastructure module system and the EasyBuild module system, the software
+packages tree, and the EasyBuild repo of installed software.</p>
+<p>Though both repositories are needed for the stack to work, it is possible to have
+them elsewhere, which may be a good option for test stacks or for development
+where you may want the repositories in a place that works better with your 
+remote software development tools.</p>
+<p><strong><em>(Optional) repository part of the tree</em></strong><br />
+<div class="highlight"><pre><span></span><code>apps
+└─ antwerpen
+    └─ CalcUA
+        ├─ UAntwerpen-modules <span class="c1">#(1)</span>
+        └─ UAntwerpen-easybuild <span class="c1">#(2)</span>
+            └─ easybuild
             ├─ easyconfigs
             ├─ easyblocks
             ├─ Customisations to naming schemes etc
@@ -612,7 +730,8 @@ hit kernel-imposed limits.</p>
 <li>EasyBuild setup</li>
 <li>Configuration files for some settings not done via environment</li>
 </ol>
-</li>
+<h3 id="module-part-of-the-tree">Module part of the tree</h3>
+<ul>
 <li>
 <p>We distinguish between two types of system-wide installed software that is not using
     EasyBuild toolchains (except <code>SYSTEM</code>):</p>
@@ -763,8 +882,8 @@ these modules rather then inject them elsewhere via EasyBuild.</p>
 <li>Manually generated modules - OPTIONAL</li>
 </ol>
 </li>
-<li>
-<p>Software directory <code>SW</code></p>
+</ul>
+<h3 id="software-directory-sw">Software directory <code>SW</code></h3>
 <p>This directory follows the same layout as the one for the EasyBuild-installed software,
 with two differences:</p>
 <ol>
@@ -780,24 +899,23 @@ as it is not managed at all by EasyBuild.</p>
 <p><strong><em>Resulting structure of the software directory</em></strong><br />
 <div class="highlight"><pre><span></span><code>apps
 └─ antwerpen
-   └─ CalcUA
-      └─ SW
-         ├─ CalcUA-2021b
-         │  ├─ RH8-x86_64
-         │  ├─ RH8-BRW-host
-         │  └─ RH8-BRW-NVGP61GL
-         ├─ system <span class="c1">#(1)</span>
-         │  ├─ RH8-x86_64
-         │  └─ RH8-IVB-host
-         └─ MNL <span class="c1">#(2)</span>
+    └─ CalcUA
+        └─ SW
+            ├─ CalcUA-2021b
+            │  ├─ RH8-x86_64
+            │  ├─ RH8-BRW-host
+            │  └─ RH8-BRW-NVGP61GL
+            ├─ system <span class="c1">#(1)</span>
+            │  ├─ RH8-x86_64
+            │  └─ RH8-IVB-host
+            └─ MNL <span class="c1">#(2)</span>
 </code></pre></div></p>
 <ol>
 <li>Sometimes relatively empty subdirs if EasyBuild only creates a module...</li>
 <li>Manually installed software</li>
 </ol>
-</li>
-<li>
-<p><code>mgmt</code> subdirectory for all files that are somehow system-generated.</p>
+<h3 id="manangement-subdirectory">Manangement subdirectory</h3>
+<p><code>mgmt</code> subdirectory for all (nearly) files that are somehow system-generated.</p>
 <p>Current subdirectories:</p>
 <ul>
 <li>
@@ -814,22 +932,37 @@ result in a single file per ( software stack, architecture) combination.</p>
 <p><strong><em>Resulting structure of the management directory</em></strong><br />
 <div class="highlight"><pre><span></span><code>apps
 └─ antwerpen
-   └─ CalcUA
-      └─ mgmt
-         ├─ ebrepo_files
-         │  ├─ CalcUA-2021b
-         │  │ ├─ redhat8-x86_64
-         │  │ └─ redhat8-broadwell-noaccel
-         │  └─ system <span class="c1">#(1)</span>
-         │     └─ redhat8-x86_64 <span class="c1">#(2)</span>
-         └─ lmod_cache
+    └─ CalcUA
+        └─ mgmt
+            ├─ ebrepo_files
+            │  ├─ CalcUA-2021b
+            │  │ ├─ redhat8-x86_64
+            │  │ └─ redhat8-broadwell-noaccel
+            │  └─ system <span class="c1">#(1)</span>
+            │     └─ redhat8-x86_64 <span class="c1">#(2)</span>
+            └─ lmod_cache
 </code></pre></div></p>
 <ol>
 <li>Modules outside the regular software stacks</li>
 <li>No specific processor versions, e.g., Matlab</li>
 </ol>
+<h3 id="other-subdirectories">Other subdirectories</h3>
+<ul>
+<li>
+<p><code>sources</code> subdirectory to permanently store the sources. This directory is
+    further organised in the EasyBuild way. Downloads for manually installed
+    software can be added to it by putting it in the EasyBuild structure.</p>
+<p>In the future we may need to add an additional level to distinguish between
+EasyBuild and other build tools that we may use and that have a different
+structure for storing source files.</p>
 </li>
 </ul>
+<p><strong><em>Other subdirectories</em></strong>
+<div class="highlight"><pre><span></span><code>apps
+└─ antwerpen
+    └─ CalcUA
+        └─ sources
+</code></pre></div></p>
 
   <hr>
 <div class="md-source-file">
