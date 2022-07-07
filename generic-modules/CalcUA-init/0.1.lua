@@ -8,9 +8,16 @@ end
 add_property( 'lmod', 'sticky' )
 
 -- Find the root of the CalcUA installation.
-local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init%-.*/CalcUA%-init/.*' )
-local repo =  myFileName():match( '.*/modules%-infrastructure/init%-(.*)/CalcUA%-init/.*' )
+--local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init%-.*/CalcUA%-init/.*' )
+local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init/CalcUA%-init/.*' )
+-- local repo =  myFileName():match( '.*/modules%-infrastructure/init%-(.*)/CalcUA%-init/.*' )
+local repo = 'UAntwerpen-modules'
 
+repo_modules,repo_easybuild,systemdefinition = get_configuration( )
+if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+    LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myFileName() .. ': working with module repo ' .. repo_modules ..
+                 ' and EasyBuild repo ' .. repo_easybuild )
+end
 
 -- -----------------------------------------------------------------------------
 --

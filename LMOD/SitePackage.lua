@@ -7,9 +7,24 @@ local hook = require( 'Hook' )
 require("sandbox")
 
 local lmod_dir = os.getenv( 'LMOD_PACKAGE_PATH' )
-dofile( pathJoin( lmod_dir, '../etc/SystemDefinition.lua' ) )
+
+--
+-- Read the SoftwareStack.lua file with the basic configuration parameters.
+-- TODO: Get the location of this file out of an environment variable...
+--
+local softwarestack = ( os.getenv( 'CALCUA_SOFTWARESTACK' ) or pathJoin( lmod_dir, '../../etc/SoftwareStack.lua' ) )
+dofile( softwarestack )
+
+--
+-- Read the system definition
+--
+dofile( systemdefinition )
+
+--
+-- Include additional LUA code into SitePackage.lua
+--
 dofile( pathJoin( lmod_dir, 'SitePackage_helper.lua' ) )
-dofile( pathJoin( lmod_dir, 'SitePackage_system_info.lua' ) )     -- This has to go in front of SitePAckage_arch_hierarchy.lua!
+dofile( pathJoin( lmod_dir, 'SitePackage_system_info.lua' ) )     -- This has to go in front of SitePackage_arch_hierarchy.lua!
 dofile( pathJoin( lmod_dir, 'SitePackage_map_toolchain.lua' ) )
 dofile( pathJoin( lmod_dir, 'SitePackage_arch_hierarchy.lua' ) )
 
@@ -22,6 +37,22 @@ dofile( pathJoin( lmod_dir, 'SitePackage_arch_hierarchy.lua' ) )
 --
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
+
+-- -----------------------------------------------------------------------------
+--
+-- function get_configuration
+--
+-- Returns a few configuration variables: The place of the system definition
+-- and of the two repositories.
+--
+function get_configuration( )
+
+    -- dofile( cfgfile )
+
+    return repo_modules, repo_easybuild, systemdefinition
+
+end
+
 
 
 -- -----------------------------------------------------------------------------
@@ -122,6 +153,7 @@ end
 -- Register in the sandbox
 --
 sandbox_registration{
+    ['get_configuration']             = get_configuration,
     ['get_hostname']                  = get_hostname,
 --    ['get_user_prefix_EasyBuild'] = get_user_prefix_EasyBuild,
     ['get_motd']                      = get_motd,
