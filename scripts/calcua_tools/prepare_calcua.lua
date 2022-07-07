@@ -27,6 +27,7 @@ dofile( repo_modules .. '/LMOD/SitePackage_arch_hierarchy.lua' )
 function create_symlink( target, name )
 
     local lfs = require( 'lfs' )
+    local debug = false
     
     --
     -- Note that we prefer to always re-create the link if it exists already.
@@ -36,28 +37,28 @@ function create_symlink( target, name )
     local name_attrs = lfs.symlinkattributes( name )
     if name_attrs == nil then
         -- This is a new file
-        print( '\nCreating symlink: ' .. target .. ' -> ' .. name )
+        if debug then print( '\nCreating symlink: ' .. name .. ' -> ' .. target ) end
         lfs.link( target, name, true )
     elseif name_attrs.mode == 'link' then
         if name_attrs.target == nil then
-            print( '\nLink ' .. name .. ' exists but cannot determine the target, so re-creating symlink ' .. target .. ' -> ' .. name )
+            print( '\nWARNING create_symlink: lfs.symlinkattributes did not return a valid target, so re-creating symlink ' .. name .. ' -> ' .. target )
             os.remove( name )
             lfs.link( target, name, true )
         elseif name_attrs.target == target then
-            print( '\nLink ' .. name .. ' exists and is pointing to the right target ' .. target )
+            if debug then print( '\nLink ' .. name .. ' exists and is pointing to the right target ' .. target ) end
         else
-            print( '\nLink ' .. name .. ' exists but current target ' .. name_attrs.target .. ' is different, re-creating symlink ' .. target .. ' -> ' .. name )
+            if debug then print( '\nLink ' .. name .. ' exists but current target ' .. name_attrs.target .. ' is different, re-creating symlink ' .. name .. ' -> ' .. target ) end
             os.remove( name )
             lfs.link( target, name, true )
         end
-    elseif name_attrs == 'file' then
+    elseif name_attrs.mode == 'file' then
         -- Finding a file is somewhat unexpected but we can handle it:
         -- remove the file and create the link.
-        print( '\nFile ' .. name .. ' exists, replacing with symlink ' .. target .. ' -> ' .. name )
+        if debug then print( '\nFile ' .. name .. ' exists, replacing with symlink ' .. name .. ' -> ' .. target ) end
         os.remove( name )
         lfs.link( target, name, true )
     else
-        print( '\n' .. name .. ' exists as a ' .. name_attrs.mode .. ', do not know how to handle this.' )
+        print( '\nWARNING create_symlink: ' .. name .. ' exists as a ' .. name_attrs.mode .. ', do not know how to handle this.' )
     end
 
 end
@@ -67,9 +68,166 @@ end
 -- What happens in the script:
 -- -   Build an overview of all architectures for all software stacks
 -- -   Set up the infrastructure modules structure
+--     -   Framework of calcua and arch modules
+--     -   Directory for each stack and arch in the stack
 -- -   Set up the EasyBuild modules structure
 -- -   Set up the software directories
 -- -   Set up the structure for the EasyBuild files repo
 -- -   Other work:
 --     -   Create sources subdirectory that will be used by EasyBuild.
+--     -   Create (actually link) the directory with the display style modules.
+--     -   Create (actually link) the initialisation module.
+--     -   .modulerc.lua files for each stack with the cluster/ synonyms.
 -- 
+-- ----------------------------------------------------------------------------
+
+
+-- ----------------------------------------------------------------------------
+--
+-- -   Build an overview of all architectures for all software stacks
+--     We'll also build a sorted list of stacks simply to show output in a
+--     somewhat reasonable and predictable order.
+--
+
+local stack_list = {}
+local SystemTable_osarch = {}
+
+for stack_version,_ in pairs( CalcUA_SystemTable )
+do
+    if stack_version ~= 'system' and stack_version ~= 'manual' then
+        table.insert( stack_list, stack_version )
+    end
+end
+
+table.sort( stack_list )
+
+table.insert( stack_list, 1, 'system' )
+table.insert( stack_list, 'manual' )
+
+for _,stack_version in ipairs( stack_list )
+do
+
+    SystemTable_osarch[stack_version] = {}
+    local OSArchTableWorker = {}
+
+    for OS,_ in pairs( CalcUA_SystemTable[stack_version] ) do
+
+        for _,arch in ipairs( CalcUA_SystemTable[stack_version][OS] ) do
+
+            for _,subarch in ipairs( get_long_osarchs_reverse( stack_version, OS, arch ) ) do
+
+                if OSArchTableWorker[subarch] == nil then
+                    OSArchTableWorker[subarch] = true
+                    table.insert( SystemTable_osarch[stack_version], subarch )
+                end
+
+            end
+
+        end
+
+    end
+
+end -- for _,stack_version in ipairs( stack_list )
+
+-- ----------------------------------------------------------------------------
+--
+-- -   Create the directories for infrastructure and easybuild modules, sofware
+--     and EasyBuild repo files for each stack and architecture.
+--
+
+for _,stack_version in ipairs( stack_list )
+do
+
+    print( '\nSetting up or confirming the structure for calcua/' .. stack_version .. '.' )
+
+    --
+    -- Stack module
+    --
+
+    if stack_version ~=  'manual'
+    then
+
+        local stack_dir = pathJoin( installroot, 'modules-infrastructure/stack/calcua' )
+        mkDir( stack_dir )
+        local stack_modulefile = pathJoin( stack_dir, stack_version .. '.lua' )
+
+        local link_target = get_versionedfile( stack_version,
+            pathJoin( repo_modules, 'generic-modules/calcua' ), '', '.lua' )
+        print( '\n- Creating/confirming the calcua/' .. stack_version .. ' module ' .. stack_modulefile .. ',\n  linking to ' .. link_target .. '.' )
+        
+        create_symlink( link_target, stack_modulefile )
+
+    end
+
+    --
+    -- -   Now do the per arch directories and modules.
+    --
+
+    for _,osarch in ipairs( SystemTable_osarch[stack_version] ) 
+    do
+
+        print( '\n- Creating or confirming directories for ' .. osarch .. ':' )
+
+        local SW_dir = pathJoin( installroot, get_system_SW_dir( osarch, stack_name, stack_version ) )
+        print( '  - Software directory:     ' .. SW_dir )
+        mkDir( SW_dir )
+    
+        if stack_version ~= 'manual'
+        then
+
+            local appl_modules = pathJoin( installroot, get_system_module_dir( osarch, stack_name, stack_version ) )
+            print( '  - Application modules:    ' .. appl_modules )
+            mkDir( appl_modules )
+        
+            local infra_modules = pathJoin( installroot, get_system_inframodule_dir( osarch, stack_name, stack_version ) )
+            print( '  - Infrastructure modules: ' .. infra_modules )
+            mkDir( infra_modules )
+        
+            local EBrepo_dir = pathJoin( installroot, 'mgmt', get_system_EBrepo_dir( osarch, stack_name, stack_version ) )
+            print( '  - EBrepo_files directory: ' .. EBrepo_dir )
+            mkDir( EBrepo_dir )  
+            
+            --
+            -- Finally the arch module
+            --
+
+            local arch_dir = pathJoin( installroot, 'modules-infrastructure/arch/calcua', stack_version, 'arch' )
+            local arch_modulefile = pathJoin( arch_dir, osarch .. '.lua' )
+            local link_target = get_versionedfile( stack_version,
+                pathJoin( repo_modules, 'generic-modules/clusterarch' ), '', '.lua' )
+            print( '  - Creating/confirming the arch/' .. osarch .. ' module ' .. arch_modulefile .. ',\n    linking to ' .. link_target .. '.' )
+            mkDir( pathJoin( arch_dir, 'arch' ) )
+            create_symlink( link_target, arch_modulefile )
+
+        end -- if stack_version ~= manual
+
+
+    end -- for _,osarch in ipairs( OSArchTable )
+
+
+end -- for _,stack_version in ipairs( stack_list )
+
+
+-- TODO:
+-- Sources directory
+-- init-caluca module
+-- Style modifier modules
+-- .modulerc.lua files with synonums????
+
+
+--
+-- Install the CalcUA-init module
+--
+local init_dir = pathJoin( installroot, 'modules-infrastructure/init', 'CalcUA-init' )
+mkDir( init_dir )
+-- TODO: Get the generic initialisation file(s) and link them in.
+print( '\nInstalling the CalcUA-init module(s)' )
+
+--
+-- Create the sources subdirectory for EasyBuild
+--
+
+local sources_dir = pathJoin( installroot, 'sources' )
+print( '\nCreating the sources directory ' .. sources_dir )
+mkDir( sources_dir )
+
