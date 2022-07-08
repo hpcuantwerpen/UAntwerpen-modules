@@ -208,7 +208,7 @@ local mapT =
 {
     label = {
 --        ['/testview$']                      = 'Activate environments',
-        ['modules%-infrastructure/init%-.*']        = 'System initialisation',
+        ['modules%-infrastructure/init']            = 'System initialisation',
         ['modules%-infrastructure/StyleModifiers']  = 'Modify the module display style',
         ['modules%-infrastructure/stack$']          = 'Software stacks',
         ['modules%-infrastructure/arch/']           = 'Available architectures for the software stack _STACK_',
