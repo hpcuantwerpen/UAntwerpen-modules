@@ -12,6 +12,12 @@ cd ..
 installroot=$(pwd)
 stackroot="$installroot"
 
+if [ $# -eq 1 ]
+then
+    stackroot="$1"	
+fi
+
+
 systemmodules='modules-infrastructure'
 
 #
@@ -26,7 +32,7 @@ echo "clearLmod ; "
 #echo "unset _CALCUA_INIT_FIRST_LOAD ; "
 
 # - Point to the SoftwareStack.lua file that we want to use
-echo "export CALCUA_SOFTWARESTACK=$installroot/etc/SoftwareStack.lua"
+echo "export CALCUA_SOFTWARESTACK=$stackroot/etc/SoftwareStack.lua"
 
 # - Set a number of LMOD environment variables
 echo "export LMOD_PACKAGE_PATH=$installroot/$repo_modules/LMOD ; "
