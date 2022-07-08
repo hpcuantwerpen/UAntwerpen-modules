@@ -10,8 +10,6 @@ add_property( 'lmod', 'sticky' )
 -- Find the root of the CalcUA installation.
 --local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init%-.*/CalcUA%-init/.*' )
 local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init/CalcUA%-init/.*' )
--- local repo =  myFileName():match( '.*/modules%-infrastructure/init%-(.*)/CalcUA%-init/.*' )
-local repo = 'UAntwerpen-modules'
 
 repo_modules,repo_easybuild,systemdefinition = get_configuration( )
 if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
@@ -27,7 +25,7 @@ end
 -- Setting defaults and visibility, note that this is a PATH-style variable.
 -- It is currently set by the enable_Calcua script already, but add this in again
 -- if needed.
--- prepend_path( 'LMOD_MODULERCFILE', pathJoin( CalcUA_root, repo, 'LMOD', 'modulerc.lua' ) )
+-- prepend_path( 'LMOD_MODULERCFILE', pathJoin( repo_modules, 'LMOD', 'modulerc.lua' ) )
 
 --
 -- Make the modules that determine visibility available

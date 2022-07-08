@@ -47,8 +47,6 @@ dofile( pathJoin( lmod_dir, 'SitePackage_arch_hierarchy.lua' ) )
 --
 function get_configuration( )
 
-    -- dofile( cfgfile )
-
     return repo_modules, repo_easybuild, systemdefinition
 
 end

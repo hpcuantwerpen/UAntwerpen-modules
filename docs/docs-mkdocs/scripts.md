@@ -1,5 +1,15 @@
 # Scripts
 
+## enable_CalcUA.sh
+
+The `enable_CalcUA.sh` script prints the shell commands needed to enable the CalcUA
+stacks in a format suitable to be used with the `eval` bash shell function.
+
+Without arguments it assumes that the software stack is located two levels towards the
+root of the file system hierarchy from the location of the script. Alternatively it
+is possible to give the root of the software stack as an argument to the script.
+
+
 ## check_clusternode.sh
 
 The `check_clusternode.sh` script prints information about the node it is running on and 

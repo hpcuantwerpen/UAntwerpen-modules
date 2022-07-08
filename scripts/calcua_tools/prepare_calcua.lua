@@ -208,20 +208,32 @@ do
 end -- for _,stack_version in ipairs( stack_list )
 
 
--- TODO:
--- Sources directory
--- init-caluca module
--- Style modifier modules
--- .modulerc.lua files with synonums????
-
-
 --
 -- Install the CalcUA-init module
 --
 local init_dir = pathJoin( installroot, 'modules-infrastructure/init', 'CalcUA-init' )
 mkDir( init_dir )
--- TODO: Get the generic initialisation file(s) and link them in.
+local target_dir = pathJoin( repo_modules, 'generic-modules/CalcUA-init' )
 print( '\nInstalling the CalcUA-init module(s)' )
+for file in lfs.dir( target_dir )
+do
+    if file:match( '.+%.lua' )
+    then
+        local init_modulefile = pathJoin( init_dir, file )
+        local target_modulefile = pathJoin( target_dir, file )
+        print( '- Creating/confirming the init/' .. file:gsub( '%.lua', '') .. ' module ' .. init_modulefile ..
+               '\n  linking to ' .. target_modulefile .. '.' )
+        create_symlink( target_modulefile, init_modulefile )
+    end
+end
+
+--
+-- Link the style modifier modules
+--
+local stylemod_dir = pathJoin( installroot, 'modules-infrastructure/', 'StyleModifiers' )
+local target_dir = pathJoin( repo_modules, 'generic-modules/StyleModifiers' )
+print( '\nInstalling the style modifier modules ' .. stylemod_dir .. ',\nlinking to ' .. target_dir )
+create_symlink( target_dir, stylemod_dir )
 
 --
 -- Create the sources subdirectory for EasyBuild
@@ -230,4 +242,11 @@ print( '\nInstalling the CalcUA-init module(s)' )
 local sources_dir = pathJoin( installroot, 'sources' )
 print( '\nCreating the sources directory ' .. sources_dir )
 mkDir( sources_dir )
+
+print()
+
+-- TODO:
+-- .modulerc.lua files with synonyms????
+
+
 
