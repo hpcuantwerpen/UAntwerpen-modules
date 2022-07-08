@@ -30,15 +30,15 @@ end
 local install_root
 local stack_name
 local stack_version
-local cluster_arch
-install_root, stack_name, stack_version, cluster_arch = 
-    myFileName():match( '(.*)/modules%-infrastructure/arch/([^/]+)/([^/]+)/arch/(.+)%.lua' )  
+local osarch
+install_root, stack_name, stack_version, osarch = 
+    myFileName():match( '(.*)/modules%-infrastructure/arch/([^/]+)/([^/]+)/arch/(.+)%.lua' )
 
 if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Detected:\n' ..
                  '- install_root: ' .. install_root .. '\n' .. 
                  '- stack name/version: ' .. stack_name .. '/' .. stack_version .. '\n' ..
-                 '- clusterarch:' .. cluster_arch )
+                 '- clusterarch:' .. osarch )
 end
 
 -- Check if we have all the data we need for this stack version
@@ -50,30 +50,73 @@ end
         
 if not is_Stack_SystemTable( stack_version ) then
     LmodError( myModuleFullName() .. ': No information for calcua/' .. stack_version .. 
-               ' in CalcUA_SystemTable in etc/SystemDefinition.lua.' )
+               ' in CalcUA_SystemTable in the system definition file.' )
 end
 
 --
 -- Check where the user stack is located (if there is any)
 --
+local user_easybuild_modules = get_user_prefix_EasyBuild()
+if user_easybuild_modules ~= nil then
+    user_easybuild_modules = pathJoin( user_easybuild_modules, 'modules')
+    if not isDir( user_easybuild_modules ) then
+        user_easybuild_modules = nil
+    end
+end
+if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil and user_easybuild_modules ~= nil then
+    LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Detected user module tree at ' .. user_easybuild_modules )
+end
 
 
 
 --
--- Build the list of architectures for the given stack
+-- Build the system module directories for the stack
 --
 
+local system_moduledirs = {} 
+            
+-- First build in reverse order (which actually corresponds to the order of prepend_path
+-- calls in the module file)
 
+local osarch_system = get_calcua_matchingarch( osarch, stack_version, 'system' )
+local system_dirs = get_system_module_dirs( osarch_system, 'calcua', 'system' )
+if system_dirs == nil then
+    io.stderr.write( 'No system modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
+else
+    for _,system_dir in ipairs( system_dirs ) do
+        table.insert( system_moduledirs, system_dir )
+    end
+end
+
+if stack_version ~= 'system' then 
+    local stack_dirs = get_system_module_dirs( osarch, 'calcua', stack_version )
+    if stack_dirs == nil then
+        io.stderr.write( 'No regular modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
+    else
+        for _,stack_dir in ipairs( stack_dirs ) do
+            table.insert( system_moduledirs, stack_dir )
+        end
+    end
+end -- if stack_version ~= 'system'
+
+local inframodule_dir = get_system_inframodule_dir( osarch, 'calcua', stack_version )
+if inframodule_dir == nil then
+    io.stderr.write( 'No infrastructure modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
+else
+    table.insert( system_moduledirs, inframodule_dir )
+end
+
+-- TODO: Do the same for user modules.
 
 --
--- If the stack is not calcua/system:
--- -   Look for the best matching architecture
-
--- -   And then build the list of architectures for that one
-
-
-
-
+-- Add the module directories to the MODULEPATH
+--
+local number
+local moduledir
+for number,moduledir in ipairs( system_moduledirs )
+do
+    prepend_path( 'MODULEPATH', moduledir )
+end
 
 
 

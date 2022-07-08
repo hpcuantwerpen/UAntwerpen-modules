@@ -31,12 +31,13 @@ end
 local stack_name    = myModuleName()
 local stack_version = myModuleVersion()
  
--- Detect the architecture of the current node. 
-local long_osarch_current = get_calcua_top( get_calcua_longosarch_current( stack_version ), stack_version )
+-- Detect the architecture of the current node.
+local node_osarch = get_calcua_longosarch_current( stack_version )
+local used_osarch = get_calcua_matchingarch( node_osarch, stack_version, stack_version )
 if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleName() .. '/' .. myModuleVersion() .. 
                  ', stack name/version is  ' .. stack_name .. '/' .. stack_version ..
-                 ', arch module to load is arch/' .. long_osarch_current )
+                 ', arch module to load is arch/' .. used_osarch )
 end
 
 -- -----------------------------------------------------------------------------
@@ -74,13 +75,12 @@ prepend_path( 'MODULEPATH', pathJoin( install_root, 'modules-infrastructure/arch
 -- The following variables may be used by various modules and LUA configuration files.
 -- However, take care as those variables may not be defined anymore when your module
 -- gets unloaded.
-setenv( 'CALCUA_MODULEPATH_ROOT',    pathJoin( install_root, 'modules' ) )
 setenv( 'CALCUA_STACK_NAME',         stack_name )
 setenv( 'CALCUA_STACK_VERSION',      stack_version )
 setenv( 'CALCUA_STACK_NAME_VERSION', stack_name .. '/' .. stack_version )
 
 -- Load the architecture module
-load( 'arch/' .. long_osarch_current )
+load( 'arch/' .. used_osarch )
 
 -- Final debugging information
 

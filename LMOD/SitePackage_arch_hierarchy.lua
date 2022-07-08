@@ -609,7 +609,7 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
     local use_arch =  extract_arch( long_osarch )
 
     populate_cache_subarchs( stack_version, use_os )
-    if reduce_stack_version ~= stack_verstion then
+    if reduce_stack_version ~= stack_version then
         populate_cache_subarchs( reduce_stack_version, use_os )
     end
 
