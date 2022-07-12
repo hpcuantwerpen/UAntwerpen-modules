@@ -18,6 +18,7 @@ theme:
     - header.autohide
     - toc.follow
     - content.code.annotate
+    - search.suggest
   palette:
     - primary: black
 
@@ -42,6 +43,7 @@ nav:
 plugins:
   # show revision date at bottom of each page
   - git-revision-date-localized
+  - search
 
 markdown_extensions:
   - meta
