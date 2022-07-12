@@ -810,6 +810,8 @@ function get_calcua_system_module_dir_worker( long_osarch, stack_version )
     -- Worker function without any error control. The error control is done
     -- by get_system_module_dir and get_system_module_dirs.
 
+    local prefix
+
     if stack_version == 'system' or stack_version == 'manual' then
         prefix = 'modules-easybuild/' .. stack_version .. '/'
     else

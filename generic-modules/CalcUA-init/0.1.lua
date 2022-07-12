@@ -36,19 +36,19 @@ prepend_path( 'MODULEPATH', pathJoin( CalcUA_root, 'modules-infrastructure/Style
 -- Note that if we set LMOD_MODULERCFILE only in this module and not at initialisation,
 -- we should not rely on the default versions, so switch the loads below.
 
-if mode() == load then
+if mode() == 'load' then
 
     if not isloaded( 'ModuleColour' ) then
         load( 'ModuleColour' )
         -- load( 'ModuleColour/on' )
     end
 
-    if not not isloaded( 'ModuleExtensions' ) then
+    if not isloaded( 'ModuleExtensions' ) then
         load( 'ModuleExtensions' )
         -- load( 'ModuleExtensions/show' )
     end
 
-    if not not isloaded( 'ModuleLabel' ) then
+    if not isloaded( 'ModuleLabel' ) then
         load( 'ModuleLabel' )
         -- load( 'ModuleLabel/label' )
     end

@@ -163,7 +163,8 @@ sandbox_registration{
     [ 'map_toolchain']                = map_toolchain,
     ['get_calcua_longosarch_current'] = get_calcua_longosarch_current,
     ['get_calcua_matchingarch']       = get_calcua_matchingarch,
-    ['get_system_module_dirs']        = get_system_module_dirs,         -- Defined in SitePAckage_arch_hierarchy
+    ['get_system_module_dirs']        = get_system_module_dirs,         -- Defined in SitePackage_arch_hierarchy
+    ['get_system_inframodule_dir']    = get_system_inframodule_dir,     -- Defined in SitePackage_arch_hierarchy
 --    ['get_calcua_top']                = get_calcua_top,
     ['is_Stack_SystemTable']          = is_Stack_SystemTable,           -- Defined in SitePackage_helper
 }
