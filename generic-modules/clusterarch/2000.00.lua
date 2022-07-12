@@ -56,15 +56,15 @@ end
 --
 -- Check where the user stack is located (if there is any)
 --
-local user_easybuild_modules = get_user_prefix_EasyBuild()
-if user_easybuild_modules ~= nil then
-    user_easybuild_modules = pathJoin( user_easybuild_modules, 'modules')
-    if not isDir( user_easybuild_modules ) then
-        user_easybuild_modules = nil
-    end
-end
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil and user_easybuild_modules ~= nil then
-    LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Detected user module tree at ' .. user_easybuild_modules )
+local user_easybuild_root = get_user_prefix_EasyBuild()
+-- if user_easybuild_modules ~= nil then
+--     user_easybuild_modules = pathJoin( user_easybuild_modules, 'modules')
+--     if not isDir( user_easybuild_modules ) then
+--         user_easybuild_modules = nil
+--     end
+-- end
+if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+    LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Detected user installation root at ' .. ( user_easybuild_root or 'NIL' ) )
 end
 
 
@@ -74,6 +74,7 @@ end
 --
 
 local system_moduledirs = {} 
+local user_moduledirs = {}
             
 -- First build in reverse order (which actually corresponds to the order of prepend_path
 -- calls in the module file)
@@ -85,6 +86,7 @@ if system_dirs == nil then
 else
     for _,system_dir in ipairs( system_dirs ) do
         table.insert( system_moduledirs, system_dir )
+        table.insert( user_moduledirs,   system_dir )
     end
 end
 
@@ -95,6 +97,7 @@ if stack_version ~= 'system' then
     else
         for _,stack_dir in ipairs( stack_dirs ) do
             table.insert( system_moduledirs, stack_dir )
+            table.insert( user_moduledirs,   stack_dir )
         end
     end
 end -- if stack_version ~= 'system'
@@ -106,8 +109,6 @@ else
     table.insert( system_moduledirs, inframodule_dir )
 end
 
--- TODO: Do the same for user modules.
-
 --
 -- Add the module directories to the MODULEPATH
 --
@@ -115,9 +116,14 @@ local number
 local moduledir
 for number,moduledir in ipairs( system_moduledirs )
 do
-    prepend_path( 'MODULEPATH', moduledir )
+    prepend_path( 'MODULEPATH', pathJoin( install_root, moduledir ) )
 end
-
+if user_easybuild_root ~= nil then
+    for number,moduledir in ipairs( user_moduledirs )
+    do
+        prepend_path( 'MODULEPATH', pathJoin( user_easybuild_root, moduledir ) )
+    end
+end
 
 
 -- Final debugging information
