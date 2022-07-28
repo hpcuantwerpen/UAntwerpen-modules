@@ -9,15 +9,35 @@ Without arguments it assumes that the software stack is located two levels towar
 root of the file system hierarchy from the location of the script. Alternatively it
 is possible to give the root of the software stack as an argument to the script.
 
+Besides setting a number of `LMOD_` environment variables to configure Lmod, it also sets
+the `CALCUA_SOFTWARESTACK` environment variable which points to the configuration file
+(itself a Lua script) pf the software stack.
+
+
+## check_systemdefinition.sh
+
+This script runs a whole set of tests again the system definition file to check for inconsistencies
+or possible mistakes. 
+
+Without command line arguments it will check the default file `etc/SystemDefinition.lua` in the parent
+directory of the directory containing the `check_systemdefinition.sh` script,
+but it is also possible to point the script to a different system definition file on the command line.
+
+It is certainly not a guarantee that there are no inconsistencies in the file, though it 
+is an extensive set of tests.
+
 
 ## check_clusternode.sh
 
 The `check_clusternode.sh` script prints information about the node it is running on and 
-can also be used to check if the node is properly supported by the CalcUA stacks,
-or if certain settings need to be adjusted.
+can also be used to check if the node is properly supported by a given system definition.
 
-Without command line arguments it will check the default file in `UAntwerpen-modules/etc/SystemDefinition.lua`,
-but it si also possible to point the script to a different system definition file on the command line.
+
+Just as `check_systemdefinintion.sh`, without 
+command line arguments it will check the default file `etc/SystemDefinition.lua` in the parent
+directory of the directory containing the `check_clusternode.sh` script,
+but it is also possible to point the script to a different system definition file on the command line.
+
 
 ## prepare_calcua.sh
 
@@ -50,7 +70,7 @@ The script has several command line arguments:
    The default is `etc/SystemDefinition.lua` located in the parent directory of the
    directory where the `prepare_calcua.sh` script is found.
   
-- '-r` or `--repair`: Runs the script in repair mode.
+- `-r` or `--repair`: Runs the script in repair mode.
 
   One can still indicate the installation directory and the script will then search in that
   directory to locate eth `etc/SoftwareStack.lua` file. However, the `-e`/`--easybuild`
@@ -64,6 +84,7 @@ The script has several command line arguments:
 ## prepare_calcua_stack.sh
 
 NOT NEEDED ANYMORE?
+
 
 ## update_easybuild.sh
 

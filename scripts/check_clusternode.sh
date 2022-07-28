@@ -9,7 +9,21 @@
 
 # That cd will work if the script is called by specifying the path or is simply
 # found on PATH. It will not expand symbolic links.
+currentdir=$PWD
 cd $(dirname $0)
 scriptdir=$PWD
+cd ..
+repodir=$PWD
+cd $currentdir
 
-$scriptdir/calcua_tools/check_clusternode.lua
+if [[ $# == 1  ]]
+then
+    systemdefinition_file="$1"
+else
+    systemdefinition_file="$repodir/etc/SystemDefinition.lua"
+fi
+
+#echo -e "Working with $systemdefinition_file."
+
+$scriptdir/calcua_tools/check_systemdefinition.lua $systemdefinition_file
+

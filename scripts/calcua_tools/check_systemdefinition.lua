@@ -2,7 +2,7 @@
 
 local lfs = require( 'lfs' )
 
-local routine_name = 'check_clusternode'
+local routine_name = 'check_systemdefinition'
 
 if #arg ~= 1 then
     io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: path to the system definition file.\n' )

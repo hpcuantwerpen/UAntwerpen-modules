@@ -4,17 +4,29 @@ local lfs = require( 'lfs' )
 
 local routine_name = 'check_clusternode'
 
+if #arg ~= 1 then
+    io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: path to the system definition file.\n' )
+    os.exit( 1 )
+end
+
+local systemdefinition_file = arg[1]
+if systemdefinition_file:find( '/' ) ~= 1 then
+    -- Not an absolute path, it does not start with a slash.
+    systemdefinition_file = lfs.currentdir() .. '/' .. systemdefinition_file
+end
+
 local script_called_dir = arg[0]:match( '(.*)/[^/]+' )
 lfs.chdir( script_called_dir )
 local repo_root = lfs.currentdir():match( '(.*)/scripts/calcua_tools' )
 local root_dir = repo_root:match( '(.*)/[^/]+' )
 
 dofile( repo_root .. '/scripts/calcua_tools/lmod_emulation.lua' )
-dofile( repo_root .. '/etc/SystemDefinition.lua' )
+dofile( systemdefinition_file )
 dofile( repo_root .. '/LMOD/SitePackage_helper.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_system_info.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
+
 
 -- -----------------------------------------------------------------------------
 --
