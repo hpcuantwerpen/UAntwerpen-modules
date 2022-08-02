@@ -17,7 +17,7 @@ local repo_root = lfs.currentdir():match( '(.*)/scripts/ClusterMod_tools' )
 local root_dir = repo_root:match( '(.*)/[^/]+' )
 
 -- Note that pathJoin is not defined here....
-local softwarestack = ( os.getenv( 'CALCUA_SOFTWARESTACK' ) or ( root_dir .. '/etc/SoftwareStack.lua' ) )
+local softwarestack = ( os.getenv( 'CLUSTERMOD_SOFTWARESTACK' ) or ( root_dir .. '/etc/SoftwareStack.lua' ) )
 dofile( softwarestack )
 
 dofile( systemdefinition )
