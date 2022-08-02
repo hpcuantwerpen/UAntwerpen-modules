@@ -815,7 +815,7 @@ function get_calcua_system_module_dir_worker( long_osarch, stack_version )
     if stack_version == 'system' or stack_version == 'manual' then
         prefix = 'modules-easybuild/' .. stack_version .. '/'
     else
-        prefix = 'modules-easybuild/CalcUA-' .. stack_version .. '/'
+        prefix = 'modules-easybuild/' .. ClusterMod_StackName  .. '-' .. stack_version .. '/'
     end
 
     return prefix .. long_osarch
@@ -830,7 +830,7 @@ function get_system_module_dir( long_osarch, stack_name, stack_version )
     if stack_name == 'manual' or stack_version == 'manual' then
         -- No EasyBuild modules for manually installed software
         return nil
-    elseif stack_name == 'calcua' then
+    elseif stack_name == ClusterMod_StackName then
         use_version = stack_version
     elseif ( stack_name == 'system' ) then
         use_version = stack_name
@@ -862,7 +862,7 @@ function get_system_module_dirs( long_osarch, stack_name, stack_version )
     if stack_name == 'manual' or stack_version == 'manual' then
         -- No EasyBuild modules for manually installed software
         return nil
-    elseif stack_name == 'calcua' then
+    elseif stack_name == ClusterMod_StackName then
         use_version = stack_version
     elseif ( stack_name == 'system' ) or ( stack_name == 'manual' ) then
         use_version = stack_name
@@ -910,12 +910,12 @@ end
 function get_system_inframodule_dir( long_osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
-    local prefix
+    local prefix = 'modules-infrastructure/infrastructure'
 
     if stack_name == 'manual' or stack_version == 'manual' then
         -- No infrastructure modules for this stack
         return nil
-    elseif stack_name == 'calcua' then
+    elseif stack_name == ClusterMod_StackName then
         use_version = stack_version
     elseif ( stack_name == 'system' ) then
         use_version = stack_name
@@ -925,13 +925,7 @@ function get_system_inframodule_dir( long_osarch, stack_name, stack_version )
         return nil
     end
 
-    if use_version == 'system' then
-        prefix = 'modules-infrastructure/infrastructure/' .. use_version .. '/'
-    else
-        prefix = 'modules-infrastructure/infrastructure/CalcUA-' .. use_version .. '/'
-    end
-
-    return prefix .. long_osarch
+    return pathJoin( prefix, stack_name, stack_version, 'arch', long_osarch )
 
 end
 
@@ -958,7 +952,7 @@ function get_system_SW_dir( long_osarch, stack_name, stack_version )
 
     if stack_name == 'manual' or stack_version == 'manual' then
         use_version = 'manual'
-    elseif stack_name == 'calcua' then
+    elseif stack_name == ClusterMod_StackName then
         use_version = stack_version
     elseif ( stack_name == 'system' ) then
         use_version = stack_name
@@ -973,7 +967,7 @@ function get_system_SW_dir( long_osarch, stack_name, stack_version )
     elseif use_version == 'system' then
         prefix = 'SW/' .. use_version .. '/'
     else
-        prefix = 'SW/CalcUA-' .. use_version .. '/'
+        prefix = 'SW/' .. ClusterMod_StackName .. '-' .. use_version .. '/'
     end
 
     return prefix .. map_long_to_short( long_osarch )
@@ -1005,7 +999,7 @@ function get_system_EBrepo_dir( long_osarch, stack_name, stack_version )
     if stack_name == 'manual' or stack_version == 'manual' then
         -- No EBrepo directory for this stack
         return nil
-    elseif stack_name == 'calcua' then
+    elseif stack_name == ClusterMod_StackName then
         use_version = stack_version
     elseif ( stack_name == 'system' ) then
         use_version = stack_name
@@ -1018,7 +1012,7 @@ function get_system_EBrepo_dir( long_osarch, stack_name, stack_version )
     if use_version == 'system' then
         prefix = 'EBrepo_files/system/'
     else
-        prefix = 'EBrepo_files/CalcUA-' .. use_version .. '/'
+        prefix = 'EBrepo_files/'  .. ClusterMod_StackName .. '-' .. use_version .. '/'
     end
 
     return prefix .. long_osarch

@@ -1323,158 +1323,158 @@ local tests = {
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2020a',
         ['longname'] =      'redhat7-ivybridge-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2020a/redhat7-ivybridge-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2020a/redhat7-x86_64,modules-easybuild/CalcUA-2020a/redhat7-ivybridge-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-2020a/redhat7-ivybridge-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-2020a/redhat7-x86_64,modules-easybuild/calcua-2020a/redhat7-ivybridge-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2020a',
         ['longname'] =      'redhat7-broadwell-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2020a/redhat7-broadwell-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2020a/redhat7-x86_64,modules-easybuild/CalcUA-2020a/redhat7-broadwell-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-2020a/redhat7-broadwell-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-2020a/redhat7-x86_64,modules-easybuild/calcua-2020a/redhat7-broadwell-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2020a',
         ['longname'] =      'redhat8-zen2-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2020a/redhat8-zen2-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2020a/redhat8-x86_64,modules-easybuild/CalcUA-2020a/redhat8-zen2-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-2020a/redhat8-zen2-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-2020a/redhat8-x86_64,modules-easybuild/calcua-2020a/redhat8-zen2-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2020a',
         ['longname'] =      'redhat8-skylake-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2020a/redhat8-skylake-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2020a/redhat8-x86_64,modules-easybuild/CalcUA-2020a/redhat8-skylake-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-2020a/redhat8-skylake-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-2020a/redhat8-x86_64,modules-easybuild/calcua-2020a/redhat8-skylake-noaccel'
     },
     -- 2021b
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2021b',
         ['longname'] =      'redhat7-ivybridge-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat7-ivybridge-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat7-x86_64,modules-easybuild/CalcUA-2021b/redhat7-ivybridge-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-2021b/redhat7-ivybridge-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-2021b/redhat7-x86_64,modules-easybuild/calcua-2021b/redhat7-ivybridge-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2021b',
         ['longname'] =      'redhat8-broadwell-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-broadwell-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-broadwell-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-2021b/redhat8-broadwell-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-2021b/redhat8-x86_64,modules-easybuild/calcua-2021b/redhat8-broadwell-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2021b',
         ['longname'] =      'redhat8-zen2-arcturus',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-zen2-arcturus',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-zen2-arcturus'
+        ['own_modules'] =   'modules-easybuild/calcua-2021b/redhat8-zen2-arcturus',
+        ['full_modules'] =  'modules-easybuild/calcua-2021b/redhat8-x86_64,modules-easybuild/calcua-2021b/redhat8-zen2-arcturus'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2021b',
         ['longname'] =      'redhat8-zen2-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-zen2-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-zen2-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-2021b/redhat8-zen2-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-2021b/redhat8-x86_64,modules-easybuild/calcua-2021b/redhat8-zen2-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '2021b',
         ['longname'] =      'redhat8-skylake-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-2021b/redhat8-skylake-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-2021b/redhat8-x86_64,modules-easybuild/CalcUA-2021b/redhat8-skylake-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-2021b/redhat8-skylake-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-2021b/redhat8-x86_64,modules-easybuild/calcua-2021b/redhat8-skylake-noaccel'
     },
     -- 3000a
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '3000a',
         ['longname'] =      'redhat7-x86_64',
-        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat7-x86_64',
-        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat7-x86_64'
+        ['own_modules'] =   'modules-easybuild/calcua-3000a/redhat7-x86_64',
+        ['full_modules'] =  'modules-easybuild/calcua-3000a/redhat7-x86_64'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '3000a',
         ['longname'] =      'redhat7-ivybridge',
-        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat7-ivybridge',
-        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat7-x86_64,modules-easybuild/CalcUA-3000a/redhat7-ivybridge'
+        ['own_modules'] =   'modules-easybuild/calcua-3000a/redhat7-ivybridge',
+        ['full_modules'] =  'modules-easybuild/calcua-3000a/redhat7-x86_64,modules-easybuild/calcua-3000a/redhat7-ivybridge'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '3000a',
         ['longname'] =      'redhat7-ivybridge-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat7-ivybridge-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat7-x86_64,modules-easybuild/CalcUA-3000a/redhat7-ivybridge,modules-easybuild/CalcUA-3000a/redhat7-ivybridge-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-3000a/redhat7-ivybridge-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-3000a/redhat7-x86_64,modules-easybuild/calcua-3000a/redhat7-ivybridge,modules-easybuild/calcua-3000a/redhat7-ivybridge-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '3000a',
         ['longname'] =      'redhat8-broadwell-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat8-broadwell-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat8-x86_64,modules-easybuild/CalcUA-3000a/redhat8-broadwell,modules-easybuild/CalcUA-3000a/redhat8-broadwell-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-3000a/redhat8-broadwell-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-3000a/redhat8-x86_64,modules-easybuild/calcua-3000a/redhat8-broadwell,modules-easybuild/calcua-3000a/redhat8-broadwell-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '3000a',
         ['longname'] =      'redhat8-zen2-arcturus',
-        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat8-zen2-arcturus',
-        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat8-x86_64,modules-easybuild/CalcUA-3000a/redhat8-zen2,modules-easybuild/CalcUA-3000a/redhat8-zen2-arcturus'
+        ['own_modules'] =   'modules-easybuild/calcua-3000a/redhat8-zen2-arcturus',
+        ['full_modules'] =  'modules-easybuild/calcua-3000a/redhat8-x86_64,modules-easybuild/calcua-3000a/redhat8-zen2,modules-easybuild/calcua-3000a/redhat8-zen2-arcturus'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '3000a',
         ['longname'] =      'redhat8-zen2-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat8-zen2-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat8-x86_64,modules-easybuild/CalcUA-3000a/redhat8-zen2,modules-easybuild/CalcUA-3000a/redhat8-zen2-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-3000a/redhat8-zen2-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-3000a/redhat8-x86_64,modules-easybuild/calcua-3000a/redhat8-zen2,modules-easybuild/calcua-3000a/redhat8-zen2-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '3000a',
         ['longname'] =      'redhat8-skylake-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-3000a/redhat8-skylake-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-3000a/redhat8-x86_64,modules-easybuild/CalcUA-3000a/redhat8-skylake,modules-easybuild/CalcUA-3000a/redhat8-skylake-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-3000a/redhat8-skylake-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-3000a/redhat8-x86_64,modules-easybuild/calcua-3000a/redhat8-skylake,modules-easybuild/calcua-3000a/redhat8-skylake-noaccel'
     },
     -- 4000a
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '4000a',
         ['longname'] =      'redhat8-x86_64',
-        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-x86_64',
-        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64'
+        ['own_modules'] =   'modules-easybuild/calcua-4000a/redhat8-x86_64',
+        ['full_modules'] =  'modules-easybuild/calcua-4000a/redhat8-x86_64'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '4000a',
         ['longname'] =      'redhat8-broadwell',
-        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-broadwell',
-        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-broadwell'
+        ['own_modules'] =   'modules-easybuild/calcua-4000a/redhat8-broadwell',
+        ['full_modules'] =  'modules-easybuild/calcua-4000a/redhat8-x86_64,modules-easybuild/calcua-4000a/redhat8-broadwell'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '4000a',
         ['longname'] =      'redhat8-broadwell-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-broadwell-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-broadwell,modules-easybuild/CalcUA-4000a/redhat8-broadwell-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-4000a/redhat8-broadwell-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-4000a/redhat8-x86_64,modules-easybuild/calcua-4000a/redhat8-broadwell,modules-easybuild/calcua-4000a/redhat8-broadwell-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '4000a',
         ['longname'] =      'redhat8-zen2-arcturus',
-        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-zen2-arcturus',
-        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-zen2,modules-easybuild/CalcUA-4000a/redhat8-zen2-arcturus'
+        ['own_modules'] =   'modules-easybuild/calcua-4000a/redhat8-zen2-arcturus',
+        ['full_modules'] =  'modules-easybuild/calcua-4000a/redhat8-x86_64,modules-easybuild/calcua-4000a/redhat8-zen2,modules-easybuild/calcua-4000a/redhat8-zen2-arcturus'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '4000a',
         ['longname'] =      'redhat8-zen2-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-zen2-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-zen2,modules-easybuild/CalcUA-4000a/redhat8-zen2-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-4000a/redhat8-zen2-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-4000a/redhat8-x86_64,modules-easybuild/calcua-4000a/redhat8-zen2,modules-easybuild/calcua-4000a/redhat8-zen2-noaccel'
     },
     { 
         ['stack_name'] =    'calcua',
         ['stack_version'] = '4000a',
         ['longname'] =      'redhat8-skylake-noaccel',
-        ['own_modules'] =   'modules-easybuild/CalcUA-4000a/redhat8-skylake-noaccel',
-        ['full_modules'] =  'modules-easybuild/CalcUA-4000a/redhat8-x86_64,modules-easybuild/CalcUA-4000a/redhat8-skylake,modules-easybuild/CalcUA-4000a/redhat8-skylake-noaccel'
+        ['own_modules'] =   'modules-easybuild/calcua-4000a/redhat8-skylake-noaccel',
+        ['full_modules'] =  'modules-easybuild/calcua-4000a/redhat8-x86_64,modules-easybuild/calcua-4000a/redhat8-skylake,modules-easybuild/calcua-4000a/redhat8-skylake-noaccel'
     },
     -- Cases that should print error messages.
     { 
@@ -1572,19 +1572,19 @@ tests = {
         ['stack_name']    = 'calcua',
         ['stack_version'] = '2021b',
         ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = 'modules-infrastructure/infrastructure/CalcUA-2021b/redhat8-zen2-arcturus',
+        ['expected']      = 'modules-infrastructure/infrastructure/calcua/2021b/arch/redhat8-zen2-arcturus',
     },
     {
         ['stack_name']    = 'calcua',
         ['stack_version'] = '2021b',
         ['longname']      = 'redhat8-x86_64',
-        ['expected']      = 'modules-infrastructure/infrastructure/CalcUA-2021b/redhat8-x86_64',
+        ['expected']      = 'modules-infrastructure/infrastructure/calcua/2021b/arch/redhat8-x86_64',
     },
     {
         ['stack_name']    = 'calcua',
         ['stack_version'] = 'system',
         ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = 'modules-infrastructure/infrastructure/system/redhat8-zen2-arcturus',
+        ['expected']      = 'modules-infrastructure/infrastructure/calcua/system/arch/redhat8-zen2-arcturus',
     },
     {
         ['stack_name']    = 'manual',
@@ -1614,13 +1614,13 @@ tests = {
         ['stack_name']    = 'calcua',
         ['stack_version'] = '2021b',
         ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = 'SW/CalcUA-2021b/RH8-zen2-GFX908',
+        ['expected']      = 'SW/calcua-2021b/RH8-zen2-GFX908',
     },
     {
         ['stack_name']    = 'calcua',
         ['stack_version'] = '2021b',
         ['longname']      = 'redhat8-x86_64',
-        ['expected']      = 'SW/CalcUA-2021b/RH8-x86_64',
+        ['expected']      = 'SW/calcua-2021b/RH8-x86_64',
     },
     {
         ['stack_name']    = 'calcua',
@@ -1656,13 +1656,13 @@ tests = {
         ['stack_name']    = 'calcua',
         ['stack_version'] = '2021b',
         ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = 'EBrepo_files/CalcUA-2021b/redhat8-zen2-arcturus',
+        ['expected']      = 'EBrepo_files/calcua-2021b/redhat8-zen2-arcturus',
     },
     {
         ['stack_name']    = 'calcua',
         ['stack_version'] = '2021b',
         ['longname']      = 'redhat8-x86_64',
-        ['expected']      = 'EBrepo_files/CalcUA-2021b/redhat8-x86_64',
+        ['expected']      = 'EBrepo_files/calcua-2021b/redhat8-x86_64',
     },
     {
         ['stack_name']    = 'calcua',

@@ -59,6 +59,7 @@ end
 -- @param value A path
 -- @return A clean canonical path.
 function path_regularize(value, full)
+   print( 'In path_regularize, argument is ' .. value )
    if value == nil then return nil end
    value = value:gsub("^%s+", "")
    value = value:gsub("%s+$", "")
@@ -70,51 +71,53 @@ function path_regularize(value, full)
       value = ' '
       return value
    end
-   local a    = {}
-   local aa   = {}
-   for dir in value:split("/") do
-      aa[#aa + 1] = dir
-   end
-
-   local first  = aa[1]
-   local icnt   = 2
-   local num    = #aa
-   if (first == ".") then
-      for i = 2, num do
-         if (aa[i] ~= ".") then
-            icnt = i
-            break
-         else
-            icnt = icnt + 1
-         end
-      end
-      a[1] = (icnt > num) and "." or aa[icnt]
-      icnt = icnt + 1
-   else
-      a[1] = first
-   end
-
-   if (full) then
-      for i = icnt, #aa do
-         local dir  = aa[i]
-         local prev = a[#a]
-         if (    dir == ".." and prev ~= "..") then
-            a[#a] = nil
-         elseif (dir ~= ".") then
-            a[#a+1] = dir
-         end
-      end
-   else
-      for i = icnt, #aa do
-         local dir  = aa[i]
-         local prev = a[#a]
-         if (dir ~= ".") then
-            a[#a+1] = dir
-         end
-      end
-   end
-
-   value = table.concat(a,"/")
+   
+-- The part below doesn't seem to work outside Lmod but it is not clear why the first for loop fails.
+--    local a    = {}
+--    local aa   = {}
+--    for dir in value:split("/") do
+--       aa[#aa + 1] = dir
+--    end
+-- 
+--    local first  = aa[1]
+--    local icnt   = 2
+--    local num    = #aa
+--    if (first == ".") then
+--       for i = 2, num do
+--          if (aa[i] ~= ".") then
+--             icnt = i
+--             break
+--          else
+--             icnt = icnt + 1
+--          end
+--       end
+--       a[1] = (icnt > num) and "." or aa[icnt]
+--       icnt = icnt + 1
+--    else
+--       a[1] = first
+--    end
+-- 
+--    if (full) then
+--       for i = icnt, #aa do
+--          local dir  = aa[i]
+--          local prev = a[#a]
+--          if (    dir == ".." and prev ~= "..") then
+--             a[#a] = nil
+--          elseif (dir ~= ".") then
+--             a[#a+1] = dir
+--          end
+--       end
+--    else
+--       for i = icnt, #aa do
+--          local dir  = aa[i]
+--          local prev = a[#a]
+--          if (dir ~= ".") then
+--             a[#a+1] = dir
+--          end
+--       end
+--    end
+-- 
+--    value = table.concat(a,"/")
 
    return value
 end
