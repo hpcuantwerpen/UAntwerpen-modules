@@ -65,11 +65,15 @@ make_dir "$installroot/sources/e"
 make_dir "$installroot/sources/e/EasyBuild"
 EBtardir="$installroot/sources/e/EasyBuild"
 
+# Get the name of the software stack
+stack_name=$($scriptdir/ClusterMod_tools/helper_get_stackname.lua)
+
+
 # Initialise LMOD just to be sure as we may be running this to install in an
 # alternative stack.
-eval $($scriptdir/enable_CalcUA.sh)
+eval $($scriptdir/enable_ClusterMod.sh)
 
-module load calcua/system
+module load $stack_name/system
 module load arch/$($scriptdir/ClusterMod_tools/helper_get_generic_current.lua 'system')
 
 ###############################################################################
@@ -172,8 +176,8 @@ do
         #
         # Need to use the full module name as the module is hidden in the default view!
         echo -e "\n## Now properly installing Easybuild/$EBversion...\n"
-        #module load EasyBuild-unlock/calcua
-        #module load EasyBuild-production/calcua
+        #module load EasyBuild-unlock
+        #module load EasyBuild-production
         #$workdir/easybuild/bin/eb --show-config || die "Something wrong with the work copy of EasyBuild, eb --show-config fails."
         #$workdir/easybuild/bin/eb $installroot/$repo/easybuild/easyconfigs/e/EasyBuild/EasyBuild-${EBversion}.eb \
         #  || die "EasyBuild failed to install EasyBuild-${EBversion}.eb."
