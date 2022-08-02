@@ -59,7 +59,6 @@ end
 -- @param value A path
 -- @return A clean canonical path.
 function path_regularize(value, full)
-   print( 'In path_regularize, argument is ' .. value )
    if value == nil then return nil end
    value = value:gsub("^%s+", "")
    value = value:gsub("%s+$", "")
