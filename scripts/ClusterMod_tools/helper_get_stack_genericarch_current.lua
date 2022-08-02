@@ -5,7 +5,7 @@ local lfs = require( 'lfs' )
 local routine_name = 'helper_get_stack_genericarch_current'
 
 if #arg ~= 1 then
-    io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the calcua stack.\n' )
+    io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the stack.\n' )
     os.exit( 1 )
 end
 
