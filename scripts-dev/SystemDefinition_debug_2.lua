@@ -1,9 +1,13 @@
 -- -----------------------------------------------------------------------------
 --
+-- ClusterMod_ClusterName is the name of the system that might be used for
+-- constructing the name of certain environment variables or file names.
 -- ClusterMod_StackName is the name that will be used for the regular software
 -- stack modules of the cluster.
 --
 
+ClusterMod_ClusterName = 'CalcUA'
+ClusterMod_StackName = 'calcua'
 ClusterMod_StackName = 'calcua'
 
 -- -----------------------------------------------------------------------------

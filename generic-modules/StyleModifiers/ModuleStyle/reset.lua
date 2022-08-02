@@ -1,4 +1,4 @@
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() .. ': Entering' )
 end
 --
@@ -28,6 +28,6 @@ if mode() == 'load' then
     unload( 'ModulePowerUser' )
 end
 
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() .. ': Exiting' )
 end

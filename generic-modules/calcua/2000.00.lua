@@ -2,7 +2,7 @@
 -- Written by Kurt Lust, kurt.lust@uantwerpen.be
 --
 
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() )
 end
 
@@ -11,7 +11,7 @@ end
 -- Initialisations
 --
 
-family( 'CalcUA_SoftwareStack' )
+family( 'ClusterMod_SoftwareStack' )
 add_property( 'lmod', 'sticky' )
 
 -- Detect the module root from the position of this module in the module tree
@@ -34,7 +34,7 @@ local stack_version = myModuleVersion()
 -- Detect the architecture of the current node.
 local node_osarch = get_calcua_longosarch_current( stack_version )
 local used_osarch = get_calcua_matchingarch( node_osarch, stack_version, stack_version )
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleName() .. '/' .. myModuleVersion() .. 
                  ', stack name/version is  ' .. stack_name .. '/' .. stack_version ..
                  ', arch module to load is arch/' .. used_osarch )
@@ -84,7 +84,7 @@ load( 'arch/' .. used_osarch )
 
 -- Final debugging information
 
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     local modulepath = os.getenv( 'MODULEPATH' ):gsub( ':', '\n' )
     LmodMessage( 'DEBUG: The MODULEPATH before exiting ' .. myModuleFullName() .. ' (mode ' .. mode() .. ') is:\n' .. modulepath .. '\n' )
 end

@@ -1,4 +1,4 @@
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myFileName() .. ': Entering' )
 end
 
@@ -7,12 +7,12 @@ end
 --
 add_property( 'lmod', 'sticky' )
 
--- Find the root of the CalcUA installation.
---local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init%-.*/CalcUA%-init/.*' )
-local CalcUA_root = myFileName():match( '(.*)/modules%-infrastructure/init/CalcUA%-init/.*' )
+-- Find the root of the module installation.
+--local ClusterMod_root = myFileName():match( '(.*)/modules%-infrastructure/init%-.*/CalcUA%-init/.*' )
+local ClusterMod_root = myFileName():match( '(.*)/modules%-infrastructure/init/CalcUA%-init/.*' )
 
 repo_modules,repo_easybuild,systemdefinition = get_configuration( )
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myFileName() .. ': working with module repo ' .. repo_modules ..
                  ' and EasyBuild repo ' .. repo_easybuild )
 end
@@ -30,7 +30,7 @@ end
 --
 -- Make the modules that determine visibility available
 --
-prepend_path( 'MODULEPATH', pathJoin( CalcUA_root, 'modules-infrastructure/StyleModifiers' ) )
+prepend_path( 'MODULEPATH', pathJoin( ClusterMod_root, 'modules-infrastructure/StyleModifiers' ) )
 
 -- Set the display style of the modules
 -- Note that if we set LMOD_MODULERCFILE only in this module and not at initialisation,
@@ -59,7 +59,7 @@ end
 --
 -- Make the software stacks available
 --
-prepend_path( 'MODULEPATH', pathJoin( CalcUA_root, 'modules-infrastructure/stack' ) )
+prepend_path( 'MODULEPATH', pathJoin( ClusterMod_root, 'modules-infrastructure/stack' ) )
 
 -- -----------------------------------------------------------------------------
 --
@@ -145,7 +145,7 @@ More information
 whatis( 'CalcUA-init: Initialisation module for the software stacks. Unload at your own risk.' )
 
 -- Debug message
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myFileName() .. ': Exiting' )
 end
 

@@ -592,7 +592,7 @@ do
 
             end -- if long_osarch_regular ~= nil then
 
-        end -- for _,node_type in ipairs( CalcUA_NodeType )
+        end -- for _,node_type in ipairs( ClusterMod_NodeType )
 
     end -- if stack_version ˜=  'manual' and stack_version ~= 'system' then
 

@@ -125,9 +125,9 @@ The structure is a table of tables.
     from other tables.
 
 
-### `CalcUA_SystemProperies`
+### `ClusterMod_SystemProperies`
 
-`CalcUA_SystemProperies` adds additional information for each partition that is not contained
+`ClusterMod_SystemProperies` adds additional information for each partition that is not contained
 in `ClusterMod_SystemTable`. It is a table of tables, the first index is the name of the calcua
 stack or `manual` for the pseudo-stack of manually installed software. The table for each
 software stack has the following entries:
@@ -607,7 +607,7 @@ map_accel_long_to_short = {
     This is a helper function to `get_system_module_dirs`.
 
 -   `populate_cache_subarchs( stack_version )`: Populate a part of the cache variable
-    `CalcUA_cache_subarchs` initialized in `SitePackage_helper.lua` with the other 
+    `ClusterMod_cache_subarchs` initialized in `SitePackage_helper.lua` with the other 
     helper variables that are used throughout.
 
     For each stack version, the cache variable will return `true` for each valid 
@@ -792,7 +792,7 @@ initialisation code is executed when the file is included.
 
 ### Data structures
 
-#### `CalcUA_sorted_archmap_keys`
+#### `ClusterMod_sorted_archmap_keys`
 
 This data structure is a sorted list of the level 1 keys used in the 
 [`ClusterMod_map_arch_hierarchy`](#ClusterMod_map_arch_hierarchy) data structure.
@@ -802,7 +802,7 @@ recomputing that data.
 TODO: GET RID OF THIS STRUCTURE
 
 
-#### `CalcUA_sorted_cputogen_keys`
+#### `ClusterMod_sorted_cputogen_keys`
 
 This data structure is a sorted list of the level 1 keys used in the 
 [`ClusterMod_map_cpu_to_gen`](#ClusterMod_map_cpu_to_gen) data structure.
@@ -810,7 +810,7 @@ Its main purpose is to speed up a search routine in this file, to avoid always
 recomputing that data.
 
 
-#### `CalcUA_sorted_toparchreduction_keys`
+#### `ClusterMod_sorted_toparchreduction_keys`
 
 This data structure is a sorted list of the level 1 keys used in the 
 [`ClusterMod_reduce_top_arch`](#ClusterMod_reduce_top_arch) data structure.
@@ -824,7 +824,7 @@ recomputing that data.
     the largest key in `ClusterMod_map_arch_hierarchy` not larger than the given version.
 
 -   `get_matching_defcpu_key( version )`: For a given numeric (i.e., yyyymm) version, returns
-    the largest key in `CalcUA_map_def_cpu` not larger than the given version.
+    the largest key in `ClusterMod_map_def_cpu` not larger than the given version.
 
 -   `get_matching_cputogen_key( version )`: For a given numeric (i.e., yyyymm) version, returns
     the largest key in `ClusterMod_map_cpu_to_gen` not larger than the given version.

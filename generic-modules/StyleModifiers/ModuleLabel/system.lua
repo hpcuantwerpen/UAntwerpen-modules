@@ -1,4 +1,4 @@
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() .. ': Entering' )
 end
 
@@ -31,6 +31,6 @@ end
 -- this module or to restore the value set by the system.
 pushenv( 'LMOD_AVAIL_STYLE', 'label:<system>' )
 
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() .. ': Exiting' )
 end

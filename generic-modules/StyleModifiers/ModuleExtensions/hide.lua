@@ -1,4 +1,4 @@
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() .. ': Entering' )
 end
 
@@ -27,6 +27,6 @@ end
 -- this module.
 pushenv( 'LMOD_AVAIL_EXTENSIONS', 'no' )
 
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() .. ': Exiting' )
 end

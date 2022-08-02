@@ -8,32 +8,32 @@
 --
 -- Build a table with the keys from ClusterMod_map_arch_hierarchy sorted
 --
-CalcUA_sorted_archmap_keys = nil
+ClusterMod_sorted_archmap_keys = nil
 
 function get_matching_archmap_key( version )
 
-    if CalcUA_sorted_archmap_keys == nil then
-        CalcUA_sorted_archmap_keys = {}
+    if ClusterMod_sorted_archmap_keys == nil then
+        ClusterMod_sorted_archmap_keys = {}
         for key in pairs( ClusterMod_map_arch_hierarchy )
         do
-            table.insert( CalcUA_sorted_archmap_keys, key )
+            table.insert( ClusterMod_sorted_archmap_keys, key )
         end
-        table.sort( CalcUA_sorted_archmap_keys )
+        table.sort( ClusterMod_sorted_archmap_keys )
     end
 
-    if version < CalcUA_sorted_archmap_keys[1]
+    if version < ClusterMod_sorted_archmap_keys[1]
     then
         return nil
     end
 
-    local index = #CalcUA_sorted_archmap_keys
+    local index = #ClusterMod_sorted_archmap_keys
 
-    while CalcUA_sorted_archmap_keys[index] > version
+    while ClusterMod_sorted_archmap_keys[index] > version
     do
         index = index - 1
     end
 
-    return CalcUA_sorted_archmap_keys[index]
+    return ClusterMod_sorted_archmap_keys[index]
 
 end
 
@@ -41,96 +41,96 @@ end
 -- Build a table with the keys from ClusterMod_map_cpu_to_gen sorted
 --
 
-CalcUA_sorted_cputogen_keys = nil
+ClusterMod_sorted_cputogen_keys = nil
 
 function get_matching_cputogen_key( version )
 
-    if CalcUA_sorted_cputogen_keys == nil then
-        CalcUA_sorted_cputogen_keys = {}
+    if ClusterMod_sorted_cputogen_keys == nil then
+        ClusterMod_sorted_cputogen_keys = {}
         for key in pairs( ClusterMod_map_cpu_to_gen )
         do
-            table.insert( CalcUA_sorted_cputogen_keys, key )
+            table.insert( ClusterMod_sorted_cputogen_keys, key )
         end
-        table.sort( CalcUA_sorted_cputogen_keys )       
+        table.sort( ClusterMod_sorted_cputogen_keys )       
     end
 
-    if version < CalcUA_sorted_cputogen_keys[1]
+    if version < ClusterMod_sorted_cputogen_keys[1]
     then
         return nil
     end
 
-    local index = #CalcUA_sorted_cputogen_keys
+    local index = #ClusterMod_sorted_cputogen_keys
 
-    while CalcUA_sorted_cputogen_keys[index] > version
+    while ClusterMod_sorted_cputogen_keys[index] > version
     do
         index = index - 1
     end
 
-    return CalcUA_sorted_cputogen_keys[index]
+    return ClusterMod_sorted_cputogen_keys[index]
 
 end
 
 --
 -- Build a table with the keys from ClusterMod_reduce_cpu sorted
 --
-CalcUA_sorted_reducecpu_keys = nil
+ClusterMod_sorted_reducecpu_keys = nil
 
 function get_matching_reducecpu_key( version )
 
-    if CalcUA_sorted_reducecpu_keys == nil then
-        CalcUA_sorted_reducecpu_keys = {}
+    if ClusterMod_sorted_reducecpu_keys == nil then
+        ClusterMod_sorted_reducecpu_keys = {}
         for key in pairs( ClusterMod_reduce_cpu )
         do
-            table.insert( CalcUA_sorted_reducecpu_keys, key )
+            table.insert( ClusterMod_sorted_reducecpu_keys, key )
         end
-        table.sort( CalcUA_sorted_reducecpu_keys )
+        table.sort( ClusterMod_sorted_reducecpu_keys )
     end
 
-    if version < CalcUA_sorted_reducecpu_keys[1]
+    if version < ClusterMod_sorted_reducecpu_keys[1]
     then
         return nil
     end
 
-    local index = #CalcUA_sorted_reducecpu_keys
+    local index = #ClusterMod_sorted_reducecpu_keys
 
-    while CalcUA_sorted_reducecpu_keys[index] > version
+    while ClusterMod_sorted_reducecpu_keys[index] > version
     do
         index = index - 1
     end
 
-    return CalcUA_sorted_reducecpu_keys[index]
+    return ClusterMod_sorted_reducecpu_keys[index]
 
 end
 
 --
 -- Build a table with the keys from ClusterMod_reduce_top_arch
 --
-CalcUA_sorted_toparchreduction_keys = nil
+ClusterMod_sorted_toparchreduction_keys = nil
 
 function get_matching_toparchreduction_key( version )
 
-    if CalcUA_sorted_toparchreduction_keys == nil then
-        CalcUA_sorted_toparchreduction_keys = {}
+    if ClusterMod_sorted_toparchreduction_keys == nil then
+        ClusterMod_sorted_toparchreduction_keys = {}
         for key in pairs( ClusterMod_reduce_top_arch )
         do
-            table.insert( CalcUA_sorted_toparchreduction_keys, key )
+            table.insert( ClusterMod_sorted_toparchreduction_keys, key )
         end
-        table.sort( CalcUA_sorted_toparchreduction_keys )
+        table.sort( ClusterMod_sorted_toparchreduction_keys )
     end
 
-    if version < CalcUA_sorted_toparchreduction_keys[1]
+    if version < ClusterMod_sorted_toparchreduction_keys[1]
     then
         return nil
     end
 
-    local index = #CalcUA_sorted_toparchreduction_keys
+    local index = #ClusterMod_sorted_toparchreduction_keys
 
-    while CalcUA_sorted_toparchreduction_keys[index] > version
+    while ClusterMod_sorted_toparchreduction_keys[index] > version
     do
         index = index - 1
     end
 
-    return CalcUA_sorted_toparchreduction_keys[index]
+    return ClusterMod_sorted_toparchreduction_keys[index]
 
 end
 
@@ -139,8 +139,8 @@ end
 -- needed.
 --
 
-CalcUA_cache_subarchs = nil
-CalcUA_cache_subosarchs = nil
+ClusterMod_cache_subarchs = nil
+ClusterMod_cache_subosarchs = nil
 
 
 -- -----------------------------------------------------------------------------

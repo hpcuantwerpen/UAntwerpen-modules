@@ -95,7 +95,7 @@ end
 
 function populate_cache_subosarchs( stack_version )
 
-    if CalcUA_cache_subosarchs ~= nil and CalcUA_cache_subosarchs[stack_version] ~= nil then
+    if ClusterMod_cache_subosarchs ~= nil and ClusterMod_cache_subosarchs[stack_version] ~= nil then
         return -- Already populated so we do nothing.
     end
     
@@ -103,12 +103,12 @@ function populate_cache_subosarchs( stack_version )
         return  -- Illegal value for stack_version but for now we simply return and do nothing.
     end
 
-    if CalcUA_cache_subosarchs == nil then
-        CalcUA_cache_subosarchs = {}
+    if ClusterMod_cache_subosarchs == nil then
+        ClusterMod_cache_subosarchs = {}
     end
     
-    if CalcUA_cache_subosarchs[stack_version] == nil then
-        CalcUA_cache_subosarchs[stack_version] = {}
+    if ClusterMod_cache_subosarchs[stack_version] == nil then
+        ClusterMod_cache_subosarchs[stack_version] = {}
     end
 
     local matching_key = get_matching_cputogen_key( stack_version )
@@ -122,16 +122,16 @@ function populate_cache_subosarchs( stack_version )
             local accel = extract_accel_from_arch( arch )
             
             local long_osarch = OS .. '-' .. arch
-            CalcUA_cache_subosarchs[stack_version][long_osarch] = true
+            ClusterMod_cache_subosarchs[stack_version][long_osarch] = true
             
             if arch ~= CPU and ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
                 long_osarch = OS .. '-' .. CPU
-                CalcUA_cache_subosarchs[stack_version][long_osarch] = true
+                ClusterMod_cache_subosarchs[stack_version][long_osarch] = true
             end
                 
             if ClusterMod_map_cpu_to_gen[matching_key][CPU] ~= nil then
                 long_osarch = OS .. '-' .. ClusterMod_map_cpu_to_gen[matching_key][CPU]
-                CalcUA_cache_subosarchs[stack_version][long_osarch] = true
+                ClusterMod_cache_subosarchs[stack_version][long_osarch] = true
             end            
             
         end -- for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] )
@@ -140,7 +140,7 @@ function populate_cache_subosarchs( stack_version )
     
     -- DEBUG CODE
     -- print( 'DEBUG: populate_cache_subosarchs: found following architectures for ' .. stack_version .. ':' )
-    -- for key,_ in pairs( CalcUA_cache_subosarchs[stack_version] ) do print( '  ' .. key ) end
+    -- for key,_ in pairs( ClusterMod_cache_subosarchs[stack_version] ) do print( '  ' .. key ) end
     -- print( 'DEBUG: end output' )
     
 end
@@ -157,8 +157,8 @@ end
 
 function populate_cache_subarchs( stack_version, os_version )
 
-    if CalcUA_cache_subarchs ~= nil and CalcUA_cache_subarchs[stack_version] ~= nil 
-       and CalcUA_cache_subarchs[stack_version[os_version]] ~=  nil then
+    if ClusterMod_cache_subarchs ~= nil and ClusterMod_cache_subarchs[stack_version] ~= nil 
+       and ClusterMod_cache_subarchs[stack_version[os_version]] ~=  nil then
         return -- Already populated so we do nothing.
     end
     
@@ -170,16 +170,16 @@ function populate_cache_subarchs( stack_version, os_version )
         return  -- Illegal value for os_version for this stack_version, but for now we simply return and do nothing..
     end
 
-    if CalcUA_cache_subarchs == nil then
-        CalcUA_cache_subarchs = {}
+    if ClusterMod_cache_subarchs == nil then
+        ClusterMod_cache_subarchs = {}
     end
     
-    if CalcUA_cache_subarchs[stack_version] == nil then
-        CalcUA_cache_subarchs[stack_version] = {}
+    if ClusterMod_cache_subarchs[stack_version] == nil then
+        ClusterMod_cache_subarchs[stack_version] = {}
     end
 
-    if CalcUA_cache_subarchs[stack_version][os_version] == nil then
-        CalcUA_cache_subarchs[stack_version][os_version] = {}
+    if ClusterMod_cache_subarchs[stack_version][os_version] == nil then
+        ClusterMod_cache_subarchs[stack_version][os_version] = {}
     end
 
     local matching_key = get_matching_cputogen_key( stack_version )
@@ -189,22 +189,22 @@ function populate_cache_subarchs( stack_version, os_version )
         local CPU = extract_cpu_from_arch( arch )
         local accel = extract_accel_from_arch( arch )
         
-        CalcUA_cache_subarchs[stack_version][os_version][arch] = true
+        ClusterMod_cache_subarchs[stack_version][os_version][arch] = true
         
         if arch ~= CPU and ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
-            CalcUA_cache_subarchs[stack_version][os_version][CPU] = true
+            ClusterMod_cache_subarchs[stack_version][os_version][CPU] = true
         end
             
         if ClusterMod_map_cpu_to_gen[matching_key][CPU] ~= nil then
             local gencpu = ClusterMod_map_cpu_to_gen[matching_key][CPU]
-            CalcUA_cache_subarchs[stack_version][os_version][gencpu] = true
+            ClusterMod_cache_subarchs[stack_version][os_version][gencpu] = true
         end            
         
     end -- for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] )
    
     -- -- DEBUG CODE
     -- print( 'DEBUG: populate_cache_subarchs: found following architectures for ' .. stack_version .. ' and OS ' .. os_version .. ':' )
-    -- for key,_ in pairs( CalcUA_cache_subarchs[stack_version][os_version] ) do print( '  ' .. key ) end
+    -- for key,_ in pairs( ClusterMod_cache_subarchs[stack_version][os_version] ) do print( '  ' .. key ) end
     -- print( 'DEBUG: end output' )
     
 end
@@ -635,7 +635,7 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
 
         local matching_version = get_matching_toparchreduction_key( num_reduced_stack_version )
 
-        while use_arch ~= nil and CalcUA_cache_subarchs[stack_version][use_os][use_arch] == nil 
+        while use_arch ~= nil and ClusterMod_cache_subarchs[stack_version][use_os][use_arch] == nil 
               and ClusterMod_reduce_top_arch[matching_version][use_arch] ~= nil 
         do
             use_arch = ClusterMod_reduce_top_arch[matching_version][use_arch]
@@ -660,7 +660,7 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
 
             local matching_version = get_matching_reducecpu_key( num_reduced_stack_version )
 
-            while use_arch ~= nil and CalcUA_cache_subarchs[stack_version][use_os][use_arch] == nil 
+            while use_arch ~= nil and ClusterMod_cache_subarchs[stack_version][use_os][use_arch] == nil 
                   and ClusterMod_reduce_cpu[matching_version][use_arch] ~= nil 
             do
                 use_arch = ClusterMod_reduce_cpu[matching_version][use_arch]
@@ -684,7 +684,7 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
 
         local matching_version = get_matching_reducecpu_key( num_reduced_stack_version )
 
-        while use_arch ~= nil and CalcUA_cache_subarchs[stack_version][use_os][use_arch] == nil 
+        while use_arch ~= nil and ClusterMod_cache_subarchs[stack_version][use_os][use_arch] == nil 
               and ClusterMod_reduce_cpu[matching_version][use_arch] ~= nil 
         do
             use_arch = ClusterMod_reduce_cpu[matching_version][use_arch]
@@ -698,7 +698,7 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
     
     if use_arch == nil then
         return nil
-    elseif CalcUA_cache_subarchs[stack_version][use_os][use_arch] == true then
+    elseif ClusterMod_cache_subarchs[stack_version][use_os][use_arch] == true then
         return use_os .. '-' .. use_arch
     else
         return nil
@@ -842,7 +842,7 @@ function get_system_module_dir( long_osarch, stack_name, stack_version )
 
     -- Check if the input long_osarch is valid in the cluster definition.
     populate_cache_subosarchs( use_version )
-    if CalcUA_cache_subosarchs[use_version][long_osarch] ~= true then
+    if ClusterMod_cache_subosarchs[use_version][long_osarch] ~= true then
         LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: ' .. (long_osarch or 'nil') .. 
                    ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
@@ -874,7 +874,7 @@ function get_system_module_dirs( long_osarch, stack_name, stack_version )
 
     -- Check if the input long_osarch is valid in the cluster definition.
     populate_cache_subosarchs( use_version )
-    if CalcUA_cache_subosarchs[use_version][long_osarch] ~= true then
+    if ClusterMod_cache_subosarchs[use_version][long_osarch] ~= true then
         LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: ' .. (long_osarch or 'nil') .. 
                    ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.

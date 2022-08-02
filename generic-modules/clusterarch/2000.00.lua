@@ -5,12 +5,12 @@
 -- of the software stack optimised for the hardware of the system
 --
 
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
 --    LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Entering' )
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myFileName() .. ': Entering' )
 end
 
-family( 'CalcUA_clusterarch' )
+family( 'ClusterMod_clusterarch' )
 add_property( 'lmod', 'sticky' )
 
 -- Detect the directory of LMOD configuration files from LMOD_PACKAGE_PATH
@@ -34,7 +34,7 @@ local osarch
 install_root, stack_name, stack_version, osarch = 
     myFileName():match( '(.*)/modules%-infrastructure/arch/([^/]+)/([^/]+)/arch/(.+)%.lua' )
 
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Detected:\n' ..
                  '- install_root: ' .. install_root .. '\n' .. 
                  '- stack name/version: ' .. stack_name .. '/' .. stack_version .. '\n' ..
@@ -63,7 +63,7 @@ local user_easybuild_root = get_user_prefix_EasyBuild()
 --         user_easybuild_modules = nil
 --     end
 -- end
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Detected user installation root at ' .. ( user_easybuild_root or 'NIL' ) )
 end
 
@@ -128,7 +128,7 @@ end
 
 -- Final debugging information
 
-if os.getenv( '_CALCUA_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     local modulepath = os.getenv( 'MODULEPATH' ):gsub( ':', '\n' )
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': The MODULEPATH before exiting ' .. myModuleFullName() .. ' (mode ' .. mode() .. ') is:\n' .. modulepath .. '\n' )
 end

@@ -36,7 +36,7 @@ with the exception that we use `skylake` instead of `skylake_avx512`.
 
 What the module does:
 
--   Declare itself a sticky module from the family `CalcUA_SoftwareStack`.
+-   Declare itself a sticky module from the family `ClusterMod_SoftwareStack`.
 -   Determine its name and version of the software stack from the module name and version
 -   Determine the architecture of the node on which it is executing taking
     into account the architectures supported by the current version of
@@ -58,7 +58,7 @@ in the `prepare_calcua_stack.lua` script.
 
 What the module does:
 
--   Declare itself a sticky module from the family `CalcUA_clusterarch`.
+-   Declare itself a sticky module from the family `ClusterMod_clusterarch`.
 
 -   Check location for the user stack via EBU_USER_PREFIX or the default, turn off by setting
     EBU_USER_PREFIX to an empty value. The default location is $VSC_DATA/EasyBuild
