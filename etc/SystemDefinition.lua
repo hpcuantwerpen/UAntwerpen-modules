@@ -64,7 +64,7 @@ CalcUA_SystemTable = {
             'skylake-noaccel',
         }
     },
-    ['2021b'] = {
+    ['2022a'] = {
         ['redhat7'] = {
             'ivybridge-noaccel',
         },
@@ -86,18 +86,18 @@ CalcUA_SystemTable = {
 --
 CalcUA_SystemProperties = {
     ['system'] = {
-        ['EasyBuild'] = '4.5.3',
+        ['EasyBuild'] = '4.6.0',
         ['hierarchy'] = '2L',  -- Doesn't really matter as we use only one level
     },
     ['manual'] = {  -- This is not an EasyBuild-managed stack.
         ['hierarchy'] = '2L',  -- Doesn't really matter as we use only one level
     },
     ['2020a'] = {
-        ['EasyBuild'] = '4.2.2',
+        ['EasyBuild'] = '4.5.3',
         ['hierarchy'] = '2L',
     },
-    ['2021b'] = {
-        ['EasyBuild'] = '4.5.3',
+    ['2022a'] = {
+        ['EasyBuild'] = '4.6.0',
         ['hierarchy'] = '2L',
     },
 }
@@ -126,7 +126,7 @@ CalcUA_ClusterMap = {
         ['leibniz-skl'] = 'redhat8-skylake-noaccel',
         ['vaughan'] =     'redhat8-zen2-noaccel',
     },
-    ['2021b'] = {
+    ['2022a'] = {
         ['hopper'] =      'redhat7-ivybridge-noaccel',
         ['leibniz'] =     'redhat8-broadwell-noaccel',
         ['leibniz-skl'] = 'redhat8-skylake-noaccel',
@@ -149,7 +149,7 @@ CalcUA_toolchain_map = {
     ['2020b']  = '202007',
     ['2021a']  = '202101',
     ['2021b']  = '202107',
-    ['2022a']  = '202201',
+    ['2022a']  = '202206',
 }
 
 
