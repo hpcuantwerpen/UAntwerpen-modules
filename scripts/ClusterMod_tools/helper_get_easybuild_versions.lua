@@ -10,7 +10,7 @@ local stack_name = 'calcua'
 
 local script_called_dir = arg[0]:match( '(.*)/[^/]+' )
 lfs.chdir( script_called_dir )
-local repo_root = lfs.currentdir():match( '(.*)/scripts/calcua_tools' )
+local repo_root = lfs.currentdir():match( '(.*)/scripts/ClusterMod_tools' )
 local root_dir = repo_root:match( '(.*)/[^/]+' )
 
 dofile( repo_root .. '/etc/SystemDefinition.lua' )

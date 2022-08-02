@@ -50,7 +50,7 @@ EOF
 
 # Get the numeric equivalent of the version to be used to locate files that exist in multiple versions.
 # The code is shared with code used by SitePackage.lua to ensure consistent processing.
-numeric_version=$($installdir/$reposupdir/scripts/calcua_tools/helper_map_toolchain.lua $stack_version)
+numeric_version=$($installdir/$reposupdir/scripts/ClusterMod_tools/helper_map_toolchain.lua $stack_version)
 echo -e "  * Using equivalent version $numeric_version for finding version-dependent files.\n"
 
 
@@ -66,5 +66,5 @@ echo -e "  * Using equivalent version $numeric_version for finding version-depen
 
 echo -e "\n## Initialising the directory structure...\n"
 
-$scriptdir/calcua_tools/prepare_calcua_stack.lua "$stack_version"
+$scriptdir/ClusterMod_tools/prepare_calcua_stack.lua "$stack_version"
 

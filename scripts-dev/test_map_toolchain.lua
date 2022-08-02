@@ -1,6 +1,6 @@
 #! /usr/bin/env lua
 
-dofile( '../scripts/calcua_tools/lmod_emulation.lua' )
+dofile( '../scripts/ClusterMod_tools/lmod_emulation.lua' )
 dofile( '../etc/SystemDefinition.lua' )
 dofile( '../LMOD/SitePackage_map_toolchain.lua' )
 

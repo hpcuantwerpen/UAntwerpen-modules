@@ -14,7 +14,7 @@ dofile( arg[1] )
 
 dofile( systemdefinition )
 
-dofile( repo_modules .. '/scripts/calcua_tools/lmod_emulation.lua' )
+dofile( repo_modules .. '/scripts/ClusterMod_tools/lmod_emulation.lua' )
 dofile( repo_modules .. '/LMOD/SitePackage_helper.lua' )
 dofile( repo_modules .. '/LMOD/SitePackage_map_toolchain.lua' )
 dofile( repo_modules .. '/LMOD/SitePackage_arch_hierarchy.lua' )

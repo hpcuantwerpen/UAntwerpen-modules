@@ -1,6 +1,6 @@
 #! /usr/bin/env lua
 
-dofile( '../scripts/calcua_tools/lmod_emulation.lua' )
+dofile( '../scripts/ClusterMod_tools/lmod_emulation.lua' )
 
 --
 -- Instead of readint etc/SystemDefnition.lua. we use a test configuration

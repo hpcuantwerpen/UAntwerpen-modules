@@ -14,10 +14,10 @@ local stack_version = arg[1]
 
 local script_called_dir = arg[0]:match( '(.*)/[^/]+' )
 lfs.chdir( script_called_dir )
-local repo_root = lfs.currentdir():match( '(.*)/scripts/calcua_tools' )
+local repo_root = lfs.currentdir():match( '(.*)/scripts/ClusterMod_tools' )
 local root_dir = repo_root:match( '(.*)/[^/]+' )
 
-dofile( repo_root .. '/scripts/calcua_tools/lmod_emulation.lua' )
+dofile( repo_root .. '/scripts/ClusterMod_tools/lmod_emulation.lua' )
 dofile( repo_root .. '/etc/SystemDefinition.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_helper.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_system_info.lua' )

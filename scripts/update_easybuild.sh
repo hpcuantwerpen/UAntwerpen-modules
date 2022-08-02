@@ -70,14 +70,14 @@ EBtardir="$installroot/sources/e/EasyBuild"
 eval $($scriptdir/enable_CalcUA.sh)
 
 module load calcua/system
-module load arch/$($scriptdir/calcua_tools/helper_get_generic_current.lua 'system')
+module load arch/$($scriptdir/ClusterMod_tools/helper_get_generic_current.lua 'system')
 
 ###############################################################################
 #
 # Actual installations
 #
 
-for EBversion in $($scriptdir/calcua_tools/helper_get_easybuild_versions.lua)
+for EBversion in $($scriptdir/ClusterMod_tools/helper_get_easybuild_versions.lua)
 do
 
     echo "\n## Considering EasyBuild $EBversion"

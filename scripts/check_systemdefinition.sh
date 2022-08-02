@@ -25,4 +25,4 @@ fi
 
 #echo -e "Working with $systemdefinition_file."
 
-$scriptdir/calcua_tools/check_systemdefinition.lua $systemdefinition_file
+$scriptdir/ClusterMod_tools/check_systemdefinition.lua $systemdefinition_file
