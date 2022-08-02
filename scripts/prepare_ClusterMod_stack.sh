@@ -41,10 +41,11 @@ installroot=$PWD
 ebsubdir='UAntwerpen-easybuild'
 
 stack_version="$1"
+stack_name=$($scriptdir/ClusterMod_tools/helper_get_stackname.lua)
 
 cat <<EOF
 
-  * Initialising software stack calcua/$stack_version
+  * Initialising software stack $stack_name/$stack_version
   * Root of the installation: $installroot
 EOF
 
