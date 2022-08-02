@@ -147,6 +147,29 @@ end -- for stack_version,reduc_top_arch in pairs( ClusterMod_reduce_top_arch )
 
 
 --
+-- - Check: ClusterMod_ClusterName and ClusterMod_StackName defined.
+--
+
+test_number = test_number + 1
+io.stdout:write( 'Test ' .. test_number .. ': Are ClusterMod_ClusterName and ClusterMod_StackName defined? ' )
+
+number_errors = 0
+
+if ClusterMod_ClusterName == nil or ClusterMod_ClusterName == '' then
+    number_errors = number_errors + 1
+end
+if ClusterMod_StackName == nil or ClusterMod_StackName == '' then
+    number_errors = number_errors + 1
+end
+
+if number_errors == 0 then
+    io.stdout:write( 'PASSED\n' )
+else
+    io.stdout:write( '\nTest ' .. test_number .. ': Are ClusterMod_ClusterName and ClusterMod_StackName defined generated ' .. number_errors .. ' error(s).\n' )
+end
+
+
+--
 -- - Check: ClusterMod_def_cpu in system definition
 --   TODO: Might be moved to SitePackage_arch_hierachy?
 --
@@ -447,7 +470,7 @@ number_errors = 0
 for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
 do
 
-    local supported_stack_list = {}
+    local supported_stackversion_list = {}
     local supported_by_system = false
     local supported_by_manual = false
     
@@ -464,7 +487,7 @@ do
             supported_by_system = ( node_used_long_osarch ~=  nil )
         else
             if node_used_long_osarch ~= nil then
-                table.insert( supported_stack_list, stack_version )
+                table.insert( supported_stackversion_list, stack_version )
             end
         end
 
@@ -480,7 +503,7 @@ do
         io.stdout:write( '\nERROR: Note type ' .. node_long_osarch .. ' is not supported by the system software stack.')
     end
 
-    if #supported_stack_list == 0 then
+    if #supported_stackversion_list == 0 then
         number_errors = number_errors + 1
         io.stdout:write( '\nERROR: Note type ' .. node_long_osarch .. ' is not supported by any of the regular software stacks.' )
     end
@@ -621,22 +644,40 @@ print( '===============================================\n' )
 
 -- -----------------------------------------------------------------------------
 --
+-- Print some intial information
+--
+
+print( '- Cluster name: ' .. ClusterMod_ClusterName )
+
+
+-- -----------------------------------------------------------------------------
+--
 -- Make a sorted list of stack versions. system goes first, manual goes last.
 --
 
-local stack_list = {}
+local stackversion_list = {}
 
 for stack_version,_ in pairs( ClusterMod_SystemTable )
 do
     if stack_version ~= 'system' and stack_version ~= 'manual' then
-        table.insert( stack_list, stack_version )
+        table.insert( stackversion_list, stack_version )
     end
 end
 
-table.sort( stack_list )
+table.sort( stackversion_list )
 
-table.insert( stack_list, 1, 'system' )
-table.insert( stack_list, 'manual' )
+table.insert( stackversion_list, 1, 'system' )
+table.insert( stackversion_list, 'manual' )
+
+local stack_list = {}
+for index,version in ipairs( stackversion_list )
+do
+    if version == 'manual' then
+        table.insert( stack_list, version )
+    else
+        table.insert( stack_list, ClusterMod_StackName .. '/' .. version )
+    end
+end
 
 print( '- Stacks supported by this system definition (including system and manual):\n  * ' ..
        table.concat( stack_list, '\n  * ') )
@@ -650,8 +691,15 @@ print( '- Stacks supported by this system definition (including system and manua
 
 local SystemTable_long_osarch = {}
 
-for _,stack_version in ipairs( stack_list )
+for _,stack_version in ipairs( stackversion_list )
 do
+
+    local stack_nameversion
+    if stack_version == 'manual' then
+        stack_nameversion = stack_version
+    else
+        stack_nameversion = ClusterMod_StackName .. '/' .. stack_version
+    end
 
     SystemTable_long_osarch[stack_version] = {}
     local OSArchTableWorker = {}
@@ -673,7 +721,7 @@ do
 
     end
 
-    print( '- Detected the following OS-arch combinations for ' .. stack_version  ..  ':\n  * ' .. 
+    print( '- Detected the following OS-arch combinations for ' .. stack_nameversion  ..  ':\n  * ' .. 
            table.concat( SystemTable_long_osarch[stack_version], '\n  * ') )
     
 end
@@ -698,12 +746,19 @@ do
     
     local node_os = extract_os( node_long_osarch )
     
-    for _,stack_version in ipairs( stack_list )
+    for _,stack_version in ipairs( stackversion_list )
     do
+
+        local stack_nameversion
+        if stack_version == 'manual' then
+            stack_nameversion = stack_version
+        else
+            stack_nameversion = ClusterMod_StackName .. '/' .. stack_version
+        end
 
         if ClusterMod_SystemTable[stack_version][node_os] == nil then
         
-            print( '  * Stack ' .. stack_version .. ' is not supported on this node type.' )
+            print( '  * Stack ' .. stack_nameversion .. ' is not supported on this node type.' )
             
         else
         
@@ -711,15 +766,15 @@ do
             local node_used_long_osarch = get_calcua_matchingarch( node_long_osarch, stack_version, stack_version )
         
             if node_used_long_osarch == nil then
-                print( '  * Stack ' .. stack_version .. ' is not supported on this node type.' )
+                print( '  * Stack ' .. stack_nameversion .. ' is not supported on this node type.' )
             else
-                print( '  * Stack ' .. stack_version .. ' is offered through architecture ' ..  
+                print( '  * Stack ' .. stack_nameversion .. ' is offered through architecture ' ..  
                        node_used_long_osarch .. '.' )
             end
         
         end -- else-part if ClusterMod_SystemTable[stack_version][node_os] == nil
 
-    end -- for _,stack_version in ipairs( stack_list )
+    end -- for _,stack_version in ipairs( stackversion_list )
 
 end -- for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
 
@@ -735,16 +790,23 @@ print( '\n' )
 print( '4. Relevant directories per stack and arch module in the stack' )
 print( '==============================================================\n' )
 
-for _,stack_version in ipairs( stack_list )
+for _,stack_version in ipairs( stackversion_list )
 do
+
+    local stack_nameversion
+    if stack_version == 'manual' then
+        stack_nameversion = stack_version
+    else
+        stack_nameversion = ClusterMod_StackName .. '/' .. stack_version
+    end
 
     local hierarchy = ClusterMod_SystemProperties[stack_version]['hierarchy']
         
     if stack_version == 'manual' then 
-        print( '- Directory structure for stack ' .. stack_version .. ' (' .. hierarchy .. '):' )
+        print( '- Directory structure for stack ' .. stack_nameversion .. ' (' .. hierarchy .. '):' )
     else
         local easybuild_version = ClusterMod_SystemProperties[stack_version]['EasyBuild']
-        print( '- Directory structure for stack ' .. stack_version .. 
+        print( '- Directory structure for stack ' .. stack_nameversion .. 
                ' (' .. hierarchy .. ' with EasyBuild ' .. easybuild_version .. '):' )
     end
     
@@ -855,7 +917,7 @@ do
                 table.insert( w_moduledirs, 1, mdir )
             end
 
-            print( '    + System-wide module directories added to MODULEPATH):\n      x ' .. table.concat( w_moduledirs, '\n      x ' ) )
+            print( '    + System-wide module directories added to :\n      x ' .. table.concat( w_moduledirs, '\n      x ' ) )
 
         end -- else-part if stack_version == 'manual' then
 
@@ -864,7 +926,7 @@ do
 
     end -- for long_osarch,_ in pairs( SystemTable_long_osarch[stack_version] )
 
-end -- for _,stack_version in ipairs( stack_list )
+end -- for _,stack_version in ipairs( stackversion_list )
 
 print()
 
