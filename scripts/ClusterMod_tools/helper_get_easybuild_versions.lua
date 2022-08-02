@@ -6,14 +6,18 @@
 local lfs = require( 'lfs' )
 
 local routine_name = 'helper_get_easybuild_version'
-local stack_name = 'calcua'
 
 local script_called_dir = arg[0]:match( '(.*)/[^/]+' )
 lfs.chdir( script_called_dir )
 local repo_root = lfs.currentdir():match( '(.*)/scripts/ClusterMod_tools' )
 local root_dir = repo_root:match( '(.*)/[^/]+' )
 
-dofile( repo_root .. '/etc/SystemDefinition.lua' )
+-- Note that pathJoin is not defined here....
+local softwarestack = ( os.getenv( 'CALCUA_SOFTWARESTACK' ) or ( root_dir .. '/etc/SoftwareStack.lua' ) )
+dofile( softwarestack )
+
+dofile( systemdefinition )
+
 dofile( repo_root .. '/LMOD/SitePackage_system_info.lua' )
 -- dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 

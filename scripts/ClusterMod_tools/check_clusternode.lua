@@ -71,7 +71,7 @@ for stack_version,_ in pairs( ClusterMod_ClusterMap ) do
     -- if stack_version ~= 'system' and stack_version ~= 'manual' then
     if stack_version ~= 'manual' then
 
-        local stack = 'calcua/' .. stack_version
+        local stack = ClusterMod_StackName .. '/' .. stack_version
 
         local use_longarch = get_calcua_top( get_calcua_longosarch_current( stack_version ), stack_version )
         local use_longarch_system = get_calcua_top( get_calcua_longosarch_current( 'system' ), 'system' )
@@ -95,7 +95,7 @@ for stack_version,_ in pairs( ClusterMod_ClusterMap ) do
         
         local moduledirs = {} 
 
-        local system_dirs = get_system_module_dirs( use_longarch_system, 'calcua', 'system' )
+        local system_dirs = get_system_module_dirs( use_longarch_system, ClusterMod_StackName, 'system' )
         if system_dirs == nil then
             io.stderr.write( 'No system modules found for ' .. stack .. '. This points to an error in the module system or cluster definition.\n' )
         else
@@ -105,7 +105,7 @@ for stack_version,_ in pairs( ClusterMod_ClusterMap ) do
         end
 
         if stack_version ~= 'system' then
-            local stack_dirs = get_system_module_dirs( use_longarch, 'calcua', stack_version )
+            local stack_dirs = get_system_module_dirs( use_longarch, ClusterMod_StackName, stack_version )
             if stack_dirs == nil then
                 io.stderr.write( 'No regular modules found for ' .. stack .. '. This points to an error in the module system or cluster definition.\n' )
             else
@@ -115,7 +115,7 @@ for stack_version,_ in pairs( ClusterMod_ClusterMap ) do
             end
         end
 
-        local inframodule_dir = get_system_inframodule_dir( use_longarch, 'calcua', stack_version )
+        local inframodule_dir = get_system_inframodule_dir( use_longarch, ClusterMod_StackName, stack_version )
         if inframodule_dir == nil then
             io.stderr.write( 'No infrastructure modules found for ' .. stack .. '. This points to an error in the module system or cluster definition.\n' )
         else

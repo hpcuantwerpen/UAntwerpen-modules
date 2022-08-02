@@ -2,8 +2,7 @@
 
 local lfs = require( 'lfs' )
 
-local routine_name = 'helper_get_calcua_generic_current'
-local stack_name = 'calcua'
+local routine_name = 'helper_get_stack_genericarch_current'
 
 if #arg ~= 1 then
     io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the calcua stack.\n' )
@@ -17,8 +16,13 @@ lfs.chdir( script_called_dir )
 local repo_root = lfs.currentdir():match( '(.*)/scripts/ClusterMod_tools' )
 local root_dir = repo_root:match( '(.*)/[^/]+' )
 
+-- Note that pathJoin is not defined here....
+local softwarestack = ( os.getenv( 'CALCUA_SOFTWARESTACK' ) or ( root_dir .. '/etc/SoftwareStack.lua' ) )
+dofile( softwarestack )
+
+dofile( systemdefinition )
+
 dofile( repo_root .. '/scripts/ClusterMod_tools/lmod_emulation.lua' )
-dofile( repo_root .. '/etc/SystemDefinition.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_helper.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_system_info.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )

@@ -11,10 +11,9 @@
 local lfs = require( 'lfs' )
 
 local routine_name = 'helper_map_toolchain'
-local stack_name = 'calcua'
 
 if #arg ~= 1 then
-    io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the calcua stack.\n' )
+    io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the stack.\n' )
     os.exit( 1 )
 end
 
@@ -25,12 +24,17 @@ lfs.chdir( script_called_dir )
 local repo_root = lfs.currentdir():match( '(.*)/scripts/ClusterMod_tools' )
 local root_dir = repo_root:match( '(.*)/[^/]+' )
 
-dofile( repo_root .. '/etc/SystemDefinition.lua' )
+-- Note that pathJoin is not defined here....
+local softwarestack = ( os.getenv( 'CALCUA_SOFTWARESTACK' ) or ( root_dir .. '/etc/SoftwareStack.lua' ) )
+dofile( softwarestack )
+
+dofile( systemdefinition )
+
 dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 
 
 if ClusterMod_SystemTable[stack_version] == nil then
-    io.stderr:write( routine_name .. ': ERROR: The stack version ' .. stack_version .. ' is not recognized as a valid stack.\n' ..
+    io.stderr:write( routine_name .. ': ERROR: The stack version ' .. stack_version .. ' is not recognized as a valid stack version.\n' ..
                      'Maybe ClusterMod_SystemTable in etc/SystemDefinition.lua needs updating?\n' )
     os.exit( 1 )
 end

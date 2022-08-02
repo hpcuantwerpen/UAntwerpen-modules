@@ -5,7 +5,7 @@ local lfs = require( 'lfs' )
 local routine_name = 'prepare_ClusterMod_stack'
 
 if #arg ~= 1 then
-    io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the calcua stack.\n' )
+    io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the stack.\n' )
     os.exit( 1 )
 end
 
@@ -21,9 +21,6 @@ dofile( repo_root .. '/etc/SystemDefinition.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_helper.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
-
-local stack_name = ClusterMod_StackName
-
 
 if ClusterMod_SystemTable[stack_version] == nil then
     io.stderr:write( routine_name .. ': ERROR: The stack version ' .. stack_version .. ' is not recognized as a valid stack.\n' ..
@@ -78,7 +75,7 @@ end
 -- Gather all dependent architectures
 --
 
-print( 'Computing all OS-arch combinations needed for ' .. stack_name .. '/' .. stack_version .. '...' )
+print( 'Computing all OS-arch combinations needed for ' .. ClusterMod_StackName .. '/' .. stack_version .. '...' )
 
 local OSArchTable = {}
 local OSArchTableWorker = {}
@@ -113,19 +110,19 @@ for _,longname in ipairs( OSArchTable ) do
 
     print( '\nCreating directories for ' .. longname .. ':' )
 
-    local appl_modules = pathJoin( root_dir, get_system_module_dir( longname, stack_name, stack_version ) )
+    local appl_modules = pathJoin( root_dir, get_system_module_dir( longname, ClusterMod_StackName, stack_version ) )
     print( 'Application modules:    ' .. appl_modules )
     mkDir( appl_modules )
 
-    local infra_modules = pathJoin( root_dir, get_system_inframodule_dir( longname, stack_name, stack_version ) )
+    local infra_modules = pathJoin( root_dir, get_system_inframodule_dir( longname, ClusterMod_StackName, stack_version ) )
     print( 'Infrastructure modules: ' .. infra_modules )
     mkDir( infra_modules )
 
-    local SW_dir = pathJoin( root_dir, get_system_SW_dir( longname, stack_name, stack_version ) )
+    local SW_dir = pathJoin( root_dir, get_system_SW_dir( longname, ClusterMod_StackName, stack_version ) )
     print( 'Software directory:     ' .. SW_dir )
     mkDir( SW_dir )
 
-    local EBrepo_dir = pathJoin( root_dir, 'mgmt', get_system_EBrepo_dir( longname, stack_name, stack_version ) )
+    local EBrepo_dir = pathJoin( root_dir, 'mgmt', get_system_EBrepo_dir( longname, ClusterMod_StackName, stack_version ) )
     print( 'EBrepo_files directory: ' .. EBrepo_dir )
     mkDir( EBrepo_dir )
 
@@ -137,11 +134,11 @@ end
 --     *   Software stack module
 --
 
-local stack_dir = pathJoin( root_dir, 'modules-infrastructure/stack/calcua' )
+local stack_dir = pathJoin( root_dir, 'modules-infrastructure/stack', ClusterMod_StackName )
 mkDir( stack_dir )
 
 local link_target = get_versionedfile( stack_version,
-    pathJoin( root_dir, 'UAntwerpen-modules/generic-modules/calcua' ),
+    pathJoin( root_dir, 'UAntwerpen-modules/generic-modules', ClusterMod_StackName ),
     '', '.lua' )    
 create_symlink( link_target, pathJoin( stack_dir, stack_version .. '.lua' ) )
 
@@ -149,7 +146,7 @@ create_symlink( link_target, pathJoin( stack_dir, stack_version .. '.lua' ) )
 --    *    Architecture modules
 --
 
-local arch_dir = pathJoin( root_dir, 'modules-infrastructure/arch/calcua', stack_version )
+local arch_dir = pathJoin( root_dir, 'modules-infrastructure/arch', ClusterMod_StackName, stack_version )
 
 mkDir( pathJoin( arch_dir, 'arch' ) )
 

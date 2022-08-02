@@ -536,7 +536,7 @@ do
 
             -- Scheme:
             -- Node type
-            --   +- Actual architecture for calcua/yyy.mm:                                           osarch_regular
+            --   +- Actual architecture for <stack_name>/yyyy.mm:                                    osarch_regular
             --   +- Matching arch for system modules for the actual architecture:                    osarch_system     modules: full_system_dirs
             --      +- Subarchitecture under consideration:                                          subarch_regular
             --      +- Matching arch for system modules for the subarchitecture under consideration: subarch_system    modules: system_dirs
@@ -548,13 +548,13 @@ do
                 local osarch_system  = get_calcua_matchingarch( osarch_regular, stack_version, 'system' )
                 local hierarchy = ClusterMod_SystemProperties[stack_version] -- Hierarchy of the regular software stack.
 
-                local full_system_dirs = get_system_module_dirs( osarch_system, 'calcua', 'system' )
+                local full_system_dirs = get_system_module_dirs( osarch_system, ClusterMod_StackName, 'system' )
 
                 if full_system_dirs == nil then 
                     -- Could not determine module dirs for system in this stack, which is an error.
 
                     number_errors = number_errors + 1
-                    io.stdout:write( '\nERROR: Could not find system modules for calcua/' .. stack_version .. ' for node type ' .. node_type  )
+                    io.stdout:write( '\nERROR: Could not find system modules for ' .. ClusterMod_StackName .. '/' .. stack_version .. ' for node type ' .. node_type  )
 
                 else -- if full_system_dirs == nil
                     -- Found system modules for this software stack, now compare with those for subarchs of long_osarch_regular.
@@ -572,28 +572,28 @@ do
 
                         if subarch_system == nil then
                             number_errors = number_errors + 1
-                            io.stdout:write( '\nERROR: node type ' .. node_type .. ' in stack calcua/' .. stack_version ..
+                            io.stdout:write( '\nERROR: node type ' .. node_type .. ' in stack ' .. ClusterMod_StackName .. '/' .. stack_version ..
                                             ' uses the actual architecture ' .. osarch_regular .. 
-                                            ' and actual architecture for calcua/system modules ' .. osarch_system .. 
-                                            ' but no corresponding architecture for calcua/system modules is found for subarch ' .. subarch_regular )
+                                            ' and actual architecture for ' .. ClusterMod_StackName .. '/system modules ' .. osarch_system .. 
+                                            ' but no corresponding architecture for ' .. ClusterMod_StackName .. '/system modules is found for subarch ' .. subarch_regular )
                         else
                             local system_dirs = get_calcua_matchingarch(  subarch_system, stack_version, 'system' )      -- Corresponding module dirs in system
                             if system_dirs == nil then
                                 number_errors = number_errors + 1
-                                io.stdout:write( '\nERROR: node type ' .. node_type .. ' in stack calcua/' .. stack_version ..
+                                io.stdout:write( '\nERROR: node type ' .. node_type .. ' in stack ' .. ClusterMod_StackName .. '/' .. stack_version ..
                                                 ' uses the actual architecture ' .. osarch_regular .. 
-                                                ' and actual architecture for calcua/system modules ' .. osarch_system .. 
+                                                ' and actual architecture for ' .. ClusterMod_StackName .. '/system modules ' .. osarch_system .. 
                                                 ' but no system modules are found for subarch ' .. subarch_regular .. 
-                                                ' with for calcua/system the corresponding architecture ' .. subarch_system )
+                                                ' with for ' .. ClusterMod_StackName .. '/system the corresponding architecture ' .. subarch_system )
                             else
                                 local OK = true
                                 for dir,_ in ipairs( system_dirs ) do OK = OK and is_sytem_module_dir( dir ) end
                                 if not OK then
-                                    io.stdout:write( '\nERROR: node type ' .. node_type .. ' in stack calcua/' .. stack_version ..
+                                    io.stdout:write( '\nERROR: node type ' .. node_type .. ' in stack ' .. ClusterMod_StackName .. '/' .. stack_version ..
                                                 ' uses the actual architecture ' .. osarch_regular .. 
-                                                ' and actual architecture for calcua/system modules ' .. osarch_system ..
+                                                ' and actual architecture for ' .. ClusterMod_StackName .. '/system modules ' .. osarch_system ..
                                                 ' , subarch ' .. subarch_regular .. ' uses corresponding architecture ' .. subarch_system ..
-                                                ' for calcua/system modules, but the module directories of both calcua/system stacks are inconsistent:' ..
+                                                ' for ' .. ClusterMod_StackName .. '/system modules, but the module directories of both ' .. ClusterMod_StackName .. '/system stacks are inconsistent:' ..
                                                 '\n   * full stack: ' .. table.concat( full_system_dirs, ', ' ) ..
                                                 '\n   * subarch: ' .. table.concat( system_dirs, ', ' ) )
                                 end -- if not OK
@@ -856,18 +856,18 @@ do
         if stack_version == 'manual' then
             print( '    + No module directory for this stack' )
         else
-            print( '    + System-wide modules in ' .. get_system_module_dir( long_osarch, 'calcua', stack_version ) )
+            print( '    + System-wide modules in ' .. get_system_module_dir( long_osarch, ClusterMod_StackName, stack_version ) )
         end
         
         -- SW directory
-        print( '    + System-wide software in ' .. get_system_SW_dir( long_osarch, 'calcua', stack_version ) )
+        print( '    + System-wide software in ' .. get_system_SW_dir( long_osarch, ClusterMod_StackName, stack_version ) )
         
         -- EBrepo_files directory
         if stack_version == 'manual' then
             print( '    + No EBrepo_files directory for this stack' )
         else
             print( '    + System-wide EasyBuild repository for installed EasyConfigs (ebrepo_files) in ' .. 
-                   get_system_EBrepo_dir( long_osarch, 'calcua', stack_version ) )
+                   get_system_EBrepo_dir( long_osarch, ClusterMod_StackName, stack_version ) )
         end
         
         -- Construct the MODULEPATH of system modules.       
@@ -883,7 +883,7 @@ do
             -- calls in the module file)
 
             local long_osarch_system = get_calcua_matchingarch( long_osarch, stack_version, 'system' )
-            local system_dirs = get_system_module_dirs( long_osarch_system, 'calcua', 'system' )
+            local system_dirs = get_system_module_dirs( long_osarch_system, ClusterMod_StackName, 'system' )
             if system_dirs == nil then
                 io.stderr.write( 'No system modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
             else
@@ -893,7 +893,7 @@ do
             end
             
             if stack_version ~= 'system' then 
-                local stack_dirs = get_system_module_dirs( long_osarch, 'calcua', stack_version )
+                local stack_dirs = get_system_module_dirs( long_osarch, ClusterMod_StackName, stack_version )
                 if stack_dirs == nil then
                     io.stderr.write( 'No regular modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
                 else
@@ -903,7 +903,7 @@ do
                 end
             end -- if stack_version ~= 'system'
         
-            local inframodule_dir = get_system_inframodule_dir( long_osarch, 'calcua', stack_version )
+            local inframodule_dir = get_system_inframodule_dir( long_osarch, ClusterMod_StackName, stack_version )
             if inframodule_dir == nil then
                 io.stderr.write( 'No infrastructure modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
             else

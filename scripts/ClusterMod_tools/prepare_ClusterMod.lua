@@ -3,7 +3,6 @@
 local lfs = require( 'lfs' )
 
 local routine_name = 'prepare_ClusterMod'
-local stack_name = 'calcua'
 
 if #arg ~= 1 then
     io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: software stack configuration file.\n' )
@@ -68,7 +67,7 @@ end
 -- What happens in the script:
 -- -   Build an overview of all architectures for all software stacks
 -- -   Set up the infrastructure modules structure
---     -   Framework of calcua and arch modules
+--     -   Framework of stack and clusterarch modules
 --     -   Directory for each stack and arch in the stack
 -- -   Set up the EasyBuild modules structure
 -- -   Set up the software directories
@@ -138,7 +137,7 @@ end -- for _,stack_version in ipairs( stack_list )
 for _,stack_version in ipairs( stack_list )
 do
 
-    print( '\nSetting up or confirming the structure for calcua/' .. stack_version .. '.' )
+    print( '\nSetting up or confirming the structure for ' .. ClusterMod_StackName .. '/' .. stack_version .. '.' )
 
     --
     -- Stack module
@@ -168,22 +167,22 @@ do
 
         print( '\n- Creating or confirming directories for ' .. osarch .. ':' )
 
-        local SW_dir = pathJoin( installroot, get_system_SW_dir( osarch, stack_name, stack_version ) )
+        local SW_dir = pathJoin( installroot, get_system_SW_dir( osarch, ClusterMod_StackName, stack_version ) )
         print( '  - Software directory:     ' .. SW_dir )
         mkDir( SW_dir )
     
         if stack_version ~= 'manual'
         then
 
-            local appl_modules = pathJoin( installroot, get_system_module_dir( osarch, stack_name, stack_version ) )
+            local appl_modules = pathJoin( installroot, get_system_module_dir( osarch, ClusterMod_StackName, stack_version ) )
             print( '  - Application modules:    ' .. appl_modules )
             mkDir( appl_modules )
         
-            local infra_modules = pathJoin( installroot, get_system_inframodule_dir( osarch, stack_name, stack_version ) )
+            local infra_modules = pathJoin( installroot, get_system_inframodule_dir( osarch, ClusterMod_StackName, stack_version ) )
             print( '  - Infrastructure modules: ' .. infra_modules )
             mkDir( infra_modules )
         
-            local EBrepo_dir = pathJoin( installroot, 'mgmt', get_system_EBrepo_dir( osarch, stack_name, stack_version ) )
+            local EBrepo_dir = pathJoin( installroot, 'mgmt', get_system_EBrepo_dir( osarch, ClusterMod_StackName, stack_version ) )
             print( '  - EBrepo_files directory: ' .. EBrepo_dir )
             mkDir( EBrepo_dir )  
             
