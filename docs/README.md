@@ -17,6 +17,11 @@ which makes it very easy to preview the result of the changes you make locally.
 
       pip install mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin
 
+  You may want to do this in a virtual environment if you have more mkdocs configurations
+  with different versions of Python packages.
+
+* Go into the `config` subdirectory of this directory to build the documentation.
+
 * Start the MkDocs built-in dev-server to preview the tutorial as you work on it:
 
       make preview

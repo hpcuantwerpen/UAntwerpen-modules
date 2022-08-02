@@ -1,9 +1,11 @@
 site_name: "UAntwerpen-modules documentation"
-#site_url: https://klust.github.io/
-site_dir: site
+#site_url: https://klust.github.io/UAntwerpen-modules
+#repo_url: https://github.com/klust/UAntwerpen-modules
 site_description: >-
   Documentation for the UAntwerpen-modules repository
-docs_dir: docs-mkdocs
+
+docs_dir: ..
+site_dir: ../../site
 
 theme:
   name: material
