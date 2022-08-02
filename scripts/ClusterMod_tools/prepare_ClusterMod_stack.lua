@@ -2,8 +2,7 @@
 
 local lfs = require( 'lfs' )
 
-local routine_name = 'create_calcua_stack_dirs'
-local stack_name = 'calcua'
+local routine_name = 'prepare_ClusterMod_stack'
 
 if #arg ~= 1 then
     io.stderr:write( routine_name .. ': ERROR: One command line argument is expected: the version of the calcua stack.\n' )
@@ -22,6 +21,8 @@ dofile( repo_root .. '/etc/SystemDefinition.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_helper.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
+
+local stack_name = ClusterMod_StackName
 
 
 if ClusterMod_SystemTable[stack_version] == nil then

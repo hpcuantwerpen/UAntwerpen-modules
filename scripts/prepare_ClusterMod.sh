@@ -251,4 +251,4 @@ else
 
 fi
 
-$scriptdir/ClusterMod_tools/prepare_calcua.lua "$softwarestack"
+$scriptdir/ClusterMod_tools/prepare_ClusterMod.lua "$softwarestack"

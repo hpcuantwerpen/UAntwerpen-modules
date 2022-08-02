@@ -1,6 +1,8 @@
 #! /bin/bash
 #
 # This is a script to enable the CalcuUA software stack in an arbitrary location.
+# This is currently not generic code but for the specific setup used on the
+# CalcUA cluster.
 #
 
 # That cd will work if the script is called by specifying the path or is simply

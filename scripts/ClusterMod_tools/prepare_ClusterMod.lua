@@ -2,7 +2,7 @@
 
 local lfs = require( 'lfs' )
 
-local routine_name = 'prepare_calcua'
+local routine_name = 'prepare_ClusterMod'
 local stack_name = 'calcua'
 
 if #arg ~= 1 then
