@@ -31,9 +31,9 @@ and as it also complicates the implementation.
 
 **TODO: Some clean-up. Some of these tables could be generated automatically in `SitePackage_helper.lua`?**
 
-### `CalcUA_NodeTypes`
+### `ClusterMod_NodeTypes`
 
-CalcUA_NodeTypes is simply n array of nodes in the system, specified using
+ClusterMod_NodeTypes is simply n array of nodes in the system, specified using
 the long os-CPU-accelerator names.
 
 As this is a description of the current hardware in the cluster, it is not
@@ -50,7 +50,7 @@ the 3-level software architecture schemes (and make coding more difficult even f
 
 Example: At the time of writing, the CalcUA cluster description would have been:
 ```lua
-CalcUA_NodeTypes = {
+ClusterMod_NodeTypes = {
     'redhat7-ivybridge-noaccel',
     'redhat7-broadwell-noaccel',
     'redhat8-broadwell-noaccel',
@@ -64,9 +64,9 @@ CalcUA_NodeTypes = {
 }
 ```
 
-### `CalcUA_SystemTable`
+### `ClusterMod_SystemTable`
 
-`CalcUA_SystemTable` defines the whole structure of the software tree, including the manually
+`ClusterMod_SystemTable` defines the whole structure of the software tree, including the manually
 installed software and system-wide EasyBuild managed software. Note that the table will be
 completed automatically with more generic os-cpu-accelerator architecture strings based
 on the other tables in this file.
@@ -75,7 +75,7 @@ All names used should be for the 3L scheme. However, the middle level should not
 for versions that will use a 2L_long naming scheme.
 
 ```lua
-CalcUA_SystemTable = {
+ClusterMod_SystemTable = {
     ['system'] = {
         ['redhat7'] = {
             'x86_64',
@@ -128,7 +128,7 @@ The structure is a table of tables.
 ### `CalcUA_SystemProperies`
 
 `CalcUA_SystemProperies` adds additional information for each partition that is not contained
-in `CalcUA_SystemTable`. It is a table of tables, the first index is the name of the calcua
+in `ClusterMod_SystemTable`. It is a table of tables, the first index is the name of the calcua
 stack or `manual` for the pseudo-stack of manually installed software. The table for each
 software stack has the following entries:
 
@@ -143,15 +143,15 @@ software stack has the following entries:
     2.  `3L`: 3 levels in the architecture hierarchy.
 
 
-### `CalcUA_ClusterMap`
+### `ClusterMod_ClusterMap`
 
-`CalcUA_ClusterMap` contains for each version of the calcua toolchains, including
+`ClusterMod_ClusterMap` contains for each version of the calcua toolchains, including
 the dummy system version, a mapping from cluster names to os-architecture strings.
 Each should be the topmost supported architecture for a particular node type.
 
 
 ```lua
-CalcUA_ClusterMap = {
+ClusterMod_ClusterMap = {
     ['system'] = {
         ['hopper'] =      'redhat7-x86_64',
         ['leibniz'] =     'redhat8-x86_64',
@@ -173,24 +173,24 @@ CalcUA_ClusterMap = {
 }
 ```
 
-`CalcUA_ClusterMap` is an associative table-of-tables. 
+`ClusterMod_ClusterMap` is an associative table-of-tables. 
 
 -   On the first level, the keys are the various versions of the software stack visible to
     users (and can include `system`)
 -   On the second level, the keys are the names of the clusters that we want to map on a 
     particular architecture.
 -   The values are then the architecture strings, in the formats specified in 
-    `CalcUA_SystemProperties`.
+    `ClusterMod_SystemProperties`.
 
 
-### `CalcUA_toolchain_map`
+### `ClusterMod_toolchain_map`
 
-`CalcUA_toolchain_map` is an associative table, with the yyyy[a|b] toolchains as the keys and
+`ClusterMod_toolchain_map` is an associative table, with the yyyy[a|b] toolchains as the keys and
 the matching yyyymm value as the value (note: no dot, not yyyy.mm)
 
 Example:
 ```lua
-CalcUA_toolchain_map = {
+ClusterMod_toolchain_map = {
     ['system'] = '200000',
     ['manual'] = '200000',
     ['2020a']  = '202001',
@@ -202,9 +202,9 @@ CalcUA_toolchain_map = {
 ```
 
 
-### `CalcUA_map_arch_hierarchy`
+### `ClusterMod_map_arch_hierarchy`
 
-`CalcUA_map_arch_hierarchy` is an associative table of associative tables with for each supported
+`ClusterMod_map_arch_hierarchy` is an associative table of associative tables with for each supported
 OS a table that can be used to determine the parent of every CPU/accelerator
 architecture.
 
@@ -218,7 +218,7 @@ architecture.
 
 Example:
 ```lua
-CalcUA_map_arch_hierarchy = {
+ClusterMod_map_arch_hierarchy = {
     -- We start with a 2-level map
     ['200000'] = {
         ['zen2-noaccel']      = 'x86_64',
@@ -238,9 +238,9 @@ CalcUA_map_arch_hierarchy = {
 TODO: Can we get rid of the above data structure?
 
 
-### `CalcUA_def_cpu`
+### `ClusterMod_def_cpu`
 
-`CalcUA_def_cpu` is an associative table of associative tables defining
+`ClusterMod_def_cpu` is an associative table of associative tables defining
 the  CPU architectures and whether they are generic or not.
 
 -   First level: The keys are the yyyymm versions of toolchains, the values the matching
@@ -258,7 +258,7 @@ as it can be safely extended with new types.
 
 Example:
 ```lua
-CalcUA_def_cpu = {
+ClusterMod_def_cpu = {
     ['zen4']      = false,
     ['zen3']      = false,
     ['zen2']      = false,
@@ -269,9 +269,9 @@ CalcUA_def_cpu = {
 }
 ```
  
-### `CalcUA_map_cpu_to_gen`
+### `ClusterMod_map_cpu_to_gen`
 
-`CalcUA_map_cpu_to_gen` is an associative table of associative tables with for each supported
+`ClusterMod_map_cpu_to_gen` is an associative table of associative tables with for each supported
 OS a table that can be used to determine the generic architecture for every CPU.
 
 -   First level: The keys are the yyyymm versions of toolchains, the values the matching
@@ -283,7 +283,7 @@ OS a table that can be used to determine the generic architecture for every CPU.
 
 Example:
 ```lua
-CalcUA_map_cpu_to_gen = {
+ClusterMod_map_cpu_to_gen = {
     ['200000'] = {
         ['zen3']      = 'x86_64',
         ['zen2']      = 'x86_64',
@@ -296,9 +296,9 @@ CalcUA_map_cpu_to_gen = {
 ```
 
 
-### `CalcUA_reduce_cpu`
+### `ClusterMod_reduce_cpu`
 
-`CalcUA_reduce_cpu` is an associative table of associative tables with for each supported
+`ClusterMod_reduce_cpu` is an associative table of associative tables with for each supported
 OS a table that can be used to determine a compatible but less capable version of the CPU,
 until we end at the generic architectures. If the key is a generic architecture, the value
 also has to be a generic architecture, or 'nil' if the tree/chain of architectures ends 
@@ -313,15 +313,15 @@ there.
     CPU as value should also run on the CPU as key but not always the other way
     around.
 
-For each stack in CalcUA_SystemTable, these reduction rules have to be compatible
-with the matching ones in CalcUA_reduce_top_Arch. I.e., if somehow
-CPU1-Accel1 in CalcUA_reduce_top_arch reduces to CPU2-Accel2 then it must 
+For each stack in ClusterMod_SystemTable, these reduction rules have to be compatible
+with the matching ones in ClusterMod_reduce_top_arch. I.e., if somehow
+CPU1-Accel1 in ClusterMod_reduce_top_arch reduces to CPU2-Accel2 then it must 
 also be possible to reduce CPU1 to CPU2 (in one or more steps) using the
-rules specified in the `CalcUA_reduce_top_arch` table below.
+rules specified in the `ClusterMod_reduce_top_arch` table below.
 
 Example:
 ```lua
-CalcUA_reduce_cpu = {
+ClusterMod_reduce_cpu = {
     ['200000'] = {
         ['zen3']      = 'zen2',
         ['zen2']      = 'broadwell',
@@ -333,9 +333,9 @@ CalcUA_reduce_cpu = {
 ```
 
 
-### `CalcUA_reduce_top_arch`
+### `ClusterMod_reduce_top_arch`
 
-`CalcUA_reduce_top_arch` is an associative table of associative tables with for each supported
+`ClusterMod_reduce_top_arch` is an associative table of associative tables with for each supported
 OS a table that can be used to walk a chain of compatible but less specific architectures when 
 looking for an architecture that is supported for a particular version of a software stack.
 
@@ -353,7 +353,7 @@ with a yyyymm starting version of the software stacks.
 
 Example:
 ```lua
-CalcUA_reduce_top_arch = {
+ClusterMod_reduce_top_arch = {
     ['200000'] = {
         ['zen2-ampere']       = 'zen2-noaccel',
         ['zen2-arcturus']     = 'zen2-noaccel',
@@ -374,14 +374,14 @@ CalcUA_reduce_top_arch = {
 
 ### Data structures
 
--   Uses `CalcUA_toolchain_map` from `etc/SystemDefinition.lua`
+-   Uses `ClusterMod_toolchain_map` from `etc/SystemDefinition.lua`
 
 ### Routines
 
 -   `map_toolchain`:  Returns the matching yyyymm toolchain for any toolchain. The
     input argument can be either a yyyy.mm toolchain version (in which case the
     routine simply returns that version without the dot) or a yyyy[a|b] version in
-    which case the routine uses the `CalcUA_toolchain_map` to compute the matching
+    which case the routine uses the `ClusterMod_toolchain_map` to compute the matching
     yyyymm version or falls back to a default rule (where a becomes 01 and b becomes
     07).
     
@@ -398,7 +398,7 @@ CalcUA_reduce_top_arch = {
 
 #### From other files
 
--   Uses `CalcUA_map_arch_hierarchy` from `etc/SystemDefinition.lua`.
+-   Uses `ClusterMod_map_arch_hierarchy` from `etc/SystemDefinition.lua`.
 
 
 #### `map_os_long_to_short`
@@ -569,7 +569,7 @@ map_accel_long_to_short = {
             CPUs for `reduce_stack_version` to find a middle level or bottom/generic
             level supported by `stack_version`. 
         -   `stack_version` is a 2L hierarchy: We use the mapping to generic CPU 
-            defined by `CalcUA_map_cpu_to_gen` for `reduce_stackversion` to find
+            defined by `ClusterMod_map_cpu_to_gen` for `reduce_stackversion` to find
             the matching generic CPU and then continue using the CPU chaining
             rules defined by 
 
@@ -753,7 +753,7 @@ in favor of `get_cluster_longosarch()`.**
 
 `get_clusterarch` returns the cluster architecture in four possible formats for the 
 module system. It is then to the module system to select which one of the four it needs
-for which purpose (and that depends on the `hierarchy` field in `CalcUA_SystemProperties`
+for which purpose (and that depends on the `hierarchy` field in `ClusterMod_SystemProperties`
 in `/etc/SysteDefinition.lua`). The four formats are two with long names and two with
 short names, each time with three components or with only two components if there is no
 accelerator.
@@ -795,7 +795,7 @@ initialisation code is executed when the file is included.
 #### `CalcUA_sorted_archmap_keys`
 
 This data structure is a sorted list of the level 1 keys used in the 
-[`CalcUA_map_arch_hierarchy`](#calcua_map_arch_hierarchy) data structure.
+[`ClusterMod_map_arch_hierarchy`](#ClusterMod_map_arch_hierarchy) data structure.
 Its main purpose is to speed up a search routine in this file, to avoid always 
 recomputing that data.
 
@@ -805,7 +805,7 @@ TODO: GET RID OF THIS STRUCTURE
 #### `CalcUA_sorted_cputogen_keys`
 
 This data structure is a sorted list of the level 1 keys used in the 
-[`CalcUA_map_cpu_to_gen`](#calcua_map_cpu_to_gen) data structure.
+[`ClusterMod_map_cpu_to_gen`](#ClusterMod_map_cpu_to_gen) data structure.
 Its main purpose is to speed up a search routine in this file, to avoid always 
 recomputing that data.
 
@@ -813,7 +813,7 @@ recomputing that data.
 #### `CalcUA_sorted_toparchreduction_keys`
 
 This data structure is a sorted list of the level 1 keys used in the 
-[`CalcUA_reduce_top_arch`](#calcua_reduce_top_arch) data structure.
+[`ClusterMod_reduce_top_arch`](#ClusterMod_reduce_top_arch) data structure.
 Its main purpose is to speed up a search routine in this file, to avoid always 
 recomputing that data.
 
@@ -821,22 +821,22 @@ recomputing that data.
 ### Routines
 
 -   `get_matching_archmap_key( version )`: For a given numeric (i.e., yyyymm) version, returns
-    the largest key in `CalcUA_map_arch_hierarchy` not larger than the given version.
+    the largest key in `ClusterMod_map_arch_hierarchy` not larger than the given version.
 
 -   `get_matching_defcpu_key( version )`: For a given numeric (i.e., yyyymm) version, returns
     the largest key in `CalcUA_map_def_cpu` not larger than the given version.
 
 -   `get_matching_cputogen_key( version )`: For a given numeric (i.e., yyyymm) version, returns
-    the largest key in `CalcUA_map_cpu_to_gen` not larger than the given version.
+    the largest key in `ClusterMod_map_cpu_to_gen` not larger than the given version.
 
 -   `get_matching_reducecpu_key( version )`: For a given numeric (i.e., yyyymm) version, returns
-    the largest key in `CalcUA_reduce_cpu` not larger than the given version.
+    the largest key in `ClusterMod_reduce_cpu` not larger than the given version.
 
 -   `get_matching_toparchreduction_key( version )`: For a given numeric (i.e., yyyymm) version, returns
-    the largest key in `CalcUA_reduce_top_arch` not larger than the given version.
+    the largest key in `ClusterMod_reduce_top_arch` not larger than the given version.
 
 -   `is_Stack_SystemTable`: Check if a given stack version corresponds to a key in
-    `CalcUA_SystemTable`. We have to do this through a function that is then exported
+    `ClusterMod_SystemTable`. We have to do this through a function that is then exported
     to the sandbox as module files do not have access to the data itself.
 
     The main purpose of this function is simply to give more precise error messages

@@ -1,6 +1,6 @@
 #! /usr/bin/env lua
 
-CalcUA_map_arch_hierarchy = {
+ClusterMod_map_arch_hierarchy = {
     -- We start with a 2-level map 
     ['200000'] = {
         ['zen2-noaccel']      = 'x86_64',
@@ -28,7 +28,7 @@ CalcUA_map_arch_hierarchy = {
     }
 }
 
-CalcUA_map_cpu_to_gen = {
+ClusterMod_map_cpu_to_gen = {
     ['200000'] = {
         ['zen3']      = 'x86_64',
         ['zen2']      = 'x86_64',
@@ -47,7 +47,7 @@ CalcUA_map_cpu_to_gen = {
     },
 }
 
-CalcUA_reduce_cpu = {
+ClusterMod_reduce_cpu = {
     ['200000'] = {
         ['zen3']      = 'zen2',
         ['zen2']      = 'broadwell',
@@ -64,7 +64,7 @@ CalcUA_reduce_cpu = {
     },
 }
 
-CalcUA_reduce_top_arch = {
+ClusterMod_reduce_top_arch = {
     ['200000'] = {
         ['zen3-noaccel']      = 'zen2-noaccel',
         ['zen2-ampere']       = 'zen2-noaccel',

@@ -6,7 +6,7 @@
 --
 
 --
--- Build a table with the keys from CalcUA_map_arch_hierarchy sorted
+-- Build a table with the keys from ClusterMod_map_arch_hierarchy sorted
 --
 CalcUA_sorted_archmap_keys = nil
 
@@ -14,7 +14,7 @@ function get_matching_archmap_key( version )
 
     if CalcUA_sorted_archmap_keys == nil then
         CalcUA_sorted_archmap_keys = {}
-        for key in pairs( CalcUA_map_arch_hierarchy )
+        for key in pairs( ClusterMod_map_arch_hierarchy )
         do
             table.insert( CalcUA_sorted_archmap_keys, key )
         end
@@ -38,7 +38,7 @@ function get_matching_archmap_key( version )
 end
 
 --
--- Build a table with the keys from CalcUA_map_cpu_to_gen sorted
+-- Build a table with the keys from ClusterMod_map_cpu_to_gen sorted
 --
 
 CalcUA_sorted_cputogen_keys = nil
@@ -47,7 +47,7 @@ function get_matching_cputogen_key( version )
 
     if CalcUA_sorted_cputogen_keys == nil then
         CalcUA_sorted_cputogen_keys = {}
-        for key in pairs( CalcUA_map_cpu_to_gen )
+        for key in pairs( ClusterMod_map_cpu_to_gen )
         do
             table.insert( CalcUA_sorted_cputogen_keys, key )
         end
@@ -71,7 +71,7 @@ function get_matching_cputogen_key( version )
 end
 
 --
--- Build a table with the keys from CalcUA_reduce_cpu sorted
+-- Build a table with the keys from ClusterMod_reduce_cpu sorted
 --
 CalcUA_sorted_reducecpu_keys = nil
 
@@ -79,7 +79,7 @@ function get_matching_reducecpu_key( version )
 
     if CalcUA_sorted_reducecpu_keys == nil then
         CalcUA_sorted_reducecpu_keys = {}
-        for key in pairs( CalcUA_reduce_cpu )
+        for key in pairs( ClusterMod_reduce_cpu )
         do
             table.insert( CalcUA_sorted_reducecpu_keys, key )
         end
@@ -103,7 +103,7 @@ function get_matching_reducecpu_key( version )
 end
 
 --
--- Build a table with the keys from CalcUA_reduce_top_arch
+-- Build a table with the keys from ClusterMod_reduce_top_arch
 --
 CalcUA_sorted_toparchreduction_keys = nil
 
@@ -111,7 +111,7 @@ function get_matching_toparchreduction_key( version )
 
     if CalcUA_sorted_toparchreduction_keys == nil then
         CalcUA_sorted_toparchreduction_keys = {}
-        for key in pairs( CalcUA_reduce_top_arch )
+        for key in pairs( ClusterMod_reduce_top_arch )
         do
             table.insert( CalcUA_sorted_toparchreduction_keys, key )
         end
@@ -150,7 +150,7 @@ CalcUA_cache_subosarchs = nil
 
 function is_Stack_SystemTable( stack_version )
 
-    return ( CalcUA_SystemTable[stack_version] ~= nil )
+    return ( ClusterMod_SystemTable[stack_version] ~= nil )
 
 end
 

@@ -99,7 +99,7 @@ function populate_cache_subosarchs( stack_version )
         return -- Already populated so we do nothing.
     end
     
-    if CalcUA_SystemTable[stack_version] == nil then
+    if ClusterMod_SystemTable[stack_version] == nil then
         return  -- Illegal value for stack_version but for now we simply return and do nothing.
     end
 
@@ -113,10 +113,10 @@ function populate_cache_subosarchs( stack_version )
 
     local matching_key = get_matching_cputogen_key( stack_version )
 
-    for OS,_ in pairs( CalcUA_SystemTable[stack_version] )
+    for OS,_ in pairs( ClusterMod_SystemTable[stack_version] )
     do
 
-        for _,arch in ipairs( CalcUA_SystemTable[stack_version][OS] )
+        for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] )
         do
             local CPU = extract_cpu_from_arch( arch )
             local accel = extract_accel_from_arch( arch )
@@ -124,19 +124,19 @@ function populate_cache_subosarchs( stack_version )
             local long_osarch = OS .. '-' .. arch
             CalcUA_cache_subosarchs[stack_version][long_osarch] = true
             
-            if arch ~= CPU and CalcUA_SystemProperties[stack_version]['hierarchy'] == '3L' then
+            if arch ~= CPU and ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
                 long_osarch = OS .. '-' .. CPU
                 CalcUA_cache_subosarchs[stack_version][long_osarch] = true
             end
                 
-            if CalcUA_map_cpu_to_gen[matching_key][CPU] ~= nil then
-                long_osarch = OS .. '-' .. CalcUA_map_cpu_to_gen[matching_key][CPU]
+            if ClusterMod_map_cpu_to_gen[matching_key][CPU] ~= nil then
+                long_osarch = OS .. '-' .. ClusterMod_map_cpu_to_gen[matching_key][CPU]
                 CalcUA_cache_subosarchs[stack_version][long_osarch] = true
             end            
             
-        end -- for _,arch in ipairs( CalcUA_SystemTable[stack_version][OS] )
+        end -- for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] )
         
-    end -- for OS,_ in pairs( CalcUA_SystemTable[stack_version] )
+    end -- for OS,_ in pairs( ClusterMod_SystemTable[stack_version] )
     
     -- DEBUG CODE
     -- print( 'DEBUG: populate_cache_subosarchs: found following architectures for ' .. stack_version .. ':' )
@@ -162,11 +162,11 @@ function populate_cache_subarchs( stack_version, os_version )
         return -- Already populated so we do nothing.
     end
     
-    if CalcUA_SystemTable[stack_version] == nil then
+    if ClusterMod_SystemTable[stack_version] == nil then
         return  -- Illegal value for stack_version but for now we simply return and do nothing.
     end
 
-    if CalcUA_SystemTable[stack_version][os_version] == nil then
+    if ClusterMod_SystemTable[stack_version][os_version] == nil then
         return  -- Illegal value for os_version for this stack_version, but for now we simply return and do nothing..
     end
 
@@ -184,23 +184,23 @@ function populate_cache_subarchs( stack_version, os_version )
 
     local matching_key = get_matching_cputogen_key( stack_version )
 
-    for _,arch in ipairs( CalcUA_SystemTable[stack_version][os_version] )
+    for _,arch in ipairs( ClusterMod_SystemTable[stack_version][os_version] )
     do
         local CPU = extract_cpu_from_arch( arch )
         local accel = extract_accel_from_arch( arch )
         
         CalcUA_cache_subarchs[stack_version][os_version][arch] = true
         
-        if arch ~= CPU and CalcUA_SystemProperties[stack_version]['hierarchy'] == '3L' then
+        if arch ~= CPU and ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
             CalcUA_cache_subarchs[stack_version][os_version][CPU] = true
         end
             
-        if CalcUA_map_cpu_to_gen[matching_key][CPU] ~= nil then
-            local gencpu = CalcUA_map_cpu_to_gen[matching_key][CPU]
+        if ClusterMod_map_cpu_to_gen[matching_key][CPU] ~= nil then
+            local gencpu = ClusterMod_map_cpu_to_gen[matching_key][CPU]
             CalcUA_cache_subarchs[stack_version][os_version][gencpu] = true
         end            
         
-    end -- for _,arch in ipairs( CalcUA_SystemTable[stack_version][OS] )
+    end -- for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] )
    
     -- -- DEBUG CODE
     -- print( 'DEBUG: populate_cache_subarchs: found following architectures for ' .. stack_version .. ' and OS ' .. os_version .. ':' )
@@ -240,9 +240,9 @@ function get_long_osarchs( stack_version, long_os, long_arch )
 
     local matching_version = get_matching_cputogen_key( stack_version )
 
-    if CalcUA_SystemProperties[stack_version]['hierarchy'] == '3L' then
+    if ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
         local cpu = extract_cpu_from_arch( long_arch )
-        local gencpu = CalcUA_map_cpu_to_gen[matching_version][cpu]
+        local gencpu = ClusterMod_map_cpu_to_gen[matching_version][cpu]
         table.insert( result, long_os .. '-' .. long_arch )
         if cpu ~= long_arch then
             table.insert( result, long_os .. '-' .. cpu )
@@ -252,7 +252,7 @@ function get_long_osarchs( stack_version, long_os, long_arch )
         end
     else
         local cpu = extract_cpu_from_arch( long_arch )
-        local gencpu = CalcUA_map_cpu_to_gen[matching_version][cpu]
+        local gencpu = ClusterMod_map_cpu_to_gen[matching_version][cpu]
         table.insert( result, long_os .. '-' .. long_arch )
         if gencpu ~= nil then
             table.insert( result, long_os .. '-' .. gencpu )
@@ -271,7 +271,7 @@ end
 -- Input arguments:
 --   * stack_version: Version of the software stack (or `system` for the
 --     software installed against the system or or 'manual' for  manual mode).
---     It must be a valid software stack version defined in CalcUA_SystemTable
+--     It must be a valid software stack version defined in ClusterMod_SystemTable
 --     etc. in etc/SystemDefinition.lua
 --   * long_os: Name (with version) of the OS
 --   * long_arch: Architecture, e.g., zen2-noaccel or x86_64.
@@ -295,9 +295,9 @@ function get_long_osarchs_reverse( stack_version, long_os, long_arch )
 
     local matching_version = get_matching_cputogen_key( stack_version )
 
-    if CalcUA_SystemProperties[stack_version]['hierarchy'] == '3L' then
+    if ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
         local cpu = extract_cpu_from_arch( long_arch )
-        local gencpu = CalcUA_map_cpu_to_gen[matching_version][cpu]
+        local gencpu = ClusterMod_map_cpu_to_gen[matching_version][cpu]
         if gencpu ~= nil then
             table.insert( result, long_os .. '-' .. gencpu )
         end
@@ -307,7 +307,7 @@ function get_long_osarchs_reverse( stack_version, long_os, long_arch )
         table.insert( result, long_os .. '-' .. long_arch )
     else
         local cpu = extract_cpu_from_arch( long_arch )
-        local gencpu = CalcUA_map_cpu_to_gen[matching_version][cpu]
+        local gencpu = ClusterMod_map_cpu_to_gen[matching_version][cpu]
         if gencpu ~= nil then
             table.insert( result, long_os .. '-' .. gencpu )
         end
@@ -438,7 +438,7 @@ function get_calcua_generic( long_osarch, stack_version )
 
     local matching_version = get_matching_cputogen_key( stack_version )
 
-    local long_osgeneric = CalcUA_map_cpu_to_gen[matching_version][long_cpu]
+    local long_osgeneric = ClusterMod_map_cpu_to_gen[matching_version][long_cpu]
     if long_osgeneric == nil then
         long_osgeneric = long_os .. '-' .. long_cpu
     else
@@ -480,9 +480,9 @@ function get_calcua_longosarch_current( stack_version )
 
     local d1, d2, d3
 
-    local hierarchy_type = CalcUA_SystemProperties[stack_version]['hierarchy']
+    local hierarchy_type = ClusterMod_SystemProperties[stack_version]['hierarchy']
     if hierarchy_type == nil then
-        LmodError( 'Likely an error in CalcUA_SystemProperties in etc/SystemDefinition.lua, no hierarchy entry found for stack ' .. stack_version )
+        LmodError( 'Likely an error in ClusterMod_SystemProperties in etc/SystemDefinition.lua, no hierarchy entry found for stack ' .. stack_version )
     end
 
     local current_osarch = get_cluster_longosarch()
@@ -524,24 +524,24 @@ function get_calcua_top( long_osarch, stack_version )
     --    available as a top architecture or generic architecture for the software stack. 
     -- 
     local stack_os_archs = {}
-    if CalcUA_SystemTable[stack_version][use_os] == nil then
+    if ClusterMod_SystemTable[stack_version][use_os] == nil then
         return nil -- There is no support for this stack on this OS.
     end
-    for index,value in ipairs( CalcUA_SystemTable[stack_version][use_os] ) do
+    for index,value in ipairs( ClusterMod_SystemTable[stack_version][use_os] ) do
         stack_os_archs[value] = true
-        local level_p1 = CalcUA_map_arch_hierarchy[matching_version][value]
+        local level_p1 = ClusterMod_map_arch_hierarchy[matching_version][value]
         while level_p1 ~= nil do
             stack_os_archs[level_p1] = true
-            level_p1 = CalcUA_map_arch_hierarchy[matching_version][level_p1]
+            level_p1 = ClusterMod_map_arch_hierarchy[matching_version][level_p1]
         end 
     end
 
     --
-    -- -  Now walk down the CalcUA_reduce_top_arch searching for an
+    -- -  Now walk down the ClusterMod_reduce_top_arch searching for an
     --    architecture supported by the software stack.
     --
-    while stack_os_archs[use_arch] == nil and CalcUA_reduce_top_arch[matching_version][use_arch] ~= nil do
-        use_arch = CalcUA_reduce_top_arch[matching_version][use_arch]
+    while stack_os_archs[use_arch] == nil and ClusterMod_reduce_top_arch[matching_version][use_arch] ~= nil do
+        use_arch = ClusterMod_reduce_top_arch[matching_version][use_arch]
     end
 
     --
@@ -586,7 +586,7 @@ end
 --         be that in fact long_osarch is generated from a reduction of 
 --         
 --   * long_osarch is a os + CPU + accelerator name: We use the top-level
---     reduction rules of reduce_stack_version as given by CalcUA_reduce_top_arch
+--     reduction rules of reduce_stack_version as given by ClusterMod_reduce_top_arch
 --     until we find a match in all archs that can be generated for the stack 
 --     stack_version.
 --
@@ -597,8 +597,8 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
     -- -  Some initialisations ot use the data structures of etc/SystemDefinition.lua
     --
 
-    local stack_hierarchy =        CalcUA_SystemProperties[stack_version]['hierarchy']
-    local reduce_stack_hierarchy = CalcUA_SystemProperties[reduce_stack_version]['hierarchy']
+    local stack_hierarchy =        ClusterMod_SystemProperties[stack_version]['hierarchy']
+    local reduce_stack_hierarchy = ClusterMod_SystemProperties[reduce_stack_version]['hierarchy']
 
     local num_stack_version =         map_toolchain( stack_version )
     local num_reduced_stack_version = map_toolchain( reduce_stack_version )
@@ -617,7 +617,7 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
     -- - Check if the OS use_os is even supported by reduce_stack_version.
     --    If not, we'll return nil (or could produce an error)
     --
-    if CalcUA_SystemTable[reduce_stack_version][use_os] == nil then
+    if ClusterMod_SystemTable[reduce_stack_version][use_os] == nil then
         return nil
     end
 
@@ -630,18 +630,18 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
         --
         -- long_osarch is a top level name in 2L or 3L
         --
-        -- Now walk down the CalcUA_reduce_top_arch searching for an
+        -- Now walk down the ClusterMod_reduce_top_arch searching for an
         -- architecture supported by the software stack.
 
         local matching_version = get_matching_toparchreduction_key( num_reduced_stack_version )
 
         while use_arch ~= nil and CalcUA_cache_subarchs[stack_version][use_os][use_arch] == nil 
-              and CalcUA_reduce_top_arch[matching_version][use_arch] ~= nil 
+              and ClusterMod_reduce_top_arch[matching_version][use_arch] ~= nil 
         do
-            use_arch = CalcUA_reduce_top_arch[matching_version][use_arch]
+            use_arch = ClusterMod_reduce_top_arch[matching_version][use_arch]
         end
 
-    elseif not CalcUA_def_cpu[use_cpu] then
+    elseif not ClusterMod_def_cpu[use_cpu] then
     
         --
         -- long_osarch is a middle level name so reduce_stack_version should be 3L
@@ -655,15 +655,15 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
                 -- First map to a generic architecture, but otherwise the code
                 -- for 2L and 3L is identical.
                 local matchingversion = get_matching_cputogen_key( num_reduced_stack_version )
-                use_arch = CalcUA_map_cpu_to_gen[matchingversion][use_arch]
+                use_arch = ClusterMod_map_cpu_to_gen[matchingversion][use_arch]
             end
 
             local matching_version = get_matching_reducecpu_key( num_reduced_stack_version )
 
             while use_arch ~= nil and CalcUA_cache_subarchs[stack_version][use_os][use_arch] == nil 
-                  and CalcUA_reduce_cpu[matching_version][use_arch] ~= nil 
+                  and ClusterMod_reduce_cpu[matching_version][use_arch] ~= nil 
             do
-                use_arch = CalcUA_reduce_cpu[matching_version][use_arch]
+                use_arch = ClusterMod_reduce_cpu[matching_version][use_arch]
             end    
 
         else -- This should not happen, this is an error condition.
@@ -685,9 +685,9 @@ function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_versi
         local matching_version = get_matching_reducecpu_key( num_reduced_stack_version )
 
         while use_arch ~= nil and CalcUA_cache_subarchs[stack_version][use_os][use_arch] == nil 
-              and CalcUA_reduce_cpu[matching_version][use_arch] ~= nil 
+              and ClusterMod_reduce_cpu[matching_version][use_arch] ~= nil 
         do
-            use_arch = CalcUA_reduce_cpu[matching_version][use_arch]
+            use_arch = ClusterMod_reduce_cpu[matching_version][use_arch]
         end
 
     end -- Distinguish between the level in the hierarchy of long_osarch.
@@ -743,7 +743,7 @@ function get_calcua_subarchs( long_osarch, stack_version )
         -- We did not call the function with long_osarch pointing to the 
         -- generic level of the software stack so we need to continue.
 
-        if CalcUA_SystemProperties[stack_version]['hierarchy'] == '3L' then
+        if ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
             
             -- 3L software hierarchy
 

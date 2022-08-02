@@ -24,9 +24,9 @@ dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
 
 
-if CalcUA_SystemTable[stack_version] == nil then
+if ClusterMod_SystemTable[stack_version] == nil then
     io.stderr:write( routine_name .. ': ERROR: The stack version ' .. stack_version .. ' is not recognized as a valid stack.\n' ..
-                     'Maybe CalcUA_SystemTable in etc/SystemDefinition.lua needs updating?\n' )
+                     'Maybe ClusterMod_SystemTable in etc/SystemDefinition.lua needs updating?\n' )
     os.exit( 1 )
 end
 
@@ -82,9 +82,9 @@ print( 'Computing all OS-arch combinations needed for ' .. stack_name .. '/' .. 
 local OSArchTable = {}
 local OSArchTableWorker = {}
 
-for OS,_ in pairs( CalcUA_SystemTable[stack_version] ) do
+for OS,_ in pairs( ClusterMod_SystemTable[stack_version] ) do
 
-    for _,arch in ipairs( CalcUA_SystemTable[stack_version][OS] ) do
+    for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] ) do
 
         for _,subarch in ipairs( get_long_osarchs_reverse( stack_version, OS, arch ) ) do
 
@@ -171,7 +171,7 @@ print( '\nCreating ' .. pathJoin( arch_dir, '.modulerc.lua' ) .. '...' )
 
 local f = io.open( pathJoin( arch_dir, '.modulerc.lua' ), 'w' )
 
-for cluster,arch in pairs( CalcUA_ClusterMap[stack_version] ) do
+for cluster,arch in pairs( ClusterMod_ClusterMap[stack_version] ) do
     f:write( 'module_version( \'arch/' .. arch .. '\' , \'' .. cluster .. '\' )\n' )
 end
 

@@ -1,6 +1,14 @@
 -- -----------------------------------------------------------------------------
 --
--- CalcUA_NodeTypes is simply n array of nodes in the system, specified using
+-- ClusterMod_StackName is the name that will be used for the regular software
+-- stack modules of the cluster.
+--
+
+ClusterMod_StackName = 'calcua'
+
+-- -----------------------------------------------------------------------------
+--
+-- ClusterMod_NodeTypes is simply n array of nodes in the system, specified using
 -- the long os-CPU-accelerator names.
 --
 -- As this is a description of the current hardware in the cluster, it is not
@@ -10,7 +18,7 @@
 -- types.
 --
 
-CalcUA_NodeTypes = {
+ClusterMod_NodeTypes = {
     'redhat7-ivybridge-noaccel',
     'redhat7-broadwell-noaccel',
     'redhat8-broadwell-noaccel',
@@ -23,7 +31,7 @@ CalcUA_NodeTypes = {
     'redhat8-zen2-arcturus',
 }
 
--- SystemTable defines the setup of the module system. For each toolchain it
+-- ClusterMod_SystemTable defines the setup of the module system. For each toolchain it
 -- indicates which OSes are supported for which architectures.
 --
 -- It is sufficient to only specify the "main" architectures (the leaves
@@ -37,7 +45,7 @@ CalcUA_NodeTypes = {
 -- scheme.
 --
 
-CalcUA_SystemTable = {
+ClusterMod_SystemTable = {
     ['system'] = {
         ['redhat7'] = {
             'x86_64',
@@ -78,13 +86,13 @@ CalcUA_SystemTable = {
 
 -- -----------------------------------------------------------------------------
 --
--- SystemProperties defines other properties of the system, e.g.,
+-- ClusterMod_SystemProperties defines other properties of the system, e.g.,
 --   * ['EasyBuild']: Version of EasyBuild to use.
 --   * ['hierarchy']: Type of hierarchy, 3 values though not all are implemented
 --       * 2L : 2 levels, all names on the second level include accelerator
 --       * 3L : 3 levels
 --
-CalcUA_SystemProperties = {
+ClusterMod_SystemProperties = {
     ['system'] = {
         ['EasyBuild'] = '4.6.0',
         ['hierarchy'] = '2L',  -- Doesn't really matter as we use only one level
@@ -105,7 +113,7 @@ CalcUA_SystemProperties = {
 
 -- -----------------------------------------------------------------------------
 --
--- CalcUA_ClusterMap is a structure that maps names of clusters onto
+-- ClusterMod_ClusterMap is a structure that maps names of clusters onto
 -- architectures. Each should be the topmost supported architecture for a 
 -- particular node type.
 --
@@ -113,7 +121,7 @@ CalcUA_SystemProperties = {
 -- one that users should be able to load via calcua modules.
 --
 
-CalcUA_ClusterMap = {
+ClusterMod_ClusterMap = {
     ['system'] = {
         ['hopper'] =      'redhat7-x86_64',
         ['leibniz'] =     'redhat8-x86_64',
@@ -137,12 +145,12 @@ CalcUA_ClusterMap = {
 
 -- -----------------------------------------------------------------------------
 --
--- SystemTable defines the setup of the module system. For each toolchain in
--- yyyy[a|b] format it gives the matching toolchain in yyyymm format that should
--- be used in version comparisons.
+-- ClusterMod_toolchain_map defines the setup of the module system. For each
+-- toolchain in yyyy[a|b] format it gives the matching toolchain in yyyymm format
+-- that should be used in version comparisons.
 --
 
-CalcUA_toolchain_map = {
+ClusterMod_toolchain_map = {
     ['system'] = '200000',
     ['manual'] = '200000',
     ['2020a']  = '202001',
@@ -195,7 +203,7 @@ CalcUA_toolchain_map = {
 --         ['ivybridge-noaccel'] = 'x86_64',
 --         ['x86_64']            = nil,
 
-CalcUA_map_arch_hierarchy = {
+ClusterMod_map_arch_hierarchy = {
     -- We start with a 2-level map
     ['200000'] = {
         ['zen3-noaccel']      = 'x86_64',
@@ -217,7 +225,7 @@ CalcUA_map_arch_hierarchy = {
 -- Map defining the CPU architectures and whether they are generic or 
 -- not. 
 --
-CalcUA_def_cpu = {
+ClusterMod_def_cpu = {
     ['zen4']      = false,
     ['zen3']      = false,
     ['zen2']      = false,
@@ -236,7 +244,7 @@ CalcUA_def_cpu = {
 --  as a value.
 --
 
-CalcUA_map_cpu_to_gen = {
+ClusterMod_map_cpu_to_gen = {
     ['200000'] = {
         ['zen4']      = 'x86_64',
         ['zen3']      = 'x86_64',
@@ -252,16 +260,16 @@ CalcUA_map_cpu_to_gen = {
 -- -----------------------------------------------------------------------------
 --
 -- The following table defines reduction rules for CPUs.
--- For each stack in CalcUA_SystemTable, these reduction rules have to be compatible
--- with the matching ones in CalcUA_reduce_top_Arch. I.e., if somehow
--- CPU1-Accel1 in CalcUA_reduce_top_arch reduces to CPU2-Accel2 then it must 
+-- For each stack in ClusterMod_SystemTable, these reduction rules have to be compatible
+-- with the matching ones in ClusterMod_reduce_top_arch. I.e., if somehow
+-- CPU1-Accel1 in ClusterMod_reduce_top_arch reduces to CPU2-Accel2 then it must 
 -- also be possible to reduce CPU1 to CPU2 (in one or more steps) using the
 -- rules specified in the following table.
 --
 -- The chain 
 --
 
-CalcUA_reduce_cpu = {
+ClusterMod_reduce_cpu = {
     ['200000'] = {
         ['zen3']      = 'zen2',
         ['zen2']      = 'broadwell',
@@ -286,7 +294,7 @@ CalcUA_reduce_cpu = {
 -- an additional level based on a yyyymm representation of the software stacks
 --
 
-CalcUA_reduce_top_arch = {
+ClusterMod_reduce_top_arch = {
     ['200000'] = {
         ['zen3-noaccel']      = 'zen2-noaccel',
         ['zen2-ampere']       = 'zen2-noaccel',

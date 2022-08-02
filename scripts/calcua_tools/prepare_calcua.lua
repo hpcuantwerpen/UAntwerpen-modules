@@ -92,7 +92,7 @@ end
 local stack_list = {}
 local SystemTable_osarch = {}
 
-for stack_version,_ in pairs( CalcUA_SystemTable )
+for stack_version,_ in pairs( ClusterMod_SystemTable )
 do
     if stack_version ~= 'system' and stack_version ~= 'manual' then
         table.insert( stack_list, stack_version )
@@ -110,9 +110,9 @@ do
     SystemTable_osarch[stack_version] = {}
     local OSArchTableWorker = {}
 
-    for OS,_ in pairs( CalcUA_SystemTable[stack_version] ) do
+    for OS,_ in pairs( ClusterMod_SystemTable[stack_version] ) do
 
-        for _,arch in ipairs( CalcUA_SystemTable[stack_version][OS] ) do
+        for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] ) do
 
             for _,subarch in ipairs( get_long_osarchs_reverse( stack_version, OS, arch ) ) do
 

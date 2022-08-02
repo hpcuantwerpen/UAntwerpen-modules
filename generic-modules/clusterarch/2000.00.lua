@@ -50,7 +50,7 @@ end
         
 if not is_Stack_SystemTable( stack_version ) then
     LmodError( myModuleFullName() .. ': No information for calcua/' .. stack_version .. 
-               ' in CalcUA_SystemTable in the system definition file.' )
+               ' in ClusterMod_SystemTable in the system definition file.' )
 end
 
 --

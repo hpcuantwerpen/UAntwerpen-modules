@@ -55,7 +55,7 @@ print( '- Detected node architecture: ' .. clusternode_long_osarch )
 --
 
 print()
-for stack,_ in pairs( CalcUA_ClusterMap ) do
+for stack,_ in pairs( ClusterMod_ClusterMap ) do
     print( '- Used architecture for this node for ' .. stack .. ': ' .. get_calcua_top( get_calcua_longosarch_current( stack ), stack ) )
 end
 
@@ -66,7 +66,7 @@ end
 
 print()
 
-for stack_version,_ in pairs( CalcUA_ClusterMap ) do
+for stack_version,_ in pairs( ClusterMod_ClusterMap ) do
 
     -- if stack_version ~= 'system' and stack_version ~= 'manual' then
     if stack_version ~= 'manual' then
@@ -83,8 +83,8 @@ for stack_version,_ in pairs( CalcUA_ClusterMap ) do
         -- Check if there is an alternative name for the architecture
 
         local current_longosarch = get_calcua_longosarch_current( stack_version )
-        if CalcUA_ClusterMap[stack_version] ~= nil then
-            for name,longarch in pairs( CalcUA_ClusterMap[stack_version] ) do
+        if ClusterMod_ClusterMap[stack_version] ~= nil then
+            for name,longarch in pairs( ClusterMod_ClusterMap[stack_version] ) do
                 if longarch == current_longosarch then
                     print( '  - Alternative architecture name: cluster/' .. name )
                 end

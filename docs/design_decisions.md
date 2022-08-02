@@ -75,7 +75,7 @@
 
         -   Generic level names do not include an accelerator.
 
-    -   In the `CalcUA_SystemTable` that defines which architectures have software stacks 
+    -   In the `ClusterMod_SystemTable` that defines which architectures have software stacks 
         for which stack version, only generic CPU names or CPU-Accelerator pairs are
         supported
 

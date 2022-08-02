@@ -25,14 +25,14 @@ local my_os = get_fullos()
 
 local EBversion_table = {}
 
-for stack_version, _ in pairs( CalcUA_SystemTable ) do
+for stack_version, _ in pairs( ClusterMod_SystemTable ) do
 
-    if CalcUA_SystemTable[stack_version] ~= nil then
+    if ClusterMod_SystemTable[stack_version] ~= nil then
         -- Found a toolchain that should be installed for this OS, check if it needs
         -- EasyBuild and if so store the version of EasyBuild.
 
-        if CalcUA_SystemProperties[stack_version]['EasyBuild'] ~= nil then
-            EBversion_table[CalcUA_SystemProperties[stack_version]['EasyBuild']] = true
+        if ClusterMod_SystemProperties[stack_version]['EasyBuild'] ~= nil then
+            EBversion_table[ClusterMod_SystemProperties[stack_version]['EasyBuild']] = true
         end
 
     end

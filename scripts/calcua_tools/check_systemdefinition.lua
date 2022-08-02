@@ -51,17 +51,17 @@ local number_errors = 0
 
 local node_cpu_list = {} -- All CPU types that are found directly in the node types
 
-for _,node_long_osarch in ipairs( CalcUA_NodeTypes )
+for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
 do
     node_cpu_list[extract_cpu(node_long_osarch)] = true
 end
 
 local full_cpu_list = {} -- All CPU types that are found directly in the node types or 
-                         -- can be derived from them via any of the tables in CalcUA_reduce_cpu
-                         -- or are found in CalcUA_SystemTable
-                         -- or are found in CalcUA_reduce_top_arch
+                         -- can be derived from them via any of the tables in ClusterMod_reduce_cpu
+                         -- or are found in ClusterMod_SystemTable
+                         -- or are found in ClusterMod_reduce_top_arch
 
-for _,reduce_cpu in pairs( CalcUA_reduce_cpu )
+for _,reduce_cpu in pairs( ClusterMod_reduce_cpu )
 do
 
     for cpu,_ in pairs( node_cpu_list )
@@ -77,10 +77,10 @@ do
     
     end -- for cpu,_ in pairs( node_cpu_list )
 
-end -- for _,reduce_cpu in pairs( CalcUA_reduce_cpu )
+end -- for _,reduce_cpu in pairs( ClusterMod_reduce_cpu )
 
--- Gather from CalcUA_SystemTable
-for stack_version,system_table in pairs( CalcUA_SystemTable )
+-- Gather from ClusterMod_SystemTable
+for stack_version,system_table in pairs( ClusterMod_SystemTable )
 do
     for osversion,cpu_list in pairs( system_table )
     do
@@ -90,10 +90,10 @@ do
             if use_cpu ~= nil then full_cpu_list[use_cpu] = true end
         end -- for _,arch in ipairs( cpu_list)    
     end -- for osversion,cpulist in pairs( system_table )
-end -- for stack_version,system_table in pairs( CalcUA_SystemTable )
+end -- for stack_version,system_table in pairs( ClusterMod_SystemTable )
 
--- Gather from CalcUA_reduce_top_arch
-for stack_version,reduce_top_arch in pairs( CalcUA_reduce_top_arch )
+-- Gather from ClusterMod_reduce_top_arch
+for stack_version,reduce_top_arch in pairs( ClusterMod_reduce_top_arch )
 do
     for from_arch,to_arch in ipairs( reduce_top_arch )
     do 
@@ -101,27 +101,27 @@ do
         if use_cpu ~= nil then full_cpu_list[use_cpu] =  true end
         local use_cpu = extract_accel( to_arch )
         if use_cpu ~= nil then full_cpu_list[use_cpu] =  true end
-    end -- for from_arch,to_arch in ipairs( CalcUA_NodeTypes )
-end -- for stack_version,reduc_top_arch in pairs( CalcUA_reduce_top_arch )
+    end -- for from_arch,to_arch in ipairs( ClusterMod_NodeTypes )
+end -- for stack_version,reduc_top_arch in pairs( ClusterMod_reduce_top_arch )
 
 
 --
 -- Preparation: Build a list of accelerator architecytures in the node types and in general.
 --
 
--- First gather accelerator types from CalcUA_NodeTypes and CalcUA_reduce_top_arch
+-- First gather accelerator types from ClusterMod_NodeTypes and ClusterMod_reduce_top_arch
 local full_accel_list = {}
 full_accel_list['noaccel'] = true
 
--- Gather accelerator types from CalcUA_NodeTypes
-for _,node_type in ipairs( CalcUA_NodeTypes )
+-- Gather accelerator types from ClusterMod_NodeTypes
+for _,node_type in ipairs( ClusterMod_NodeTypes )
 do 
     local use_accel = extract_accel( node_type )
     if use_accel ~= nil then full_accel_list[use_accel] =  true end
-end -- for _,node_type in ipairs( CalcUA_NodeTypes )
+end -- for _,node_type in ipairs( ClusterMod_NodeTypes )
 
--- Gather from CalcUA_SystemTable
-for stack_version,system_table in pairs( CalcUA_SystemTable )
+-- Gather from ClusterMod_SystemTable
+for stack_version,system_table in pairs( ClusterMod_SystemTable )
 do
     for osversion,cpu_list in pairs( system_table )
     do
@@ -131,10 +131,10 @@ do
             if use_accel ~= nil then full_accel_list[use_accel] = true end
         end -- for _,arch in ipairs( cpu_list)    
     end -- for osversion,cpulist in pairs( system_table )
-end -- for stack_version,system_table in pairs( CalcUA_SystemTable )
+end -- for stack_version,system_table in pairs( ClusterMod_SystemTable )
 
--- Gather accelerator types from CalcUA_reduce_top_arch
-for stack_version,reduce_top_arch in pairs( CalcUA_reduce_top_arch )
+-- Gather accelerator types from ClusterMod_reduce_top_arch
+for stack_version,reduce_top_arch in pairs( ClusterMod_reduce_top_arch )
 do
     for from_arch,to_arch in ipairs( reduce_top_arch )
     do 
@@ -142,17 +142,17 @@ do
         if use_accel ~= nil then full_accel_list[use_accel] =  true end
         local use_accel = extract_accel( to_arch )
         if use_accel ~= nil then full_accel_list[use_accel] =  true end
-    end -- for from_arch,to_arch in ipairs( CalcUA_NodeTypes )
-end -- for stack_version,reduc_top_arch in pairs( CalcUA_reduce_top_arch )
+    end -- for from_arch,to_arch in ipairs( ClusterMod_NodeTypes )
+end -- for stack_version,reduc_top_arch in pairs( ClusterMod_reduce_top_arch )
 
 
 --
--- - Check: CalcUA_def_cpu in system definition
+-- - Check: ClusterMod_def_cpu in system definition
 --   TODO: Might be moved to SitePackage_arch_hierachy?
 --
 
 test_number = test_number + 1
-io.stdout:write( 'Test ' .. test_number .. ': Is every CPU type defined and declared generic or not (CalcUA_def_cpu structure)? ' )
+io.stdout:write( 'Test ' .. test_number .. ': Is every CPU type defined and declared generic or not (ClusterMod_def_cpu structure)? ' )
 
 number_warnings = 0
 number_errors = 0
@@ -160,12 +160,12 @@ number_errors = 0
 for cpu,_ in pairs( full_cpu_list )
 do
 
-    if CalcUA_def_cpu[cpu] == nil then
+    if ClusterMod_def_cpu[cpu] == nil then
         number_errors = number_errors + 1
-        io.stdout:write( '\nERROR: cpu type ' .. cpu .. ' not found in CalcUA_def_cpu in the system definition.' )
-    elseif CalcUA_def_cpu[cpu] ~= true and CalcUA_def_cpu[cpu] ~= false then
+        io.stdout:write( '\nERROR: cpu type ' .. cpu .. ' not found in ClusterMod_def_cpu in the system definition.' )
+    elseif ClusterMod_def_cpu[cpu] ~= true and ClusterMod_def_cpu[cpu] ~= false then
         number_errors = number_errors + 1
-        io.stdout:write( '\nERROR: cpu type ' .. cpu .. ' in CalcUA_def_cpu (system definition) does not have a boolean value.' )
+        io.stdout:write( '\nERROR: cpu type ' .. cpu .. ' in ClusterMod_def_cpu (system definition) does not have a boolean value.' )
     end
     
 end -- for cpu,_ in pairs( full_cpu_list )
@@ -173,71 +173,71 @@ end -- for cpu,_ in pairs( full_cpu_list )
 if number_errors == 0 then
     io.stdout:write( 'PASSED\n' )
 else
-    io.stdout:write( '\nTest ' .. test_number .. ': Is every CPU type defined and declared generic or not (CalcUA_def_cpu structure) generated ' .. number_errors .. ' error(s).\n' )
+    io.stdout:write( '\nTest ' .. test_number .. ': Is every CPU type defined and declared generic or not (ClusterMod_def_cpu structure) generated ' .. number_errors .. ' error(s).\n' )
 end
 
 
 --
--- - Check: CalcUA_map_cpu_to_gen in system definition
+-- - Check: ClusterMod_map_cpu_to_gen in system definition
 --
 
 test_number = test_number + 1
-io.stdout:write( 'Test ' .. test_number .. ': Does every non-generic CPU type map to a generic one in all cases (CalcUA_map_cpu_to_gen structure)? ' )
+io.stdout:write( 'Test ' .. test_number .. ': Does every non-generic CPU type map to a generic one in all cases (ClusterMod_map_cpu_to_gen structure)? ' )
 
 number_warnings = 0
 number_errors = 0
 
-for stack_version,map_cpu_to_gen in pairs( CalcUA_map_cpu_to_gen )
+for stack_version,map_cpu_to_gen in pairs( ClusterMod_map_cpu_to_gen )
 do
 
     for cpu,_ in pairs( full_cpu_list )
     do
 
-        if map_cpu_to_gen[cpu] == nil and not( CalcUA_def_cpu[cpu] ) then
+        if map_cpu_to_gen[cpu] == nil and not( ClusterMod_def_cpu[cpu] ) then
             number_warnings = number_errors + 1
-            io.stdout:write( '\nWARNING: Non-generic cpu type ' .. cpu .. ' not found in CalcUA_map_cpu_to_gen[' .. stack_version .. '] in the system definition.' )
+            io.stdout:write( '\nWARNING: Non-generic cpu type ' .. cpu .. ' not found in ClusterMod_map_cpu_to_gen[' .. stack_version .. '] in the system definition.' )
         end
         
     end -- for cpu,_ in pairs( full_cpu_list )
 
-end -- for stack_version,map_cpu_to_gen in pairs( CalcUA_map_cpu_to_gen )
+end -- for stack_version,map_cpu_to_gen in pairs( ClusterMod_map_cpu_to_gen )
 
 if number_warnings == 0 then
     io.stdout:write( 'PASSED\n' )
 else
-    io.stdout:write( '\nTest ' .. test_number .. ': Does every non-generic CPU type map to a generic one in all cases (CalcUA_map_cpu_to_gen structure) generated ' .. number_warnings .. ' warning(s).\n' )
+    io.stdout:write( '\nTest ' .. test_number .. ': Does every non-generic CPU type map to a generic one in all cases (ClusterMod_map_cpu_to_gen structure) generated ' .. number_warnings .. ' warning(s).\n' )
 end
 
 
 --
--- - Check: CalcUA_reduce_cpu in system definition
+-- - Check: ClusterMod_reduce_cpu in system definition
 --
 
 test_number = test_number + 1
-io.stdout:write( 'Test ' .. test_number .. ': Does every non-generic CPU type map to a more generic one in all cases (CalcUA_reduce_cpu structure)? ' )
+io.stdout:write( 'Test ' .. test_number .. ': Does every non-generic CPU type map to a more generic one in all cases (ClusterMod_reduce_cpu structure)? ' )
 
 number_warnings = 0
 number_errors = 0
 
-for stack_version,reduce_cpu in pairs( CalcUA_reduce_cpu )
+for stack_version,reduce_cpu in pairs( ClusterMod_reduce_cpu )
 do
 
     for cpu,_ in pairs( full_cpu_list )
     do
 
-        if reduce_cpu[cpu] == nil and not( CalcUA_def_cpu[cpu] ) then
+        if reduce_cpu[cpu] == nil and not( ClusterMod_def_cpu[cpu] ) then
             number_warnings = number_errors + 1
-            io.stdout:write( '\nWARNING: Non-generic cpu type ' .. cpu .. ' not found in CalcUA_reduce_cpu[' .. stack_version .. '] in the system definition.' )
+            io.stdout:write( '\nWARNING: Non-generic cpu type ' .. cpu .. ' not found in ClusterMod_reduce_cpu[' .. stack_version .. '] in the system definition.' )
         end
         
     end -- for cpu,_ in pairs( full_cpu_list )
 
-end -- for stack_version,reduce_cpu in pairs( CalcUA_reduce_cpu )
+end -- for stack_version,reduce_cpu in pairs( ClusterMod_reduce_cpu )
 
 if number_warnings == 0 then
     io.stdout:write( 'PASSED\n' )
 else
-    io.stdout:write( '\nTest ' .. test_number .. ': Does every non-generic CPU type map to a more generic one in all cases (CalcUA_reduce_cpu structure) generated ' .. number_warnings .. ' warning(s).\n' )
+    io.stdout:write( '\nTest ' .. test_number .. ': Does every non-generic CPU type map to a more generic one in all cases (ClusterMod_reduce_cpu structure) generated ' .. number_warnings .. ' warning(s).\n' )
 end
 
 
@@ -307,10 +307,10 @@ io.stdout:write( 'Test ' .. test_number .. ': Does every OS have a short equival
 number_warnings = 0
 number_errors = 0
 
--- Gather a list of OSes used in CalcUA_SystemTable. These are stripped from version numbers.
+-- Gather a list of OSes used in ClusterMod_SystemTable. These are stripped from version numbers.
 local is_OS = {}
 
-for stack_version,system_table in pairs( CalcUA_SystemTable )
+for stack_version,system_table in pairs( ClusterMod_SystemTable )
 do
     for osversion,_ in pairs( system_table )
     do
@@ -336,75 +336,75 @@ end
 
 
 --
--- - Check if the CalcUA_SystemProperties structure contains all required information
+-- - Check if the ClusterMod_SystemProperties structure contains all required information
 --
 
 test_number = test_number + 1
-io.stdout:write( 'Test ' .. test_number .. ': Checking CalcUA_SystemProperties in the system definition. ' )
+io.stdout:write( 'Test ' .. test_number .. ': Checking ClusterMod_SystemProperties in the system definition. ' )
 
 number_warnings = 0
 number_errors = 0
 
-for stack_version,_ in pairs( CalcUA_SystemTable )
+for stack_version,_ in pairs( ClusterMod_SystemTable )
 do
 
-    if CalcUA_SystemProperties == nil then
+    if ClusterMod_SystemProperties == nil then
 
         number_errors = number_errors + 1
-        io.stdout:write( '\nERROR: No entry found in CalcUA_SystemProperties for stack ' .. stack_version )
+        io.stdout:write( '\nERROR: No entry found in ClusterMod_SystemProperties for stack ' .. stack_version )
     
     else
 
         if stack_version ~= 'manual' then       
-            if CalcUA_SystemProperties[stack_version]['EasyBuild'] == nil then
+            if ClusterMod_SystemProperties[stack_version]['EasyBuild'] == nil then
                 number_errors = number_errors + 1
                 io.stdout:write( '\nERROR: Failed to find the EasyBuild version for stack ' .. stack_version )            
-            elseif CalcUA_SystemProperties[stack_version]['EasyBuild'] ~= CalcUA_SystemProperties[stack_version]['EasyBuild']:match( '%d+%.%d+%.%d+' )  then
+            elseif ClusterMod_SystemProperties[stack_version]['EasyBuild'] ~= ClusterMod_SystemProperties[stack_version]['EasyBuild']:match( '%d+%.%d+%.%d+' )  then
                 number_warnings = number_warnings + 1
-                io.stdout:write( '\nWARNING: Suspicious EasyBuild version ' .. CalcUA_SystemProperties[stack_version]['EasyBuild'] .. ' for stack ' .. stack_version )
+                io.stdout:write( '\nWARNING: Suspicious EasyBuild version ' .. ClusterMod_SystemProperties[stack_version]['EasyBuild'] .. ' for stack ' .. stack_version )
             end
         end -- if stack_version ~= 'manual'
 
-        if CalcUA_SystemProperties[stack_version]['hierarchy'] == nil then 
+        if ClusterMod_SystemProperties[stack_version]['hierarchy'] == nil then 
             number_errors = number_errors + 1
             io.stdout:write( '\nERROR: Failed to find the hierarchy (2L or 3L) for stack ' .. stack_version )            
-        elseif CalcUA_SystemProperties[stack_version]['hierarchy'] ~= '2L' and CalcUA_SystemProperties[stack_version]['hierarchy'] ~= '3L' then
+        elseif ClusterMod_SystemProperties[stack_version]['hierarchy'] ~= '2L' and ClusterMod_SystemProperties[stack_version]['hierarchy'] ~= '3L' then
             number_errors = number_errors + 1
-            io.stdout:write( '\nERROR: ' .. CalcUA_SystemProperties[stack_version]['hierarchy'] .. ' is an invalid hierarchy for stack ' .. stack_version .. ' (should be 2L or 3L)')            
+            io.stdout:write( '\nERROR: ' .. ClusterMod_SystemProperties[stack_version]['hierarchy'] .. ' is an invalid hierarchy for stack ' .. stack_version .. ' (should be 2L or 3L)')            
         end
 
-    end -- if CalcUA_SystemProperties == nil then
+    end -- if ClusterMod_SystemProperties == nil then
 
-end -- for stack_version,_ in CalcUA_SystemTable
+end -- for stack_version,_ in ClusterMod_SystemTable
 
 if number_warnings == 0 and number_errors == 0 then
     io.stdout:write( 'PASSED\n' )
 else
-    io.stdout:write( '\nTest ' .. test_number .. ': Checking CalcUA_SystemProperties in the system definition generated ' .. number_warnings .. ' warning(s) and ' .. number_errors .. ' error(s).\n' )
+    io.stdout:write( '\nTest ' .. test_number .. ': Checking ClusterMod_SystemProperties in the system definition generated ' .. number_warnings .. ' warning(s) and ' .. number_errors .. ' error(s).\n' )
 end
 
 
 --
--- - Check: Checking CalcUA_ClusterMap
+-- - Check: Checking ClusterMod_ClusterMap
 --
 
 test_number = test_number + 1
-io.stdout:write( 'Test ' .. test_number .. ': Check of CalcUA_ClusterMap ' )
+io.stdout:write( 'Test ' .. test_number .. ': Check of ClusterMod_ClusterMap ' )
 
 number_warnings = 0
 number_errors = 0
 
-for stack_version,cluster_map in pairs( CalcUA_ClusterMap )
+for stack_version,cluster_map in pairs( ClusterMod_ClusterMap )
 do
 
-    if CalcUA_SystemTable[stack_version] == nil then
+    if ClusterMod_SystemTable[stack_version] == nil then
         number_errors = number_errors + 1
-        io.stdout:write( '\nERROR: Stack version ' .. stack_version .. ' of CalcUA_ClusterMap is not defined in CalcUA_SystemTable.' )
+        io.stdout:write( '\nERROR: Stack version ' .. stack_version .. ' of ClusterMod_ClusterMap is not defined in ClusterMod_SystemTable.' )
     else
 
         -- Build the list of top architectures for all node types in the cluster for this stack version
         is_supported_cluster_arch = {}
-        for _,node_type in ipairs( CalcUA_NodeTypes )
+        for _,node_type in ipairs( ClusterMod_NodeTypes )
         do
             local actual_osarch = get_calcua_matchingarch( node_type, stack_version, stack_version )
             if actual_osarch ~=  nil then -- Test is needed as some node types may not be supported by all stack versions
@@ -412,24 +412,24 @@ do
             end
         end
 
-        -- Now run over the architectures used in CalcUA_ClusterMap[stack_version] = cluster_map
+        -- Now run over the architectures used in ClusterMod_ClusterMap[stack_version] = cluster_map
         for alias,requested_arch in pairs( cluster_map )
         do
             if not is_supported_cluster_arch[requested_arch] then
                 number_errors = number_errors + 1
-                io.stdout:write( '\nERROR: CalcUA_ClusterMap: Alias ' .. alias .. ' for stack version ' .. stack_version ..
+                io.stdout:write( '\nERROR: ClusterMod_ClusterMap: Alias ' .. alias .. ' for stack version ' .. stack_version ..
                                  ' has an illegal value (' .. requested_arch .. ').' )
             end
         end -- for alias,requested_arch in pairs( cluster_map )
 
-    end -- if CalcUA_SystemTable[stack_version] == nil
+    end -- if ClusterMod_SystemTable[stack_version] == nil
 
-end  -- for stack_version,cluster_map in pairs( CalcUA_ClusterMap )
+end  -- for stack_version,cluster_map in pairs( ClusterMod_ClusterMap )
 
 if number_warnings == 0 and number_errors == 0 then
     io.stdout:write( 'PASSED\n' )
 else
-    io.stdout:write( '\nTest ' .. test_number .. ': Check of CalcUA_ClusterMap generated ' .. number_warnings .. ' warning(s) and ' .. number_errors .. ' error(s).\n' )
+    io.stdout:write( '\nTest ' .. test_number .. ': Check of ClusterMod_ClusterMap generated ' .. number_warnings .. ' warning(s) and ' .. number_errors .. ' error(s).\n' )
 end
 
 
@@ -444,7 +444,7 @@ io.stdout:write( 'Test ' .. test_number .. ': Is every node type supported by so
 number_warnings = 0
 number_errors = 0
 
-for _,node_long_osarch in ipairs( CalcUA_NodeTypes )
+for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
 do
 
     local supported_stack_list = {}
@@ -453,7 +453,7 @@ do
     
     local node_os = extract_os( node_long_osarch )
     
-    for stack_version,_ in pairs( CalcUA_SystemTable )
+    for stack_version,_ in pairs( ClusterMod_SystemTable )
     do
 
         local node_used_long_osarch = get_calcua_matchingarch( node_long_osarch, stack_version, stack_version )
@@ -468,7 +468,7 @@ do
             end
         end
 
-    end -- for stack_version,_ in pairs( CalcUA_SystemTable )
+    end -- for stack_version,_ in pairs( ClusterMod_SystemTable )
 
     if not supported_by_manual then
         number_warnings = number_warnings + 1
@@ -485,7 +485,7 @@ do
         io.stdout:write( '\nERROR: Note type ' .. node_long_osarch .. ' is not supported by any of the regular software stacks.' )
     end
 
-end -- for _,node_long_osarch in ipairs( CalcUA_NodeTypes )
+end -- for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
 
 if number_warnings == 0 and number_errors == 0 then
     io.stdout:write( 'PASSED\n' )
@@ -503,12 +503,12 @@ io.stdout:write( 'Test ' .. test_number .. ': Are the system modules consistent 
 number_warnings = 0
 number_errors = 0
 
-for stack_version,_ in pairs( CalcUA_SystemTable )
+for stack_version,_ in pairs( ClusterMod_SystemTable )
 do
 
     if stack_version ~=  'manual' and stack_version ~= 'system' then
 
-        for _,node_type in ipairs( CalcUA_NodeTypes )
+        for _,node_type in ipairs( ClusterMod_NodeTypes )
         do
 
             -- Scheme:
@@ -523,7 +523,7 @@ do
             if osarch_regular ~= nil then
                 -- Architecture supported by this stack
                 local osarch_system  = get_calcua_matchingarch( osarch_regular, stack_version, 'system' )
-                local hierarchy = CalcUA_SystemProperties[stack_version] -- Hierarchy of the regular software stack.
+                local hierarchy = ClusterMod_SystemProperties[stack_version] -- Hierarchy of the regular software stack.
 
                 local full_system_dirs = get_system_module_dirs( osarch_system, 'calcua', 'system' )
 
@@ -596,7 +596,7 @@ do
 
     end -- if stack_version ˜=  'manual' and stack_version ~= 'system' then
 
-end -- for stack_version,_ in pairs( CalcUA_SystemTable )
+end -- for stack_version,_ in pairs( ClusterMod_SystemTable )
 
 if number_warnings == 0 and number_errors == 0 then
     io.stdout:write( 'PASSED\n' )
@@ -626,7 +626,7 @@ print( '===============================================\n' )
 
 local stack_list = {}
 
-for stack_version,_ in pairs( CalcUA_SystemTable )
+for stack_version,_ in pairs( ClusterMod_SystemTable )
 do
     if stack_version ~= 'system' and stack_version ~= 'manual' then
         table.insert( stack_list, stack_version )
@@ -656,9 +656,9 @@ do
     SystemTable_long_osarch[stack_version] = {}
     local OSArchTableWorker = {}
 
-    for OS,_ in pairs( CalcUA_SystemTable[stack_version] ) do
+    for OS,_ in pairs( ClusterMod_SystemTable[stack_version] ) do
 
-        for _,arch in ipairs( CalcUA_SystemTable[stack_version][OS] ) do
+        for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] ) do
 
             for _,subarch in ipairs( get_long_osarchs_reverse( stack_version, OS, arch ) ) do
 
@@ -691,7 +691,7 @@ print( '3. Available node types with their stacks and supported architectures' )
 print( '=====================================================================\n' )
 
 
-for _,node_long_osarch in ipairs( CalcUA_NodeTypes )
+for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
 do
 
     print( '- Node type: ' .. node_long_osarch ) 
@@ -701,7 +701,7 @@ do
     for _,stack_version in ipairs( stack_list )
     do
 
-        if CalcUA_SystemTable[stack_version][node_os] == nil then
+        if ClusterMod_SystemTable[stack_version][node_os] == nil then
         
             print( '  * Stack ' .. stack_version .. ' is not supported on this node type.' )
             
@@ -717,11 +717,11 @@ do
                        node_used_long_osarch .. '.' )
             end
         
-        end -- else-part if CalcUA_SystemTable[stack_version][node_os] == nil
+        end -- else-part if ClusterMod_SystemTable[stack_version][node_os] == nil
 
     end -- for _,stack_version in ipairs( stack_list )
 
-end -- for _,node_long_osarch in ipairs( CalcUA_NodeTypes )
+end -- for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
 
 
 -- -----------------------------------------------------------------------------
@@ -738,12 +738,12 @@ print( '==============================================================\n' )
 for _,stack_version in ipairs( stack_list )
 do
 
-    local hierarchy = CalcUA_SystemProperties[stack_version]['hierarchy']
+    local hierarchy = ClusterMod_SystemProperties[stack_version]['hierarchy']
         
     if stack_version == 'manual' then 
         print( '- Directory structure for stack ' .. stack_version .. ' (' .. hierarchy .. '):' )
     else
-        local easybuild_version = CalcUA_SystemProperties[stack_version]['EasyBuild']
+        local easybuild_version = ClusterMod_SystemProperties[stack_version]['EasyBuild']
         print( '- Directory structure for stack ' .. stack_version .. 
                ' (' .. hierarchy .. ' with EasyBuild ' .. easybuild_version .. '):' )
     end
@@ -759,8 +759,8 @@ do
         
         -- Check if there is an cluster/* alternative name for the architecture
         local alternatives = {}
-        if CalcUA_ClusterMap[stack_version] ~= nil then
-            for name,w_long_osarch in pairs( CalcUA_ClusterMap[stack_version] ) do
+        if ClusterMod_ClusterMap[stack_version] ~= nil then
+            for name,w_long_osarch in pairs( ClusterMod_ClusterMap[stack_version] ) do
                 if long_osarch == w_long_osarch then
                     table.insert( alternatives, 'cluster/' .. name )
                 end
@@ -775,13 +775,13 @@ do
         
         -- Check if there is an node/* alternative name for the architecture
         alternatives = {}
-        for _,node_type in ipairs( CalcUA_NodeTypes )
+        for _,node_type in ipairs( ClusterMod_NodeTypes )
         do
             local use_long_osarch = get_calcua_matchingarch( node_type, stack_version, stack_version )
             if use_long_osarch == long_osarch then
                 table.insert( alternatives, 'node/' .. node_type )
             end 
-        end  -- for _,node_types = ipairs( CalcUA_NodeTypes )
+        end  -- for _,node_types = ipairs( ClusterMod_NodeTypes )
         
         if #alternatives == 0 then
             print( '    + No node/* alternative names found.' )

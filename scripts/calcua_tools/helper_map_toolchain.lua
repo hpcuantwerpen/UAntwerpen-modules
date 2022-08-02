@@ -29,9 +29,9 @@ dofile( repo_root .. '/etc/SystemDefinition.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 
 
-if CalcUA_SystemTable[stack_version] == nil then
+if ClusterMod_SystemTable[stack_version] == nil then
     io.stderr:write( routine_name .. ': ERROR: The stack version ' .. stack_version .. ' is not recognized as a valid stack.\n' ..
-                     'Maybe CalcUA_SystemTable in etc/SystemDefinition.lua needs updating?\n' )
+                     'Maybe ClusterMod_SystemTable in etc/SystemDefinition.lua needs updating?\n' )
     os.exit( 1 )
 end
 

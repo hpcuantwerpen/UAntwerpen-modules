@@ -83,7 +83,7 @@ stack_versions = { '2020a', '3000a' }
 for _, stack_version in ipairs( stack_versions ) do
 
     print( '\nHierarchy type of toolchain version ' .. stack_version.. ': ' .. 
-           CalcUA_SystemProperties[stack_version]['hierarchy'] )
+           ClusterMod_SystemProperties[stack_version]['hierarchy'] )
 
     osname   = 'redhat8'
     archname = 'x86_64'
@@ -1524,11 +1524,11 @@ local tests = {
 for _,test in ipairs( tests )
 do
     local hierarchy
-    if CalcUA_SystemProperties[test['stack_version']] == nil then
+    if ClusterMod_SystemProperties[test['stack_version']] == nil then
         -- Needed for manual.
         hierarchy = '*'
     else
-        hierarchy =          CalcUA_SystemProperties[test['stack_version']]['hierarchy']
+        hierarchy =          ClusterMod_SystemProperties[test['stack_version']]['hierarchy']
     end
     local system_module_dir =  get_system_module_dir(  test['longname'], test['stack_name'], test['stack_version'] )
     local system_module_dirs = get_system_module_dirs( test['longname'], test['stack_name'], test['stack_version'] )
@@ -1701,7 +1701,7 @@ print( colour_title .. '\nTESTING CURRENT CLUSTER\n========================' .. 
 
 print( colour_title .. '\nTesting get_calcua_generic_current function\n' .. colour_reset )
 
-for stack,_ in pairs( CalcUA_SystemTable ) do
+for stack,_ in pairs( ClusterMod_SystemTable ) do
        print( mssg_sysdep .. ' Generic for ' .. stack .. ' on the current node: ' .. get_calcua_generic_current( stack ) )
 end
               
@@ -1712,8 +1712,8 @@ end
 
 print( colour_title .. '\nTesting get_calcua_longosarch_current function\n' .. colour_reset )
 
-for stack,_ in pairs( CalcUA_SystemTable ) do
-    local hierarchy = CalcUA_SystemProperties[stack]['hierarchy'] 
+for stack,_ in pairs( ClusterMod_SystemTable ) do
+    local hierarchy = ClusterMod_SystemProperties[stack]['hierarchy'] 
     print( mssg_sysdep .. ' Architecture of the current node in the format for ' .. stack .. 
            ' (' .. hierarchy .. '): ' ..
            get_calcua_longosarch_current( stack ) )
@@ -1739,8 +1739,8 @@ local inputdata = {
     },            
 }
 
-for stack,_ in pairs( CalcUA_SystemTable ) do
-    local hierarchy = CalcUA_SystemProperties[stack]['hierarchy'] 
+for stack,_ in pairs( ClusterMod_SystemTable ) do
+    local hierarchy = ClusterMod_SystemProperties[stack]['hierarchy'] 
     local current_osarch = get_cluster_longosarch()
     print( mssg_sysdep .. ' Used architecture for ' .. current_osarch  .. 
            ' (this node) for ' .. stack .. ' (' .. hierarchy .. '): ' .. 

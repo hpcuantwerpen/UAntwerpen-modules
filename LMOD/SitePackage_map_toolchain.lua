@@ -22,7 +22,7 @@ function map_toolchain( version )
     elseif version:match( '%d%d%d%d.%d%d' ) then
         map_version = version:gsub( '%.', '')
     elseif version:match( '%d%d%d%d%l' ) then
-        map_version = CalcUA_toolchain_map[version]
+        map_version = ClusterMod_toolchain_map[version]
         if map_version == nil then
             if version:match( '%d%d%d%da' ) then
                 map_version = version:match( '(%d%d%d%d)a' ) .. '01'
@@ -31,7 +31,7 @@ function map_toolchain( version )
             end
         end
     else -- This will treat version == system or manual, or an illegal version
-        map_version = CalcUA_toolchain_map[version]
+        map_version = ClusterMod_toolchain_map[version]
     end
 
     return map_version
