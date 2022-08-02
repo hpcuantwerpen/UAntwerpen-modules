@@ -2,6 +2,10 @@
 
 ## Software stack modules
 
+-   The name of the stack, `calcua`, is not hard-coded but specified through a variable
+    in the system definition so that a future version may be extended to support more
+    sites.
+
 -   The software stack has two levels:
 
     1.  Version of the software stack: `calcua` module.
@@ -45,7 +49,8 @@
     2.  It is build using the `SYSTEM` toolchain (or installed in an equivalent way)
 
     This is basically the tree to install software from binaries or to create modules for
-    manually installed software (e.g., MATLAB and MAPLE).
+    manually installed software (e.g., MATLAB and MAPLE). The stack is managed through
+    EasyBuild though.
 
     The code of the module tree is largely prepared to have an architecture hierarchy
     there too, but we may not use it initially. The tree could be used to, e.g.,
@@ -115,10 +120,8 @@ and is used to point to a number of important files and (sub)directories:
 
 ***Configuration part of the tree***
 ``` bash
-apps
-└─ antwerpen
-    └─ CalcUA
-        └─ etc
+InstallRoot
+ └─ etc
 ```
 
 ### (Optional) repository part of the tree
@@ -135,16 +138,14 @@ remote software development tools.
 
 ***(Optional) repository part of the tree***  
 ``` bash
-apps
-└─ antwerpen
-    └─ CalcUA
-        ├─ UAntwerpen-modules #(1)
-        └─ UAntwerpen-easybuild #(2)
-            └─ easybuild
-            ├─ easyconfigs
-            ├─ easyblocks
-            ├─ Customisations to naming schemes etc
-            └─ config #(3)
+InstallRoot
+ ├─ UAntwerpen-modules #(1)
+ └─ UAntwerpen-easybuild #(2)
+     └─ easybuild
+         ├─ easyconfigs
+         ├─ easyblocks
+         ├─ Customisations to naming schemes etc
+         └─ config #(3)
 ```
 
 1.  Repository with LMOD configuration and generic modules
@@ -236,42 +237,40 @@ apps
 -   This leads to the following view on the modules tree:
 
     ``` bash
-    apps
-    └─ antwerpen
-       └─ CalcUA
-          ├─ modules-infrastructure #(1)
-          │  ├─ init-UAntwerpen-modules #(2)
-          │  ├─ stacks #(3)
-          │  │  └─ calcua
-          │  │     └─ 2021b.lua #(4)
-          │  ├─ arch #(5)
-          │  │  └─ calcua
-          │  │     ├─ 2021b
-          │  │     │  └─ arch
-          │  │     │     ├─ redhat8-x86_64
-          │  │     │     ├─ redhat8-broadwell-noaccel
-          │  │     │     └─ redhat8-broadwell-quadro
-          │  │     └─ system
-          │  │        └─ arch
-          │  │           ├─ redhat8-x86_64
-          │  │           └─ redhat8-ivybridge-noaccel
-          │  └─ infrastructure #(6)
-          │     └─ CalcUA
-          │        └─ 2021b
-          │           └─ arch
-          │               └─ redhat8-ivybridge-noaccel
-          │                  ├─ EasyBuild-production
-          │                  ├─ EasyBuild-infrastructure
-          │                  └─ EasyBuild-user
-          ├─ modules-easybuild #(7)
-          │  ├─ CalcUA-2021b
-          │  │  ├─ redhat8_x86_64 #(8)
-          │  │  ├─ redhat8-broadwell-noaccel
-          │  │  └─ redhat8-broadwell-quadro
-          │  └─ system* #(9)!
-          │     ├─ redhat8-x86_64 #(10)
-          │     └─ redhat8-ivybridge-noaccel #(11)
-          └─ modules-manual #(12)!
+    InstallRoot
+     ├─ modules-infrastructure #(1)
+     │   ├─ init-UAntwerpen-modules #(2)
+     │   ├─ stacks #(3)
+     │   │   └─ calcua
+     │   │       └─ 2021b.lua #(4)
+     │   ├─ arch #(5)
+     │   │   └─ calcua
+     │   │       ├─ 2021b
+     │   │       │   └─ arch
+     │   │       │       ├─ redhat8-x86_64
+     │   │       │       ├─ redhat8-broadwell-noaccel
+     │   │       │       └─ redhat8-broadwell-quadro
+     │   │       └─ system
+     │   │           └─ arch
+     │   │               ├─ redhat8-x86_64
+     │   │               └─ redhat8-ivybridge-noaccel
+     │   └─ infrastructure #(6)
+     │       └─ calcua
+     │           └─ 2021b
+     │               └─ arch
+     │                   └─ redhat8-ivybridge-noaccel
+     │                       ├─ EasyBuild-production
+     │                       ├─ EasyBuild-infrastructure
+     │                       └─ EasyBuild-user
+     ├─ modules-easybuild #(7)
+     │   ├─ calcua-2021b
+     │   │   ├─ redhat8_x86_64 #(8)
+     │   │   ├─ redhat8-broadwell-noaccel
+     │   │   └─ redhat8-broadwell-quadro
+     │   └─ system* #(9)
+     │       ├─ redhat8-x86_64 #(10)
+     │       └─ redhat8-ivybridge-noaccel #(11)
+     └─ modules-manual #(12)!
     ```
     
     1.  Lmod hierarchy as the framework of the module system 
@@ -302,18 +301,16 @@ with two differences:
 
 ***Resulting structure of the software directory***  
 ``` bash
-apps
-└─ antwerpen
-    └─ CalcUA
-        └─ SW
-            ├─ CalcUA-2021b
-            │  ├─ RH8-x86_64
-            │  ├─ RH8-BRW-host
-            │  └─ RH8-BRW-NVGP61GL
-            ├─ system #(1)
-            │  ├─ RH8-x86_64
-            │  └─ RH8-IVB-host
-            └─ MNL #(2)
+InstallRoot
+ └─ SW
+     ├─ calcua-2021b
+     │   ├─ RH8-x86_64
+     │   ├─ RH8-BRW-host
+     │   └─ RH8-BRW-NVGP61GL
+     ├─ system #(1) 
+     │   ├─ RH8-x86_64
+     │   └─ RH8-IVB-host
+     └─ MNL #(2)
 ```
 
 1.  Sometimes relatively empty subdirs if EasyBuild only creates a module...
@@ -337,17 +334,15 @@ Current subdirectories:
 
 ***Resulting structure of the management directory***  
 ``` bash
-apps
-└─ antwerpen
-    └─ CalcUA
-        └─ mgmt
-            ├─ ebrepo_files
-            │  ├─ CalcUA-2021b
-            │  │ ├─ redhat8-x86_64
-            │  │ └─ redhat8-broadwell-noaccel
-            │  └─ system #(1)
-            │     └─ redhat8-x86_64 #(2)
-            └─ lmod_cache
+InstallRoot
+ └─ mgmt
+     ├─ ebrepo_files
+     │   ├─ calcua-2021b
+     │   │   ├─ redhat8-x86_64
+     │   │   └─ redhat8-broadwell-noaccel
+     │   └─ system #(1)
+     │       └─ redhat8-x86_64 #(2)
+     └─ lmod_cache
 ```
 
 1.  Modules outside the regular software stacks
@@ -366,9 +361,7 @@ apps
 
 ***Other subdirectories***
 ``` bash
-apps
-└─ antwerpen
-    └─ CalcUA
-        └─ sources
+InstallRoot
+ └─ sources
 ```
 

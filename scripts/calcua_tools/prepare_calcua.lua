@@ -147,14 +147,14 @@ do
     if stack_version ~=  'manual'
     then
 
-        local stack_dir = pathJoin( installroot, 'modules-infrastructure/stack/calcua' )
+        local stack_dir = pathJoin( installroot, 'modules-infrastructure/stack', ClusterMod_StackName )
         mkDir( stack_dir )
-        local stack_modulefile = pathJoin( stack_dir, stack_version .. '.lua' )
 
+        local stack_modulefile = pathJoin( stack_dir, stack_version .. '.lua' )
         local link_target = get_versionedfile( stack_version,
-            pathJoin( repo_modules, 'generic-modules/calcua' ), '', '.lua' )
-        print( '\n- Creating/confirming the calcua/' .. stack_version .. ' module ' .. stack_modulefile .. ',\n  linking to ' .. link_target .. '.' )
-        
+            pathJoin( repo_modules, 'generic-modules/stack' ), '', '.lua' )
+
+        print( '\n- Creating/confirming the ' .. ClusterMod_StackName .. '/' .. stack_version .. ' module ' .. stack_modulefile .. ',\n  linking to ' .. link_target .. '.' )        
         create_symlink( link_target, stack_modulefile )
 
     end
@@ -191,12 +191,14 @@ do
             -- Finally the arch module
             --
 
-            local arch_dir = pathJoin( installroot, 'modules-infrastructure/arch/calcua', stack_version, 'arch' )
+            local arch_dir = pathJoin( installroot, 'modules-infrastructure/arch', ClusterMod_StackName, stack_version, 'arch' )
+            mkDir( arch_dir )
+                        
             local arch_modulefile = pathJoin( arch_dir, osarch .. '.lua' )
             local link_target = get_versionedfile( stack_version,
-                pathJoin( repo_modules, 'generic-modules/clusterarch' ), '', '.lua' )
+                pathJoin( repo_modules, 'generic-modules/clusterarch' ), '', '.lua' )                
+
             print( '  - Creating/confirming the arch/' .. osarch .. ' module ' .. arch_modulefile .. ',\n    linking to ' .. link_target .. '.' )
-            mkDir( pathJoin( arch_dir, 'arch' ) )
             create_symlink( link_target, arch_modulefile )
 
         end -- if stack_version ~= manual
@@ -209,19 +211,19 @@ end -- for _,stack_version in ipairs( stack_list )
 
 
 --
--- Install the CalcUA-init module
+-- Install the ClusterMod-init module
 --
-local init_dir = pathJoin( installroot, 'modules-infrastructure/init', 'CalcUA-init' )
+local init_dir = pathJoin( installroot, 'modules-infrastructure/init', ClusterMod_ClusterName .. '-init' )
 mkDir( init_dir )
-local target_dir = pathJoin( repo_modules, 'generic-modules/CalcUA-init' )
-print( '\nInstalling the CalcUA-init module(s)' )
+local target_dir = pathJoin( repo_modules, 'generic-modules/ClusterMod-init' )
+print( '\nInstalling the ' .. ClusterMod_ClusterName .. '-init module(s)' )
 for file in lfs.dir( target_dir )
 do
     if file:match( '.+%.lua' )
     then
         local init_modulefile = pathJoin( init_dir, file )
         local target_modulefile = pathJoin( target_dir, file )
-        print( '- Creating/confirming the init/' .. file:gsub( '%.lua', '') .. ' module ' .. init_modulefile ..
+        print( '- Creating/confirming the ' .. ClusterMod_ClusterName .. '-init/' .. file:gsub( '%.lua', '') .. ' module ' .. init_modulefile ..
                '\n  linking to ' .. target_modulefile .. '.' )
         create_symlink( target_modulefile, init_modulefile )
     end

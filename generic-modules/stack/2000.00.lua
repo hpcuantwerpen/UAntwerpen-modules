@@ -1,4 +1,4 @@
--- calcua generic module code
+-- Generic module for the software stack
 -- Written by Kurt Lust, kurt.lust@uantwerpen.be
 --
 
