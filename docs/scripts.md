@@ -10,8 +10,10 @@ root of the file system hierarchy from the location of the script. Alternatively
 is possible to give the root of the software stack as an argument to the script.
 
 Besides setting a number of `LMOD_` environment variables to configure Lmod, it also sets
-the `CALCUA_SOFTWARESTACK` environment variable which points to the configuration file
-(itself a Lua script) pf the software stack.
+the `CLUSTERMOD_SOFTWARESTACK` environment variable which points to the configuration file
+(itself a Lua script) of the software stack. Note that we need this variable to find 
+the system definition file which then tells the name of the cluster which is why we 
+cannot use the name of the cluster in the name of the environment variable.
 
 
 ## check_systemdefinition.sh

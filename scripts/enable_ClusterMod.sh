@@ -31,7 +31,6 @@ systemmodules='modules-infrastructure'
 #   This is essential as otherwise restore will reset the MODULEPATH that
 #   we build here,
 echo "clearLmod ; "
-#echo "unset _CALCUA_INIT_FIRST_LOAD ; "
 
 # - Point to the SoftwareStack.lua file that we want to use
 echo "export CLUSTERMOD_SOFTWARESTACK=$stackroot/etc/SoftwareStack.lua"
@@ -43,12 +42,13 @@ echo "export LMOD_MODULERCFILE=$installroot/$repo_modules/LMOD/modulerc.lua ; "
 echo "export LMOD_ADMIN_FILE=$installroot/$repo_modules/LMOD/admin.list ; "
 
 # - set the MODULEPATH
-#echo "export MODULEPATH=$installroot/$systemmodules/init-$repo_modules ; "
 echo "export MODULEPATH=$installroot/$systemmodules/init ; "
 
 # - Set the initial list of modules
 echo "export LMOD_SYSTEM_DEFAULT_MODULES=CalcUA-init ; "
 
-# - Initialize LMOD but
-echo "source /usr/share/lmod/lmod/init/profile ; "
+# - Re-initialize LMOD (Lmod should be there already since we need LMOD_ROOT).
+#   We do need to source lmod/init/profile though as the clearLmod has removed 
+#   the module command also.
+echo "source $LMOD_ROOT/lmod/init/profile ; "
 echo "module --initial_load --no_redirect restore ; "

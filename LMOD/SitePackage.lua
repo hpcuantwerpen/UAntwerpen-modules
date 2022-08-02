@@ -12,7 +12,7 @@ local lmod_dir = os.getenv( 'LMOD_PACKAGE_PATH' )
 -- Read the SoftwareStack.lua file with the basic configuration parameters.
 -- TODO: Get the location of this file out of an environment variable...
 --
-local softwarestack = ( os.getenv( 'CALCUA_SOFTWARESTACK' ) or pathJoin( lmod_dir, '../../etc/SoftwareStack.lua' ) )
+local softwarestack = ( os.getenv( 'CLUSTERMOD_SOFTWARESTACK' ) or pathJoin( lmod_dir, '../../etc/SoftwareStack.lua' ) )
 dofile( softwarestack )
 
 --
