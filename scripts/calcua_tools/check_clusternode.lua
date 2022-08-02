@@ -68,7 +68,8 @@ print()
 
 for stack_version,_ in pairs( CalcUA_ClusterMap ) do
 
-    if stack_version ~= 'system' and stack_version ~= 'manual' then
+    -- if stack_version ~= 'system' and stack_version ~= 'manual' then
+    if stack_version ~= 'manual' then
 
         local stack = 'calcua/' .. stack_version
 
@@ -103,12 +104,14 @@ for stack_version,_ in pairs( CalcUA_ClusterMap ) do
             end
         end
 
-        local stack_dirs = get_system_module_dirs( use_longarch, 'calcua', stack_version )
-        if stack_dirs == nil then
-            io.stderr.write( 'No regular modules found for ' .. stack .. '. This points to an error in the module system or cluster definition.\n' )
-        else
-            for _,stack_dir in ipairs( stack_dirs ) do
-                table.insert( moduledirs, stack_dir )
+        if stack_version ~= 'system' then
+            local stack_dirs = get_system_module_dirs( use_longarch, 'calcua', stack_version )
+            if stack_dirs == nil then
+                io.stderr.write( 'No regular modules found for ' .. stack .. '. This points to an error in the module system or cluster definition.\n' )
+            else
+                for _,stack_dir in ipairs( stack_dirs ) do
+                    table.insert( moduledirs, stack_dir )
+                end
             end
         end
 

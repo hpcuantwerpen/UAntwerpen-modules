@@ -25,5 +25,5 @@ fi
 
 #echo -e "Working with $systemdefinition_file."
 
-$scriptdir/calcua_tools/check_systemdefinition.lua $systemdefinition_file
+$scriptdir/calcua_tools/check_clusternode.lua $systemdefinition_file
 
