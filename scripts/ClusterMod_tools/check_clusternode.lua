@@ -46,8 +46,8 @@ print( '- The CPU string is ' .. get_cpu_info() )
 
 print( '- Detected accelerator is ' .. ( get_accelerator_info() or 'none detected' ) )
 
-local clusternode_long_osarch = get_cluster_longosarch()
-print( '- Detected node architecture: ' .. clusternode_long_osarch )
+local clusternode_osarch = get_cluster_osarch()
+print( '- Detected node architecture: ' .. clusternode_osarch )
 
 -- -----------------------------------------------------------------------------
 --

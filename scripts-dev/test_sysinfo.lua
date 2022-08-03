@@ -17,7 +17,7 @@ print( '- (get_cpu_info) The CPU string is ' .. get_cpu_info() )
 
 print( '- (get_accelerator_info) Detected accelerator is ' .. ( get_accelerator_info() or 'none detected' ) )
 
-print( '- (get_cluster_longosarch) Detected node architecture: ' .. ( get_cluster_longosarch() or 'RETURNED NIL') )
+print( '- (get_cluster_osarch) Detected node architecture: ' .. ( get_cluster_osarch() or 'RETURNED NIL') )
 
 -- local clusterarch_short_minimal
 -- local clusterarch_long_minimal

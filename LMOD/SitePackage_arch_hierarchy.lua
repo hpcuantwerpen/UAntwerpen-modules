@@ -121,17 +121,17 @@ function populate_cache_subosarchs( stack_version )
             local CPU = extract_cpu_from_arch( arch )
             local accel = extract_accel_from_arch( arch )
             
-            local long_osarch = OS .. '-' .. arch
-            ClusterMod_cache_subosarchs[stack_version][long_osarch] = true
+            local osarch = OS .. '-' .. arch
+            ClusterMod_cache_subosarchs[stack_version][osarch] = true
             
             if arch ~= CPU and ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
-                long_osarch = OS .. '-' .. CPU
-                ClusterMod_cache_subosarchs[stack_version][long_osarch] = true
+                osarch = OS .. '-' .. CPU
+                ClusterMod_cache_subosarchs[stack_version][osarch] = true
             end
                 
             if ClusterMod_map_cpu_to_gen[matching_key][CPU] ~= nil then
-                long_osarch = OS .. '-' .. ClusterMod_map_cpu_to_gen[matching_key][CPU]
-                ClusterMod_cache_subosarchs[stack_version][long_osarch] = true
+                osarch = OS .. '-' .. ClusterMod_map_cpu_to_gen[matching_key][CPU]
+                ClusterMod_cache_subosarchs[stack_version][osarch] = true
             end            
             
         end -- for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] )
@@ -212,14 +212,14 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- get_long_osarchs
+-- get_osarchs
 --
 -- Input arguments:
 --   * stack_version: Version of the software stack (or `system` for the
 --     software installed against the system or in manual mode).
 --     The routine also accpets versions in yyyymm format.
---   * long_os: Name (with version) of the OS (currently only redhat8)
---   * long_arch: Architecture, e.g., zen2-noaccel or x86_64.
+--   * os: Name (with version) of the OS (currently only redhat8)
+--   * arch: Architecture, e.g., zen2-noaccel or x86_64.
 --
 -- Output: A table with the chain of architectures, each a string with two or
 -- three dash-separated entities: OS (+version), base CPU architecture and
@@ -227,7 +227,7 @@ end
 --
 -- The order is from the least generic to the most generic one.
 --
-function get_long_osarchs( stack_version, long_os, long_arch )
+function get_osarchs( stack_version, os, arch )
 
     local result = {}
     local version = map_toolchain( stack_version )
@@ -241,21 +241,21 @@ function get_long_osarchs( stack_version, long_os, long_arch )
     local matching_version = get_matching_cputogen_key( stack_version )
 
     if ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
-        local cpu = extract_cpu_from_arch( long_arch )
+        local cpu = extract_cpu_from_arch( arch )
         local gencpu = ClusterMod_map_cpu_to_gen[matching_version][cpu]
-        table.insert( result, long_os .. '-' .. long_arch )
-        if cpu ~= long_arch then
-            table.insert( result, long_os .. '-' .. cpu )
+        table.insert( result, os .. '-' .. arch )
+        if cpu ~= arch then
+            table.insert( result, os .. '-' .. cpu )
         end
         if gencpu ~= nil then
-            table.insert( result, long_os .. '-' .. gencpu )
+            table.insert( result, os .. '-' .. gencpu )
         end
     else
-        local cpu = extract_cpu_from_arch( long_arch )
+        local cpu = extract_cpu_from_arch( arch )
         local gencpu = ClusterMod_map_cpu_to_gen[matching_version][cpu]
-        table.insert( result, long_os .. '-' .. long_arch )
+        table.insert( result, os .. '-' .. arch )
         if gencpu ~= nil then
-            table.insert( result, long_os .. '-' .. gencpu )
+            table.insert( result, os .. '-' .. gencpu )
         end
     end
 
@@ -266,15 +266,15 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_long_osarchs_reverse( stack_version, long_os, long_arch )
+-- Function get_osarchs_reverse( stack_version, os, arch )
 --
 -- Input arguments:
 --   * stack_version: Version of the software stack (or `system` for the
 --     software installed against the system or or 'manual' for  manual mode).
 --     It must be a valid software stack version defined in ClusterMod_SystemTable
 --     etc. in etc/SystemDefinition.lua
---   * long_os: Name (with version) of the OS
---   * long_arch: Architecture, e.g., zen2-noaccel or x86_64.
+--   * os: Name (with version) of the OS
+--   * arch: Architecture, e.g., zen2-noaccel or x86_64.
 --
 -- Output: A table with the chain of architectures, each a string with two or
 -- three dash-separated entities: OS (+version), base CPU architecture and
@@ -282,7 +282,7 @@ end
 --
 -- The order is from the most generic to the least generic one.
 --
-function get_long_osarchs_reverse( stack_version, long_os, long_arch )
+function get_osarchs_reverse( stack_version, os, arch )
 
     local result = {}
     local version = map_toolchain( stack_version )
@@ -296,22 +296,22 @@ function get_long_osarchs_reverse( stack_version, long_os, long_arch )
     local matching_version = get_matching_cputogen_key( stack_version )
 
     if ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
-        local cpu = extract_cpu_from_arch( long_arch )
+        local cpu = extract_cpu_from_arch( arch )
         local gencpu = ClusterMod_map_cpu_to_gen[matching_version][cpu]
         if gencpu ~= nil then
-            table.insert( result, long_os .. '-' .. gencpu )
+            table.insert( result, os .. '-' .. gencpu )
         end
-        if cpu ~= long_arch then
-            table.insert( result, long_os .. '-' .. cpu )
+        if cpu ~= arch then
+            table.insert( result, os .. '-' .. cpu )
         end
-        table.insert( result, long_os .. '-' .. long_arch )
+        table.insert( result, os .. '-' .. arch )
     else
-        local cpu = extract_cpu_from_arch( long_arch )
+        local cpu = extract_cpu_from_arch( arch )
         local gencpu = ClusterMod_map_cpu_to_gen[matching_version][cpu]
         if gencpu ~= nil then
-            table.insert( result, long_os .. '-' .. gencpu )
+            table.insert( result, os .. '-' .. gencpu )
         end
-        table.insert( result, long_os .. '-' .. long_arch )
+        table.insert( result, os .. '-' .. arch )
     end
 
     return result
@@ -320,15 +320,15 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function map_long_to_short( long_osarch )
+-- Function map_long_to_short( osarch )
 --
 -- Input arguments: 1
---   * long_osarch: The full os-and-architecture string in long format
+--   * osarch: The full os-and-architecture string in long format
 --
 -- Return arguments: 1
 --   * The full os-and-architecture string in short format
 --
-function map_long_to_short( long_osarch )
+function map_long_to_short( osarch )
 
     function string.easysplit( self, delimiter )
         local result = {}
@@ -338,15 +338,15 @@ function map_long_to_short( long_osarch )
         return result;
     end
 
-    local elements = long_osarch:easysplit( '-' )
+    local elements = osarch:easysplit( '-' )
 
     local returnlist = {}
 
     -- Process the OS part
-    local long_os
+    local os
     local version
-    long_os, version = elements[1]:match( '(%a+)(%d+)' )
-    table.insert( returnlist, map_os_long_to_short[long_os] .. version )
+    os, version = elements[1]:match( '(%a+)(%d+)' )
+    table.insert( returnlist, map_os_long_to_short[os] .. version )
 
     -- Process the CPU part
     table.insert( returnlist, map_cpu_long_to_short[elements[2]] )
@@ -423,29 +423,29 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_stack_generic( long_osarch, stack_version )
+-- Function get_stack_generic( osarch, stack_version )
 --
 -- Input arguments:
---   * long_osarch: long_osarch string in the long format
+--   * osarch: osarch string in the long format
 --   * stack_version: Version of the calcua stack, can be system.
 --
 -- Output: The most generic architecture for the current node.
 --
-function get_stack_generic( long_osarch, stack_version )
+function get_stack_generic( osarch, stack_version )
 
-    local long_os = extract_os( long_osarch )
-    local long_cpu = extract_cpu( long_osarch )
+    local os = extract_os( osarch )
+    local cpu = extract_cpu( osarch )
 
     local matching_version = get_matching_cputogen_key( stack_version )
 
-    local long_osgeneric = ClusterMod_map_cpu_to_gen[matching_version][long_cpu]
-    if long_osgeneric == nil then
-        long_osgeneric = long_os .. '-' .. long_cpu
+    local osgeneric = ClusterMod_map_cpu_to_gen[matching_version][cpu]
+    if osgeneric == nil then
+        osgeneric = os .. '-' .. cpu
     else
-        long_osgeneric = long_os .. '-' .. long_osgeneric
+        osgeneric = os .. '-' .. osgeneric
     end
 
-    return long_osgeneric
+    return osgeneric
 
 end
 
@@ -460,9 +460,9 @@ end
 --
 function get_stack_generic_current( stack_version )
 
-    local long_osarch = get_cluster_longosarch()
+    local osarch = get_cluster_osarch()
 
-    return get_stack_generic( long_osarch, stack_version )
+    return get_stack_generic( osarch, stack_version )
 
 end
 
@@ -485,7 +485,7 @@ function get_stack_osarch_current( stack_version )
         LmodError( 'Likely an error in ClusterMod_SystemProperties in etc/SystemDefinition.lua, no hierarchy entry found for stack ' .. stack_version )
     end
 
-    local current_osarch = get_cluster_longosarch()
+    local current_osarch = get_cluster_osarch()
 
     return current_osarch
 
@@ -495,20 +495,20 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_stack_top( long_osarch, stack_version )
+-- Function get_stack_top( osarch, stack_version )
 --
 -- Input arguments:
---   * long_osarch: os and architecture with long names and in a format 
+--   * osarch: os and architecture with long names and in a format 
 --     compatible with the indicated version of the software stack (so respecting
 --     the hierarchy types 2L or 3L).
 --   * stack_version: Version of the calcua stack, can be system.
 --
 -- Output: The most specific os-architecture for the current node in the indicated
 -- version of the CalcUA software stacks, or nil if there is no support for the 
--- calcua stack for long_osarch.
+-- calcua stack for osarch.
 --
 
-function get_stack_top( long_osarch, stack_version )
+function get_stack_top( osarch, stack_version )
 
     --
     -- -  Some initialisations ot use the data structures of etc/SystemDefinition.lua
@@ -516,8 +516,8 @@ function get_stack_top( long_osarch, stack_version )
     local numversion = map_toolchain( stack_version )
     local matching_version = get_matching_toparchreduction_key( stack_version )
 
-    local use_arch = extract_arch( long_osarch )
-    local use_os   = extract_os( long_osarch )
+    local use_arch = extract_arch( osarch )
+    local use_os   = extract_os( osarch )
 
     --
     -- -  Build a table that helps to quickly detect if an architecture is
@@ -558,11 +558,11 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_stack_matchingarch( long_osarch, reduce_stack_version, 
+-- Function get_stack_matchingarch( osarch, reduce_stack_version, 
 --                                   stack_version )
 --
 -- Input arguments:
---   * long_osarch: os and architecture with long names. The name could be
+--   * osarch: os and architecture with long names. The name could be
 --     incompatible with the software stack, i.e., we could get a middle
 --     level name for a 3L scheme while looking in a 2L scheme. This happens,
 --     e.g., when looking for a system module for an arch module for the
@@ -572,26 +572,26 @@ end
 --   * stack_version: Version of the calcua stack for which the returned
 --     arch should be valid. Can be system.
 --
--- Output: The most specific os-architecture for the long_osarch in the indicated
+-- Output: The most specific os-architecture for the osarch in the indicated
 -- version of the CalcUA software stacks, or nil if there is no support for the 
--- calcua stack for long_osarch.
+-- calcua stack for osarch.
 --
 -- Cases to consider:
---   * long_osarch is os + generic CPU type: No reduction rules are applied.
---     Return nil if we find no way to generate this long_osarch from the
+--   * osarch is os + generic CPU type: No reduction rules are applied.
+--     Return nil if we find no way to generate this osarch from the
 --     architectures in stack_version in the matching system table.
---   * long_osarch is a os + CPU name: 
+--   * osarch is a os + CPU name: 
 --       * If stack_version is a 2L scheme and reduce_stack_version is a 3L 
 --         scheme, then we are in a difficult case. From the use cases it can 
---         be that in fact long_osarch is generated from a reduction of 
+--         be that in fact osarch is generated from a reduction of 
 --         
---   * long_osarch is a os + CPU + accelerator name: We use the top-level
+--   * osarch is a os + CPU + accelerator name: We use the top-level
 --     reduction rules of reduce_stack_version as given by ClusterMod_reduce_top_arch
 --     until we find a match in all archs that can be generated for the stack 
 --     stack_version.
 --
 
-function get_stack_matchingarch( long_osarch, reduce_stack_version, stack_version )
+function get_stack_matchingarch( osarch, reduce_stack_version, stack_version )
 
     --
     -- -  Some initialisations ot use the data structures of etc/SystemDefinition.lua
@@ -603,10 +603,10 @@ function get_stack_matchingarch( long_osarch, reduce_stack_version, stack_versio
     local num_stack_version =         map_toolchain( stack_version )
     local num_reduced_stack_version = map_toolchain( reduce_stack_version )
 
-    local use_os =    extract_os( long_osarch )
-    local use_cpu =   extract_cpu( long_osarch )
-    local use_accel = extract_accel( long_osarch )
-    local use_arch =  extract_arch( long_osarch )
+    local use_os =    extract_os( osarch )
+    local use_cpu =   extract_cpu( osarch )
+    local use_accel = extract_accel( osarch )
+    local use_arch =  extract_arch( osarch )
 
     populate_cache_subarchs( stack_version, use_os )
     if reduce_stack_version ~= stack_version then
@@ -628,7 +628,7 @@ function get_stack_matchingarch( long_osarch, reduce_stack_version, stack_versio
     if use_accel ~= nil then
 
         --
-        -- long_osarch is a top level name in 2L or 3L
+        -- osarch is a top level name in 2L or 3L
         --
         -- Now walk down the ClusterMod_reduce_top_arch searching for an
         -- architecture supported by the software stack.
@@ -644,7 +644,7 @@ function get_stack_matchingarch( long_osarch, reduce_stack_version, stack_versio
     elseif not ClusterMod_def_cpu[use_cpu] then
     
         --
-        -- long_osarch is a middle level name so reduce_stack_version should be 3L
+        -- osarch is a middle level name so reduce_stack_version should be 3L
         --
         -- Note that use_arch == use_cpu in this case.
         --
@@ -675,7 +675,7 @@ function get_stack_matchingarch( long_osarch, reduce_stack_version, stack_versio
     else
 
         --
-        -- long_osarch is a bottom/generic level name
+        -- osarch is a bottom/generic level name
         --
         -- Note that use_arch == use_cpu in this case.
         --
@@ -690,7 +690,7 @@ function get_stack_matchingarch( long_osarch, reduce_stack_version, stack_versio
             use_arch = ClusterMod_reduce_cpu[matching_version][use_arch]
         end
 
-    end -- Distinguish between the level in the hierarchy of long_osarch.
+    end -- Distinguish between the level in the hierarchy of osarch.
 
     --
     -- -  Now check if we have found something and produce the answer.
@@ -709,15 +709,15 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_stack_subarchs( long_osarch, stack_version )
+-- Function get_stack_subarchs( osarch, stack_version )
 --
 -- Input arguments:
---   * long_osarch: os and architecture with long names and in a format 
+--   * osarch: os and architecture with long names and in a format 
 --     compatible with the indicated version of the software stack (so respecting
 --     the hierarchy types 2L or 3L).
 --   * stack_version: Version of the calcua stack, can be system.
 --
--- Output: A list containing the given long_osarch and its subarchs in
+-- Output: A list containing the given osarch and its subarchs in
 -- the hierarchy of the naming scheme for the stack. So the list can
 -- be at most 3 elements long. The most generic one is at the front of
 -- the list.
@@ -726,55 +726,55 @@ end
 -- readability at all.
 --
 
-function get_stack_subarchs( long_osarch, stack_version )
+function get_stack_subarchs( osarch, stack_version )
 
     local result = {}
 
-    local long_osgeneric = get_stack_generic( long_osarch, stack_version )
+    local osgeneric = get_stack_generic( osarch, stack_version )
 
-    if long_osarch == long_osgeneric then
+    if osarch == osgeneric then
 
-        -- The function was called with long_osarch pointing to the
+        -- The function was called with osarch pointing to the
         -- generic level of a 2L or 3L hierarchy, so only one element
         -- in the return list.
-        table.insert( result, long_osgeneric )
+        table.insert( result, osgeneric )
 
     else
-        -- We did not call the function with long_osarch pointing to the 
+        -- We did not call the function with osarch pointing to the 
         -- generic level of the software stack so we need to continue.
 
         if ClusterMod_SystemProperties[stack_version]['hierarchy'] == '3L' then
             
             -- 3L software hierarchy
 
-            if extract_cpu( long_osarch ) == extract_arch( long_osarch ) then
+            if extract_cpu( osarch ) == extract_arch( osarch ) then
 
-                -- long_osarch has only two compoonents so it must be the middle level
+                -- osarch has only two compoonents so it must be the middle level
                 -- in a 3L hierarchy. The result has two elements: the middle level
                 -- and generic level.
-                table.insert( result, long_osgeneric )
-                table.insert( result, long_osarch )
+                table.insert( result, osgeneric )
+                table.insert( result, osarch )
 
             else
                 
-                -- long_osarch has three components so it must be the top level in a
+                -- osarch has three components so it must be the top level in a
                 -- 3L hierarchy. The result has three elements: the given top level
                 -- architecture, the middle level obtained from omitting the accelerator
                 -- part, and the generic level.
-                table.insert( result, long_osgeneric )
-                table.insert( result, extract_os( long_osarch ) .. '-' .. extract_cpu( long_osarch ))
-                table.insert( result, long_osarch )
+                table.insert( result, osgeneric )
+                table.insert( result, extract_os( osarch ) .. '-' .. extract_cpu( osarch ))
+                table.insert( result, osarch )
 
             end
 
         else
 
             -- 2L software hierarchy, so unless the function was called with wrong arguments
-            -- (we will not check for it) long_osarch must be a top level architecture, and
+            -- (we will not check for it) osarch must be a top level architecture, and
             -- the result consists of this top level architecture and the corresponding generic
             -- one.
-            table.insert( result, long_osgeneric )
-            table.insert( result, long_osarch )
+            table.insert( result, osgeneric )
+            table.insert( result, osarch )
 
         end
 
@@ -787,8 +787,8 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_module_dir( long_osarch, stack_name, stack_version )
--- Function get_system_module_dirs( long_osarch, stack_name, stack_version )
+-- Function get_system_module_dir( osarch, stack_name, stack_version )
+-- Function get_system_module_dirs( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -805,7 +805,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_stack_system_module_dir_worker( long_osarch, stack_version )
+function get_stack_system_module_dir_worker( osarch, stack_version )
 
     -- Worker function without any error control. The error control is done
     -- by get_system_module_dir and get_system_module_dirs.
@@ -818,11 +818,11 @@ function get_stack_system_module_dir_worker( long_osarch, stack_version )
         prefix = 'modules-easybuild/' .. ClusterMod_StackName  .. '-' .. stack_version .. '/'
     end
 
-    return prefix .. long_osarch
+    return prefix .. osarch
 
 end
 
-function get_system_module_dir( long_osarch, stack_name, stack_version )
+function get_system_module_dir( osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -840,19 +840,19 @@ function get_system_module_dir( long_osarch, stack_name, stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
-    -- Check if the input long_osarch is valid in the cluster definition.
+    -- Check if the input osarch is valid in the cluster definition.
     populate_cache_subosarchs( use_version )
-    if ClusterMod_cache_subosarchs[use_version][long_osarch] ~= true then
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: ' .. (long_osarch or 'nil') .. 
+    if ClusterMod_cache_subosarchs[use_version][osarch] ~= true then
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: ' .. (osarch or 'nil') .. 
                    ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
-    return get_stack_system_module_dir_worker( long_osarch, use_version )
+    return get_stack_system_module_dir_worker( osarch, use_version )
 
 end
 
-function get_system_module_dirs( long_osarch, stack_name, stack_version )
+function get_system_module_dirs( osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local result
@@ -872,16 +872,16 @@ function get_system_module_dirs( long_osarch, stack_name, stack_version )
         return nil
     end
 
-    -- Check if the input long_osarch is valid in the cluster definition.
+    -- Check if the input osarch is valid in the cluster definition.
     populate_cache_subosarchs( use_version )
-    if ClusterMod_cache_subosarchs[use_version][long_osarch] ~= true then
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: ' .. (long_osarch or 'nil') .. 
+    if ClusterMod_cache_subosarchs[use_version][osarch] ~= true then
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: ' .. (osarch or 'nil') .. 
                    ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
     result = {}
-    for index, os_arch_accel in ipairs( get_stack_subarchs( long_osarch, use_version ) )
+    for index, os_arch_accel in ipairs( get_stack_subarchs( osarch, use_version ) )
     do
         table.insert( result, get_stack_system_module_dir_worker( os_arch_accel, use_version ) )
     end
@@ -893,7 +893,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_inframodule_dir( long_osarch, stack_name, stack_version )
+-- Function get_system_inframodule_dir( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -907,7 +907,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_system_inframodule_dir( long_osarch, stack_name, stack_version )
+function get_system_inframodule_dir( osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local prefix = 'modules-infrastructure/infrastructure'
@@ -925,13 +925,13 @@ function get_system_inframodule_dir( long_osarch, stack_name, stack_version )
         return nil
     end
 
-    return pathJoin( prefix, stack_name, stack_version, 'arch', long_osarch )
+    return pathJoin( prefix, stack_name, stack_version, 'arch', osarch )
 
 end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_SW_dir( long_osarch, stack_name, stack_version )
+-- Function get_system_SW_dir( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -945,7 +945,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_system_SW_dir( long_osarch, stack_name, stack_version )
+function get_system_SW_dir( osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -970,14 +970,14 @@ function get_system_SW_dir( long_osarch, stack_name, stack_version )
         prefix = 'SW/' .. ClusterMod_StackName .. '-' .. use_version .. '/'
     end
 
-    return prefix .. map_long_to_short( long_osarch )
+    return prefix .. map_long_to_short( osarch )
 
 end
 
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_EBrepo_dir( long_osarch, stack_name, stack_version )
+-- Function get_system_EBrepo_dir( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -991,7 +991,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_system_EBrepo_dir( long_osarch, stack_name, stack_version )
+function get_system_EBrepo_dir( osarch, stack_name, stack_version )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -1015,7 +1015,7 @@ function get_system_EBrepo_dir( long_osarch, stack_name, stack_version )
         prefix = 'EBrepo_files/'  .. ClusterMod_StackName .. '-' .. use_version .. '/'
     end
 
-    return prefix .. long_osarch
+    return prefix .. osarch
 
 end
 

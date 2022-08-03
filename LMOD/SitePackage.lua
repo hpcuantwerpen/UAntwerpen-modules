@@ -158,7 +158,7 @@ sandbox_registration{
     ['get_fortune']                   = get_fortune,                    -- Defined in SitePackage
     ['get_user_prefix_EasyBuild']     = get_user_prefix_EasyBuild,      -- Defined in SitePackage_helper
     ['is_interactive']                = is_interactive,                 -- Defined in SitePackage
-    ['get_cluster_longosarch']        = get_cluster_longosarch,
+    ['get_cluster_osarch']        = get_cluster_osarch,
 --    ['get_clusterarch']               = get_clusterarch,
     [ 'map_toolchain']                = map_toolchain,
     ['get_stack_osarch_current'] = get_stack_osarch_current,

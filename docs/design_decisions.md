@@ -88,7 +88,7 @@
 
         -   Changes to the `get_stack_top` function needed.
 
-        -   Needs changes to `get_long_osarchs` and `get_long_osarchs_reverse`.
+        -   Needs changes to `get_osarchs` and `get_osarchs_reverse`.
 
 
 ## Directory structure

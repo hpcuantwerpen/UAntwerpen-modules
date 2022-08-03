@@ -451,14 +451,14 @@ map_accel_long_to_short = {
 
 #### Discover the architecture hierarchy
 
--   `get_long_osarchs`: For a given OS (long name + version) and architecture
+-   `get_osarchs`: For a given OS (long name + version) and architecture
     (long name, CPU + optionally accelerator), return a table which also includes
     the parent and potentially grandparent of the architecture for the given OS.
 
     The order in the table is from the least generic architecture to the most
     generic one.
 
--   `get_long_osarchs_reverse`: Same as `get_long_osarchs`, but now with the
+-   `get_osarchs_reverse`: Same as `get_osarchs`, but now with the
     most generic one first and least generic one (the one used as the argument
     of the function) last.
 
@@ -513,11 +513,11 @@ map_accel_long_to_short = {
     architecture for the given version of the CalcUA stack on the current
     architecture.
 
--   `get_stack_top( long_osarch, stack_version )`:
+-   `get_stack_top( osarch, stack_version )`:
 
     **Input arguments:**
 
-    -   `long_osarch`: os and architecture with long names and in a format 
+    -   `osarch`: os and architecture with long names and in a format 
         compatible with the indicated version of the software stack (so respecting
         the hierarchy types 2L or 3L).
 
@@ -529,11 +529,11 @@ map_accel_long_to_short = {
         version of the CalcUA software stacks.
 
 
--   `get_stack_matchingarch( long_osarch, reduce_stack_version, stack_version )`:
+-   `get_stack_matchingarch( osarch, reduce_stack_version, stack_version )`:
 
     **Input arguments:**
 
-    -   `long_osarch`: os and architecture with long names and in a format 
+    -   `osarch`: os and architecture with long names and in a format 
         compatible with the indicated version of the software stack (so respecting
         the hierarchy types 2L or 3L).
 
@@ -542,7 +542,7 @@ map_accel_long_to_short = {
 
     -   `stack_version`: Version of the calcua stack, can be system for which the
         best matching architecture should be returned. If `stack_version` is a 
-        3L hierarchy, this can be a middle level one if `long_osarch` is also a 
+        3L hierarchy, this can be a middle level one if `osarch` is also a 
         middle level name (which implies that `reduce_stack_version` is also a
         3L hierarchy)
 
@@ -557,11 +557,11 @@ map_accel_long_to_short = {
     the `system` stack which may be 2L or 3L.
 
     Cases:
-    -   `long_osarch` is of type OS-generic CPU. As we currently have no rules 
+    -   `osarch` is of type OS-generic CPU. As we currently have no rules 
         to reduce generic CPUs to an even less capable generic one, we produce
-        `nil` if `long_osarch` is not supported by `stack_version` and return
-        `long_osarch` otherwise.
-    -   `long_osarch` is of type OS-CPU, i.e., a middle level architecture for a 
+        `nil` if `osarch` is not supported by `stack_version` and return
+        `osarch` otherwise.
+    -   `osarch` is of type OS-CPU, i.e., a middle level architecture for a 
         3L hierarchy. This implies that `reduce_stack_version` must be a 3L stack.
 
         There are now 2 options:
@@ -573,7 +573,7 @@ map_accel_long_to_short = {
             the matching generic CPU and then continue using the CPU chaining
             rules defined by 
 
-    -   `long_osarch` is of type os-generic CPU: We follow the CPU reduction path
+    -   `osarch` is of type os-generic CPU: We follow the CPU reduction path
         for `reduce_stack_version` to see if we can find a match in the generic
         architectures supported by `stack_version`.
 
@@ -598,8 +598,8 @@ map_accel_long_to_short = {
 
 #### Miscellaneous functions
 
--   `get_stack_subarchs( long_osarch, stack_version )`: Compute a list containing
-    the given long_osarch and its subarchs in
+-   `get_stack_subarchs( osarch, stack_version )`: Compute a list containing
+    the given osarch and its subarchs in
     the hierarchy of the naming scheme for the stack. So the list can
     be at most 3 elements long. The most generic one is at the front of
     the list.
@@ -738,18 +738,18 @@ Current return value:
 -   NEC_aurora1  (leibniz Aurora node)
 
 
-#### `get_cluster_longosarch()`
+#### `get_cluster_osarch()`
 
 `get_clusterarch_longosarch` returns the cluster architecture in the os-cpu-accelerator
 format with long names, e.g., `redhat8-zen2-noaccel` or `redhat8-skylake-aurora1`.
 This is the format that in our naming conventions would be denoted as
-`long_osarch`.
+`osarch`.
 
 
 #### `get_clusterarch()`
 
 **This function may not be needed in the final implementation and may be eliminated
-in favor of `get_cluster_longosarch()`.**
+in favor of `get_cluster_osarch()`.**
 
 `get_clusterarch` returns the cluster architecture in four possible formats for the 
 module system. It is then to the module system to select which one of the four it needs
@@ -772,7 +772,7 @@ Return values:
 e.g., `RH8-zen2, redhat8-zen2, RH8-zen2-host, redhat8-zen2-noaccel` or
 `RH8-SKLX-NEC1, redhat8-skylake-aurora1, RH8-SKLX-NEC1, redhat8-skylake-aurora1`.
 This is the format that in our naming conventions would be denoted as
-`long_osarch`.
+`osarch`.
 
 
 #### `get_fullos()`

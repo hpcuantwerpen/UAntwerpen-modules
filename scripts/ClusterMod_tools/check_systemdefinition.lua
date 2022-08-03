@@ -51,9 +51,9 @@ local number_errors = 0
 
 local node_cpu_list = {} -- All CPU types that are found directly in the node types
 
-for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
+for _,node_osarch in ipairs( ClusterMod_NodeTypes )
 do
-    node_cpu_list[extract_cpu(node_long_osarch)] = true
+    node_cpu_list[extract_cpu(node_osarch)] = true
 end
 
 local full_cpu_list = {} -- All CPU types that are found directly in the node types or 
@@ -467,26 +467,26 @@ io.stdout:write( 'Test ' .. test_number .. ': Is every node type supported by so
 number_warnings = 0
 number_errors = 0
 
-for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
+for _,node_osarch in ipairs( ClusterMod_NodeTypes )
 do
 
     local supported_stackversion_list = {}
     local supported_by_system = false
     local supported_by_manual = false
     
-    local node_os = extract_os( node_long_osarch )
+    local node_os = extract_os( node_osarch )
     
     for stack_version,_ in pairs( ClusterMod_SystemTable )
     do
 
-        local node_used_long_osarch = get_stack_matchingarch( node_long_osarch, stack_version, stack_version )
+        local node_used_osarch = get_stack_matchingarch( node_osarch, stack_version, stack_version )
 
         if stack_version == 'manual' then
-            supported_by_manual = ( node_used_long_osarch ~=  nil )
+            supported_by_manual = ( node_used_osarch ~=  nil )
         elseif stack_version == 'system' then
-            supported_by_system = ( node_used_long_osarch ~=  nil )
+            supported_by_system = ( node_used_osarch ~=  nil )
         else
-            if node_used_long_osarch ~= nil then
+            if node_used_osarch ~= nil then
                 table.insert( supported_stackversion_list, stack_version )
             end
         end
@@ -495,20 +495,20 @@ do
 
     if not supported_by_manual then
         number_warnings = number_warnings + 1
-        io.stdout:write( '\nWARNING: Node type ' .. node_long_osarch .. ' is not supported by the manual software stack (but that is not a hard requirement).' )
+        io.stdout:write( '\nWARNING: Node type ' .. node_osarch .. ' is not supported by the manual software stack (but that is not a hard requirement).' )
     end
 
     if not supported_by_system then
         number_errors = number_errors + 1
-        io.stdout:write( '\nERROR: Note type ' .. node_long_osarch .. ' is not supported by the system software stack.')
+        io.stdout:write( '\nERROR: Note type ' .. node_osarch .. ' is not supported by the system software stack.')
     end
 
     if #supported_stackversion_list == 0 then
         number_errors = number_errors + 1
-        io.stdout:write( '\nERROR: Note type ' .. node_long_osarch .. ' is not supported by any of the regular software stacks.' )
+        io.stdout:write( '\nERROR: Note type ' .. node_osarch .. ' is not supported by any of the regular software stacks.' )
     end
 
-end -- for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
+end -- for _,node_osarch in ipairs( ClusterMod_NodeTypes )
 
 if number_warnings == 0 and number_errors == 0 then
     io.stdout:write( 'PASSED\n' )
@@ -557,11 +557,11 @@ do
                     io.stdout:write( '\nERROR: Could not find system modules for ' .. ClusterMod_StackName .. '/' .. stack_version .. ' for node type ' .. node_type  )
 
                 else -- if full_system_dirs == nil
-                    -- Found system modules for this software stack, now compare with those for subarchs of long_osarch_regular.
+                    -- Found system modules for this software stack, now compare with those for subarchs of osarch_regular.
 
                     local use_os =   extract_os(   osarch_regular )
                     local use_arch = extract_arch( osarch_regular )
-                    local subarchs = get_long_osarchs_reverse( stack_version, use_os, use_arch )
+                    local subarchs = get_osarchs_reverse( stack_version, use_os, use_arch )
 
                     local is_system_module_dir = {}
                     for _,system_module_dir in ipairs( full_system_dirs ) do is_system_module_dir[system_module_dir] = true end
@@ -613,7 +613,7 @@ do
 
                 end -- if full_system_dirs == nil
 
-            end -- if long_osarch_regular ~= nil then
+            end -- if osarch_regular ~= nil then
 
         end -- for _,node_type in ipairs( ClusterMod_NodeType )
 
@@ -689,7 +689,7 @@ print( '- Stacks supported by this system definition (including system and manua
 -- version of the software stack, including system and manual.
 --
 
-local SystemTable_long_osarch = {}
+local SystemTable_osarch = {}
 
 for _,stack_version in ipairs( stackversion_list )
 do
@@ -701,18 +701,18 @@ do
         stack_nameversion = ClusterMod_StackName .. '/' .. stack_version
     end
 
-    SystemTable_long_osarch[stack_version] = {}
+    SystemTable_osarch[stack_version] = {}
     local OSArchTableWorker = {}
 
     for OS,_ in pairs( ClusterMod_SystemTable[stack_version] ) do
 
         for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] ) do
 
-            for _,subarch in ipairs( get_long_osarchs_reverse( stack_version, OS, arch ) ) do
+            for _,subarch in ipairs( get_osarchs_reverse( stack_version, OS, arch ) ) do
 
                 if OSArchTableWorker[subarch] == nil then
                     OSArchTableWorker[subarch] = true
-                    table.insert( SystemTable_long_osarch[stack_version], subarch )
+                    table.insert( SystemTable_osarch[stack_version], subarch )
                 end
 
             end
@@ -722,7 +722,7 @@ do
     end
 
     print( '- Detected the following OS-arch combinations for ' .. stack_nameversion  ..  ':\n  * ' .. 
-           table.concat( SystemTable_long_osarch[stack_version], '\n  * ') )
+           table.concat( SystemTable_osarch[stack_version], '\n  * ') )
     
 end
 
@@ -739,12 +739,12 @@ print( '3. Available node types with their stacks and supported architectures' )
 print( '=====================================================================\n' )
 
 
-for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
+for _,node_osarch in ipairs( ClusterMod_NodeTypes )
 do
 
-    print( '- Node type: ' .. node_long_osarch ) 
+    print( '- Node type: ' .. node_osarch ) 
     
-    local node_os = extract_os( node_long_osarch )
+    local node_os = extract_os( node_osarch )
     
     for _,stack_version in ipairs( stackversion_list )
     do
@@ -762,21 +762,21 @@ do
             
         else
         
-            -- local node_used_long_osarch = get_stack_top( node_long_osarch, stack_version )
-            local node_used_long_osarch = get_stack_matchingarch( node_long_osarch, stack_version, stack_version )
+            -- local node_used_osarch = get_stack_top( node_osarch, stack_version )
+            local node_used_osarch = get_stack_matchingarch( node_osarch, stack_version, stack_version )
         
-            if node_used_long_osarch == nil then
+            if node_used_osarch == nil then
                 print( '  * Stack ' .. stack_nameversion .. ' is not supported on this node type.' )
             else
                 print( '  * Stack ' .. stack_nameversion .. ' is offered through architecture ' ..  
-                       node_used_long_osarch .. '.' )
+                       node_used_osarch .. '.' )
             end
         
         end -- else-part if ClusterMod_SystemTable[stack_version][node_os] == nil
 
     end -- for _,stack_version in ipairs( stackversion_list )
 
-end -- for _,node_long_osarch in ipairs( ClusterMod_NodeTypes )
+end -- for _,node_osarch in ipairs( ClusterMod_NodeTypes )
 
 
 -- -----------------------------------------------------------------------------
@@ -810,20 +810,20 @@ do
                ' (' .. hierarchy .. ' with EasyBuild ' .. easybuild_version .. '):' )
     end
     
-    for _,long_osarch in ipairs( SystemTable_long_osarch[stack_version] )
+    for _,osarch in ipairs( SystemTable_osarch[stack_version] )
     do
         
         if stack_version == 'manual' then
-            print( '  * Architecture ' .. long_osarch .. ':' )
+            print( '  * Architecture ' .. osarch .. ':' )
         else
-            print( '  * module arch/' .. long_osarch .. ':' )
+            print( '  * module arch/' .. osarch .. ':' )
         end
         
         -- Check if there is an cluster/* alternative name for the architecture
         local alternatives = {}
         if ClusterMod_ClusterMap[stack_version] ~= nil then
-            for name,w_long_osarch in pairs( ClusterMod_ClusterMap[stack_version] ) do
-                if long_osarch == w_long_osarch then
+            for name,w_osarch in pairs( ClusterMod_ClusterMap[stack_version] ) do
+                if osarch == w_osarch then
                     table.insert( alternatives, 'cluster/' .. name )
                 end
             end
@@ -839,8 +839,8 @@ do
         alternatives = {}
         for _,node_type in ipairs( ClusterMod_NodeTypes )
         do
-            local use_long_osarch = get_stack_matchingarch( node_type, stack_version, stack_version )
-            if use_long_osarch == long_osarch then
+            local use_osarch = get_stack_matchingarch( node_type, stack_version, stack_version )
+            if use_osarch == osarch then
                 table.insert( alternatives, 'node/' .. node_type )
             end 
         end  -- for _,node_types = ipairs( ClusterMod_NodeTypes )
@@ -856,18 +856,18 @@ do
         if stack_version == 'manual' then
             print( '    + No module directory for this stack' )
         else
-            print( '    + System-wide modules in ' .. get_system_module_dir( long_osarch, ClusterMod_StackName, stack_version ) )
+            print( '    + System-wide modules in ' .. get_system_module_dir( osarch, ClusterMod_StackName, stack_version ) )
         end
         
         -- SW directory
-        print( '    + System-wide software in ' .. get_system_SW_dir( long_osarch, ClusterMod_StackName, stack_version ) )
+        print( '    + System-wide software in ' .. get_system_SW_dir( osarch, ClusterMod_StackName, stack_version ) )
         
         -- EBrepo_files directory
         if stack_version == 'manual' then
             print( '    + No EBrepo_files directory for this stack' )
         else
             print( '    + System-wide EasyBuild repository for installed EasyConfigs (ebrepo_files) in ' .. 
-                   get_system_EBrepo_dir( long_osarch, ClusterMod_StackName, stack_version ) )
+                   get_system_EBrepo_dir( osarch, ClusterMod_StackName, stack_version ) )
         end
         
         -- Construct the MODULEPATH of system modules.       
@@ -882,8 +882,8 @@ do
             -- First build in reverse order (which actually corresponds to the order of prepend_path
             -- calls in the module file)
 
-            local long_osarch_system = get_stack_matchingarch( long_osarch, stack_version, 'system' )
-            local system_dirs = get_system_module_dirs( long_osarch_system, ClusterMod_StackName, 'system' )
+            local osarch_system = get_stack_matchingarch( osarch, stack_version, 'system' )
+            local system_dirs = get_system_module_dirs( osarch_system, ClusterMod_StackName, 'system' )
             if system_dirs == nil then
                 io.stderr.write( 'No system modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
             else
@@ -893,7 +893,7 @@ do
             end
             
             if stack_version ~= 'system' then 
-                local stack_dirs = get_system_module_dirs( long_osarch, ClusterMod_StackName, stack_version )
+                local stack_dirs = get_system_module_dirs( osarch, ClusterMod_StackName, stack_version )
                 if stack_dirs == nil then
                     io.stderr.write( 'No regular modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
                 else
@@ -903,7 +903,7 @@ do
                 end
             end -- if stack_version ~= 'system'
         
-            local inframodule_dir = get_system_inframodule_dir( long_osarch, ClusterMod_StackName, stack_version )
+            local inframodule_dir = get_system_inframodule_dir( osarch, ClusterMod_StackName, stack_version )
             if inframodule_dir == nil then
                 io.stderr.write( 'No infrastructure modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
             else
@@ -924,7 +924,7 @@ do
         
         
 
-    end -- for long_osarch,_ in pairs( SystemTable_long_osarch[stack_version] )
+    end -- for osarch,_ in pairs( SystemTable_osarch[stack_version] )
 
 end -- for _,stack_version in ipairs( stackversion_list )
 

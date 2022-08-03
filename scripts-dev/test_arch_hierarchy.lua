@@ -73,11 +73,11 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Testing get_long_osarchs and get_long_osarchs_reverse
+-- Testing get_osarchs and get_osarchs_reverse
 -- We do so for a 2L and a 3L toolchain.
 --
 
-print( colour_title .. '\ntesting get_long_osarch and get_long_osarch_reverse' .. colour_reset )
+print( colour_title .. '\ntesting get_osarchs and get_osarchs_reverse' .. colour_reset )
 
 stack_versions = { '2020a', '3000a' }
 for _, stack_version in ipairs( stack_versions ) do
@@ -91,14 +91,14 @@ for _, stack_version in ipairs( stack_versions ) do
         ['2020a'] = 'redhat8-x86_64',
         ['3000a'] = 'redhat8-x86_64',
     }
-    result = get_long_osarchs( stack_version, osname, archname )
+    result = get_osarchs( stack_version, osname, archname )
     print( testresult( table.concat( result, ', ') == expected[stack_version] ) .. 
            'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
     expected = { 
         ['2020a'] = 'redhat8-x86_64',
         ['3000a'] = 'redhat8-x86_64',
     }
-    result = get_long_osarchs_reverse( stack_version, osname, archname )
+    result = get_osarchs_reverse( stack_version, osname, archname )
     print( testresult( table.concat( result, ', ') == expected[stack_version] ) .. 
            'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
 
@@ -108,14 +108,14 @@ for _, stack_version in ipairs( stack_versions ) do
         ['2020a'] = 'redhat8-zen2-noaccel, redhat8-x86_64',
         ['3000a'] = 'redhat8-zen2-noaccel, redhat8-zen2, redhat8-x86_64',
     }
-    result = get_long_osarchs( stack_version, osname, archname )
+    result = get_osarchs( stack_version, osname, archname )
     print( testresult( table.concat( result, ', ') == expected[stack_version] ) .. 
            'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
     expected = { 
         ['2020a'] = 'redhat8-x86_64, redhat8-zen2-noaccel',
         ['3000a'] = 'redhat8-x86_64, redhat8-zen2, redhat8-zen2-noaccel',
     }
-    result = get_long_osarchs_reverse( stack_version, osname, archname )
+    result = get_osarchs_reverse( stack_version, osname, archname )
     print( testresult( table.concat( result, ', ') == expected[stack_version] ) .. 
            'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
 
@@ -125,14 +125,14 @@ for _, stack_version in ipairs( stack_versions ) do
         ['2020a'] = 'redhat8-zen2-arcturus, redhat8-x86_64',
         ['3000a'] = 'redhat8-zen2-arcturus, redhat8-zen2, redhat8-x86_64',
     }
-    result = get_long_osarchs( stack_version, osname, archname )
+    result = get_osarchs( stack_version, osname, archname )
     print( testresult( table.concat( result, ', ') == expected[stack_version] ) .. 
            'Arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
     expected = { 
         ['2020a'] = 'redhat8-x86_64, redhat8-zen2-arcturus',
         ['3000a'] = 'redhat8-x86_64, redhat8-zen2, redhat8-zen2-arcturus',
     }
-    result = get_long_osarchs_reverse( stack_version, osname, archname )
+    result = get_osarchs_reverse( stack_version, osname, archname )
     print( testresult( table.concat( result, ', ') == expected[stack_version] ) .. 
            'Reverse arch chain for ' .. archname .. ' on ' .. osname .. ' in toolchain ' .. stack_version .. ' is ' .. table.concat( result, ', ') )
 
@@ -1721,10 +1721,10 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Testing get_stack_top with get_cluster_longosarch
+-- Testing get_stack_top with get_cluster_osarch
 --
 
-print( colour_title .. '\nTesting get_stack_top function with get_cluster_longosarch\n' .. colour_reset )
+print( colour_title .. '\nTesting get_stack_top function with get_cluster_osarch\n' .. colour_reset )
 
 local inputdata = {
     {   
@@ -1741,7 +1741,7 @@ local inputdata = {
 
 for stack,_ in pairs( ClusterMod_SystemTable ) do
     local hierarchy = ClusterMod_SystemProperties[stack]['hierarchy'] 
-    local current_osarch = get_cluster_longosarch()
+    local current_osarch = get_cluster_osarch()
     print( mssg_sysdep .. ' Used architecture for ' .. current_osarch  .. 
            ' (this node) for ' .. stack .. ' (' .. hierarchy .. '): ' .. 
            ( get_stack_top( current_osarch, stack ) or '\27[31mPROBLEM, GOT NIL\27[0m' ) )

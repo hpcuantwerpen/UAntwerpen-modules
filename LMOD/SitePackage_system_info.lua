@@ -193,44 +193,44 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- get_cluster_longosarch
+-- get_cluster_osarch
 --
 -- Returns the cluster architecture for use in the clusterarch modules in the
 -- long os-cpu-acclerator format, e.g., redhat2-zen2-noaccel.
 --
-function get_cluster_longosarch()
+function get_cluster_osarch()
 
     local cpustring         = get_cpu_info()
     local osname, osversion = get_os_info()
     local accelerator       = get_accelerator_info()
 
     if cpustring == nil then
-        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch/get_cpu_info: Failed to determine the CPU type.\n' )
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_osarch/get_cpu_info: Failed to determine the CPU type.\n' )
         return nil, nil
     end
 
     if osname == nil then
-        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch/get_os_info: Failed to determine the OS name.\n' )
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_osarch/get_os_info: Failed to determine the OS name.\n' )
         return nil, nil
     end
 
     if osversion == nil then
-        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch/get_os_info: Failed to determine the OS version.\n' )
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_osarch/get_os_info: Failed to determine the OS version.\n' )
         return nil, nil
     end
 
     if cpustring_to_longtarget[cpustring] == nil then
-        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch: The target ' .. cpustring .. ' is unknown.\n' )
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_osarch: The target ' .. cpustring .. ' is unknown.\n' )
         return nil, nil
     end
 
     if osname_to_longos[osname] == nil then
-        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch: The OS name ' .. osname .. ' is unknown.\n' )
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_osarch: The OS name ' .. osname .. ' is unknown.\n' )
         return nil, nil
     end
 
     if accelerator ~= nil and accelerator_to_longacc[accelerator] == nil then
-        io.stderr:write( 'SitePackage_system_info.lua get_cluster_longosarch: The accelerator ' .. accelerator .. ' is unknown.\n' )
+        io.stderr:write( 'SitePackage_system_info.lua get_cluster_osarch: The accelerator ' .. accelerator .. ' is unknown.\n' )
         return nil, nil
     end
 

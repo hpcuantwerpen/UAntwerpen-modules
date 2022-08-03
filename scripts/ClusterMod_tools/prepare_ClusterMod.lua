@@ -113,7 +113,7 @@ do
 
         for _,arch in ipairs( ClusterMod_SystemTable[stack_version][OS] ) do
 
-            for _,subarch in ipairs( get_long_osarchs_reverse( stack_version, OS, arch ) ) do
+            for _,subarch in ipairs( get_osarchs_reverse( stack_version, OS, arch ) ) do
 
                 if OSArchTableWorker[subarch] == nil then
                     OSArchTableWorker[subarch] = true
