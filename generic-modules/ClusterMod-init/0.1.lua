@@ -36,23 +36,23 @@ prepend_path( 'MODULEPATH', pathJoin( ClusterMod_root, 'modules-infrastructure/S
 -- Note that if we set LMOD_MODULERCFILE only in this module and not at initialisation,
 -- we should not rely on the default versions, so switch the loads below.
 
-if mode() == 'load' then
+if mode() == 'load' or mode() == 'show' then
 
     if not isloaded( 'ModuleColour' ) then
-        load( 'ModuleColour' )
+        try_load( 'ModuleColour' )
         -- load( 'ModuleColour/on' )
     end
 
     if not isloaded( 'ModuleExtensions' ) then
-        load( 'ModuleExtensions' )
+        try_load( 'ModuleExtensions' )
         -- load( 'ModuleExtensions/show' )
     end
 
     if not isloaded( 'ModuleLabel' ) then
-        load( 'ModuleLabel' )
+        try_load( 'ModuleLabel' )
         -- load( 'ModuleLabel/label' )
     end
-
+    
 end
 
 
@@ -68,10 +68,12 @@ prepend_path( 'MODULEPATH', pathJoin( ClusterMod_root, 'modules-infrastructure/s
 
 if mode() == 'load' or mode() == 'show' then
 
+    local var_name = '_' .. get_clustername():upper() .. '_INIT_FIRST_LOAD'
+
     local show_motd = not isFile( pathJoin( os.getenv( 'HOME' ) or '', '.nomotd' ) )
     local show_tip  = not isFile( pathJoin( os.getenv( 'HOME' ) or '', '.nomotdtip' ) ) and show_motd
 
-    if os.getenv( '_CALCUA_INIT_FIRST_LOAD' ) == nil and is_interactive() then
+    if os.getenv( var_name ) == nil and is_interactive() then
 
         -- Get the MOTD and print.
         --
@@ -97,7 +99,7 @@ if mode() == 'load' or mode() == 'show' then
         -- Make sure this block of code is not executed anymore.
         -- This statement is not reached during an unload of the module
         -- so _CALCUA_INIT_FIRST_LOAD will not be unset anymore.
-        setenv( '_CALCUA_INIT_FIRST_LOAD', '1' )
+        setenv( var_name, '1' )
 
     end
 
