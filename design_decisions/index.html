@@ -604,6 +604,11 @@
 <h2 id="software-stack-modules">Software stack modules</h2>
 <ul>
 <li>
+<p>The name of the stack, <code>calcua</code>, is not hard-coded but specified through a variable
+    in the system definition so that a future version may be extended to support more
+    sites.</p>
+</li>
+<li>
 <p>The software stack has two levels:</p>
 <ol>
 <li>Version of the software stack: <code>calcua</code> module.</li>
@@ -652,7 +657,8 @@ architectures.</p>
 <li>It is build using the <code>SYSTEM</code> toolchain (or installed in an equivalent way)</li>
 </ol>
 <p>This is basically the tree to install software from binaries or to create modules for
-manually installed software (e.g., MATLAB and MAPLE).</p>
+manually installed software (e.g., MATLAB and MAPLE). The stack is managed through
+EasyBuild though.</p>
 <p>The code of the module tree is largely prepared to have an architecture hierarchy
 there too, but we may not use it initially. The tree could be used to, e.g.,
 accomodate Gaussian and automatically offer the right version rather than have multiple
@@ -694,16 +700,16 @@ versions with versionsuffix for the architecture.</p>
 </ul>
 </li>
 <li>
-<p>In the <code>CalcUA_SystemTable</code> that defines which architectures have software stacks 
+<p>In the <code>ClusterMod_SystemTable</code> that defines which architectures have software stacks 
     for which stack version, only generic CPU names or CPU-Accelerator pairs are
     supported</p>
 <p>Impact of omitting that restriction and supporting a module and software hierarchy </p>
 <ul>
 <li>
-<p>Changes to the <code>get_calcua_top</code> function needed.</p>
+<p>Changes to the <code>get_stack_top</code> function needed.</p>
 </li>
 <li>
-<p>Needs changes to <code>get_long_osarchs</code> and <code>get_long_osarchs_reverse</code>.</p>
+<p>Needs changes to <code>get_osarchs</code> and <code>get_osarchs_reverse</code>.</p>
 </li>
 </ul>
 </li>
@@ -734,10 +740,8 @@ and is used to point to a number of important files and (sub)directories:</p>
     custom EasyConfigs.</li>
 </ol>
 <p><strong><em>Configuration part of the tree</em></strong>
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-    └─ CalcUA
-        └─ etc
+<div class="highlight"><pre><span></span><code>InstallRoot
+ └─ etc
 </code></pre></div></p>
 <h3 id="optional-repository-part-of-the-tree">(Optional) repository part of the tree</h3>
 <p>At the top of the hierarchy, in the installation root, we find the GitHub
@@ -749,16 +753,14 @@ them elsewhere, which may be a good option for test stacks or for development
 where you may want the repositories in a place that works better with your 
 remote software development tools.</p>
 <p><strong><em>(Optional) repository part of the tree</em></strong><br />
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-    └─ CalcUA
-        ├─ UAntwerpen-modules <span class="c1">#(1)</span>
-        └─ UAntwerpen-easybuild <span class="c1">#(2)</span>
-            └─ easybuild
-            ├─ easyconfigs
-            ├─ easyblocks
-            ├─ Customisations to naming schemes etc
-            └─ config <span class="c1">#(3)</span>
+<div class="highlight"><pre><span></span><code>InstallRoot
+ ├─ UAntwerpen-modules <span class="c1">#(1)</span>
+ └─ UAntwerpen-easybuild <span class="c1">#(2)</span>
+     └─ easybuild
+         ├─ easyconfigs
+         ├─ easyblocks
+         ├─ Customisations to naming schemes etc
+         └─ config <span class="c1">#(3)</span>
 </code></pre></div></p>
 <ol>
 <li>Repository with LMOD configuration and generic modules</li>
@@ -865,42 +867,40 @@ these modules rather then inject them elsewhere via EasyBuild.</p>
 </li>
 <li>
 <p>This leads to the following view on the modules tree:</p>
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-   └─ CalcUA
-      ├─ modules-infrastructure <span class="c1">#(1)</span>
-      │  ├─ init-UAntwerpen-modules <span class="c1">#(2)</span>
-      │  ├─ stacks <span class="c1">#(3)</span>
-      │  │  └─ calcua
-      │  │     └─ 2021b.lua <span class="c1">#(4)</span>
-      │  ├─ arch <span class="c1">#(5)</span>
-      │  │  └─ calcua
-      │  │     ├─ 2021b
-      │  │     │  └─ arch
-      │  │     │     ├─ redhat8-x86_64
-      │  │     │     ├─ redhat8-broadwell-noaccel
-      │  │     │     └─ redhat8-broadwell-quadro
-      │  │     └─ system
-      │  │        └─ arch
-      │  │           ├─ redhat8-x86_64
-      │  │           └─ redhat8-ivybridge-noaccel
-      │  └─ infrastructure <span class="c1">#(6)</span>
-      │     └─ CalcUA
-      │        └─ 2021b
-      │           └─ arch
-      │               └─ redhat8-ivybridge-noaccel
-      │                  ├─ EasyBuild-production
-      │                  ├─ EasyBuild-infrastructure
-      │                  └─ EasyBuild-user
-      ├─ modules-easybuild <span class="c1">#(7)</span>
-      │  ├─ CalcUA-2021b
-      │  │  ├─ redhat8_x86_64 <span class="c1">#(8)</span>
-      │  │  ├─ redhat8-broadwell-noaccel
-      │  │  └─ redhat8-broadwell-quadro
-      │  └─ system* <span class="c1">#(9)!</span>
-      │     ├─ redhat8-x86_64 <span class="c1">#(10)</span>
-      │     └─ redhat8-ivybridge-noaccel <span class="c1">#(11)</span>
-      └─ modules-manual <span class="c1">#(12)!</span>
+<div class="highlight"><pre><span></span><code>InstallRoot
+ ├─ modules-infrastructure <span class="c1">#(1)</span>
+ │   ├─ init-UAntwerpen-modules <span class="c1">#(2)</span>
+ │   ├─ stacks <span class="c1">#(3)</span>
+ │   │   └─ calcua
+ │   │       └─ 2021b.lua <span class="c1">#(4)</span>
+ │   ├─ arch <span class="c1">#(5)</span>
+ │   │   └─ calcua
+ │   │       ├─ 2021b
+ │   │       │   └─ arch
+ │   │       │       ├─ redhat8-x86_64
+ │   │       │       ├─ redhat8-broadwell-noaccel
+ │   │       │       └─ redhat8-broadwell-quadro
+ │   │       └─ system
+ │   │           └─ arch
+ │   │               ├─ redhat8-x86_64
+ │   │               └─ redhat8-ivybridge-noaccel
+ │   └─ infrastructure <span class="c1">#(6)</span>
+ │       └─ calcua
+ │           └─ 2021b
+ │               └─ arch
+ │                   └─ redhat8-ivybridge-noaccel
+ │                       ├─ EasyBuild-production
+ │                       ├─ EasyBuild-infrastructure
+ │                       └─ EasyBuild-user
+ ├─ modules-easybuild <span class="c1">#(7)</span>
+ │   ├─ calcua-2021b
+ │   │   ├─ redhat8_x86_64 <span class="c1">#(8)</span>
+ │   │   ├─ redhat8-broadwell-noaccel
+ │   │   └─ redhat8-broadwell-quadro
+ │   └─ system* <span class="c1">#(9)</span>
+ │       ├─ redhat8-x86_64 <span class="c1">#(10)</span>
+ │       └─ redhat8-ivybridge-noaccel <span class="c1">#(11)</span>
+ └─ modules-manual <span class="c1">#(12)!</span>
 </code></pre></div>
 <ol>
 <li>Lmod hierarchy as the framework of the module system </li>
@@ -932,18 +932,16 @@ as it is not managed at all by EasyBuild.</p>
 </li>
 </ol>
 <p><strong><em>Resulting structure of the software directory</em></strong><br />
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-    └─ CalcUA
-        └─ SW
-            ├─ CalcUA-2021b
-            │  ├─ RH8-x86_64
-            │  ├─ RH8-BRW-host
-            │  └─ RH8-BRW-NVGP61GL
-            ├─ system <span class="c1">#(1)</span>
-            │  ├─ RH8-x86_64
-            │  └─ RH8-IVB-host
-            └─ MNL <span class="c1">#(2)</span>
+<div class="highlight"><pre><span></span><code>InstallRoot
+ └─ SW
+     ├─ calcua-2021b
+     │   ├─ RH8-x86_64
+     │   ├─ RH8-BRW-host
+     │   └─ RH8-BRW-NVGP61GL
+     ├─ system <span class="c1">#(1) </span>
+     │   ├─ RH8-x86_64
+     │   └─ RH8-IVB-host
+     └─ MNL <span class="c1">#(2)</span>
 </code></pre></div></p>
 <ol>
 <li>Sometimes relatively empty subdirs if EasyBuild only creates a module...</li>
@@ -965,17 +963,15 @@ result in a single file per ( software stack, architecture) combination.</p>
 </li>
 </ul>
 <p><strong><em>Resulting structure of the management directory</em></strong><br />
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-    └─ CalcUA
-        └─ mgmt
-            ├─ ebrepo_files
-            │  ├─ CalcUA-2021b
-            │  │ ├─ redhat8-x86_64
-            │  │ └─ redhat8-broadwell-noaccel
-            │  └─ system <span class="c1">#(1)</span>
-            │     └─ redhat8-x86_64 <span class="c1">#(2)</span>
-            └─ lmod_cache
+<div class="highlight"><pre><span></span><code>InstallRoot
+ └─ mgmt
+     ├─ ebrepo_files
+     │   ├─ calcua-2021b
+     │   │   ├─ redhat8-x86_64
+     │   │   └─ redhat8-broadwell-noaccel
+     │   └─ system <span class="c1">#(1)</span>
+     │       └─ redhat8-x86_64 <span class="c1">#(2)</span>
+     └─ lmod_cache
 </code></pre></div></p>
 <ol>
 <li>Modules outside the regular software stacks</li>
@@ -993,10 +989,8 @@ structure for storing source files.</p>
 </li>
 </ul>
 <p><strong><em>Other subdirectories</em></strong>
-<div class="highlight"><pre><span></span><code>apps
-└─ antwerpen
-    └─ CalcUA
-        └─ sources
+<div class="highlight"><pre><span></span><code>InstallRoot
+ └─ sources
 </code></pre></div></p>
 
   <hr>
@@ -1004,7 +998,7 @@ structure for storing source files.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 6, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2022</span>
       
     
   </small>

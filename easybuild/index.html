@@ -325,6 +325,27 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#configuration-modes-modules" class="md-nav__link">
+    Configuration modes (modules)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-in-configuration-files" class="md-nav__link">
+    Settings in configuration files
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-through-environment-variables" class="md-nav__link">
+    Settings through environment variables
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -476,6 +497,27 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#configuration-modes-modules" class="md-nav__link">
+    Configuration modes (modules)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-in-configuration-files" class="md-nav__link">
+    Settings in configuration files
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings-through-environment-variables" class="md-nav__link">
+    Settings through environment variables
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -514,13 +556,121 @@ module.</p>
 <p>The stack does implement a script that will bootstrap EasyBuild rather than install
 EasyBuild with another version of EasyBuild. This makes it very easy to set up a 
 test stack in a different file system.</p>
+<h2 id="configuration-modes-modules">Configuration modes (modules)</h2>
+<ul>
+<li>
+<p><code>EasyBuild-production</code> is the configuration for installing software with modules 
+    in the <code>modules-easybuild</code> tree. Where software will be installed, is determined
+    by the software stack and cluster architecture modules that are loaded at that
+    time.</p>
+</li>
+<li>
+<p><code>EasyBuild-user</code> is the configuration for installing software in the user
+    directory. The place where software will be installed in the user tree again
+    depends on the software stack and cluster architecture modules that are 
+    loaded at that time.</p>
+</li>
+<li>
+<p><code>EasyBuild-infrastructure</code> is the configuration for installing software whose
+    modules go in the <code>modules-infrastrcutrue/infrastructure</code> tree. It is implemented
+    but not really tested as we have no use for it at the moment.</p>
+</li>
+</ul>
+<h2 id="settings-in-configuration-files">Settings in configuration files</h2>
+<ul>
+<li>
+<p>Module syntax and naming scheme. Given that the whole module framework is based on Lmod, 
+    it is not a good idea though to use Tcl-based modules even though Lmod can work with them.</p>
+</li>
+<li>
+<p>Module naming scheme</p>
+</li>
+<li>
+<p>Modules that should be hidden.</p>
+<p>This is not currently used in the configuration at UAntwerpen. It may be better to hide modules
+through Lmod instead as then modules maintain their regular version numbers and it is easier
+to change visibility afterwards.</p>
+</li>
+<li>
+<p>Modules that may be loaded when EasyBuild runs.</p>
+</li>
+<li>
+<p>Setting to ignore EBROOT variables without matching modules as this is very useful to define
+    additional EBROOT variables in bundles.</p>
+</li>
+</ul>
+<h2 id="settings-through-environment-variables">Settings through environment variables</h2>
+<ul>
+<li>
+<p>Module installation path</p>
+<ul>
+<li>
+<p><code>production</code>: Determined by the <code>get_system_module_dir</code> function and based on 
+    the system installation root.</p>
+</li>
+<li>
+<p><code>infrastructure</code>: Determined by the <code>get_system_inframodule_dir</code> function and based
+    on the system installation root.</p>
+</li>
+<li>
+<p><code>user</code>: Determined by the <code>get_user_module_dir</code> function and based on 
+    the user installation root.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Software installation path</p>
+<ul>
+<li>
+<p><code>production</code> and <code>infrastructure</code> use the same path, determined by the 
+    <code>get_system_SW_dir</code> function and based on top of the system installation directory.</p>
+</li>
+<li>
+<p><code>user</code>: Determined by the <code>gget_user_SW_dir</code> function and based on top of
+    the user installation root.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Installed EasyConfigs repository</p>
+<ul>
+<li>
+<p><code>production</code> and <code>infrastructure</code> use the same directory, determined by the
+    <code>get_system_EBrepo_dir</code> function and based on top of the system installation
+    directory.</p>
+<p>As we should not have modules with the same name in the infrastructure and in
+the regular module tree, there does not seem to be a problem with this approach.</p>
+</li>
+<li>
+<p><code>user</code>: Determined by the <code>get_user_EBrepo_dir</code> function and based on top
+    of the user installation directory.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Sources subdirectories:</p>
+<ul>
+<li>
+<p><code>production</code> and <code>infrastructure</code> use the same directory, determined by the
+    <code>get_system_EBsources_dir</code> function and based on top of the system installation
+    directory.</p>
+</li>
+<li>
+<p><code>user</code> stores the sources in the directory determined by the <code>get_user_EBsources_dir</code>
+    function based on top of the user installation directory, but also adds the directory
+    used by <code>production</code> to the sources path so that sources that are already on the
+    system don't need to be downloaded again.</p>
+</li>
+</ul>
+</li>
+</ul>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 12, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2022</span>
       
     
   </small>

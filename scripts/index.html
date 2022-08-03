@@ -296,6 +296,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#check_systemdefinitionsh" class="md-nav__link">
+    check_systemdefinition.sh
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#check_clusternodesh" class="md-nav__link">
     check_clusternode.sh
   </a>
@@ -505,6 +512,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#check_systemdefinitionsh" class="md-nav__link">
+    check_systemdefinition.sh
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#check_clusternodesh" class="md-nav__link">
     check_clusternode.sh
   </a>
@@ -553,12 +567,26 @@ stacks in a format suitable to be used with the <code>eval</code> bash shell fun
 <p>Without arguments it assumes that the software stack is located two levels towards the
 root of the file system hierarchy from the location of the script. Alternatively it
 is possible to give the root of the software stack as an argument to the script.</p>
+<p>Besides setting a number of <code>LMOD_</code> environment variables to configure Lmod, it also sets
+the <code>CLUSTERMOD_SOFTWARESTACK</code> environment variable which points to the configuration file
+(itself a Lua script) of the software stack. Note that we need this variable to find 
+the system definition file which then tells the name of the cluster which is why we 
+cannot use the name of the cluster in the name of the environment variable.</p>
+<h2 id="check_systemdefinitionsh">check_systemdefinition.sh</h2>
+<p>This script runs a whole set of tests again the system definition file to check for inconsistencies
+or possible mistakes. </p>
+<p>Without command line arguments it will check the default file <code>etc/SystemDefinition.lua</code> in the parent
+directory of the directory containing the <code>check_systemdefinition.sh</code> script,
+but it is also possible to point the script to a different system definition file on the command line.</p>
+<p>It is certainly not a guarantee that there are no inconsistencies in the file, though it 
+is an extensive set of tests.</p>
 <h2 id="check_clusternodesh">check_clusternode.sh</h2>
 <p>The <code>check_clusternode.sh</code> script prints information about the node it is running on and 
-can also be used to check if the node is properly supported by the CalcUA stacks,
-or if certain settings need to be adjusted.</p>
-<p>Without command line arguments it will check the default file in <code>UAntwerpen-modules/etc/SystemDefinition.lua</code>,
-but it si also possible to point the script to a different system definition file on the command line.</p>
+can also be used to check if the node is properly supported by a given system definition.</p>
+<p>Just as <code>check_systemdefinintion.sh</code>, without 
+command line arguments it will check the default file <code>etc/SystemDefinition.lua</code> in the parent
+directory of the directory containing the <code>check_clusternode.sh</code> script,
+but it is also possible to point the script to a different system definition file on the command line.</p>
 <h2 id="prepare_calcuash">prepare_calcua.sh</h2>
 <p>This script is used to set up or extend the whole structure of the software stack.
 It should be run whenever new software stack versions are started or new nodes are added
@@ -591,7 +619,7 @@ it helps many other components to find the location of other files.</p>
 <p>The default is <code>etc/SystemDefinition.lua</code> located in the parent directory of the
    directory where the <code>prepare_calcua.sh</code> script is found.</p>
 <ul>
-<li>'-r<code>or</code>--repair`: Runs the script in repair mode.</li>
+<li><code>-r</code> or <code>--repair</code>: Runs the script in repair mode.</li>
 </ul>
 <p>One can still indicate the installation directory and the script will then search in that
   directory to locate eth <code>etc/SoftwareStack.lua</code> file. However, the <code>-e</code>/<code>--easybuild</code>
@@ -610,7 +638,7 @@ it helps many other components to find the location of other files.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 8, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 2, 2022</span>
       
     
   </small>
