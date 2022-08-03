@@ -164,6 +164,7 @@ sandbox_registration{
     ['get_stack_osarch_current']      = get_stack_osarch_current,
     ['get_stack_matchingarch']        = get_stack_matchingarch,
     ['get_system_module_dirs']        = get_system_module_dirs,         -- Defined in SitePackage_arch_hierarchy
+    ['get_user_module_dirs']          = get_user_module_dirs,           -- Defined in SitePackage_arch_hierarchy
     ['get_system_inframodule_dir']    = get_system_inframodule_dir,     -- Defined in SitePackage_arch_hierarchy
 --    ['get_stack_top']                 = get_stack_top,
     ['is_Stack_SystemTable']          = is_Stack_SystemTable,           -- Defined in SitePackage_helper

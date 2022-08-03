@@ -67,8 +67,6 @@ if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Detected user installation root at ' .. ( user_easybuild_root or 'NIL' ) )
 end
 
-
-
 --
 -- Build the system module directories for the stack
 --
@@ -80,29 +78,44 @@ local user_moduledirs = {}
 -- calls in the module file)
 
 local osarch_system = get_stack_matchingarch( osarch, stack_version, 'system' )
-local system_dirs = get_system_module_dirs( osarch_system, 'calcua', 'system' )
-if system_dirs == nil then
+local system_systemstack_dirs = get_system_module_dirs( osarch_system, stack_name, 'system' )
+if system_systemstack_dirs == nil then
     io.stderr.write( 'No system modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
 else
-    for _,system_dir in ipairs( system_dirs ) do
-        table.insert( system_moduledirs, system_dir )
-        table.insert( user_moduledirs,   system_dir )
+    for _,system_systemstack_dir in ipairs( system_systemstack_dirs ) do
+        table.insert( system_moduledirs, system_systemstack_dir )
+    end
+end
+local user_systemstack_dirs = get_user_module_dirs( osarch_system, stack_name, 'system' )
+if user_systemstack_dirs == nil then
+    io.stderr.write( 'No user modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
+else
+    for _,user_systemstack_dir in ipairs( user_systemstack_dirs ) do
+        table.insert( user_moduledirs, user_systemstack_dir )
     end
 end
 
+
 if stack_version ~= 'system' then 
-    local stack_dirs = get_system_module_dirs( osarch, 'calcua', stack_version )
-    if stack_dirs == nil then
+    local system_stack_dirs = get_system_module_dirs( osarch, stack_name, stack_version )
+    if system_stack_dirs == nil then
         io.stderr.write( 'No regular modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
     else
-        for _,stack_dir in ipairs( stack_dirs ) do
-            table.insert( system_moduledirs, stack_dir )
-            table.insert( user_moduledirs,   stack_dir )
+        for _,system_stack_dir in ipairs( system_stack_dirs ) do
+            table.insert( system_moduledirs, system_stack_dir )
+        end
+    end
+    local user_stack_dirs = get_user_module_dirs( osarch, stack_name, stack_version )
+    if user_stack_dirs == nil then
+        io.stderr.write( 'No regular modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
+    else
+        for _,user_stack_dir in ipairs( user_stack_dirs ) do
+            table.insert( user_moduledirs, user_stack_dir )
         end
     end
 end -- if stack_version ~= 'system'
 
-local inframodule_dir = get_system_inframodule_dir( osarch, 'calcua', stack_version )
+local inframodule_dir = get_system_inframodule_dir( osarch, stack_name, stack_version )
 if inframodule_dir == nil then
     io.stderr.write( 'No infrastructure modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )
 else

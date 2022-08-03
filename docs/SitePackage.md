@@ -580,7 +580,7 @@ map_accel_long_to_short = {
 
 #### Computing directories
 
--   `get_system_module_dir`: Compute the module directory from the three input arguments:
+-   `get_system_module_dir`: Compute the system module directory from the three input arguments:
     long os-and-architecture name, stack name and stack version.
 
     The directory name returned is relative from the installation root, with the most
@@ -589,12 +589,20 @@ map_accel_long_to_short = {
     Note `system` in the name does not denote the `system` stack but the whole
     system installation, versus the user installation.
 
--   `get_system_module_dirs`: Compute the module directory hierarchy from the three input
+-   `get_system_module_dirs`: Compute the system module directory hierarchy from the three input
     arguments: long os-and-architecture name, stack name and stack version.
 
     The directory names returned are relative from the installation root, with the most
     generic one first.
-
+    
+-   `get_user_module_dir`: Similar to `get_system_module_dir` but then for the
+    modules in the user module tree and hence the subdirectory that should go on top
+    of the user install root.
+    
+-   `get_user_module_dirs`: Similar to `get_system_module_dirs` but then for the
+    modules in the user module tree and hence the subdirectories that should go on top
+    of the user install root.
+    
 
 #### Miscellaneous functions
 

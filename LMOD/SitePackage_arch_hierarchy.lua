@@ -1020,3 +1020,55 @@ function get_system_EBrepo_dir( osarch, stack_name, stack_version )
 end
 
 
+-- -----------------------------------------------------------------------------
+--
+-- Function get_user_module_dir( osarch, stack_name, stack_version )
+-- Function get_user_module_dirs( osarch, stack_name, stack_version )
+--
+-- Input argument: 3
+--   * The long os-and-architecture name
+--   * Stack name, can be system or manual
+--   * Stack version, not used when the stack name is system of manual
+--
+-- Return argument: 1
+--   * get_user_module_dir: Module subdirectory in the user root (not including
+--     the user root) corresponding to the given stack and architecture.
+--   * get_user_module_dirs: Module directories, starting from the user root,
+--     corresponding to the given stack and architecture and with the most generic 
+--     one first.
+--
+-- Note `system` in the name does not denote the `system` stack but the whole
+-- system installation, versus the user installation.
+--
+
+function get_user_module_dir( osarch, stack_name, stack_version )
+
+    local system_dir = get_system_module_dir( osarch, stack_name, stack_version )
+
+    if system_dir == nil then
+        return nil
+    else
+        local user_dir =  system_dir:gsub( '^modules%-easybuild', 'modules' )
+        return user_dir
+    end
+
+end
+
+
+function get_user_module_dirs( osarch, stack_name, stack_version )
+
+    local system_dirs = get_system_module_dirs( osarch, stack_name, stack_version )
+
+    if system_dirs == nil then
+        return nil
+    else
+        local result = {}
+        for index, dir in ipairs( system_dirs )
+        do
+            local user_dir = dir:gsub( '^modules%-easybuild', 'modules' )
+            table.insert( result, user_dir )
+        end
+        return result
+    end
+
+end
