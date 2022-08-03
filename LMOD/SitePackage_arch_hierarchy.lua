@@ -423,7 +423,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_generic( long_osarch, stack_version )
+-- Function get_stack_generic( long_osarch, stack_version )
 --
 -- Input arguments:
 --   * long_osarch: long_osarch string in the long format
@@ -431,7 +431,7 @@ end
 --
 -- Output: The most generic architecture for the current node.
 --
-function get_calcua_generic( long_osarch, stack_version )
+function get_stack_generic( long_osarch, stack_version )
 
     local long_os = extract_os( long_osarch )
     local long_cpu = extract_cpu( long_osarch )
@@ -451,24 +451,24 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_generic_current( stack_version )
+-- Function get_stack_generic_current( stack_version )
 --
 -- Input argument:
 --   * stack_version: Version of the calcua stack, can be system.
 --
 -- Output: The most generic architecture for the current node.
 --
-function get_calcua_generic_current( stack_version )
+function get_stack_generic_current( stack_version )
 
     local long_osarch = get_cluster_longosarch()
 
-    return get_calcua_generic( long_osarch, stack_version )
+    return get_stack_generic( long_osarch, stack_version )
 
 end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_longosarch_current( stack_version )
+-- Function get_stack_osarch_current( stack_version )
 --
 -- Input argument:
 --   * stack_version: Version of the calcua stack, can be system.
@@ -476,7 +476,7 @@ end
 -- Output: The architecture of the current node with long names.
 --
 
-function get_calcua_longosarch_current( stack_version )
+function get_stack_osarch_current( stack_version )
 
     local d1, d2, d3
 
@@ -495,7 +495,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_top( long_osarch, stack_version )
+-- Function get_stack_top( long_osarch, stack_version )
 --
 -- Input arguments:
 --   * long_osarch: os and architecture with long names and in a format 
@@ -508,7 +508,7 @@ end
 -- calcua stack for long_osarch.
 --
 
-function get_calcua_top( long_osarch, stack_version )
+function get_stack_top( long_osarch, stack_version )
 
     --
     -- -  Some initialisations ot use the data structures of etc/SystemDefinition.lua
@@ -558,7 +558,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_matchingarch( long_osarch, reduce_stack_version, 
+-- Function get_stack_matchingarch( long_osarch, reduce_stack_version, 
 --                                   stack_version )
 --
 -- Input arguments:
@@ -591,7 +591,7 @@ end
 --     stack_version.
 --
 
-function get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_version )
+function get_stack_matchingarch( long_osarch, reduce_stack_version, stack_version )
 
     --
     -- -  Some initialisations ot use the data structures of etc/SystemDefinition.lua
@@ -709,7 +709,7 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_calcua_subarchs( long_osarch, stack_version )
+-- Function get_stack_subarchs( long_osarch, stack_version )
 --
 -- Input arguments:
 --   * long_osarch: os and architecture with long names and in a format 
@@ -726,11 +726,11 @@ end
 -- readability at all.
 --
 
-function get_calcua_subarchs( long_osarch, stack_version )
+function get_stack_subarchs( long_osarch, stack_version )
 
     local result = {}
 
-    local long_osgeneric = get_calcua_generic( long_osarch, stack_version )
+    local long_osgeneric = get_stack_generic( long_osarch, stack_version )
 
     if long_osarch == long_osgeneric then
 
@@ -805,7 +805,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_calcua_system_module_dir_worker( long_osarch, stack_version )
+function get_stack_system_module_dir_worker( long_osarch, stack_version )
 
     -- Worker function without any error control. The error control is done
     -- by get_system_module_dir and get_system_module_dirs.
@@ -848,7 +848,7 @@ function get_system_module_dir( long_osarch, stack_name, stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
-    return get_calcua_system_module_dir_worker( long_osarch, use_version )
+    return get_stack_system_module_dir_worker( long_osarch, use_version )
 
 end
 
@@ -881,9 +881,9 @@ function get_system_module_dirs( long_osarch, stack_name, stack_version )
     end
 
     result = {}
-    for index, os_arch_accel in ipairs( get_calcua_subarchs( long_osarch, use_version ) )
+    for index, os_arch_accel in ipairs( get_stack_subarchs( long_osarch, use_version ) )
     do
-        table.insert( result, get_calcua_system_module_dir_worker( os_arch_accel, use_version ) )
+        table.insert( result, get_stack_system_module_dir_worker( os_arch_accel, use_version ) )
     end
 
     return result

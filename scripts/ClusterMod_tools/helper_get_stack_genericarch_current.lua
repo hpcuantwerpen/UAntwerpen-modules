@@ -38,4 +38,4 @@ end
 --
 -- Actual code
 --
-print( get_calcua_generic_current( stack_version ) )
+print( get_stack_generic_current( stack_version ) )

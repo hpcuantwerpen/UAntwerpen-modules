@@ -429,7 +429,7 @@ do
         is_supported_cluster_arch = {}
         for _,node_type in ipairs( ClusterMod_NodeTypes )
         do
-            local actual_osarch = get_calcua_matchingarch( node_type, stack_version, stack_version )
+            local actual_osarch = get_stack_matchingarch( node_type, stack_version, stack_version )
             if actual_osarch ~=  nil then -- Test is needed as some node types may not be supported by all stack versions
                 is_supported_cluster_arch[actual_osarch] = true
             end
@@ -479,7 +479,7 @@ do
     for stack_version,_ in pairs( ClusterMod_SystemTable )
     do
 
-        local node_used_long_osarch = get_calcua_matchingarch( node_long_osarch, stack_version, stack_version )
+        local node_used_long_osarch = get_stack_matchingarch( node_long_osarch, stack_version, stack_version )
 
         if stack_version == 'manual' then
             supported_by_manual = ( node_used_long_osarch ~=  nil )
@@ -541,11 +541,11 @@ do
             --      +- Subarchitecture under consideration:                                          subarch_regular
             --      +- Matching arch for system modules for the subarchitecture under consideration: subarch_system    modules: system_dirs
 
-            local osarch_regular = get_calcua_matchingarch( node_type, stack_version, stack_version )
+            local osarch_regular = get_stack_matchingarch( node_type, stack_version, stack_version )
 
             if osarch_regular ~= nil then
                 -- Architecture supported by this stack
-                local osarch_system  = get_calcua_matchingarch( osarch_regular, stack_version, 'system' )
+                local osarch_system  = get_stack_matchingarch( osarch_regular, stack_version, 'system' )
                 local hierarchy = ClusterMod_SystemProperties[stack_version] -- Hierarchy of the regular software stack.
 
                 local full_system_dirs = get_system_module_dirs( osarch_system, ClusterMod_StackName, 'system' )
@@ -568,7 +568,7 @@ do
 
                     local function test_subarch( subarch_regular )
 
-                        local subarch_system = get_calcua_matchingarch( subarch_regular, stack_version, 'system' ) -- Corresponding system arch for arch/subarchs[2]
+                        local subarch_system = get_stack_matchingarch( subarch_regular, stack_version, 'system' ) -- Corresponding system arch for arch/subarchs[2]
 
                         if subarch_system == nil then
                             number_errors = number_errors + 1
@@ -577,7 +577,7 @@ do
                                             ' and actual architecture for ' .. ClusterMod_StackName .. '/system modules ' .. osarch_system .. 
                                             ' but no corresponding architecture for ' .. ClusterMod_StackName .. '/system modules is found for subarch ' .. subarch_regular )
                         else
-                            local system_dirs = get_calcua_matchingarch(  subarch_system, stack_version, 'system' )      -- Corresponding module dirs in system
+                            local system_dirs = get_stack_matchingarch(  subarch_system, stack_version, 'system' )      -- Corresponding module dirs in system
                             if system_dirs == nil then
                                 number_errors = number_errors + 1
                                 io.stdout:write( '\nERROR: node type ' .. node_type .. ' in stack ' .. ClusterMod_StackName .. '/' .. stack_version ..
@@ -762,8 +762,8 @@ do
             
         else
         
-            -- local node_used_long_osarch = get_calcua_top( node_long_osarch, stack_version )
-            local node_used_long_osarch = get_calcua_matchingarch( node_long_osarch, stack_version, stack_version )
+            -- local node_used_long_osarch = get_stack_top( node_long_osarch, stack_version )
+            local node_used_long_osarch = get_stack_matchingarch( node_long_osarch, stack_version, stack_version )
         
             if node_used_long_osarch == nil then
                 print( '  * Stack ' .. stack_nameversion .. ' is not supported on this node type.' )
@@ -839,7 +839,7 @@ do
         alternatives = {}
         for _,node_type in ipairs( ClusterMod_NodeTypes )
         do
-            local use_long_osarch = get_calcua_matchingarch( node_type, stack_version, stack_version )
+            local use_long_osarch = get_stack_matchingarch( node_type, stack_version, stack_version )
             if use_long_osarch == long_osarch then
                 table.insert( alternatives, 'node/' .. node_type )
             end 
@@ -882,7 +882,7 @@ do
             -- First build in reverse order (which actually corresponds to the order of prepend_path
             -- calls in the module file)
 
-            local long_osarch_system = get_calcua_matchingarch( long_osarch, stack_version, 'system' )
+            local long_osarch_system = get_stack_matchingarch( long_osarch, stack_version, 'system' )
             local system_dirs = get_system_module_dirs( long_osarch_system, ClusterMod_StackName, 'system' )
             if system_dirs == nil then
                 io.stderr.write( 'No system modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )

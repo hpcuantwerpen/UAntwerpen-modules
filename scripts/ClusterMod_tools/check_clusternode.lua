@@ -56,7 +56,7 @@ print( '- Detected node architecture: ' .. clusternode_long_osarch )
 
 print()
 for stack,_ in pairs( ClusterMod_ClusterMap ) do
-    print( '- Used architecture for this node for ' .. stack .. ': ' .. get_calcua_top( get_calcua_longosarch_current( stack ), stack ) )
+    print( '- Used architecture for this node for ' .. stack .. ': ' .. get_stack_top( get_stack_osarch_current( stack ), stack ) )
 end
 
 -- -----------------------------------------------------------------------------
@@ -73,8 +73,8 @@ for stack_version,_ in pairs( ClusterMod_ClusterMap ) do
 
         local stack = ClusterMod_StackName .. '/' .. stack_version
 
-        local use_longarch = get_calcua_top( get_calcua_longosarch_current( stack_version ), stack_version )
-        local use_longarch_system = get_calcua_top( get_calcua_longosarch_current( 'system' ), 'system' )
+        local use_longarch = get_stack_top( get_stack_osarch_current( stack_version ), stack_version )
+        local use_longarch_system = get_stack_top( get_stack_osarch_current( 'system' ), 'system' )
 
         print( '- EasyBuild stack ' .. stack .. ': ' )
         print( '  - Used top architecture for the stack: ' .. use_longarch )
@@ -82,7 +82,7 @@ for stack_version,_ in pairs( ClusterMod_ClusterMap ) do
 
         -- Check if there is an alternative name for the architecture
 
-        local current_longosarch = get_calcua_longosarch_current( stack_version )
+        local current_longosarch = get_stack_osarch_current( stack_version )
         if ClusterMod_ClusterMap[stack_version] ~= nil then
             for name,longarch in pairs( ClusterMod_ClusterMap[stack_version] ) do
                 if longarch == current_longosarch then

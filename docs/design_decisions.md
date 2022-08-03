@@ -86,7 +86,7 @@
 
         Impact of omitting that restriction and supporting a module and software hierarchy 
 
-        -   Changes to the `get_calcua_top` function needed.
+        -   Changes to the `get_stack_top` function needed.
 
         -   Needs changes to `get_long_osarchs` and `get_long_osarchs_reverse`.
 

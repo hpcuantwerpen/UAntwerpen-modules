@@ -32,8 +32,8 @@ local stack_name    = myModuleName()
 local stack_version = myModuleVersion()
  
 -- Detect the architecture of the current node.
-local node_osarch = get_calcua_longosarch_current( stack_version )
-local used_osarch = get_calcua_matchingarch( node_osarch, stack_version, stack_version )
+local node_osarch = get_stack_osarch_current( stack_version )
+local used_osarch = get_stack_matchingarch( node_osarch, stack_version, stack_version )
 if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. myModuleName() .. '/' .. myModuleVersion() .. 
                  ', stack name/version is  ' .. stack_name .. '/' .. stack_version ..

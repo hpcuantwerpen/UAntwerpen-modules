@@ -174,10 +174,10 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Testing get_calcua_generic
+-- Testing get_stack_generic
 --
 
-print( colour_title .. '\nTesting get_calcua_generic function\n' .. colour_reset )
+print( colour_title .. '\nTesting get_stack_generic function\n' .. colour_reset )
 
 local inputdata = {
     {   
@@ -193,7 +193,7 @@ local inputdata = {
 }
 
 for index, data in ipairs( inputdata ) do
-    local got = get_calcua_generic( data['cluster_arch'], data['stack_version'] )
+    local got = get_stack_generic( data['cluster_arch'], data['stack_version'] )
     local expected = data['expected']
     print( testresult( got == expected ) .. 'Generic for ' .. data['cluster_arch'] ..
            ' in calcua/' .. data['stack_version'] .. ': ' ..
@@ -202,10 +202,10 @@ end
               
 -- -----------------------------------------------------------------------------
 --
--- Testing get_calcua_top
+-- Testing get_stack_top
 --
 
-print( colour_title .. '\nTesting get_calcua_top function\n' .. colour_reset )
+print( colour_title .. '\nTesting get_stack_top function\n' .. colour_reset )
 
 local inputdata = {
     -- Manual test cases (2L)
@@ -522,7 +522,7 @@ local inputdata = {
 }
 
 for index, data in ipairs( inputdata ) do
-    local got = get_calcua_top( data['cluster_arch'], data['stack_version'] )
+    local got = get_stack_top( data['cluster_arch'], data['stack_version'] )
     local expected = data['expected']
     print( testresult( got == expected ) ..
            'Top architecture for ' .. data['cluster_arch'] .. ' in ' .. data['stack_version'] .. ' is ' ..
@@ -531,10 +531,10 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Testing get_calcua_matchingarch
+-- Testing get_stack_matchingarch
 --
 
-print( colour_title .. '\nTesting get_calcua_matchingarch function\n' .. colour_reset )
+print( colour_title .. '\nTesting get_stack_matchingarch function\n' .. colour_reset )
 
 local inputdata = {
    -- Manual test cases (2L)
@@ -1272,7 +1272,7 @@ local inputdata = {
 }
 
 for index, data in ipairs( inputdata ) do
-   local got = get_calcua_matchingarch( data['cluster_arch'], data['red_version'], data['stack_version'] )
+   local got = get_stack_matchingarch( data['cluster_arch'], data['red_version'], data['stack_version'] )
    local expected = data['expected']
    print( testresult( got == expected ) ..
          'Matching architecture for ' .. data['cluster_arch'] .. ' for ' .. data['stack_version'] .. 
@@ -1283,10 +1283,10 @@ end
 -- -----------------------------------------------------------------------------
 --
 -- Testing get_system_module_dirs( longname, stack_name, stack_version )
--- and through it get_calcua_subarchs( longname, stack_version )
+-- and through it get_stack_subarchs( longname, stack_version )
 --
 
-print( colour_title .. '\nTesting get_system_module_dirs and hence get_calcua_subarchs\n' .. colour_reset )
+print( colour_title .. '\nTesting get_system_module_dirs and hence get_stack_subarchs\n' .. colour_reset )
 
 local tests = {
     -- system
@@ -1696,35 +1696,35 @@ print( colour_title .. '\nTESTING CURRENT CLUSTER\n========================' .. 
 
 -- -----------------------------------------------------------------------------
 --
--- Testing get_calcua_generic_current
+-- Testing get_stack_generic_current
 --
 
-print( colour_title .. '\nTesting get_calcua_generic_current function\n' .. colour_reset )
+print( colour_title .. '\nTesting get_stack_generic_current function\n' .. colour_reset )
 
 for stack,_ in pairs( ClusterMod_SystemTable ) do
-       print( mssg_sysdep .. ' Generic for ' .. stack .. ' on the current node: ' .. get_calcua_generic_current( stack ) )
+       print( mssg_sysdep .. ' Generic for ' .. stack .. ' on the current node: ' .. get_stack_generic_current( stack ) )
 end
               
 -- -----------------------------------------------------------------------------
 --
--- Testing get_calcua_longosarch_current
+-- Testing get_stack_osarch_current
 --
 
-print( colour_title .. '\nTesting get_calcua_longosarch_current function\n' .. colour_reset )
+print( colour_title .. '\nTesting get_stack_osarch_current function\n' .. colour_reset )
 
 for stack,_ in pairs( ClusterMod_SystemTable ) do
     local hierarchy = ClusterMod_SystemProperties[stack]['hierarchy'] 
     print( mssg_sysdep .. ' Architecture of the current node in the format for ' .. stack .. 
            ' (' .. hierarchy .. '): ' ..
-           get_calcua_longosarch_current( stack ) )
+           get_stack_osarch_current( stack ) )
 end
 
 -- -----------------------------------------------------------------------------
 --
--- Testing get_calcua_top with get_cluster_longosarch
+-- Testing get_stack_top with get_cluster_longosarch
 --
 
-print( colour_title .. '\nTesting get_calcua_top function with get_cluster_longosarch\n' .. colour_reset )
+print( colour_title .. '\nTesting get_stack_top function with get_cluster_longosarch\n' .. colour_reset )
 
 local inputdata = {
     {   
@@ -1744,7 +1744,7 @@ for stack,_ in pairs( ClusterMod_SystemTable ) do
     local current_osarch = get_cluster_longosarch()
     print( mssg_sysdep .. ' Used architecture for ' .. current_osarch  .. 
            ' (this node) for ' .. stack .. ' (' .. hierarchy .. '): ' .. 
-           ( get_calcua_top( current_osarch, stack ) or '\27[31mPROBLEM, GOT NIL\27[0m' ) )
+           ( get_stack_top( current_osarch, stack ) or '\27[31mPROBLEM, GOT NIL\27[0m' ) )
 end
        
 

@@ -79,7 +79,7 @@ local user_moduledirs = {}
 -- First build in reverse order (which actually corresponds to the order of prepend_path
 -- calls in the module file)
 
-local osarch_system = get_calcua_matchingarch( osarch, stack_version, 'system' )
+local osarch_system = get_stack_matchingarch( osarch, stack_version, 'system' )
 local system_dirs = get_system_module_dirs( osarch_system, 'calcua', 'system' )
 if system_dirs == nil then
     io.stderr.write( 'No system modules found for ' .. stack_version .. '. This points to an error in the module system or cluster definition.\n' )

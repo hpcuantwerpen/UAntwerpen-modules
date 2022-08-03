@@ -492,7 +492,7 @@ map_accel_long_to_short = {
 
 #### Computing matching architectures in software stacks
 
--   `get_calcua_longosarch_current( stack_version )`
+-   `get_stack_osarch_current( stack_version )`
 
     **Input argument:**
 
@@ -504,16 +504,16 @@ map_accel_long_to_short = {
         format compatible with the indicated software stack (so taking into 
         account the hierarchy types 2L or 3L).
 
--   `get_calcua_generic( clusterarch, stack_version )`: Compute the most generic
+-   `get_stack_generic( clusterarch, stack_version )`: Compute the most generic
     architecture for the given version of the CalcUA stack on the given clusterarch
     architecture. The clusterarch argument has to be in the long format compatible
     with the CalcUA stack version.
 
--   `get_calcua_generic_current( stack_version )`: Compute the most generic
+-   `get_stack_generic_current( stack_version )`: Compute the most generic
     architecture for the given version of the CalcUA stack on the current
     architecture.
 
--   `get_calcua_top( long_osarch, stack_version )`:
+-   `get_stack_top( long_osarch, stack_version )`:
 
     **Input arguments:**
 
@@ -529,7 +529,7 @@ map_accel_long_to_short = {
         version of the CalcUA software stacks.
 
 
--   `get_calcua_matchingarch( long_osarch, reduce_stack_version, stack_version )`:
+-   `get_stack_matchingarch( long_osarch, reduce_stack_version, stack_version )`:
 
     **Input arguments:**
 
@@ -598,7 +598,7 @@ map_accel_long_to_short = {
 
 #### Miscellaneous functions
 
--   `get_calcua_subarchs( long_osarch, stack_version )`: Compute a list containing
+-   `get_stack_subarchs( long_osarch, stack_version )`: Compute a list containing
     the given long_osarch and its subarchs in
     the hierarchy of the naming scheme for the stack. So the list can
     be at most 3 elements long. The most generic one is at the front of
