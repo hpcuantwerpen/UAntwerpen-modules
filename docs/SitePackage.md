@@ -709,6 +709,18 @@ tables from long to short names as defined in `SitePackage_arch_hierarchy.lua`.
 
 Request the name of the host. The routine calls `/bin/hostname`.
 
+#### `get_clustername()` 
+
+Returns the name of the cluster as defined in the system definition through
+the `ClusterMod_ClusterName` variable.
+
+
+#### `get_stackname()`
+
+Returns the name of the primary software stack as defined in the system definition
+through the `ClusterMod_StackName` variable.
+
+
 #### `get_cpu_info()`
 
 Returns the CPU string derived from the data in `/proc/cpuinfo`, by combining 

@@ -6,6 +6,8 @@ dofile( '../LMOD/SitePackage_system_info.lua' )
 
 print( '\nInformation about this system:' )
 
+print( '- (get_clustername) The name of the cluster is ' .. get_clustername() )
+
 print( '- (get_hostname) The host name is ' .. get_hostname() )
 
 local osname
@@ -18,6 +20,8 @@ print( '- (get_cpu_info) The CPU string is ' .. get_cpu_info() )
 print( '- (get_accelerator_info) Detected accelerator is ' .. ( get_accelerator_info() or 'none detected' ) )
 
 print( '- (get_cluster_osarch) Detected node architecture: ' .. ( get_cluster_osarch() or 'RETURNED NIL') )
+
+print( '- (get_stackname) The name of the primary EasyBuild-managed software stack is ' .. get_stackname() )
 
 -- local clusterarch_short_minimal
 -- local clusterarch_long_minimal

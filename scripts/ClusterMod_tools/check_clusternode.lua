@@ -35,6 +35,8 @@ dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
 
 print( '\nInformation about this node:' )
 
+print( '- The cluster name is ' .. get_clustername() )
+
 print( '- The host name is ' .. get_hostname() )
 
 local osname
@@ -47,7 +49,9 @@ print( '- The CPU string is ' .. get_cpu_info() )
 print( '- Detected accelerator is ' .. ( get_accelerator_info() or 'none detected' ) )
 
 local clusternode_osarch = get_cluster_osarch()
-print( '- Detected node architecture: ' .. clusternode_osarch )
+print( '- Detected node architecture is ' .. clusternode_osarch )
+
+print( '- The main software stack name is ' .. get_stackname() )
 
 -- -----------------------------------------------------------------------------
 --

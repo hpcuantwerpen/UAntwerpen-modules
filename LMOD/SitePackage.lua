@@ -152,20 +152,20 @@ end
 --
 sandbox_registration{
     ['get_configuration']             = get_configuration,
-    ['get_hostname']                  = get_hostname,
---    ['get_user_prefix_EasyBuild'] = get_user_prefix_EasyBuild,
+--    ['get_hostname']                  = get_hostname,
+    ['get_clustername']               = get_clustername,                -- Defined in SitePackage_system_info
     ['get_motd']                      = get_motd,                       -- Defined in SitePackage
     ['get_fortune']                   = get_fortune,                    -- Defined in SitePackage
     ['get_user_prefix_EasyBuild']     = get_user_prefix_EasyBuild,      -- Defined in SitePackage_helper
     ['is_interactive']                = is_interactive,                 -- Defined in SitePackage
-    ['get_cluster_osarch']        = get_cluster_osarch,
+--    ['get_cluster_osarch']            = get_cluster_osarch,
 --    ['get_clusterarch']               = get_clusterarch,
-    [ 'map_toolchain']                = map_toolchain,
-    ['get_stack_osarch_current'] = get_stack_osarch_current,
-    ['get_stack_matchingarch']       = get_stack_matchingarch,
+--    [ 'map_toolchain']                = map_toolchain,
+    ['get_stack_osarch_current']      = get_stack_osarch_current,
+    ['get_stack_matchingarch']        = get_stack_matchingarch,
     ['get_system_module_dirs']        = get_system_module_dirs,         -- Defined in SitePackage_arch_hierarchy
     ['get_system_inframodule_dir']    = get_system_inframodule_dir,     -- Defined in SitePackage_arch_hierarchy
---    ['get_stack_top']                = get_stack_top,
+--    ['get_stack_top']                 = get_stack_top,
     ['is_Stack_SystemTable']          = is_Stack_SystemTable,           -- Defined in SitePackage_helper
 }
 

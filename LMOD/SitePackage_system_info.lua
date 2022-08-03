@@ -88,6 +88,32 @@ end
 
 -- -----------------------------------------------------------------------------
 --
+-- function get_clustername()
+--
+-- Returns the cluster name from the system definition file.
+--
+function get_clustername()
+
+    return ClusterMod_ClusterName
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- function get_stackname()
+--
+-- Returns the name of the primary EasyBuild-managed software stack.
+--
+function get_stackname()
+
+    return ClusterMod_StackName
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
 -- get_cpu_info()
 --
 -- Get information about the host. The function returns 1 value:
