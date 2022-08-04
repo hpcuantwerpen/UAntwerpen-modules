@@ -174,15 +174,15 @@ do
         if stack_version ~= 'manual'
         then
 
-            local appl_modules = pathJoin( installroot, get_system_module_dir( osarch, ClusterMod_StackName, stack_version ) )
+            local appl_modules = get_system_module_dir( osarch, ClusterMod_StackName, stack_version )
             print( '  - Application modules:    ' .. appl_modules )
             mkDir( appl_modules )
         
-            local infra_modules = pathJoin( installroot, get_system_inframodule_dir( osarch, ClusterMod_StackName, stack_version ) )
+            local infra_modules = get_system_inframodule_dir( osarch, ClusterMod_StackName, stack_version )
             print( '  - Infrastructure modules: ' .. infra_modules )
             mkDir( infra_modules )
         
-            local EBrepo_dir = pathJoin( installroot, 'mgmt', get_system_EBrepo_dir( osarch, ClusterMod_StackName, stack_version ) )
+            local EBrepo_dir = get_system_EBrepo_dir( osarch, ClusterMod_StackName, stack_version )
             print( '  - EBrepo_files directory: ' .. EBrepo_dir )
             mkDir( EBrepo_dir )  
             

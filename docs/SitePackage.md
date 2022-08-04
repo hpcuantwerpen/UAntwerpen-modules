@@ -580,28 +580,51 @@ map_accel_long_to_short = {
 
 #### Computing directories
 
--   `get_system_module_dir`: Compute the system module directory from the three input arguments:
-    long os-and-architecture name, stack name and stack version.
+-   `get_system_module_dir( osarch, stack_name, stack_version )`: Compute the system module directory 
+    from the three input arguments: long os-and-architecture name, stack name and stack version.
 
-    The directory name returned is relative from the installation root, with the most
-    generic one first.
+    The directory name is an absolute path.
 
     Note `system` in the name does not denote the `system` stack but the whole
     system installation, versus the user installation.
 
--   `get_system_module_dirs`: Compute the system module directory hierarchy from the three input
-    arguments: long os-and-architecture name, stack name and stack version.
+-   `get_system_module_dirs( osarch, stack_name, stack_version )`: Compute the system module directory 
+    hierarchy from the three input arguments: long os-and-architecture name, stack name and stack version.
 
-    The directory names returned are relative from the installation root, with the most
+    The directory names returned are absolute paths, with the most
     generic one first.
     
--   `get_user_module_dir`: Similar to `get_system_module_dir` but then for the
-    modules in the user module tree and hence the subdirectory that should go on top
-    of the user install root.
+-   `get_user_module_dir( osarch, stack_name, stack_version )`: 
+    Similar to `get_system_module_dir` but then for the modules in the user module tree.
     
--   `get_user_module_dirs`: Similar to `get_system_module_dirs` but then for the
-    modules in the user module tree and hence the subdirectories that should go on top
-    of the user install root.
+-   `get_user_module_dirs( osarch, stack_name, stack_version )`: 
+    Similar to `get_system_module_dirs` but then for the modules in the user module tree.
+
+-   `get_system_inframodule_dir( osarch, stack_name, stack_version )`: Get the 
+    infrastructure module directory for the given architecture, stack name and stack
+    version. The function returns the absolute path: The system installation root is 
+    obtained via the `get_system_install_root` function.
+
+-   `get_system_SW_dir( osarch, stack_name, stack_version )`: Get the system software
+    installation directory for the given architecture, stack name and stack version.
+    The function returns the absolute path: The system installation root is 
+    obtained via the `get_system_install_root` function.
+    
+-   `get_user_SW_dir( osarch, stack_name, stack_version )`: Get the user software
+    installation directory for the given architecture, stack name and stack version.
+    The function returns the absolute path: The user installation root is 
+    obtained via the `get_user_install_root` function.
+
+-   `get_system_EBrepo_dir( osarch, stack_name, stack_version )`: Get the system EasyBuild
+    repo directory for the given architecture, stack name and stack version. The function
+    returns the absolute path; the system installation root is obtained via the 
+    `get_system_install_root` function.
+
+-   `get_user_EBrepo_dir( osarch, stack_name, stack_version )`: Get the user EasyBuild
+    repo directory for the given architecture, stack name and stack version. The function
+    returns the absolute path; the user installation root is obtained via the 
+    `get_user_install_root` function.
+
     
 
 #### Miscellaneous functions
@@ -868,5 +891,5 @@ recomputing that data.
     effect of `mkdir -p`, so it can create multiple levels from the given directory if
     needed.
 
--   'get_user_prefix_EasyBuild': Compute the directory for the EasyBuild user installation,
+-   'get_user_install_root': Compute the directory for the EasyBuild user installation,
     or nil if that is explicitly turned off by setting `EBU_USER_PREFIX` to an empty string.

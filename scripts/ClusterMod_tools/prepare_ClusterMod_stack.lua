@@ -110,19 +110,19 @@ for _,longname in ipairs( OSArchTable ) do
 
     print( '\nCreating directories for ' .. longname .. ':' )
 
-    local appl_modules = pathJoin( root_dir, get_system_module_dir( longname, ClusterMod_StackName, stack_version ) )
+    local appl_modules = get_system_module_dir( longname, ClusterMod_StackName, stack_version )
     print( 'Application modules:    ' .. appl_modules )
     mkDir( appl_modules )
 
-    local infra_modules = pathJoin( root_dir, get_system_inframodule_dir( longname, ClusterMod_StackName, stack_version ) )
+    local infra_modules = get_system_inframodule_dir( longname, ClusterMod_StackName, stack_version )
     print( 'Infrastructure modules: ' .. infra_modules )
     mkDir( infra_modules )
 
-    local SW_dir = pathJoin( root_dir, get_system_SW_dir( longname, ClusterMod_StackName, stack_version ) )
+    local SW_dir = get_system_SW_dir( longname, ClusterMod_StackName, stack_version )
     print( 'Software directory:     ' .. SW_dir )
     mkDir( SW_dir )
 
-    local EBrepo_dir = pathJoin( root_dir, 'mgmt', get_system_EBrepo_dir( longname, ClusterMod_StackName, stack_version ) )
+    local EBrepo_dir = get_system_EBrepo_dir( longname, ClusterMod_StackName, stack_version )
     print( 'EBrepo_files directory: ' .. EBrepo_dir )
     mkDir( EBrepo_dir )
 

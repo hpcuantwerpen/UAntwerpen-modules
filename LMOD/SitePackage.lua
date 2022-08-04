@@ -156,7 +156,8 @@ sandbox_registration{
     ['get_clustername']               = get_clustername,                -- Defined in SitePackage_system_info
     ['get_motd']                      = get_motd,                       -- Defined in SitePackage
     ['get_fortune']                   = get_fortune,                    -- Defined in SitePackage
-    ['get_user_prefix_EasyBuild']     = get_user_prefix_EasyBuild,      -- Defined in SitePackage_helper
+    ['get_system_install_root']       = get_system_install_root,        -- Defined in SitePackage_helper
+    ['get_user_install_root']         =get_user_install_root,           -- Defined in SitePackage_helper
     ['is_interactive']                = is_interactive,                 -- Defined in SitePackage
 --    ['get_cluster_osarch']            = get_cluster_osarch,
 --    ['get_clusterarch']               = get_clusterarch,
@@ -206,7 +207,7 @@ end
 
 -- We need to avoid that EB_prefix is nil so give it some meaningless value if it would
 -- be nil.
--- local EB_prefix = string.gsub( get_user_prefix_EasyBuild() or '/NONE', '%-', '%%-' )
+-- local EB_prefix = string.gsub( get_user_install_root() or '/NONE', '%-', '%%-' )
 
 local mapT =
 {

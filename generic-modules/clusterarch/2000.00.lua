@@ -56,7 +56,7 @@ end
 --
 -- Check where the user stack is located (if there is any)
 --
-local user_easybuild_root = get_user_prefix_EasyBuild()
+local user_easybuild_root = get_user_install_root()
 -- if user_easybuild_modules ~= nil then
 --     user_easybuild_modules = pathJoin( user_easybuild_modules, 'modules')
 --     if not isDir( user_easybuild_modules ) then
@@ -129,12 +129,12 @@ local number
 local moduledir
 for number,moduledir in ipairs( system_moduledirs )
 do
-    prepend_path( 'MODULEPATH', pathJoin( install_root, moduledir ) )
+    prepend_path( 'MODULEPATH', moduledir )
 end
 if user_easybuild_root ~= nil then
     for number,moduledir in ipairs( user_moduledirs )
     do
-        prepend_path( 'MODULEPATH', pathJoin( user_easybuild_root, moduledir ) )
+        prepend_path( 'MODULEPATH', moduledir )
     end
 end
 

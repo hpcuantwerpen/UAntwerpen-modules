@@ -27,6 +27,24 @@ dofile( repo_root .. '/LMOD/SitePackage_system_info.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_map_toolchain.lua' )
 dofile( repo_root .. '/LMOD/SitePackage_arch_hierarchy.lua' )
 
+--
+-- Replace some functions in SitePackage_helper.lua that cannot product the
+-- proper result in the context of this routine.
+--
+
+function get_system_install_root()
+
+    return '<SYSROOT>'
+ 
+end
+
+function get_user_install_root()
+
+    return '<USERROOT>'
+ 
+end
+ 
+
 -- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
 --

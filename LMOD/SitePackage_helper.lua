@@ -197,18 +197,35 @@ function mkDir( dirname )
 
 end
 
+
 -- -----------------------------------------------------------------------------
 --
--- Function get_user_prefix_EasyBuild
+-- Function get_system_install_root
 --
--- Returns the user prefix for the EasyBuild installation.
+-- Returns the system install root which should in fact be in the installroot
+-- variable, but this makes it useable in module files also that have no
+-- direct access to that variable.
+--
+
+function get_system_install_root()
+
+    return installroot
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_user_install_root
+--
+-- Returns the user install root for the EasyBuild installation.
 --
 -- The value is taken from EBU_USER_PREFIX or if that one is not defined,
 -- computed from the location of the home directory.
 --
 -- There is no trailing dash in the output.
 --
-function get_user_prefix_EasyBuild()
+function get_user_install_root()
 
     local default_prefix = os.getenv( 'VSC_DATA' ) .. '/EasyBuild'
     default_prefix = default_prefix:gsub( '//', '/' ):gsub( '/$', '' )

@@ -789,6 +789,8 @@ end
 --
 -- Function get_system_module_dir( osarch, stack_name, stack_version )
 -- Function get_system_module_dirs( osarch, stack_name, stack_version )
+-- Function get_user_module_dir( osarch, stack_name, stack_version )
+-- Function get_user_module_dirs( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -796,16 +798,21 @@ end
 --   * Stack version, not used when the stack name is system of manual
 --
 -- Return argument: 1
---   * get_system_module_dir: Module directory in the modules-easybuild directory
---     corresponding to the given stack.
---   * get_system_module_dirs: Directories, starting from the installation root,
---     with the most generic one first.
+--   * get_system_module_dir: Module directory in the system installation for the
+--     given architecture and stack. Absolute paths.
+--   * get_system_module_dirs: All regular modular directories in the system
+--     installation for the given architecture and stack, and relevant
+--     subarchitectures, with the most generic architecture first.
+--   * get_user_module_dir: As get_system_module_dir, but then for the user 
+--     installation .
+--   * get_user_module_dirs: As get_system_module_dirs, but now for the user
+--     installation.
 --
 -- Note `system` in the name does not denote the `system` stack but the whole
 -- system installation, versus the user installation.
 --
 
-function get_stack_system_module_dir_worker( osarch, stack_version )
+function get_stack_module_dir_worker( osarch, stack_version, module_prefix )
 
     -- Worker function without any error control. The error control is done
     -- by get_system_module_dir and get_system_module_dirs.
@@ -813,16 +820,16 @@ function get_stack_system_module_dir_worker( osarch, stack_version )
     local prefix
 
     if stack_version == 'system' or stack_version == 'manual' then
-        prefix = 'modules-easybuild/' .. stack_version .. '/'
+        prefix = module_prefix .. '/' .. stack_version .. '/'
     else
-        prefix = 'modules-easybuild/' .. ClusterMod_StackName  .. '-' .. stack_version .. '/'
+        prefix = module_prefix .. '/' .. ClusterMod_StackName  .. '-' .. stack_version .. '/'
     end
 
     return prefix .. osarch
 
 end
 
-function get_system_module_dir( osarch, stack_name, stack_version )
+function get_module_dir_worker( osarch, stack_name, stack_version, module_prefix, routine_name )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -836,23 +843,23 @@ function get_system_module_dir( osarch, stack_name, stack_version )
         use_version = stack_name
     else
         -- Error condition, not known how to treat this stack
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_' .. routine_name .. '_module_dir: Illegal input arguments\n' )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
     -- Check if the input osarch is valid in the cluster definition.
     populate_cache_subosarchs( use_version )
     if ClusterMod_cache_subosarchs[use_version][osarch] ~= true then
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: ' .. (osarch or 'nil') .. 
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_' .. routine_name .. '_module_dir: ' .. (osarch or 'nil') .. 
                    ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
 
-    return get_stack_system_module_dir_worker( osarch, use_version )
+    return get_stack_module_dir_worker( osarch, use_version, module_prefix )
 
 end
 
-function get_system_module_dirs( osarch, stack_name, stack_version )
+function get_module_dirs_worker( osarch, stack_name, stack_version, module_prefix, routine_name )
 
     local use_version    -- Processed stack_version
     local result
@@ -868,14 +875,14 @@ function get_system_module_dirs( osarch, stack_name, stack_version )
         use_version = stack_name
     else
         -- Error condition, not known how to treat this stack
-        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: Illegal input arguments\n' )
+        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_' .. routine_name .. '_module_dirs: Illegal input arguments\n' )
         return nil
     end
 
     -- Check if the input osarch is valid in the cluster definition.
     populate_cache_subosarchs( use_version )
     if ClusterMod_cache_subosarchs[use_version][osarch] ~= true then
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dirs: ' .. (osarch or 'nil') .. 
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_' .. routine_name .. '_module_dirs: ' .. (osarch or 'nil') .. 
                    ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
         return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
     end
@@ -883,10 +890,45 @@ function get_system_module_dirs( osarch, stack_name, stack_version )
     result = {}
     for index, os_arch_accel in ipairs( get_stack_subarchs( osarch, use_version ) )
     do
-        table.insert( result, get_stack_system_module_dir_worker( os_arch_accel, use_version ) )
+        table.insert( result, get_stack_module_dir_worker( os_arch_accel, use_version, module_prefix ) )
     end
 
     return result
+
+end
+
+
+function get_system_module_dir( osarch, stack_name, stack_version )
+
+    local prefix = pathJoin( get_system_install_root(), 'modules-easybuild' )
+
+    return get_module_dir_worker( osarch, stack_name, stack_version, prefix, 'get_system_module_dir' )
+
+end
+
+
+function get_system_module_dirs( osarch, stack_name, stack_version )
+
+    local prefix = pathJoin( get_system_install_root(), 'modules-easybuild' )
+
+    return get_module_dirs_worker( osarch, stack_name, stack_version, prefix, 'get_system_module_dirs' )
+
+end
+
+function get_user_module_dir( osarch, stack_name, stack_version )
+
+    local prefix = pathJoin( get_user_install_root(), 'modules' )
+
+    return get_module_dir_worker( osarch, stack_name, stack_version, prefix, 'get_user_module_dir' )
+
+end
+
+
+function get_user_module_dirs( osarch, stack_name, stack_version )
+
+    local prefix = pathJoin( get_user_install_root(), 'modules' )
+
+    return get_module_dirs_worker( osarch, stack_name, stack_version, prefix, 'get_user_module_dirs' )
 
 end
 
@@ -901,8 +943,9 @@ end
 --   * Stack version, not used when the stack name is system of manual
 --
 -- Return argument: 1
---   * Module directory in the modules-infrastructure/infrastructure directory
---     corresponding to the given stack.
+--   * Absolute path of the module directory 
+--     (in the modules-infrastructure/infrastructure section) corresponding to 
+--     the given stack.
 -- Note `system` in the name does not denote the `system` stack but the whole
 -- system installation, versus the user installation.
 --
@@ -925,13 +968,14 @@ function get_system_inframodule_dir( osarch, stack_name, stack_version )
         return nil
     end
 
-    return pathJoin( prefix, stack_name, stack_version, 'arch', osarch )
+    return pathJoin( get_system_install_root(), prefix, stack_name, stack_version, 'arch', osarch )
 
 end
 
 -- -----------------------------------------------------------------------------
 --
 -- Function get_system_SW_dir( osarch, stack_name, stack_version )
+-- Function get_user_SW_dir( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -939,13 +983,13 @@ end
 --   * Stack version, not used when the stack name is system of manual
 --
 -- Return argument: 1
---   * Software directory in the SW directory (starting from the SW level)
---     corresponding to the given stack.
+--   * Software directory in the SW directory relative to respectively the
+--     system and user installation root, corresponding to the given stack.
 -- Note `system` in the name does not denote the `system` stack but the whole
 -- system installation, versus the user installation.
 --
 
-function get_system_SW_dir( osarch, stack_name, stack_version )
+function get_SW_dir_worker( osarch, stack_name, stack_version, dir_prefix )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -962,15 +1006,32 @@ function get_system_SW_dir( osarch, stack_name, stack_version )
         return nil
     end
 
+    local postfix = map_long_to_short( osarch )
     if use_version == 'manual' then
-        prefix = 'SW/MNL/'
+        return pathJoin( dir_prefix, 'SW/MNL', postfix )
     elseif use_version == 'system' then
-        prefix = 'SW/' .. use_version .. '/'
+        return pathJoin( dir_prefix, 'SW', use_version, postfix )
     else
-        prefix = 'SW/' .. ClusterMod_StackName .. '-' .. use_version .. '/'
+        return pathJoin( dir_prefix, 'SW', ClusterMod_StackName .. '-' .. use_version, postfix )
     end
 
-    return prefix .. map_long_to_short( osarch )
+end
+
+
+function get_system_SW_dir( osarch, stack_name, stack_version )
+
+    local dir_prefix = get_system_install_root()
+
+    return get_SW_dir_worker( osarch, stack_name, stack_version, dir_prefix )
+
+end
+
+
+function get_user_SW_dir( osarch, stack_name, stack_version )
+
+    local dir_prefix = get_user_install_root()
+
+    return get_SW_dir_worker( osarch, stack_name, stack_version, dir_prefix )
 
 end
 
@@ -978,6 +1039,7 @@ end
 -- -----------------------------------------------------------------------------
 --
 -- Function get_system_EBrepo_dir( osarch, stack_name, stack_version )
+-- Function get_user_EBrepo_dir( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -991,7 +1053,7 @@ end
 -- system installation, versus the user installation.
 --
 
-function get_system_EBrepo_dir( osarch, stack_name, stack_version )
+function get_EBrepo_dir_worker( osarch, stack_name, stack_version, dir_prefix )
 
     local use_version    -- Processed stack_version
     local prefix
@@ -1010,65 +1072,27 @@ function get_system_EBrepo_dir( osarch, stack_name, stack_version )
     end
 
     if use_version == 'system' then
-        prefix = 'EBrepo_files/system/'
+        return pathJoin( dir_prefix, 'EBrepo_files/system', osarch )
     else
-        prefix = 'EBrepo_files/'  .. ClusterMod_StackName .. '-' .. use_version .. '/'
-    end
-
-    return prefix .. osarch
-
-end
-
-
--- -----------------------------------------------------------------------------
---
--- Function get_user_module_dir( osarch, stack_name, stack_version )
--- Function get_user_module_dirs( osarch, stack_name, stack_version )
---
--- Input argument: 3
---   * The long os-and-architecture name
---   * Stack name, can be system or manual
---   * Stack version, not used when the stack name is system of manual
---
--- Return argument: 1
---   * get_user_module_dir: Module subdirectory in the user root (not including
---     the user root) corresponding to the given stack and architecture.
---   * get_user_module_dirs: Module directories, starting from the user root,
---     corresponding to the given stack and architecture and with the most generic 
---     one first.
---
--- Note `system` in the name does not denote the `system` stack but the whole
--- system installation, versus the user installation.
---
-
-function get_user_module_dir( osarch, stack_name, stack_version )
-
-    local system_dir = get_system_module_dir( osarch, stack_name, stack_version )
-
-    if system_dir == nil then
-        return nil
-    else
-        local user_dir =  system_dir:gsub( '^modules%-easybuild', 'modules' )
-        return user_dir
+        return pathJoin( dir_prefix, 'EBrepo_files',  ClusterMod_StackName .. '-' .. use_version, osarch )
     end
 
 end
 
 
-function get_user_module_dirs( osarch, stack_name, stack_version )
+function get_system_EBrepo_dir( osarch, stack_name, stack_version )
 
-    local system_dirs = get_system_module_dirs( osarch, stack_name, stack_version )
+    local dir_prefix = pathJoin( get_system_install_root(), 'mgmt' )
 
-    if system_dirs == nil then
-        return nil
-    else
-        local result = {}
-        for index, dir in ipairs( system_dirs )
-        do
-            local user_dir = dir:gsub( '^modules%-easybuild', 'modules' )
-            table.insert( result, user_dir )
-        end
-        return result
-    end
+    return get_EBrepo_dir_worker( osarch, stack_name, stack_version, dir_prefix )
+
+end
+
+
+function get_user_EBrepo_dir( osarch, stack_name, stack_version )
+
+    local dir_prefix = get_user_install_root()
+
+    return get_EBrepo_dir_worker( osarch, stack_name, stack_version, dir_prefix )
 
 end
