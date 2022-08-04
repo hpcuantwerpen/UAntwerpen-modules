@@ -1843,28 +1843,55 @@ the <code>system</code> stack which may be 2L or 3L.</p>
 <h4 id="computing-directories">Computing directories</h4>
 <ul>
 <li>
-<p><code>get_system_module_dir</code>: Compute the system module directory from the three input arguments:
-    long os-and-architecture name, stack name and stack version.</p>
-<p>The directory name returned is relative from the installation root, with the most
-generic one first.</p>
+<p><code>get_system_module_dir( osarch, stack_name, stack_version )</code>: Compute the system module directory 
+    from the three input arguments: long os-and-architecture name, stack name and stack version.</p>
+<p>The directory name is an absolute path.</p>
 <p>Note <code>system</code> in the name does not denote the <code>system</code> stack but the whole
 system installation, versus the user installation.</p>
 </li>
 <li>
-<p><code>get_system_module_dirs</code>: Compute the system module directory hierarchy from the three input
-    arguments: long os-and-architecture name, stack name and stack version.</p>
-<p>The directory names returned are relative from the installation root, with the most
+<p><code>get_system_module_dirs( osarch, stack_name, stack_version )</code>: Compute the system module directory 
+    hierarchy from the three input arguments: long os-and-architecture name, stack name and stack version.</p>
+<p>The directory names returned are absolute paths, with the most
 generic one first.</p>
 </li>
 <li>
-<p><code>get_user_module_dir</code>: Similar to <code>get_system_module_dir</code> but then for the
-    modules in the user module tree and hence the subdirectory that should go on top
-    of the user install root.</p>
+<p><code>get_user_module_dir( osarch, stack_name, stack_version )</code>: 
+    Similar to <code>get_system_module_dir</code> but then for the modules in the user module tree.</p>
 </li>
 <li>
-<p><code>get_user_module_dirs</code>: Similar to <code>get_system_module_dirs</code> but then for the
-    modules in the user module tree and hence the subdirectories that should go on top
-    of the user install root.</p>
+<p><code>get_user_module_dirs( osarch, stack_name, stack_version )</code>: 
+    Similar to <code>get_system_module_dirs</code> but then for the modules in the user module tree.</p>
+</li>
+<li>
+<p><code>get_system_inframodule_dir( osarch, stack_name, stack_version )</code>: Get the 
+    infrastructure module directory for the given architecture, stack name and stack
+    version. The function returns the absolute path: The system installation root is 
+    obtained via the <code>get_system_install_root</code> function.</p>
+</li>
+<li>
+<p><code>get_system_SW_dir( osarch, stack_name, stack_version )</code>: Get the system software
+    installation directory for the given architecture, stack name and stack version.
+    The function returns the absolute path: The system installation root is 
+    obtained via the <code>get_system_install_root</code> function.</p>
+</li>
+<li>
+<p><code>get_user_SW_dir( osarch, stack_name, stack_version )</code>: Get the user software
+    installation directory for the given architecture, stack name and stack version.
+    The function returns the absolute path: The user installation root is 
+    obtained via the <code>get_user_install_root</code> function.</p>
+</li>
+<li>
+<p><code>get_system_EBrepo_dir( osarch, stack_name, stack_version )</code>: Get the system EasyBuild
+    repo directory for the given architecture, stack name and stack version. The function
+    returns the absolute path; the system installation root is obtained via the 
+    <code>get_system_install_root</code> function.</p>
+</li>
+<li>
+<p><code>get_user_EBrepo_dir( osarch, stack_name, stack_version )</code>: Get the user EasyBuild
+    repo directory for the given architecture, stack name and stack version. The function
+    returns the absolute path; the user installation root is obtained via the 
+    <code>get_user_install_root</code> function.</p>
 </li>
 </ul>
 <h4 id="miscellaneous-functions">Miscellaneous functions</h4>
@@ -2081,7 +2108,7 @@ but you'll never know.</p>
     needed.</p>
 </li>
 <li>
-<p>'get_user_prefix_EasyBuild': Compute the directory for the EasyBuild user installation,
+<p>'get_user_install_root': Compute the directory for the EasyBuild user installation,
     or nil if that is explicitly turned off by setting <code>EBU_USER_PREFIX</code> to an empty string.</p>
 </li>
 </ul>
@@ -2091,7 +2118,7 @@ but you'll never know.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 4, 2022</span>
       
     
   </small>
