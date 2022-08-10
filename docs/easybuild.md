@@ -106,4 +106,53 @@ test stack in a different file system.
         used by `production` to the sources path so that sources that are already on the
         system don't need to be downloaded again.
     
+-   Robot search path.
+
+    -   The goal of our settings is that we ensure as much as possible that for installed modules
+        EasyBuild will find the EasyConfig used for that install. Therefore we put the repository
+        of installed EasyConfigs first in the robot path, even though that is not commonly done.
+
+        This does have a negative aspect also though: When re-installing a module after a change
+        to the EasyConfig, we need to re-install each package that needs to be reinstalled by hand 
+        from the directory of the corresponding EasyConfig, or the old one in the repository will be
+        used instead.
+
+    -   We use the `EASYBUILD_ROBOT_PATHS` environment variable so that dependency resolution is
+        not turned on by default and the `-r` option remains available for users to add additional
+        directories to the front of the search path.
+
+    -   After that comes the default name for the user repository, if present and if the `user`
+        module is being loaded.
+
+    -   Next comes the system repository as can be obtained from `etc/SystemDefinition.lua`.
+
+    -   Next we add the default EasyBuilders repository.
+
+-   EasyConfig search path for `-S` and `--search`: No additional directories are used at the moment. 
+    This can be changed should we chose to pull in additional repositories.
+
+-   EasyBlocks:
+
+    -   In user mode, if there is a user repository and if it contains an easyblocks subdirectory, then
+        that one has the highest priority (but looks like it has to go at the end of the list).
+
+    -   In all modes, the next highest priority are the EasyBlocks in the `easyblocks` subdirectory in the
+        system EasyBuild repository.
+
+    -   Last in line are the EasyBlocks from the EasyBuild distribution that is being used.
+
+-   Configuration files: These are in the `easybuild/config` subdirectory of the system repo and the similar
+    subdirectory in `UserRepo` of the user installation.
+
+    In the order in which they should be read, so the later one wins on the earlier ones:
+
+    1.  In all modes, `easybuild-production.cfg`
+
+    2.  In `user` mode only, `easybuild-user.cfg`
+
+    3.  In all modes, `easybuild-production-<stackname>-<stackversion>.cfg` where the stack name for the `system`
+        version is also the regular stack name.
+
+    4.  In `user` mode, `easybuild-user-<stackname>-<stackversion>.cfg` 
+
 
