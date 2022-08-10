@@ -52,7 +52,6 @@ function get_configuration( )
 end
 
 
-
 -- -----------------------------------------------------------------------------
 --
 -- function get_motd
@@ -151,7 +150,7 @@ end
 -- Register in the sandbox
 --
 sandbox_registration{
-    ['get_configuration']             = get_configuration,
+    ['get_configuration']             = get_configuration,              -- Defined in this file
 --    ['get_hostname']                  = get_hostname,
     ['get_clustername']               = get_clustername,                -- Defined in SitePackage_system_info
     ['get_motd']                      = get_motd,                       -- Defined in SitePackage

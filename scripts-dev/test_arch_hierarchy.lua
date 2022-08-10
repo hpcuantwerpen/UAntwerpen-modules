@@ -1896,7 +1896,7 @@ for _,test in ipairs( tests )
 do
     local got = get_system_inframodule_dir( test['longname'], test['stack_name'], test['stack_version'] )
     print( testresult( got == test['expected']  ) ..
-           'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
+           'Infrastructure odules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
 end
 
 
@@ -1944,7 +1944,7 @@ for _,test in ipairs( tests )
 do
     local got = get_system_SW_dir( test['longname'], test['stack_name'], test['stack_version'] )
     print( testresult( got == test['expected']  ) ..
-           'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
+           'Software installations of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
 end
 
 
@@ -1992,7 +1992,7 @@ for _,test in ipairs( tests )
 do
     local got = get_user_SW_dir( test['longname'], test['stack_name'], test['stack_version'] )
     print( testresult( got == test['expected']  ) ..
-           'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
+           'Software installations of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
 end
 
 
@@ -2009,39 +2009,277 @@ function get_system_install_root()
 
 end
 
-tests = {
-    {
-        ['stack_name']    = 'calcua',
-        ['stack_version'] = '2021b',
-        ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-zen2-arcturus',
+local tests = {
+   -- system
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat7-x86_64',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/system/redhat7-x86_64',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/system/redhat7-x86_64'
+   },
+   {   -- This one should work as we must also be able to generate the module directories for subarchitectures.
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat8-x86_64',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/system/redhat8-x86_64',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/system/redhat8-x86_64'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat8-broadwell-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/system/redhat8-broadwell-noaccel', -- system for redhat8 has specific CPU support
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/system/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/system/redhat8-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/system/redhat8-zen2-noaccel', -- system for redhat8 has specific CPU support
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/system/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/system/redhat8-zen2-noaccel'
+   },
+   -- 2020a
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat7-ivybridge-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat7-ivybridge-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat7-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat7-ivybridge-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat7-broadwell-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat7-broadwell-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat7-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat7-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat8-zen2-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat8-zen2-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat8-skylake-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat8-skylake-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2020a/redhat8-skylake-noaccel'
+   },
+   -- 2021b
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat7-ivybridge-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat7-ivybridge-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat7-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat7-ivybridge-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat8-broadwell-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-broadwell-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-zen2-arcturus',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-zen2-arcturus'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-zen2-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-zen2-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat8-skylake-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-skylake-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-skylake-noaccel'
+   },
+   -- 3000a
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat7-x86_64',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-x86_64',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-x86_64'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat7-ivybridge',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-ivybridge',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-ivybridge'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat7-ivybridge-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-ivybridge-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-ivybridge,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat7-ivybridge-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat8-broadwell-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-broadwell-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-broadwell,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-zen2-arcturus',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-zen2,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-zen2-arcturus'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-zen2-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-zen2,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-zen2-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat8-skylake-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-skylake-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-skylake,<SYSROOT>/mgmt/EBrepo_files/calcua-3000a/redhat8-skylake-noaccel'
+   },
+   -- 4000a
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-x86_64',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-x86_64',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-x86_64'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-broadwell',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-broadwell',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-broadwell'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-broadwell-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-broadwell-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-broadwell,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-zen2-arcturus',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-zen2,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-zen2-arcturus'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-zen2-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-zen2,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-zen2-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-skylake-noaccel',
+       ['own_repo'] =      '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-skylake-noaccel',
+       ['full_repo'] =     '<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-x86_64,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-skylake,<SYSROOT>/mgmt/EBrepo_files/calcua-4000a/redhat8-skylake-noaccel'
+   },
+   -- Cases that should print error messages.
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat7-broadwell-noaccel',
+       ['own_repo'] =      nil, -- system for redhat7 exists only in an x86_64 version.
+       ['full_repo'] =     nil
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      nil, -- system for redhat8 has specific CPU support but no GPU support.
+       ['full_repo'] =     nil
     },
-    {
-        ['stack_name']    = 'calcua',
-        ['stack_version'] = '2021b',
-        ['longname']      = 'redhat8-x86_64',
-        ['expected']      = '<SYSROOT>/mgmt/EBrepo_files/calcua-2021b/redhat8-x86_64',
+    { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat8-zen2',
+       ['own_repo'] =      nil, -- 2L scheme so this level is not present.
+       ['full_repo'] =     nil
     },
-    {
-        ['stack_name']    = 'calcua',
-        ['stack_version'] = 'system',
-        ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = '<SYSROOT>/mgmt/EBrepo_files/system/redhat8-zen2-arcturus',
+    { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat7-ivybridge-noaccel',
+       ['own_repo'] =      nil, -- No redhat7 software in 4000a.
+       ['full_repo'] =     nil
     },
-    {
-        ['stack_name']    = 'manual',
-        ['stack_version'] = '',
-        ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = nil,
+    { 
+       ['stack_name'] =    'manual',
+       ['stack_version'] = '',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      nil, -- No modules for manual.
+       ['full_repo'] =     nil
     },
-}
+    { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'manual',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      nil, -- No modules for manual.
+       ['full_repo'] =     nil
+    },
+} 
 
 for _,test in ipairs( tests )
 do
-    local got = get_system_EBrepo_dir( test['longname'], test['stack_name'], test['stack_version'] )
-    print( testresult( got == test['expected']  ) ..
-           'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
+    local hierarchy
+    if ClusterMod_SystemProperties[test['stack_version']] == nil then
+        -- Needed for manual.
+        hierarchy = '*'
+    else
+        hierarchy =          ClusterMod_SystemProperties[test['stack_version']]['hierarchy']
+    end
+    local system_repo_dir =  get_system_EBrepo_dir(  test['longname'], test['stack_name'], test['stack_version'] )
+    local system_repo_dirs = get_system_EBrepo_dirs( test['longname'], test['stack_name'], test['stack_version'] )
+    local string_system_repo_dirs
+    if system_repo_dirs == nil then
+        string_system_repo_dirs = nil
+    else
+        string_system_repo_dirs = table.concat( system_repo_dirs, ',')
+    end
+    print( testresult( system_repo_dir == test['own_repo'] and string_system_repo_dirs == test['full_repo'] ) ..
+           'System EasyConfig repository files of ' .. test['stack_name'] .. '/' .. test['stack_version'] ..
+           ' (' .. hierarchy .. ') for arch ' .. test['longname'] .. 
+           ' are in \n      ' .. ( system_repo_dir or 'nil' ) )
+           
+    if system_repo_dirs == nil then
+        print(  '    Full hierarchy (lowest priority first):\n      nil' )
+    else
+        print(  '    Full hierarchy (lowest priority first):\n      ' ..
+                table.concat( system_repo_dirs, '\n      ') )
+    end
+    if system_repo_dir ~= test['own_repo'] then
+        print( '    Expected repo dir: ' .. ( test['own_repo'] or 'nil' )  )
+    end
+    if string_system_repo_dirs ~= test['full_repo'] then
+        print( '    Expected full hierarchy: ' .. (test['full_repo'] or ''):gsub(',', ', ') )
+    end
+    print( '\n' )
+         
 end
+
 
 
 -- -----------------------------------------------------------------------------
@@ -2057,38 +2295,275 @@ function get_user_install_root()
 
 end
 
-tests = {
-    {
-        ['stack_name']    = 'calcua',
-        ['stack_version'] = '2021b',
-        ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-zen2-arcturus',
+local tests = {
+   -- system
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat7-x86_64',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/system/redhat7-x86_64',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/system/redhat7-x86_64'
+   },
+   {   -- This one should work as we must also be able to generate the module directories for subarchitectures.
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat8-x86_64',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/system/redhat8-x86_64',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/system/redhat8-x86_64'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat8-broadwell-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/system/redhat8-broadwell-noaccel', -- system for redhat8 has specific CPU support
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/system/redhat8-x86_64,<USERROOT>/EBrepo_files/system/redhat8-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/system/redhat8-zen2-noaccel', -- system for redhat8 has specific CPU support
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/system/redhat8-x86_64,<USERROOT>/EBrepo_files/system/redhat8-zen2-noaccel'
+   },
+   -- 2020a
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat7-ivybridge-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2020a/redhat7-ivybridge-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2020a/redhat7-x86_64,<USERROOT>/EBrepo_files/calcua-2020a/redhat7-ivybridge-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat7-broadwell-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2020a/redhat7-broadwell-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2020a/redhat7-x86_64,<USERROOT>/EBrepo_files/calcua-2020a/redhat7-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2020a/redhat8-zen2-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2020a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-2020a/redhat8-zen2-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat8-skylake-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2020a/redhat8-skylake-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2020a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-2020a/redhat8-skylake-noaccel'
+   },
+   -- 2021b
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat7-ivybridge-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2021b/redhat7-ivybridge-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2021b/redhat7-x86_64,<USERROOT>/EBrepo_files/calcua-2021b/redhat7-ivybridge-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat8-broadwell-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-broadwell-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-2021b/redhat8-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-zen2-arcturus',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-2021b/redhat8-zen2-arcturus'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-zen2-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-2021b/redhat8-zen2-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2021b',
+       ['longname'] =      'redhat8-skylake-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-skylake-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-2021b/redhat8-skylake-noaccel'
+   },
+   -- 3000a
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat7-x86_64',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-3000a/redhat7-x86_64',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-3000a/redhat7-x86_64'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat7-ivybridge',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-3000a/redhat7-ivybridge',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-3000a/redhat7-x86_64,<USERROOT>/EBrepo_files/calcua-3000a/redhat7-ivybridge'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat7-ivybridge-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-3000a/redhat7-ivybridge-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-3000a/redhat7-x86_64,<USERROOT>/EBrepo_files/calcua-3000a/redhat7-ivybridge,<USERROOT>/EBrepo_files/calcua-3000a/redhat7-ivybridge-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat8-broadwell-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-3000a/redhat8-broadwell-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-3000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-3000a/redhat8-broadwell,<USERROOT>/EBrepo_files/calcua-3000a/redhat8-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =   '<USERROOT>/EBrepo_files/calcua-3000a/redhat8-zen2-arcturus',
+       ['full_repo'] =  '<USERROOT>/EBrepo_files/calcua-3000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-3000a/redhat8-zen2,<USERROOT>/EBrepo_files/calcua-3000a/redhat8-zen2-arcturus'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =   '<USERROOT>/EBrepo_files/calcua-3000a/redhat8-zen2-noaccel',
+       ['full_repo'] =  '<USERROOT>/EBrepo_files/calcua-3000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-3000a/redhat8-zen2,<USERROOT>/EBrepo_files/calcua-3000a/redhat8-zen2-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '3000a',
+       ['longname'] =      'redhat8-skylake-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-3000a/redhat8-skylake-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-3000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-3000a/redhat8-skylake,<USERROOT>/EBrepo_files/calcua-3000a/redhat8-skylake-noaccel'
+   },
+   -- 4000a
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-x86_64',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-x86_64',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-x86_64'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-broadwell',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-broadwell',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-broadwell'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-broadwell-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-broadwell-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-broadwell,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-broadwell-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-zen2-arcturus',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-zen2,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-zen2-arcturus'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-zen2-noaccel',
+       ['own_repo'] =      '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-zen2-noaccel',
+       ['full_repo'] =     '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-zen2,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-zen2-noaccel'
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat8-skylake-noaccel',
+       ['own_repo'] =   '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-skylake-noaccel',
+       ['full_repo'] =  '<USERROOT>/EBrepo_files/calcua-4000a/redhat8-x86_64,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-skylake,<USERROOT>/EBrepo_files/calcua-4000a/redhat8-skylake-noaccel'
+   },
+   -- Cases that should print error messages.
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat7-broadwell-noaccel',
+       ['own_repo'] =   nil, -- system for redhat7 exists only in an x86_64 version.
+       ['full_repo'] =  nil
+   },
+   { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'system',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      nil, -- system for redhat8 has specific CPU support but no GPU support.
+       ['full_repo'] =     nil
     },
-    {
-        ['stack_name']    = 'calcua',
-        ['stack_version'] = '2021b',
-        ['longname']      = 'redhat8-x86_64',
-        ['expected']      = '<USERROOT>/EBrepo_files/calcua-2021b/redhat8-x86_64',
+    { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '2020a',
+       ['longname'] =      'redhat8-zen2',
+       ['own_repo'] =      nil, -- 2L scheme so this level is not present.
+       ['full_repo'] =     nil
     },
-    {
-        ['stack_name']    = 'calcua',
-        ['stack_version'] = 'system',
-        ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = '<USERROOT>/EBrepo_files/system/redhat8-zen2-arcturus',
+    { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = '4000a',
+       ['longname'] =      'redhat7-ivybridge-noaccel',
+       ['own_repo'] =      nil, -- No redhat7 software in 4000a.
+       ['full_repo'] =     nil
     },
-    {
-        ['stack_name']    = 'manual',
-        ['stack_version'] = '',
-        ['longname']      = 'redhat8-zen2-arcturus',
-        ['expected']      = nil,
+    { 
+       ['stack_name'] =    'manual',
+       ['stack_version'] = '',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      nil, -- No modules for manual.
+       ['full_repo'] =     nil
     },
-}
+    { 
+       ['stack_name'] =    'calcua',
+       ['stack_version'] = 'manual',
+       ['longname'] =      'redhat8-zen2-arcturus',
+       ['own_repo'] =      nil, -- No modules for manual.
+       ['full_repo'] =     nil
+    },
+} 
 
 for _,test in ipairs( tests )
 do
-    local got = get_user_EBrepo_dir( test['longname'], test['stack_name'], test['stack_version'] )
-    print( testresult( got == test['expected']  ) ..
-           'Modules of ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' are in \n  ' .. ( got or 'NIL' )  ..'\n' )
+    local hierarchy
+    if ClusterMod_SystemProperties[test['stack_version']] == nil then
+        -- Needed for manual.
+        hierarchy = '*'
+    else
+        hierarchy =          ClusterMod_SystemProperties[test['stack_version']]['hierarchy']
+    end
+    local user_repo_dir =  get_user_EBrepo_dir(  test['longname'], test['stack_name'], test['stack_version'] )
+    local user_repo_dirs = get_user_EBrepo_dirs( test['longname'], test['stack_name'], test['stack_version'] )
+    local string_user_repo_dirs
+    if user_repo_dirs == nil then
+        string_user_repo_dirs = nil
+    else
+        string_user_repo_dirs = table.concat( user_repo_dirs, ',')
+    end
+    print( testresult( user_repo_dir == test['own_repo'] and string_user_repo_dirs == test['full_repo'] ) ..
+           'User EasyConfig repository files of ' .. test['stack_name'] .. '/' .. test['stack_version'] ..
+           ' (' .. hierarchy .. ') for arch ' .. test['longname'] .. 
+           ' are in \n      ' .. ( user_repo_dir or 'nil' ) )
+           
+    if user_repo_dirs == nil then
+        print(  '    Full hierarchy (lowest priority first):\n      nil' )
+    else
+        print(  '    Full hierarchy (lowest priority first):\n      ' ..
+                table.concat( user_repo_dirs, '\n      ') )
+    end
+    if user_repo_dir ~= test['own_repo'] then
+        print( '    Expected repo dir: ' .. ( test['own_repo'] or 'nil' )  )
+    end
+    if string_user_repo_dirs ~= test['full_repo'] then
+        print( '    Expected full hierarchy: ' .. (test['full_repo'] or ''):gsub(',', ', ') )
+    end
+    print( '\n' )
+         
 end
 
 

@@ -787,154 +787,6 @@ end
 
 -- -----------------------------------------------------------------------------
 --
--- Function get_system_module_dir( osarch, stack_name, stack_version )
--- Function get_system_module_dirs( osarch, stack_name, stack_version )
--- Function get_user_module_dir( osarch, stack_name, stack_version )
--- Function get_user_module_dirs( osarch, stack_name, stack_version )
---
--- Input argument: 3
---   * The long os-and-architecture name
---   * Stack name, can be system or manual
---   * Stack version, not used when the stack name is system of manual
---
--- Return argument: 1
---   * get_system_module_dir: Module directory in the system installation for the
---     given architecture and stack. Absolute paths.
---   * get_system_module_dirs: All regular modular directories in the system
---     installation for the given architecture and stack, and relevant
---     subarchitectures, with the most generic architecture first.
---   * get_user_module_dir: As get_system_module_dir, but then for the user 
---     installation .
---   * get_user_module_dirs: As get_system_module_dirs, but now for the user
---     installation.
---
--- Note `system` in the name does not denote the `system` stack but the whole
--- system installation, versus the user installation.
---
-
-function get_stack_module_dir_worker( osarch, stack_version, module_prefix )
-
-    -- Worker function without any error control. The error control is done
-    -- by get_system_module_dir and get_system_module_dirs.
-
-    local prefix
-
-    if stack_version == 'system' or stack_version == 'manual' then
-        prefix = module_prefix .. '/' .. stack_version .. '/'
-    else
-        prefix = module_prefix .. '/' .. ClusterMod_StackName  .. '-' .. stack_version .. '/'
-    end
-
-    return prefix .. osarch
-
-end
-
-function get_module_dir_worker( osarch, stack_name, stack_version, module_prefix, routine_name )
-
-    local use_version    -- Processed stack_version
-    local prefix
-
-    if stack_name == 'manual' or stack_version == 'manual' then
-        -- No EasyBuild modules for manually installed software
-        return nil
-    elseif stack_name == ClusterMod_StackName then
-        use_version = stack_version
-    elseif ( stack_name == 'system' ) then
-        use_version = stack_name
-    else
-        -- Error condition, not known how to treat this stack
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_' .. routine_name .. '_module_dir: Illegal input arguments\n' )
-        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
-    end
-
-    -- Check if the input osarch is valid in the cluster definition.
-    populate_cache_subosarchs( use_version )
-    if ClusterMod_cache_subosarchs[use_version][osarch] ~= true then
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_' .. routine_name .. '_module_dir: ' .. (osarch or 'nil') .. 
-                   ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
-        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
-    end
-
-    return get_stack_module_dir_worker( osarch, use_version, module_prefix )
-
-end
-
-function get_module_dirs_worker( osarch, stack_name, stack_version, module_prefix, routine_name )
-
-    local use_version    -- Processed stack_version
-    local result
-    local all_archs
-    local prefix
-
-    if stack_name == 'manual' or stack_version == 'manual' then
-        -- No EasyBuild modules for manually installed software
-        return nil
-    elseif stack_name == ClusterMod_StackName then
-        use_version = stack_version
-    elseif ( stack_name == 'system' ) or ( stack_name == 'manual' ) then
-        use_version = stack_name
-    else
-        -- Error condition, not known how to treat this stack
-        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_' .. routine_name .. '_module_dirs: Illegal input arguments\n' )
-        return nil
-    end
-
-    -- Check if the input osarch is valid in the cluster definition.
-    populate_cache_subosarchs( use_version )
-    if ClusterMod_cache_subosarchs[use_version][osarch] ~= true then
-        LmodError( 'LMOD/SitePackage_arch_hierarchy: get_' .. routine_name .. '_module_dirs: ' .. (osarch or 'nil') .. 
-                   ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
-        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
-    end
-
-    result = {}
-    for index, os_arch_accel in ipairs( get_stack_subarchs( osarch, use_version ) )
-    do
-        table.insert( result, get_stack_module_dir_worker( os_arch_accel, use_version, module_prefix ) )
-    end
-
-    return result
-
-end
-
-
-function get_system_module_dir( osarch, stack_name, stack_version )
-
-    local prefix = pathJoin( get_system_install_root(), 'modules-easybuild' )
-
-    return get_module_dir_worker( osarch, stack_name, stack_version, prefix, 'get_system_module_dir' )
-
-end
-
-
-function get_system_module_dirs( osarch, stack_name, stack_version )
-
-    local prefix = pathJoin( get_system_install_root(), 'modules-easybuild' )
-
-    return get_module_dirs_worker( osarch, stack_name, stack_version, prefix, 'get_system_module_dirs' )
-
-end
-
-function get_user_module_dir( osarch, stack_name, stack_version )
-
-    local prefix = pathJoin( get_user_install_root(), 'modules' )
-
-    return get_module_dir_worker( osarch, stack_name, stack_version, prefix, 'get_user_module_dir' )
-
-end
-
-
-function get_user_module_dirs( osarch, stack_name, stack_version )
-
-    local prefix = pathJoin( get_user_install_root(), 'modules' )
-
-    return get_module_dirs_worker( osarch, stack_name, stack_version, prefix, 'get_user_module_dirs' )
-
-end
-
-
--- -----------------------------------------------------------------------------
---
 -- Function get_system_inframodule_dir( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
@@ -971,6 +823,272 @@ function get_system_inframodule_dir( osarch, stack_name, stack_version )
     return pathJoin( get_system_install_root(), prefix, stack_name, stack_version, 'arch', osarch )
 
 end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_system_module_dir( osarch, stack_name, stack_version )
+-- Function get_system_module_dirs( osarch, stack_name, stack_version )
+-- Function get_user_module_dir( osarch, stack_name, stack_version )
+-- Function get_user_module_dirs( osarch, stack_name, stack_version )
+--
+-- Input argument: 3
+--   * The long os-and-architecture name
+--   * Stack name, can be system or manual
+--   * Stack version, not used when the stack name is system of manual
+--
+-- Return argument: 1
+--   * get_system_module_dir: Module directory in the system installation for the
+--     given architecture and stack. Absolute paths.
+--   * get_system_module_dirs: All regular modular directories in the system
+--     installation for the given architecture and stack, and relevant
+--     subarchitectures, with the most generic architecture first.
+--   * get_user_module_dir: As get_system_module_dir, but then for the user 
+--     installation .
+--   * get_user_module_dirs: As get_system_module_dirs, but now for the user
+--     installation.
+--
+-- Note `system` in the name does not denote the `system` stack but the whole
+-- system installation, versus the user installation.
+--
+
+--
+-- First to functions that will also be used by the corresponding EBrepo functions to ensure
+-- that the repository directories and module directories correspond.
+--
+function get_module_dir_worker( osarch, stack_name, stack_version, module_prefix, routine_name, dir_generator )
+
+    local use_version    -- Processed stack_version
+    local prefix
+
+    if stack_name == 'manual' or stack_version == 'manual' then
+        -- No EasyBuild modules for manually installed software
+        return nil
+    elseif stack_name == ClusterMod_StackName then
+        use_version = stack_version
+    elseif ( stack_name == 'system' ) then
+        use_version = stack_name
+    else
+        -- Error condition, not known how to treat this stack
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: ' .. routine_name .. ': Illegal input arguments\n' )
+        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
+    end
+
+    -- Check if the input osarch is valid in the cluster definition.
+    populate_cache_subosarchs( use_version )
+    if ClusterMod_cache_subosarchs[use_version][osarch] ~= true then
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: ' .. routine_name .. ': ' .. (osarch or 'nil') .. 
+                   ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
+        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
+    end
+
+    return dir_generator( osarch, use_version, module_prefix )
+
+end
+
+function get_module_dirs_worker( osarch, stack_name, stack_version, module_prefix, routine_name, dir_generator )
+
+    local use_version    -- Processed stack_version
+    local result
+    local all_archs
+    local prefix
+
+    if stack_name == 'manual' or stack_version == 'manual' then
+        -- No EasyBuild modules for manually installed software
+        return nil
+    elseif stack_name == ClusterMod_StackName then
+        use_version = stack_version
+    elseif ( stack_name == 'system' ) or ( stack_name == 'manual' ) then
+        use_version = stack_name
+    else
+        -- Error condition, not known how to treat this stack
+        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: ' .. routine_name .. ': Illegal input arguments\n' )
+        return nil
+    end
+
+    -- Check if the input osarch is valid in the cluster definition.
+    populate_cache_subosarchs( use_version )
+    if ClusterMod_cache_subosarchs[use_version][osarch] ~= true then
+        LmodError( 'LMOD/SitePackage_arch_hierarchy: ' .. routine_name .. ': ' .. (osarch or 'nil') .. 
+                   ' is not a valid architecture for stack ' .. stack_name .. '/' .. stack_version )
+        return nil -- Return value is only useful for the test code as otherwise LmodError stops executing the module code.
+    end
+
+    result = {}
+    for index, os_arch_accel in ipairs( get_stack_subarchs( osarch, use_version ) )
+    do
+        table.insert( result, dir_generator( os_arch_accel, use_version, module_prefix ) )
+    end
+
+    return result
+
+end
+
+
+function get_module_dir_generator( osarch, stack_version, module_prefix )
+
+    -- Worker function without any error control. The error control is done
+    -- by get_system_module_dir and get_system_module_dirs.
+
+    local prefix
+
+    if stack_version == 'system' or stack_version == 'manual' then
+        prefix = module_prefix .. '/' .. stack_version .. '/'
+    else
+        prefix = module_prefix .. '/' .. ClusterMod_StackName  .. '-' .. stack_version .. '/'
+    end
+
+    return prefix .. osarch
+
+end
+
+
+function get_system_module_dir( osarch, stack_name, stack_version )
+
+    local prefix = pathJoin( get_system_install_root(), 'modules-easybuild' )
+
+    return get_module_dir_worker( osarch, stack_name, stack_version, prefix, 'get_system_module_dir', get_module_dir_generator )
+
+end
+
+
+function get_system_module_dirs( osarch, stack_name, stack_version )
+
+    local prefix = pathJoin( get_system_install_root(), 'modules-easybuild' )
+
+    return get_module_dirs_worker( osarch, stack_name, stack_version, prefix, 'get_system_module_dirs', get_module_dir_generator )
+
+end
+
+function get_user_module_dir( osarch, stack_name, stack_version )
+
+    local prefix = pathJoin( get_user_install_root(), 'modules' )
+
+    return get_module_dir_worker( osarch, stack_name, stack_version, prefix, 'get_user_module_dir', get_module_dir_generator )
+
+end
+
+
+function get_user_module_dirs( osarch, stack_name, stack_version )
+
+    local prefix = pathJoin( get_user_install_root(), 'modules' )
+
+    return get_module_dirs_worker( osarch, stack_name, stack_version, prefix, 'get_user_module_dirs', get_module_dir_generator )
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_system_EBrepo_dir( osarch, stack_name, stack_version )
+-- Function get_system_EBrepo_dirs( osarch, stack_name, stack_version )
+-- Function get_user_EBrepo_dir( osarch, stack_name, stack_version )
+-- Function get_user_EBrepo_dirs( osarch, stack_name, stack_version )
+--
+-- Input argument: 3
+--   * The long os-and-architecture name
+--   * Stack name, can be system or manual
+--   * Stack version, not used when the stack name is system of manual
+--
+-- Return argument: 1
+--   * get_system_EBrepo_dir: subdirectory in the EBrepo_files subdirectory
+--     for installed system EasyConfigs for the corresponding architecture in 
+--     for the given architecture and stack (name/version)
+--   * get_system_EBrepo_dirs: All relevant subdirectories in the EBrepo_files
+--     subdirectory for installed system EasyConfigs for the corresponding
+--     architecture and parent architectures for the given architecture
+--     and stack (name/version), with the most generic one first.
+--   * get_user_EBrepo_dir: subdirectory in the EBrepo_files subdirectory
+--     for installed user EasyConfigs for the corresponding architecture in 
+--     for the given architecture and stack (name/version)
+--   * get_user_EBrepo_dirs: All relevant subdirectories in the EBrepo_files
+--     subdirectory for installed user EasyConfigs for the corresponding
+--     architecture and parent architectures for the given architecture
+--     and stack (name/version), with the most generic one first.
+--
+
+function get_EBrepo_dir_worker_BAD( osarch, stack_name, stack_version, dir_prefix )
+
+    local use_version    -- Processed stack_version
+    local prefix
+
+    if stack_name == 'manual' or stack_version == 'manual' then
+        -- No EBrepo directory for this stack
+        return nil
+    elseif stack_name == ClusterMod_StackName then
+        use_version = stack_version
+    elseif ( stack_name == 'system' ) then
+        use_version = stack_name
+    else
+        -- Error condition, not known how to treat this stack
+        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
+        return nil
+    end
+
+    if use_version == 'system' then
+        return pathJoin( dir_prefix, 'EBrepo_files/system', osarch )
+    else
+        return pathJoin( dir_prefix, 'EBrepo_files',  ClusterMod_StackName .. '-' .. use_version, osarch )
+    end
+
+end
+
+
+function get_EBroot_dir_generator( osarch, stack_version, dir_prefix )
+
+    -- Worker function without full error control. The error control is done
+    -- by get_system_module_dir_worker and get_system_module_dirs_worker.
+
+    local prefix
+
+    if stack_name == 'manual' or stack_version == 'manual' then
+        -- This function should actually not be called in this case, but just in case,
+        -- though it will likely produce an error message later on.
+        return nil 
+    elseif stack_version == 'system' then
+        return pathJoin( dir_prefix, 'EBrepo_files/system', osarch )
+    else
+        return pathJoin( dir_prefix, 'EBrepo_files',  ClusterMod_StackName .. '-' .. stack_version, osarch )
+    end
+
+end
+
+
+function get_system_EBrepo_dir( osarch, stack_name, stack_version )
+
+    local dir_prefix = pathJoin( get_system_install_root(), 'mgmt' )
+
+    return get_module_dir_worker( osarch, stack_name, stack_version, dir_prefix, 'get_system_EBrepo_dir', get_EBroot_dir_generator )
+
+end
+
+
+function get_system_EBrepo_dirs( osarch, stack_name, stack_version )
+
+    local dir_prefix = pathJoin( get_system_install_root(), 'mgmt' )
+
+    return get_module_dirs_worker( osarch, stack_name, stack_version, dir_prefix, 'get_system_EBrepo_dir', get_EBroot_dir_generator )
+
+end
+
+
+function get_user_EBrepo_dir( osarch, stack_name, stack_version )
+
+    local dir_prefix = get_user_install_root()
+
+    return get_module_dir_worker( osarch, stack_name, stack_version, dir_prefix, 'get_user_EBrepo_dir', get_EBroot_dir_generator )
+
+end
+
+
+function get_user_EBrepo_dirs( osarch, stack_name, stack_version )
+
+    local dir_prefix = get_user_install_root()
+
+    return get_module_dirs_worker( osarch, stack_name, stack_version, dir_prefix, 'get_user_EBrepo_dir', get_EBroot_dir_generator )
+
+end
+
 
 -- -----------------------------------------------------------------------------
 --
@@ -1036,63 +1154,3 @@ function get_user_SW_dir( osarch, stack_name, stack_version )
 end
 
 
--- -----------------------------------------------------------------------------
---
--- Function get_system_EBrepo_dir( osarch, stack_name, stack_version )
--- Function get_user_EBrepo_dir( osarch, stack_name, stack_version )
---
--- Input argument: 3
---   * The long os-and-architecture name
---   * Stack name, can be system or manual
---   * Stack version, not used when the stack name is system of manual
---
--- Return argument: 1
---   * Module directory in the EBrepo_files directory
---     corresponding to the given stack (starting from the EBrepo_files level)
--- Note `system` in the name does not denote the `system` stack but the whole
--- system installation, versus the user installation.
---
-
-function get_EBrepo_dir_worker( osarch, stack_name, stack_version, dir_prefix )
-
-    local use_version    -- Processed stack_version
-    local prefix
-
-    if stack_name == 'manual' or stack_version == 'manual' then
-        -- No EBrepo directory for this stack
-        return nil
-    elseif stack_name == ClusterMod_StackName then
-        use_version = stack_version
-    elseif ( stack_name == 'system' ) then
-        use_version = stack_name
-    else
-        -- Error condition, not known how to treat this stack
-        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
-        return nil
-    end
-
-    if use_version == 'system' then
-        return pathJoin( dir_prefix, 'EBrepo_files/system', osarch )
-    else
-        return pathJoin( dir_prefix, 'EBrepo_files',  ClusterMod_StackName .. '-' .. use_version, osarch )
-    end
-
-end
-
-
-function get_system_EBrepo_dir( osarch, stack_name, stack_version )
-
-    local dir_prefix = pathJoin( get_system_install_root(), 'mgmt' )
-
-    return get_EBrepo_dir_worker( osarch, stack_name, stack_version, dir_prefix )
-
-end
-
-
-function get_user_EBrepo_dir( osarch, stack_name, stack_version )
-
-    local dir_prefix = get_user_install_root()
-
-    return get_EBrepo_dir_worker( osarch, stack_name, stack_version, dir_prefix )
-
-end
