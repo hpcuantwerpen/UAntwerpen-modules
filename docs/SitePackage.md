@@ -842,6 +842,20 @@ of the formats with long names of `get_clusterarch`)
 Example return value: `redhat8` on systems with CentOS 8.x or Rocky Linux 8.x.
 
 
+#### 'get_system_install_root()`
+
+Get the root of the system installation via `etc/SoftwareStack.lua`. 
+
+This function is needed as modules have no direct access to the variables defined in
+that file.
+
+
+#### 'get_user_install_root()'
+
+Compute the directory for the EasyBuild user installation,
+or nil if that is explicitly turned off by setting `EBU_USER_PREFIX` to an empty string.
+
+
 ## SitePackage_helper.lua
 
 This file defines data structures derived from other data structures mentioned earlier
@@ -907,5 +921,3 @@ recomputing that data.
     effect of `mkdir -p`, so it can create multiple levels from the given directory if
     needed.
 
--   'get_user_install_root': Compute the directory for the EasyBuild user installation,
-    or nil if that is explicitly turned off by setting `EBU_USER_PREFIX` to an empty string.
