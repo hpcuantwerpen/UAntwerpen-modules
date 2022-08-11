@@ -856,6 +856,18 @@ Compute the directory for the EasyBuild user installation,
 or nil if that is explicitly turned off by setting `EBU_USER_PREFIX` to an empty string.
 
 
+#### `get_systemrepo_modules()`
+
+Returns the location of the repository with the module system code
+(the `repo_modules` variables from `etc/SoftwareStack.lua`).
+
+
+#### `get_systemrepo_easybuild()`
+
+Returns the location of the repository with the module system code
+(the `repo_easybuild` variables from `etc/SoftwareStack.lua`).
+
+
 ## SitePackage_helper.lua
 
 This file defines data structures derived from other data structures mentioned earlier

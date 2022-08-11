@@ -419,3 +419,34 @@ function get_user_install_root()
 
 end
 
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_systemrepo_modules
+--
+-- Returns the location of the repository with the module system code
+-- (the `repo_modules` variables from `etc/SoftwareStack.lua`).
+--
+
+function get_systemrepo_modules()
+
+    return repo_modules
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
+-- Function get_systemrepo_easybuild
+--
+-- Returns the location of the repository with the module system code
+-- (the `repo_easybuild` variables from `etc/SoftwareStack.lua`).
+--
+
+function get_systemrepo_easybuild()
+
+    return repo_easybuild
+
+end
+
+
