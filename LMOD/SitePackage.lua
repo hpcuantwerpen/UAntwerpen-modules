@@ -155,8 +155,12 @@ sandbox_registration{
     ['get_clustername']               = get_clustername,                -- Defined in SitePackage_system_info
     ['get_motd']                      = get_motd,                       -- Defined in SitePackage
     ['get_fortune']                   = get_fortune,                    -- Defined in SitePackage
-    ['get_system_install_root']       = get_system_install_root,        -- Defined in SitePackage_helper
-    ['get_user_install_root']         =get_user_install_root,           -- Defined in SitePackage_helper
+    ['get_system_install_root']       = get_system_install_root,        -- Defined in SitePackage_system_info
+    ['get_user_install_root']         = get_user_install_root,          -- Defined in SitePackage_system_info
+    ['get_systemrepo_modules']        = get_systemrepo_modules,         -- Defined in SitePackage_system_info
+    ['get_systemrepo_easybuild']      = get_systemrepo_easybuild,       -- Defined in SitePackage_system_info
+    ['get_clustername']               = get_clustername,                -- Defined in SitePackage_system_info
+    ['get_stackname']                 = get_stackname,                  -- Defined in SitePackage_system_info
     ['is_interactive']                = is_interactive,                 -- Defined in SitePackage
 --    ['get_cluster_osarch']            = get_cluster_osarch,
 --    ['get_clusterarch']               = get_clusterarch,
@@ -216,6 +220,7 @@ local mapT =
         ['modules%-infrastructure/StyleModifiers']  = 'Modify the module display style',
         ['modules%-infrastructure/stack$']          = 'Software stacks',
         ['modules%-infrastructure/arch/']           = 'Available architectures for the software stack _STACK_',
+        ['modules%-infrastructure/infrastructure/'] = 'Available infrastructure modules for _STACK_ on _ARCH_',
         -- LMOD
         ['usr/share/lmod/lmod/modulefiles']         = 'LMOD modules',
         -- User-installed software
@@ -240,12 +245,12 @@ local function avail_hook(t)
     end
 
     local stack = os.getenv( 'CALCUA_STACK_NAME_VERSION' ) or 'unknown'
-    local partition = 'CALCUA-' .. ( os.getenv( 'CALCUA_STACK_PARTITION' ) or 'X' )
+    local arch  = os.getenv( 'CALCUA_STACK_OSARCH' ) or 'X'
 
     for directory, dirlabel in pairs(t) do
         for pattern, label in pairs(styleT) do
             if (directory:find(pattern)) then
-                t[directory] = label:gsub( '_PARTITION_', partition ):gsub( '_STACK_', stack )
+                t[directory] = label:gsub( '_ARCH_', arch ):gsub( '_STACK_', stack )
                 break
             end
         end

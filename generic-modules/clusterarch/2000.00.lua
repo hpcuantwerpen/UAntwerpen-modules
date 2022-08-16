@@ -43,13 +43,13 @@ end
 
 -- Check if we have all the data we need for this stack version
 
-if stack_name ~= 'calcua' then
+if stack_name ~= get_stackname() then
     LmodError( myModuleFullName() .. ': Support for stack name ' .. stack_name .. 
                ' (detected from the module file name ' ..  myFileName() .. ') is not supported.' )
 end
         
 if not is_Stack_SystemTable( stack_version ) then
-    LmodError( myModuleFullName() .. ': No information for calcua/' .. stack_version .. 
+    LmodError( myModuleFullName() .. ': No information for ' .. get_stackname() .. '/' .. stack_version .. 
                ' in ClusterMod_SystemTable in the system definition file.' )
 end
 
@@ -66,6 +66,14 @@ local user_easybuild_root = get_user_install_root()
 if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Detected user installation root at ' .. ( user_easybuild_root or 'NIL' ) )
 end
+
+--
+-- Get the prefix for the environment variables
+--
+local envvar_prefix = get_clustername():upper()
+
+-- -----------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 
 --
 -- Build the system module directories for the stack
@@ -137,6 +145,11 @@ if user_easybuild_root ~= nil then
         prepend_path( 'MODULEPATH', moduledir )
     end
 end
+
+--
+-- Set the environment variables with the stack architecture.
+--
+setenv( envvar_prefix .. '_STACK_OSARCH', osarch )
 
 
 -- Final debugging information

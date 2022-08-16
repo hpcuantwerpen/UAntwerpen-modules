@@ -27,6 +27,10 @@ if LMOD_root == nil then
     LmodError( 'Failed to get the value of LMOD_PACKAGE_PATH' )
 end
 
+-- Get the cluster name from the system definition to determine the prefix for
+-- environment variables.
+
+
 -- Detect the software stack from the name and version of the module
 local stack_name    = myModuleName()
 local stack_version = myModuleVersion()
@@ -40,18 +44,20 @@ if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
                  ', arch module to load is arch/' .. used_osarch )
 end
 
+local envvar_prefix = get_clustername():upper()
+
 -- -----------------------------------------------------------------------------
 --
 -- Help information
 --
 
-whatis( 'Enables the calcua-' .. stack_version .. ' software stack for the current architecture.' )
+whatis( 'Enables the ' .. stack_name .. '/' .. stack_version .. ' software stack for the current architecture.' )
 
 help( [[
 
 Description
 ===========
-This module enables the calcua/]] .. stack_version .. [[ software stack for the current architecture.
+This module enables the ]] .. stack_name .. '/' .. stack_version .. [[ software stack for the current architecture.
 
 By swapping the architecture module it is possible to load software compiled for
 a different architecture instead, but be careful as that software may not run as
@@ -59,9 +65,9 @@ expected.
 
 The module will also set a number of environment variables that can be useful
 for references in scripts:
-  * CALCUA_STACK_NAME to ]] .. stack_name .. [[ (name of the software stack)
-  * CALCUA_STACK_VERSION to ]] .. stack_version .. [[ (version of the software stack)
-  * CALCUA_STACK_NAME_VERSION to ]] .. stack_name .. '/' .. stack_version .. [[ (name/version of the software stack)
+  * ]] .. envvar_prefix .. [[_STACK_NAME to ]] .. stack_name .. [[ (name of the software stack)
+  * ]] .. envvar_prefix .. [[_STACK_VERSION to ]] .. stack_version .. [[ (version of the software stack)
+  * ]] .. envvar_prefix .. [[_STACK_NAME_VERSION to ]] .. stack_name .. '/' .. stack_version .. [[ (name/version of the software stack)
 ]] )
 
 -- -----------------------------------------------------------------------------
@@ -75,9 +81,9 @@ prepend_path( 'MODULEPATH', pathJoin( install_root, 'modules-infrastructure/arch
 -- The following variables may be used by various modules and LUA configuration files.
 -- However, take care as those variables may not be defined anymore when your module
 -- gets unloaded.
-setenv( 'CALCUA_STACK_NAME',         stack_name )
-setenv( 'CALCUA_STACK_VERSION',      stack_version )
-setenv( 'CALCUA_STACK_NAME_VERSION', stack_name .. '/' .. stack_version )
+setenv( envvar_prefix .. '_STACK_NAME',         stack_name )
+setenv( envvar_prefix .. '_STACK_VERSION',      stack_version )
+setenv( envvar_prefix .. '_STACK_NAME_VERSION', stack_name .. '/' .. stack_version )
 
 -- Load the architecture module
 load( 'arch/' .. used_osarch )
