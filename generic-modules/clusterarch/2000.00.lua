@@ -149,7 +149,7 @@ end
 --
 -- Set the environment variables with the stack architecture.
 --
-setenv( envvar_prefix .. '_STACK_OSARCH', osarch )
+setenv( envvar_prefix .. '_ARCH_OSARCH', osarch )
 
 
 -- Final debugging information

@@ -244,8 +244,9 @@ local function avail_hook(t)
         return
     end
 
-    local stack = os.getenv( 'CALCUA_STACK_NAME_VERSION' ) or 'unknown'
-    local arch  = os.getenv( 'CALCUA_STACK_OSARCH' ) or 'X'
+    local envvar_prefix = get_clustername():upper()
+    local stack = os.getenv( envvar_prefix .. '_STACK_NAME_VERSION' ) or 'unknown'
+    local arch  = os.getenv( envvar_prefix .. '_ARCH_OSARCH' ) or 'X'
 
     for directory, dirlabel in pairs(t) do
         for pattern, label in pairs(styleT) do
