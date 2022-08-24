@@ -15,6 +15,7 @@ dofile( systemdefinition )
 
 dofile( repo_modules .. '/scripts/ClusterMod_tools/lmod_emulation.lua' )
 dofile( repo_modules .. '/LMOD/SitePackage_helper.lua' )
+dofile( repo_modules .. '/LMOD/SitePackage_system_info.lua' )
 dofile( repo_modules .. '/LMOD/SitePackage_map_toolchain.lua' )
 dofile( repo_modules .. '/LMOD/SitePackage_arch_hierarchy.lua' )
 
@@ -187,7 +188,7 @@ do
             mkDir( EBrepo_dir )  
             
             --
-            -- Finally the arch module
+            -- Now the arch module
             --
 
             local arch_dir = pathJoin( installroot, 'modules-infrastructure/arch', ClusterMod_StackName, stack_version, 'arch' )
@@ -199,6 +200,32 @@ do
 
             print( '  - Creating/confirming the arch/' .. osarch .. ' module ' .. arch_modulefile .. ',\n    linking to ' .. link_target .. '.' )
             create_symlink( link_target, arch_modulefile )
+
+            --
+            -- Finally the EasyBuild configuration modules
+            --
+
+            -- First EasyBuild-unlock
+            target_version = '2000.00.lua' -- TODO: Replace with a search for the matching version
+            link_target = pathJoin( repo_modules, 'generic-modules/EasyBuild-unlock', target_version )
+            link_name = pathJoin( infra_modules, 'EasyBuild-unlock', ClusterMod_StackName .. '.lua' )
+            
+            print( '  - Creating/configrming the EasyBuild-unlock module: link ' .. link_name .. ' linking to ' .. link_target .. '.' )
+            mkDir( pathJoin( infra_modules, 'EasyBuild-unlock' ) )
+            create_symlink( link_target, link_name )
+
+            -- Next EasyBuild-production/EasyBuild-infrastructure/EasyBuild-user
+            target_version = '2000.00.lua' -- TODO: Replace with a search for the matching version
+            
+            for _, module in ipairs( {'production', 'infrastructure', 'user'} ) 
+            do
+                link_target = pathJoin( repo_modules, 'generic-modules/EasyBuild-config', target_version )
+                link_name = pathJoin( infra_modules, 'EasyBuild-' .. module, ClusterMod_StackName .. '.lua' )
+            
+                print( '  - Creating/configrming the EasyBuild-' .. module .. ' module: link ' .. link_name .. ' linking to ' .. link_target .. '.' )
+                mkDir( pathJoin( infra_modules, 'EasyBuild-' .. module ) )
+                create_symlink( link_target, link_name )
+            end
 
         end -- if stack_version ~= manual
 
