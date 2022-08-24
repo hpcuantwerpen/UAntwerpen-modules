@@ -8,8 +8,7 @@ end
 add_property( 'lmod', 'sticky' )
 
 -- Find the root of the module installation.
---local ClusterMod_root = myFileName():match( '(.*)/modules%-infrastructure/init%-.*/CalcUA%-init/.*' )
-local ClusterMod_root = myFileName():match( '(.*)/modules%-infrastructure/init/CalcUA%-init/.*' )
+local ClusterMod_root = myFileName():match( '(.*)/modules%-infrastructure/init/.*%-init/.*' )
 
 repo_modules,repo_easybuild,systemdefinition = get_configuration( )
 if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
@@ -23,7 +22,7 @@ end
 --
 
 -- Setting defaults and visibility, note that this is a PATH-style variable.
--- It is currently set by the enable_Calcua script already, but add this in again
+-- It is currently set by the enable_ClusterMod script already, but add this in again
 -- if needed.
 -- prepend_path( 'LMOD_MODULERCFILE', pathJoin( repo_modules, 'LMOD', 'modulerc.lua' ) )
 
@@ -98,7 +97,7 @@ if mode() == 'load' or mode() == 'show' then
 
         -- Make sure this block of code is not executed anymore.
         -- This statement is not reached during an unload of the module
-        -- so _CALCUA_INIT_FIRST_LOAD will not be unset anymore.
+        -- so _<PREFIX>_INIT_FIRST_LOAD will not be unset anymore.
         setenv( var_name, '1' )
 
     end
@@ -112,11 +111,13 @@ end
 -- Help information
 --
 
+local site_name = get_clustername()
+
 help( [[
 Description
 ===========
-The CalcUA-init module performs most of the initialisations needed to use the
-CalcUA software stacks.
+The ]] .. site_name .. [[-init module performs most of the initialisations needed to use the
+]]  .. site_name .. [[ software stacks.
 
 
 Usage
@@ -132,19 +133,12 @@ You can disable the complete message-of-the-day except for some header by creati
 $ touch ~/.nomotd
 
 Note that it is still your responsability to be aware of the information that is spread
-via the message-of-the-day, so do not blame the CalcUA User Support Team if you
+via the message-of-the-day, so do not blame the ]] .. site_name .. [[ User Support Team if you
 miss information because you hide the message-of-the-day. If you are new on the system
 you may have missed information that is in the message-of-the-day and spread by email.
-
-
-More information
-================
-  - CalcUA infrastructure documentation on the VSC web site:
-    https://docs.vscentrum.be/en/latest/antwerp/tier2_hardware.html
-  - Local CalcUA documentation: https://www.uantwerpen.be/en/core-facilities/calcua/
 ]] )
 
-whatis( 'CalcUA-init: Initialisation module for the software stacks. Unload at your own risk.' )
+whatis( site_name .. '-init: Initialisation module for the software stacks. Unload at your own risk.' )
 
 -- Debug message
 if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
