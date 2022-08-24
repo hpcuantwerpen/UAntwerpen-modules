@@ -44,6 +44,9 @@ if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
                  ', arch module to load is arch/' .. used_osarch )
 end
 
+--
+-- Get the prefix for the environment variables
+--
 local envvar_prefix = get_clustername():upper()
 
 -- -----------------------------------------------------------------------------
