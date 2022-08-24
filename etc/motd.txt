@@ -1,2 +1,3 @@
-Here is room to add to the message of the day via the CalcUA-init module rather
-than /etc/motd.
+  - CalcUA infrastructure documentation on the VSC web site:
+    https://docs.vscentrum.be/en/latest/antwerp/tier2_hardware.html
+  - Local CalcUA documentation: https://www.uantwerpen.be/en/core-facilities/calcua/
