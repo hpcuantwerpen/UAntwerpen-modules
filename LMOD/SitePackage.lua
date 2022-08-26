@@ -165,6 +165,7 @@ sandbox_registration{
 --    ['get_cluster_osarch']            = get_cluster_osarch,
 --    ['get_clusterarch']               = get_clusterarch,
 --    [ 'map_toolchain']                = map_toolchain,
+    ['get_stack_EasyBuild_version']   = get_stack_EasyBuild_version,    -- Defined in SitePackage_arch_hierarchy
     ['get_stack_osarch_current']      = get_stack_osarch_current,
     ['get_stack_matchingarch']        = get_stack_matchingarch,
     ['get_system_module_dirs']        = get_system_module_dirs,         -- Defined in SitePackage_arch_hierarchy

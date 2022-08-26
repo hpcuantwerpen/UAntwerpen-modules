@@ -1282,6 +1282,54 @@ end
     
 -- -----------------------------------------------------------------------------
 --
+-- Testing get_stack_EasyBuild_version
+--
+
+print( colour_title .. '\nTesting get_stack_EasyBuild_version\n' .. colour_reset )
+
+local inputdata = {
+    {   
+        ['stack_version'] = 'system',
+        ['expected'] =      '4.5.3',
+     },
+     {   
+        ['stack_version'] = '2020a',
+        ['expected'] =      '4.2.2',
+     },
+     {   
+        ['stack_version'] = '2021b',
+        ['expected'] =      '4.5.3',
+     },
+     {   
+        ['stack_version'] = '3000a',
+        ['expected'] =      '4.5.3',
+     },
+     {   
+        ['stack_version'] = '4000a',
+        ['expected'] =      '4.5.3',
+     },
+     {   
+        ['stack_version'] = '5000a',
+        ['expected'] =      nil,
+     },
+     {   
+        ['stack_version'] = 'manual',
+        ['expected'] =      nil,
+     },
+ }
+
+ for index, data in ipairs( inputdata ) do
+    local got = get_stack_EasyBuild_version( data['stack_version'] )
+    local expected = data['expected']
+    print( testresult( got == expected ) ..
+          'EasyBuild version for ' .. data['stack_version'] .. ' is ' ..
+          ( got or 'nil' ) .. ', expected: ' .. ( data['expected'] or 'nil' ) )
+ end
+     
+ 
+    
+-- -----------------------------------------------------------------------------
+--
 -- Testing get_system_module_dirs( longname, stack_name, stack_version )
 -- and through it get_stack_subarchs( longname, stack_version )
 --

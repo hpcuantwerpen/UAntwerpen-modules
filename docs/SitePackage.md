@@ -645,6 +645,9 @@ map_accel_long_to_short = {
 
 #### Miscellaneous functions
 
+-   `get_EasyBuild_version( stack_version )`: Returns the version of EasyBuild
+    for the stack as determined by `ClusterMod_SystemTable`.
+
 -   `get_stack_subarchs( osarch, stack_version )`: Compute a list containing
     the given osarch and its subarchs in
     the hierarchy of the naming scheme for the stack. So the list can
@@ -842,7 +845,7 @@ of the formats with long names of `get_clusterarch`)
 Example return value: `redhat8` on systems with CentOS 8.x or Rocky Linux 8.x.
 
 
-#### 'get_system_install_root()`
+#### `get_system_install_root()`
 
 Get the root of the system installation via `etc/SoftwareStack.lua`. 
 
@@ -850,7 +853,7 @@ This function is needed as modules have no direct access to the variables define
 that file.
 
 
-#### 'get_user_install_root()'
+#### `get_user_install_root()`
 
 Compute the directory for the EasyBuild user installation,
 or nil if that is explicitly turned off by setting `EBU_USER_PREFIX` to an empty string.

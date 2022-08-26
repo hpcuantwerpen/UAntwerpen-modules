@@ -709,6 +709,28 @@ end
 
 -- -----------------------------------------------------------------------------
 --
+-- Function get_stack_EasyBuild_version( stack_version )
+--
+-- Input argument:
+--   * stack_version: Version of the calcua stack, can be system. 
+--
+-- Returns the version of EasyBuild for the stack as defined in the
+-- ClusterMod_SystemProperties structure.
+--
+
+function get_stack_EasyBuild_version( stack_version )
+
+    if ClusterMod_SystemProperties[stack_version] == nil then
+        return nil
+    else
+        return ClusterMod_SystemProperties[stack_version]['EasyBuild']
+    end
+
+end
+
+
+-- -----------------------------------------------------------------------------
+--
 -- Function get_stack_subarchs( osarch, stack_version )
 --
 -- Input arguments:
