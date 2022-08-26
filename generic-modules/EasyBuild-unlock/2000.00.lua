@@ -25,6 +25,6 @@ end
 
 -- Some information for debugging
 
-if os.getenv( '_LUMI_LMOD_DEBUG' ) ~= nil then
-    LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myFileName() .. ': Exiting' )
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
+    LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Exiting' )
 end
