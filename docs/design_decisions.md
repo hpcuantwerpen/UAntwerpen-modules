@@ -323,7 +323,10 @@ InstallRoot
 
 Current subdirectories:
 
--   `ebrepo_files`: EasyBuild repository, structured the same way as the `modules-easybuild`
+-   `ebfiles_repo`: EasyBuild repository, structured the same way as the `modules-easybuild`
+    subdirectory.
+
+-   `ebfiles_repo_infrastructure`: EasyBuild repository, structured the same way as the `modules-infrastructrue/infrastructure`
     subdirectory.
 
 -   `lmod-cache`: Placeholder for Lmod cache files.
@@ -336,7 +339,13 @@ Current subdirectories:
 ``` bash
 InstallRoot
  └─ mgmt
-     ├─ ebrepo_files
+     ├─ ebfiles_repo
+     │   ├─ calcua-2021b
+     │   │   ├─ redhat8-x86_64
+     │   │   └─ redhat8-broadwell-noaccel
+     │   └─ system #(1)
+     │       └─ redhat8-x86_64 #(2)
+     ├─ ebfiles_repo_infrastructure
      │   ├─ calcua-2021b
      │   │   ├─ redhat8-x86_64
      │   │   └─ redhat8-broadwell-noaccel

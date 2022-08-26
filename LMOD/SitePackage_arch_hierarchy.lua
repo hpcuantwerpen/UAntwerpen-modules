@@ -1006,6 +1006,7 @@ end
 -- Function get_system_EBrepo_dirs( osarch, stack_name, stack_version )
 -- Function get_user_EBrepo_dir( osarch, stack_name, stack_version )
 -- Function get_user_EBrepo_dirs( osarch, stack_name, stack_version )
+-- Function get_systen_infra_EBrepo_dir( osarch, stack_name, stack_version )
 --
 -- Input argument: 3
 --   * The long os-and-architecture name
@@ -1029,48 +1030,21 @@ end
 --     and stack (name/version), with the most generic one first.
 --
 
-function get_EBrepo_dir_worker_BAD( osarch, stack_name, stack_version, dir_prefix )
-
-    local use_version    -- Processed stack_version
-    local prefix
-
-    if stack_name == 'manual' or stack_version == 'manual' then
-        -- No EBrepo directory for this stack
-        return nil
-    elseif stack_name == ClusterMod_StackName then
-        use_version = stack_version
-    elseif ( stack_name == 'system' ) then
-        use_version = stack_name
-    else
-        -- Error condition, not known how to treat this stack
-        io.stderr:write( 'LMOD/SitePackage_arch_hierarchy: get_system_module_dir: Illegal input arguments\n' )
-        return nil
-    end
-
-    if use_version == 'system' then
-        return pathJoin( dir_prefix, 'EBrepo_files/system', osarch )
-    else
-        return pathJoin( dir_prefix, 'EBrepo_files',  ClusterMod_StackName .. '-' .. use_version, osarch )
-    end
-
-end
-
-
-function get_EBroot_dir_generator( osarch, stack_version, dir_prefix )
+function get_EBrepo_dir_generator( osarch, stack_version, dir_prefix )
 
     -- Worker function without full error control. The error control is done
     -- by get_system_module_dir_worker and get_system_module_dirs_worker.
 
     local prefix
 
-    if stack_name == 'manual' or stack_version == 'manual' then
+    if stack_version == 'manual' then
         -- This function should actually not be called in this case, but just in case,
         -- though it will likely produce an error message later on.
         return nil 
     elseif stack_version == 'system' then
-        return pathJoin( dir_prefix, 'EBrepo_files/system', osarch )
+        return pathJoin( dir_prefix, 'EBfiles_repo/system', osarch )
     else
-        return pathJoin( dir_prefix, 'EBrepo_files',  ClusterMod_StackName .. '-' .. stack_version, osarch )
+        return pathJoin( dir_prefix, 'EBfiles_repo',  ClusterMod_StackName .. '-' .. stack_version, osarch )
     end
 
 end
@@ -1080,7 +1054,7 @@ function get_system_EBrepo_dir( osarch, stack_name, stack_version )
 
     local dir_prefix = pathJoin( get_system_install_root(), 'mgmt' )
 
-    return get_module_dir_worker( osarch, stack_name, stack_version, dir_prefix, 'get_system_EBrepo_dir', get_EBroot_dir_generator )
+    return get_module_dir_worker( osarch, stack_name, stack_version, dir_prefix, 'get_system_EBrepo_dir', get_EBrepo_dir_generator )
 
 end
 
@@ -1089,7 +1063,7 @@ function get_system_EBrepo_dirs( osarch, stack_name, stack_version )
 
     local dir_prefix = pathJoin( get_system_install_root(), 'mgmt' )
 
-    return get_module_dirs_worker( osarch, stack_name, stack_version, dir_prefix, 'get_system_EBrepo_dir', get_EBroot_dir_generator )
+    return get_module_dirs_worker( osarch, stack_name, stack_version, dir_prefix, 'get_system_EBrepo_dir', get_EBrepo_dir_generator )
 
 end
 
@@ -1098,7 +1072,7 @@ function get_user_EBrepo_dir( osarch, stack_name, stack_version )
 
     local dir_prefix = get_user_install_root()
 
-    return get_module_dir_worker( osarch, stack_name, stack_version, dir_prefix, 'get_user_EBrepo_dir', get_EBroot_dir_generator )
+    return get_module_dir_worker( osarch, stack_name, stack_version, dir_prefix, 'get_user_EBrepo_dir', get_EBrepo_dir_generator )
 
 end
 
@@ -1107,9 +1081,38 @@ function get_user_EBrepo_dirs( osarch, stack_name, stack_version )
 
     local dir_prefix = get_user_install_root()
 
-    return get_module_dirs_worker( osarch, stack_name, stack_version, dir_prefix, 'get_user_EBrepo_dir', get_EBroot_dir_generator )
+    return get_module_dirs_worker( osarch, stack_name, stack_version, dir_prefix, 'get_user_EBrepo_dir', get_EBrepo_dir_generator )
 
 end
+
+function get_infra_EBrepo_dir_generator( osarch, stack_version, dir_prefix )
+
+    -- Worker function without full error control. The error control is done
+    -- by get_system_module_dir_worker and get_system_module_dirs_worker.
+
+    local prefix
+
+    if stack_version == 'manual' then
+        -- This function should actually not be called in this case, but just in case,
+        -- though it will likely produce an error message later on.
+        return nil 
+    elseif stack_version == 'system' then
+        return pathJoin( dir_prefix, 'EBfiles_repo_infrastructure/system', osarch )
+    else
+        return pathJoin( dir_prefix, 'EBfiles_repo_infrastructure',  ClusterMod_StackName .. '-' .. stack_version, osarch )
+    end
+
+end
+
+
+function get_system_infra_EBrepo_dir( osarch, stack_name, stack_version )
+
+    local dir_prefix = pathJoin( get_system_install_root(), 'mgmt' )
+
+    return get_module_dir_worker( osarch, stack_name, stack_version, dir_prefix, 'get_system_Einfra_Brepo_dir', get_infra_EBrepo_dir_generator )
+
+end
+
 
 
 -- -----------------------------------------------------------------------------

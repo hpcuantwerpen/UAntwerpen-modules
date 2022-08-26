@@ -168,10 +168,17 @@ sandbox_registration{
     ['get_stack_EasyBuild_version']   = get_stack_EasyBuild_version,    -- Defined in SitePackage_arch_hierarchy
     ['get_stack_osarch_current']      = get_stack_osarch_current,
     ['get_stack_matchingarch']        = get_stack_matchingarch,
+    ['get_system_SW_dir']             = get_system_SW_dir,              -- Defined in SitePackage_arch_hierarchy
+    ['get_system_module_dir']         = get_system_module_dir,          -- Defined in SitePackage_arch_hierarchy
     ['get_system_module_dirs']        = get_system_module_dirs,         -- Defined in SitePackage_arch_hierarchy
+    ['get_system_EBrepo_dir']         = get_system_EBrepo_dir,          -- Defined in SitePackage_arch_hierarchy
+    ['get_user_SW_dir']               = get_user_SW_dir,                -- Defined in SitePackage_arch_hierarchy
+    ['get_user_module_dir']           = get_user_module_dir,            -- Defined in SitePackage_arch_hierarchy
     ['get_user_module_dirs']          = get_user_module_dirs,           -- Defined in SitePackage_arch_hierarchy
+    ['get_user_EBrepo_dir']           = get_user_EBrepo_dir,            -- Defined in SitePackage_arch_hierarchy
     ['get_system_inframodule_dir']    = get_system_inframodule_dir,     -- Defined in SitePackage_arch_hierarchy
---    ['get_stack_top']                 = get_stack_top,
+    ['get_system_infra_EBrepo_dir']   = get_system_infra_EBrepo_dir,    -- Defined in SitePackage_arch_hierarchy
+    --    ['get_stack_top']                 = get_stack_top,
     ['is_Stack_SystemTable']          = is_Stack_SystemTable,           -- Defined in SitePackage_helper
 }
 
