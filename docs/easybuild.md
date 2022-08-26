@@ -43,6 +43,20 @@ test stack in a different file system.
     but not really tested as we have no use for it at the moment.
 
 
+## Environment variables
+
+-   `EBU_USER_PREFIX`: Directory for the user installation. User installation can be
+    explicitly disabled by setting `EBU_USER_PREFIX` but not giving it a value.
+
+-   `EBU_EASYBUILD_VERSIONLESS`: When set and not 0 or `no`, the module will not load a
+    specific version of EasyBuild. As such it would preserve whatever version a user has
+    loaded already, or load the default version as determined by Lmod rules if no module
+    is loaded.
+
+-   `EBU_REMOTE_BUILD`: When set and not 0 or `no`, choose a build and temporary directory
+    that works everywhere so that EasyBuild can start Slurm jobs to build an application.
+
+
 ## Settings in configuration files
 
 -   Module syntax and naming scheme. Given that the whole module framework is based on Lmod, 
@@ -155,4 +169,27 @@ test stack in a different file system.
 
     4.  In `user` mode, `easybuild-user-<stackname>-<stackversion>.cfg` 
 
+
+-   Build directory and temporary directory for EasyBuild: The subdirectories `build` and 
+    `tmp` respectively of the work directory determined according to the followin algorithm:
+
+    -   If `EBU_REMOTE_BUILD` is set and nonzero (or not `no`), then the work directory is
+        `/dev/shm/$USER/easybuild` as that directory is available everywhere on the cluster and
+        suitable for fast building.
+
+        DISADVANTAGE AND REASON TO RECONSIDER: Currently this directory is not automatically cleaned
+        when a job fails.
+
+    -   If `XDG_RUNTIME_DIR` is defined, which is the case on the login nodes, then the 
+        subdirectory 'easybuild' of that directory is used.
+
+        This directory is always automatically cleaned when the last session of a user terminates,
+        but it does eat from RAM disk space also.
+
+    -   Otherwise, if the environment variable `SLURM_JOB_ID` exits, 
+        use `/dev/shm/$USER-$JOBID/easybuild`. In that way a user can have multiple jobs on a node
+        from which EasyBuild is used to build software, and these session can be using the same
+        sourdces, e.g., to compile an application in different configurations. 
+
+    -   Otherwise we simply use `/dev/shm/$USER/easybuild`.
 
