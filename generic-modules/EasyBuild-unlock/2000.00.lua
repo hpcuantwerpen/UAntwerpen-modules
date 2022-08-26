@@ -1,4 +1,4 @@
-if os.getenv( '_LUMI_LMOD_DEBUG' ) ~= nil then
+if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
     LmodMessage( 'DEBUG: ' .. mode() .. ' ' .. myModuleFullName() .. ': Entering' )
 end
 
@@ -17,9 +17,9 @@ The module has no other purpose.
 
 whatis( 'EasyBuild-unlock: Must be loaded when using EasyBuild to install in the system directories.' )
 
--- Make this a sticky module unless it is installed in /appl.
+-- Make this a sticky module unless it is installed in /apps/antwerpen.
 
-if myFileName():match('^/appl/lumi/') == nil then
+if myFileName():match('^/apps/antwerpen/') == nil then
     add_property(  'lmod', 'sticky' )
 end
 
