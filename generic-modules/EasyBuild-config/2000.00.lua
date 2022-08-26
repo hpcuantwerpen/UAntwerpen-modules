@@ -3,7 +3,7 @@
 --
 
 if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
-    io.stderr:write( 'DEBUG: ' .. myModuleFullName() .. ', mode ' .. mode() .. '\n' )
+    io.stderr:write( 'DEBUG: Entering ' .. myModuleFullName() .. ', mode ' .. mode() .. '\n' )
 end
 
 --
@@ -382,6 +382,9 @@ if mod_mode == 'user' and isFile( user_configfile_generic ) then table.insert( c
 if isFile( system_configfile_stack )                        then table.insert( configfiles, system_configfile_stack )   end
 if mod_mode == 'user' and isFile( user_configfile_stack )   then table.insert( configfiles, user_configfile_stack )     end
 
+-- - Determine the necessary optimization options
+
+local optarch = get_optarch( osarch, stack_name, stack_version )
 
 --
 -- Set the EasyBuild variables that point to paths or files
@@ -434,8 +437,10 @@ setenv( 'EASYBUILD_SUFFIX_MODULES_PATH',           suffix_modules_path )
 -- Let's all use python3 for EasyBuild, but this assumes at least EasyBuild version 4.
 setenv( 'EB_PYTHON', 'python3' )
 
--- Set optarch. TODO!!!!
--- setenv( 'EASYBUILD_OPTARCH', optarch[partition_name] )
+-- Set optarch.
+if optarch ~= nil then
+    setenv( 'EASYBUILD_OPTARCH', optarch )
+end
 
 -- Set <PREFIX>_EASYBUILD_MODE to be used in hooks to only execute certain hooks in production mode.
 setenv( site .. '_EASYBUILD_MODE', detail_mode )
@@ -473,6 +478,5 @@ end
 -- Final debugging information
 
 if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
-    local modulepath = os.getenv( 'MODULEPATH' ):gsub( ':', '\n' )
-    io.stderr:write( 'DEBUG: The MODULEPATH before exiting ' .. myModuleFullName() .. ' (mode ' .. mode() .. ') is:\n' .. modulepath .. '\n\n' )
+    io.stderr:write( 'DEBUG: Exiting ' .. myModuleFullName() .. ', mode ' .. mode() .. '\n' )
 end
