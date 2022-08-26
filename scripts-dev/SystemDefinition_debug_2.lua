@@ -361,3 +361,21 @@ ClusterMod_reduce_top_arch = {
     },
 }
 
+-- -----------------------------------------------------------------------------
+--
+-- The following table defines settings for OPTARCH in EasyBuild.
+-- Though one could base it only on the CPU architecture, the choice was made
+-- to currently base it on the CPU+accelerator architecture as that may become
+-- important in the future.
+--
+ClusterMod_optarch = {
+    ['200000'] = {
+        ['zen3-noaccel']      = 'Intel:march=core-avx2 -mtune=core-avx2',
+        ['zen2-ampere']       = 'Intel:march=core-avx2 -mtune=core-avx2',
+        ['zen2-arcturus']     = 'Intel:march=core-avx2 -mtune=core-avx2',
+        ['zen2-noaccel']      = 'Intel:march=core-avx2 -mtune=core-avx2',
+        ['x86_64']            = 'Intel:march=core-avx-i -mtune=core-avx-i',
+    },
+}
+
+

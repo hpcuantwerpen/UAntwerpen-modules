@@ -135,6 +135,38 @@ function get_matching_toparchreduction_key( version )
 end
 
 --
+-- Build a table with the keys from ClusterMod_optarch
+--
+ClusterMod_sorted_optarch_keys = nil
+
+function get_matching_optarch_key( version )
+
+    if ClusterMod_sorted_optarch_keys == nil then
+        ClusterMod_sorted_optarch_keys = {}
+        for key in pairs( ClusterMod_optarch )
+        do
+            table.insert( ClusterMod_sorted_optarch_keys, key )
+        end
+        table.sort( ClusterMod_sorted_optarch_keys )
+    end
+
+    if version < ClusterMod_sorted_optarch_keys[1]
+    then
+        return nil
+    end
+
+    local index = #ClusterMod_sorted_optarch_keys
+
+    while ClusterMod_sorted_optarch_keys[index] > version
+    do
+        index = index - 1
+    end
+
+    return ClusterMod_sorted_optarch_keys[index]
+
+end
+
+--
 -- Table to cache supported archs and subarchs for each stack, filled in as
 -- needed.
 --

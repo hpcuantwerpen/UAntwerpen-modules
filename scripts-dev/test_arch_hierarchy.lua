@@ -2616,6 +2616,50 @@ end
 
 
 -- -----------------------------------------------------------------------------
+--
+-- Testing get_optarch() longname, stack_name, stack_version )
+--
+
+print( colour_title .. '\nTesting get_optarch\n' .. colour_reset )
+
+tests = {
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'Intel:march=core-avx2 -mtune=core-avx2',
+    },
+    {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-x86_64',
+        ['expected']      = 'Intel:march=core-avx-i -mtune=core-avx-i',
+   },
+   {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = '2021b',
+        ['longname']      = 'redhat8-broadwell',
+        ['expected']      = nil,
+   },
+   {
+        ['stack_name']    = 'calcua',
+        ['stack_version'] = 'system',
+        ['longname']      = 'redhat8-zen2-arcturus',
+        ['expected']      = 'Intel:march=core-avx2 -mtune=core-avx2',
+    },
+}
+
+for _,test in ipairs( tests )
+do
+    local got = get_optarch( test['longname'], test['stack_name'], test['stack_version'] )
+    print( testresult( got == test['expected']  ) ..
+           'OPTARCH for ' .. test['stack_name'] .. '/' .. test['stack_version'] .. ' for arch ' .. test['longname'] .. ' is \n  ' .. ( got or 'NIL' )  ..'\n' )
+end
+
+
+
+
+-- -----------------------------------------------------------------------------
 -- -----------------------------------------------------------------------------
 --
 -- Testing specific for the current cluster, so no way to check the results automatically

@@ -1179,3 +1179,32 @@ function get_user_SW_dir( osarch, stack_name, stack_version )
 end
 
 
+-- -----------------------------------------------------------------------------
+--
+-- Function get_optarch( osarch, stack_name, stack_version )
+--
+-- Input argument: 3
+--   * The long os-and-architecture name
+--   * Stack name, can be system or manual
+--   * Stack version, not used when the stack name is system of manual
+--
+-- Return argument: 1
+--   * String to use for the optarch argument of EasyBuild, or nil if no optarch
+--     argument is needed for the architecture.
+--
+
+function get_optarch( osarch, stack_name, stack_version )
+
+    local arch = extract_arch( osarch )
+    local map_version = map_toolchain( stack_version )
+
+    local matching_key = get_matching_optarch_key( map_version )
+
+    if matching_key == nil then    
+        return nil
+    else
+        return ClusterMod_optarch[matching_key][arch]
+    end
+
+end
+
