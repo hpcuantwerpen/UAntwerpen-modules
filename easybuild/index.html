@@ -255,6 +255,21 @@
   
   
     <li class="md-nav__item">
+      <a href="../environment_variables/" class="md-nav__link">
+        Environment variables
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../scripts/" class="md-nav__link">
         Scripts
       </a>
@@ -333,6 +348,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    Environment variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#settings-in-configuration-files" class="md-nav__link">
     Settings in configuration files
   </a>
@@ -395,7 +417,7 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_10" type="checkbox" id="__nav_10" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
       
       
       
@@ -415,14 +437,14 @@
         <div class="md-nav__link md-nav__link--index ">
           <a href="../Development/">Development</a>
           
-            <label for="__nav_10">
+            <label for="__nav_11">
               <span class="md-nav__icon md-icon"></span>
             </label>
           
         </div>
       
       <nav class="md-nav" aria-label="Development" data-md-level="1">
-        <label class="md-nav__title" for="__nav_10">
+        <label class="md-nav__title" for="__nav_11">
           <span class="md-nav__icon md-icon"></span>
           Development
         </label>
@@ -505,6 +527,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    Environment variables
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#settings-in-configuration-files" class="md-nav__link">
     Settings in configuration files
   </a>
@@ -574,6 +603,23 @@ test stack in a different file system.</p>
 <p><code>EasyBuild-infrastructure</code> is the configuration for installing software whose
     modules go in the <code>modules-infrastrcutrue/infrastructure</code> tree. It is implemented
     but not really tested as we have no use for it at the moment.</p>
+</li>
+</ul>
+<h2 id="environment-variables">Environment variables</h2>
+<ul>
+<li>
+<p><code>EBU_USER_PREFIX</code>: Directory for the user installation. User installation can be
+    explicitly disabled by setting <code>EBU_USER_PREFIX</code> but not giving it a value.</p>
+</li>
+<li>
+<p><code>EBU_EASYBUILD_VERSIONLESS</code>: When set and not 0 or <code>no</code>, the module will not load a
+    specific version of EasyBuild. As such it would preserve whatever version a user has
+    loaded already, or load the default version as determined by Lmod rules if no module
+    is loaded.</p>
+</li>
+<li>
+<p><code>EBU_REMOTE_BUILD</code>: When set and not 0 or <code>no</code>, choose a build and temporary directory
+    that works everywhere so that EasyBuild can start Slurm jobs to build an application.</p>
 </li>
 </ul>
 <h2 id="settings-in-configuration-files">Settings in configuration files</h2>
@@ -663,6 +709,103 @@ the regular module tree, there does not seem to be a problem with this approach.
 </li>
 </ul>
 </li>
+<li>
+<p>Robot search path.</p>
+<ul>
+<li>
+<p>The goal of our settings is that we ensure as much as possible that for installed modules
+    EasyBuild will find the EasyConfig used for that install. Therefore we put the repository
+    of installed EasyConfigs first in the robot path, even though that is not commonly done.</p>
+<p>This does have a negative aspect also though: When re-installing a module after a change
+to the EasyConfig, we need to re-install each package that needs to be reinstalled by hand 
+from the directory of the corresponding EasyConfig, or the old one in the repository will be
+used instead.</p>
+</li>
+<li>
+<p>We use the <code>EASYBUILD_ROBOT_PATHS</code> environment variable so that dependency resolution is
+    not turned on by default and the <code>-r</code> option remains available for users to add additional
+    directories to the front of the search path.</p>
+</li>
+<li>
+<p>After that comes the default name for the user repository, if present and if the <code>user</code>
+    module is being loaded.</p>
+</li>
+<li>
+<p>Next comes the system repository as can be obtained from <code>etc/SystemDefinition.lua</code>.</p>
+</li>
+<li>
+<p>Next we add the default EasyBuilders repository.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>EasyConfig search path for <code>-S</code> and <code>--search</code>: No additional directories are used at the moment. 
+    This can be changed should we chose to pull in additional repositories.</p>
+</li>
+<li>
+<p>EasyBlocks:</p>
+<ul>
+<li>
+<p>In user mode, if there is a user repository and if it contains an easyblocks subdirectory, then
+    that one has the highest priority (but looks like it has to go at the end of the list).</p>
+</li>
+<li>
+<p>In all modes, the next highest priority are the EasyBlocks in the <code>easyblocks</code> subdirectory in the
+    system EasyBuild repository.</p>
+</li>
+<li>
+<p>Last in line are the EasyBlocks from the EasyBuild distribution that is being used.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Configuration files: These are in the <code>easybuild/config</code> subdirectory of the system repo and the similar
+    subdirectory in <code>UserRepo</code> of the user installation.</p>
+<p>In the order in which they should be read, so the later one wins on the earlier ones:</p>
+<ol>
+<li>
+<p>In all modes, <code>easybuild-production.cfg</code></p>
+</li>
+<li>
+<p>In <code>user</code> mode only, <code>easybuild-user.cfg</code></p>
+</li>
+<li>
+<p>In all modes, <code>easybuild-production-&lt;stackname&gt;-&lt;stackversion&gt;.cfg</code> where the stack name for the <code>system</code>
+    version is also the regular stack name.</p>
+</li>
+<li>
+<p>In <code>user</code> mode, <code>easybuild-user-&lt;stackname&gt;-&lt;stackversion&gt;.cfg</code> </p>
+</li>
+</ol>
+</li>
+<li>
+<p>Build directory and temporary directory for EasyBuild: The subdirectories <code>build</code> and 
+    <code>tmp</code> respectively of the work directory determined according to the followin algorithm:</p>
+<ul>
+<li>
+<p>If <code>EBU_REMOTE_BUILD</code> is set and nonzero (or not <code>no</code>), then the work directory is
+    <code>/dev/shm/$USER/easybuild</code> as that directory is available everywhere on the cluster and
+    suitable for fast building.</p>
+<p>DISADVANTAGE AND REASON TO RECONSIDER: Currently this directory is not automatically cleaned
+when a job fails.</p>
+</li>
+<li>
+<p>If <code>XDG_RUNTIME_DIR</code> is defined, which is the case on the login nodes, then the 
+    subdirectory 'easybuild' of that directory is used.</p>
+<p>This directory is always automatically cleaned when the last session of a user terminates,
+but it does eat from RAM disk space also.</p>
+</li>
+<li>
+<p>Otherwise, if the environment variable <code>SLURM_JOB_ID</code> exits, 
+    use <code>/dev/shm/$USER-$JOBID/easybuild</code>. In that way a user can have multiple jobs on a node
+    from which EasyBuild is used to build software, and these session can be using the same
+    sourdces, e.g., to compile an application in different configurations. </p>
+</li>
+<li>
+<p>Otherwise we simply use <code>/dev/shm/$USER/easybuild</code>.</p>
+</li>
+</ul>
+</li>
 </ul>
 
   <hr>
@@ -670,7 +813,7 @@ the regular module tree, there does not seem to be a problem with this approach.
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 26, 2022</span>
       
     
   </small>

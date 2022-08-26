@@ -15,7 +15,7 @@
     
     
       
-        <title>Directory structure of the repositories and software stack - UAntwerpen-modules documentation</title>
+        <title>Environment variables - UAntwerpen-modules documentation</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#directory-structure-of-the-repository-and-software-stack" class="md-skip">
+        <a href="#environment-variables" class="md-skip">
           Skip to content
         </a>
       
@@ -98,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Directory structure of the repositories and software stack
+              Environment variables
             
           </span>
         </div>
@@ -253,11 +253,73 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../environment_variables/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Environment variables
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Environment variables
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#set-by-clustermod-init" class="md-nav__link">
+    Set by ClusterMod-init
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-by-the-stack-generic-module" class="md-nav__link">
+    Set by the stack generic module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-by-the-clusterarch-generic-module" class="md-nav__link">
+    Set by the clusterarch generic module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-by-lmod" class="md-nav__link">
+    Set by LMOD
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -313,59 +375,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Directory structure of the repositories and software stack
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../directory_structure/" class="md-nav__link">
         Directory structure of the repositories and software stack
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#the-modules-repository" class="md-nav__link">
-    The modules repository
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-uantwerpen-easybuild-repository" class="md-nav__link">
-    The UAntwerpen-easybuild repository
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -492,15 +506,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-modules-repository" class="md-nav__link">
-    The modules repository
+  <a href="#set-by-clustermod-init" class="md-nav__link">
+    Set by ClusterMod-init
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-uantwerpen-easybuild-repository" class="md-nav__link">
-    The UAntwerpen-easybuild repository
+  <a href="#set-by-the-stack-generic-module" class="md-nav__link">
+    Set by the stack generic module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-by-the-clusterarch-generic-module" class="md-nav__link">
+    Set by the clusterarch generic module
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-by-lmod" class="md-nav__link">
+    Set by LMOD
   </a>
   
 </li>
@@ -519,66 +547,51 @@
                 
 
 
-<h1 id="directory-structure-of-the-repository-and-software-stack">Directory structure of the repository and software stack</h1>
-<h2 id="the-modules-repository">The modules repository</h2>
-<p>Installed as 'UAntwerpen-modules' in the software stack directory</p>
-<p>Subdirectories</p>
+<h1 id="environment-variables">Environment variables</h1>
+<h2 id="set-by-clustermod-init">Set by <code>ClusterMod-init</code></h2>
+<ul>
+<li><code>_&lt;PREFIX&gt;_INIT_FIRST_LOAD</code>: Set to one as soon as the module has been loaded for the first time
+    and used to avoid re-displaying the message-of-the-day when the module is reloaded because of
+    a <code>module purge</code>.</li>
+</ul>
+<h2 id="set-by-the-stack-generic-module">Set by the <code>stack</code> generic module</h2>
 <ul>
 <li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/docs">docs</a>: 
-    The technical documentation for the setup</p>
+<p><code>&lt;PREFIX&gt;_STACK_NAME</code>: Name of the software stack that is loaded.  </p>
 </li>
 <li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/etc">etc</a>: 
-    Place to store the message-of-the-day file and the tips list.</p>
+<p><code>&lt;PREFIX&gt;_STACK_VERSION</code>: version of the software stack that is loaded.  </p>
 </li>
 <li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules">generic-modules</a>: 
-    Generic implementation of the software stack and EasyBuild configuration modules.</p>
+<p><code>&lt;PREFIX&gt;_STACK_NAME_VERSION</code>: Name and version (format name/version) of the software stack that is loaded.  </p>
+</li>
+</ul>
+<h2 id="set-by-the-clusterarch-generic-module">Set by the <code>clusterarch</code> generic module</h2>
+<ul>
+<li><code>&lt;PREFIX&gt;_ARCH_OSARCH</code>: The long os + architecture string for the activated architecture.</li>
+</ul>
+<h2 id="set-by-lmod">Set by LMOD</h2>
 <ul>
 <li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/CalcUA-init">CalcUA-init</a>: 
-    Initialisation module for the software stack, removing some of that stuff from the system images.</p>
+<p><code>&lt;PREFIX&gt;_FAMILY_CLUSTERMOD_SOFTWARESTACK</code></p>
 </li>
 <li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/calcua">calcua</a>: 
-    Software stack module for the CalcUA software stacks.</p>
+<p><code>&lt;PREFIX&gt;_FAMILY_CLUSTERMOD_SOFTWARESTACK_VERSION</code></p>
 </li>
 <li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/clusterarch">clusterarch</a>: 
-    Module to select the desired machine architecture for the software.</p>
+<p><code>&lt;PREFIX&gt;_FAMILY_CLUSTERMOD_CLUSTERARCH</code></p>
 </li>
 <li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/EasyBuild-config">EasyBuild-config</a>: 
-    Generic configuration module for EasyBuild</p>
-</li>
-<li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/generic-modules/StyleModifiers">StyleModifiers</a>:
-    modules to change the display style of the module tree. </p>
+<p><code>&lt;PREFIX&gt;_FAMILY_CLUSTERMOD_CLUSTERARCH_VERSION</code></p>
 </li>
 </ul>
-</li>
-<li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/LMOD">LMOD</a>: Module with the configuration files for LMOD.</p>
-</li>
-<li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/scripts">scripts</a>: Various scripts to set up and maintain the software stack.</p>
-</li>
-<li>
-<p><a href="https://github.com/klust/UAntwerpen-modules/tree/main/scripts-dev">scripts-dev</a>: Various scripts used during the 
-    development of the this repository, to test concepts.</p>
-</li>
-</ul>
-<h2 id="the-uantwerpen-easybuild-repository">The UAntwerpen-easybuild repository</h2>
-<p>This is the repository containing our full EasyBuild setup with custom EasyBlocks and
-EasyConfigs, the hooks file, configuration files, etc.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 2, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 24, 2022</span>
       
     
   </small>
@@ -601,7 +614,7 @@ EasyConfigs, the hooks file, configuration files, etc.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../easybuild/" class="md-footer__link md-footer__link--prev" aria-label="Previous: EasyBuild configuration" rel="prev">
+        <a href="../modules_calcua_and_clusterarch/" class="md-footer__link md-footer__link--prev" aria-label="Previous: The generic calcua and clusterarch modules" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -610,20 +623,20 @@ EasyConfigs, the hooks file, configuration files, etc.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              EasyBuild configuration
+              The generic calcua and clusterarch modules
             </div>
           </div>
         </a>
       
       
         
-        <a href="../procedures/" class="md-footer__link md-footer__link--next" aria-label="Next: Procedures" rel="next">
+        <a href="../scripts/" class="md-footer__link md-footer__link--next" aria-label="Next: Scripts" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Procedures
+              Scripts
             </div>
           </div>
           <div class="md-footer__button md-icon">
