@@ -335,9 +335,11 @@ ClusterMod_reduce_cpu = {
 
 ### `ClusterMod_reduce_top_arch`
 
-`ClusterMod_reduce_top_arch` is an associative table of associative tables with for each supported
-OS a table that can be used to walk a chain of compatible but less specific architectures when 
+`ClusterMod_reduce_top_arch` is an associative table of associative tables with for each stack
+version a table that can be used to walk a chain of compatible but less specific architectures when 
 looking for an architecture that is supported for a particular version of a software stack.
+
+The version is given in six-digit number format and is a "from then on" version.
 
 As we forsee that this may change in incompatible ways in the future, there is a level that indexes
 with a yyyymm starting version of the software stacks.
@@ -365,6 +367,28 @@ ClusterMod_reduce_top_arch = {
         ['broadwell-pascal']  = 'broadwell-noaccel',
         ['ivybridge-noaccel'] = 'x86_64',
         ['x86_64']            = nil,
+    },
+}
+```
+
+
+### `ClusterMod_optarch`
+
+`ClusterMod_optarch` is an associative table of associative tables with for each stack
+version and for a selection of architectures the `optarch` string for EasyBuild. 
+The version is given in six-digit number format and is a "from then on" version.
+There is no need to specify an entry in the table if no special value for `optarch` is
+needed for that architecture.
+
+Example:
+```lua
+ClusterMod_optarch = {
+    ['200000'] = {
+        ['zen3-noaccel']      = 'Intel:march=core-avx2 -mtune=core-avx2',
+        ['zen2-ampere']       = 'Intel:march=core-avx2 -mtune=core-avx2',
+        ['zen2-arcturus']     = 'Intel:march=core-avx2 -mtune=core-avx2',
+        ['zen2-noaccel']      = 'Intel:march=core-avx2 -mtune=core-avx2',
+        ['x86_64']            = 'Intel:march=core-avx-i -mtune=core-avx-i',
     },
 }
 ```
@@ -898,7 +922,15 @@ Its main purpose is to speed up a search routine in this file, to avoid always
 recomputing that data.
 
 
-#### `ClusterMod_sorted_toparchreduction_keys`
+#### `ClusterMod_sorted_reducecpu_keys`
+
+This data structure is a sorted list of the level 1 keys used in the 
+[`ClusterMod_reduce_cpu`](#ClusterMod_reduce_cpu) data structure.
+Its main purpose is to speed up a search routine in this file, to avoid always 
+recomputing that data.
+
+
+##### `ClusterMod_sorted_toparchreduction_keys`
 
 This data structure is a sorted list of the level 1 keys used in the 
 [`ClusterMod_reduce_top_arch`](#ClusterMod_reduce_top_arch) data structure.
@@ -906,7 +938,15 @@ Its main purpose is to speed up a search routine in this file, to avoid always
 recomputing that data.
 
 
-### Routines
+#### `ClusterMod_sorted_optarch_keys`
+
+This data structure is a sorted list of the level 1 keys used in the 
+[`ClusterMod_optarch`](#ClusterMod_optarch) data structure.
+Its main purpose is to speed up a search routine in this file, to avoid always 
+recomputing that data.
+
+
+## Routines
 
 -   `get_matching_archmap_key( version )`: For a given numeric (i.e., yyyymm) version, returns
     the largest key in `ClusterMod_map_arch_hierarchy` not larger than the given version.
@@ -921,6 +961,9 @@ recomputing that data.
     the largest key in `ClusterMod_reduce_cpu` not larger than the given version.
 
 -   `get_matching_toparchreduction_key( version )`: For a given numeric (i.e., yyyymm) version, returns
+    the largest key in `ClusterMod_reduce_top_arch` not larger than the given version.
+
+-   `get_matching_optarch_key( version )`: For a given numeric (i.e., yyyymm) version, returns
     the largest key in `ClusterMod_reduce_top_arch` not larger than the given version.
 
 -   `is_Stack_SystemTable`: Check if a given stack version corresponds to a key in
