@@ -89,7 +89,7 @@ function get_versionedfile( matching, directory, filenameprefix, filenamesuffix 
     -- Prepare the versions structure
     --
     
-    function compare( arg1, arg2 )
+    local function compare( arg1, arg2 )
         return ( map_toolchain( arg1 ) < map_toolchain( arg2 ) )
     end
     table.sort( versions, compare )

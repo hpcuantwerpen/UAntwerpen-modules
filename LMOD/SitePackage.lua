@@ -161,7 +161,8 @@ sandbox_registration{
     ['get_systemrepo_easybuild']      = get_systemrepo_easybuild,       -- Defined in SitePackage_system_info
     ['get_clustername']               = get_clustername,                -- Defined in SitePackage_system_info
     ['get_stackname']                 = get_stackname,                  -- Defined in SitePackage_system_info
-    ['is_interactive']                = is_interactive,                 -- Defined in SitePackage
+    ['get_versionedfile']             = get_versionedfile,              -- Defined in 
+    ['is_interactive']                = is_interactive,                 -- Defined in SitePackage_map_toolchain
 --    ['get_cluster_osarch']            = get_cluster_osarch,
 --    ['get_clusterarch']               = get_clusterarch,
 --    [ 'map_toolchain']                = map_toolchain,
