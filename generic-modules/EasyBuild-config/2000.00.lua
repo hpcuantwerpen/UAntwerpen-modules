@@ -318,7 +318,7 @@ if detail_mode == 'user' then
     end
 
     if stack_version ~= 'system' then
-        EBrepo_work_dirs = get_user_EBrepo_dirs( osarch, stack_name, 'system' )
+        EBrepo_work_dirs = get_user_EBrepo_dirs( osarch_system, stack_name, 'system' )
         for i,dir in ipairs( EBrepo_work_dirs ) do
             table.insert( robot_paths, dir )
         end
@@ -330,7 +330,7 @@ end
 
 if detail_mode == 'user' or detail_mode == 'production' then
 
-    EBrepo_work_dirs = get_system_EBrepo_dirs( osarch_system, stack_name, stack_version )
+    EBrepo_work_dirs = get_system_EBrepo_dirs( osarch, stack_name, stack_version )
     for i,dir in ipairs( EBrepo_work_dirs ) do
         table.insert( robot_paths, dir )
     end
