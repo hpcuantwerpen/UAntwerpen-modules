@@ -88,7 +88,7 @@ stack_name=$($scriptdir/ClusterMod_tools/helper_get_stackname.lua)
 
 # Initialise LMOD just to be sure as we may be running this to install in an
 # alternative stack.
-eval $($scriptdir/enable_ClusterMod.sh)
+eval $($scriptdir/enable_ClusterMod.sh $installroot)
 
 module load $stack_name/system
 module load arch/$($scriptdir/ClusterMod_tools/helper_get_stack_genericarch_current.lua 'system')
