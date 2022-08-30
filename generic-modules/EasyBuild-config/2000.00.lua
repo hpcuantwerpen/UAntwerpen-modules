@@ -475,6 +475,208 @@ end
 -- TODO: Add help.
 
 
+if detail_mode == 'user' then
+
+help( [[
+Description
+===========
+The EasyBuild-user module configures EasyBuild through environment variables
+for installation of software in a user directory.
+
+The module works together with the software stack modules. Hence it is needed to first
+load an appropriate software stack and only then load EasyBuild-user. After changing
+the software stack it is needed to re-load this module (if it is not done automatically).
+
+After loading the module, it is possible to simply use the eb command without further
+need for long command line arguments to specify the configuration.
+
+The module assumes the following environment variables:
+    * EBU_USER_PREFIX: Prefix for the EasyBuild user installation. The default
+      is $HOME/EasyBuild.
+    * EBU_EASYBUILD_VERSIONLESS: When set and not 0 or no, the module will not try to
+      load a specific version of EasyBuild. As such it would preserve whatever version
+      a user has loaded already, or load the default version as determined by Lmod rules
+      if no module is loaded.
+    * EBU_REMOTE_BUILD: When set and not 0 or no, configure EasyBuild with a build and
+      temporary directory that works everywhere so that EasyBuild can start Slurm jobs
+      to build an application with lots of dependencies.
+
+The following user-specific directories and files are used by this module:
+    * Directory for user EasyConfig files:       ]] .. user_easyconfigdir .. '\n' .. [[
+    * EasyBuild user configuration files:        ]] .. user_configdir .. '\n' .. [[
+        - Generic config file:                   ]] .. user_configfile_generic .. '\n' .. [[
+        - Software stack-specific config file:   ]] .. user_configfile_stack .. '\n' .. [[
+
+The following system directories and files are used (if present):
+    * Custom module naming schemes:             ]] .. module_naming_scheme_dir .. '\n' .. [[
+    Using module naming scheme:                 ]] .. module_naming_scheme .. '\n' .. [[
+    with suffix-module-path:                    ]] .. '\'' .. suffix_modules_path .. '\'\n' .. [[
+    * EasyBuild configuration files:            ]] .. system_configdir .. '\n' .. [[
+      - Generic config file:                    ]] .. system_configfile_generic .. '\n' .. [[
+      - Software stack-specific config file:    ]] .. system_configfile_stack .. '\n' .. [[
+    * Directory of system EasyConfig files:     ]] .. system_easyconfigdir .. '\n' .. [[
+    * Repository of installed EasyConfigs:      ]] .. system_repositorypath .. '\n' .. [[
+
+Based on this information, the following settings are used:
+    * Software installation directory:          ]] .. installpath_software .. '\n' .. [[
+    * Module files installation directory:      ]] .. installpath_modules .. '\n' .. [[
+    * Repository of installed EasyConfigs       ]] .. repositorypath .. '\n' .. [[
+    * Sources of installed packages:            ]] .. table.concat( source_paths, ':' ) .. '\n' .. [[
+    * Containers installed in:                  ]] .. containerpath .. '\n' .. [[
+    * Packages installed in:                    ]] .. packagepath .. '\n' .. [[
+    * Custom EasyBlocks:                        ]] .. table.concat( easyblocks, ',' ) .. '\n' .. [[
+    * Custom module naming schemes:             ]] .. module_naming_scheme_dir .. '\n' .. [[
+      Using module naming scheme:               ]] .. module_naming_scheme .. '\n' .. [[
+      with suffix-module-path:                  ]] .. '\'' .. suffix_modules_path .. '\'\n' .. [[
+    * Robot search path:                        ]] .. table.concat( robot_paths, ':' ) .. '\n' .. [[
+    * Search path for eb -S/--search:           ]] .. table.concat( search_paths, ':' ) .. '\n' .. [[
+    * Builds are performed in:                  ]] .. buildpath .. '\n' .. [[
+    * EasyBuild temporary files in:             ]] .. tmpdir .. '\n' .. [[
+
+If multiple configuration files are given, they are read in the following order:
+    1. System generic configuration file
+    2. User generic configuration file
+    3. System stack-specific configuration file
+    4. User stack-specific configuration file
+Options that are redefined overwrite the old value. However, environment variables set by
+this module do take precedence over the values computed from the configuration files.
+
+To check the actual configuration used by EasyBuild, run ``eb --show-config``. This is
+also a good syntax check for the configuration files.
+
+First use for a software stack
+==============================
+The module will also take care of creating most of the subdirectories that it
+sets, even though EasyBuild would do so anyway when you use it. It does however
+give you a clear picture of the directory structure just after loading the
+module, and it also ensures that the software stack modules can add your user
+modules to the front of the module search path.
+]] )
+
+else -- Help text for system mode
+
+-- The help text in system mode is built up from several blocks.
+-- Help system mode: Title
+local helptext = [[
+Description
+===========
+]]
+
+if detail_mode == 'production' then
+
+-- Help system mode: First block for EasyBuild-production
+helptext = helptext .. [[
+The EasyBuild-production module configures EasyBuild through environment variables
+for installation of software in the system directories. Appropriate rights are required
+for a successful install.
+
+The module works together with the software stack modules. Hence it is needed to first
+load an appropriate software stack and only then load EasyBuild-production. After changing
+the software stack it is needed to re-load this module (if it is not done automatically).
+
+After loading the module, it is possible to simply use the eb command without further
+need for long command line arguments to specify the configuration.
+
+The module assumes the following environment variables:
+    * EBU_EASYBUILD_VERSIONLESS: When set and not 0 or no, the module will not try to
+      load a specific version of EasyBuild. As such it would preserve whatever version
+      a user has loaded already, or load the default version as determined by Lmod rules
+      if no module is loaded.
+    * EBU_REMOTE_BUILD: When set and not 0 or no, configure EasyBuild with a build and
+      temporary directory that works everywhere so that EasyBuild can start Slurm jobs
+      to build an application with lots of dependencies.
+
+]]
+
+else
+
+-- First block for EasyBuild-infrastructure
+helptext = helptext .. [[
+The EasyBuild-infrastructure module configures EasyBuild through environment variables
+for installation of software in the system infrastructure directories. Appropriate rights
+are required for a successful install.
+
+The module works together with the software stack modules. Hence it is needed to first
+load an appropriate software stack and only then load EasyBuild-infrastructure. After changing
+the software stack it is needed to re-load this module (if it is not done automatically).
+
+It should only be used to install the Cray cpe* toolchains, EasyBuild configuration
+modules (if they would be ported to EasyBuild), etc. as the Infrastructure
+module tree should only be used for modules that need to be available for all
+4 LUMI partitions and the hidden common pseudo-partition, where the modules in
+common should not be visible or available in the other partitions, i.e., a
+number of modules that are needed to make a hierarchy work and to reload
+correctly when switching modules.
+
+The EasyBuild configuration generated by this module is exactly the same
+as the one generated by EasyBuild-production except for the location where
+the modules are stored.
+
+After loading the module, it is possible to simply use the eb command without further
+need for long command line arguments to specify the configuration.
+
+]]
+
+end -- Of adding the first block of the help text in system mode (if detail_mode == production then else)
+
+-- Help system mode: Middle block of the help text, same for EasyBuild-production and EasyBuild-infrastructure.
+helptext = helptext .. [[
+The following directories and files are used by this module:
+
+    * Directory for EasyConfig files:           ]] .. system_easyconfigdir .. '\n' .. [[
+    * Software installed in:                    ]] .. system_installpath_software .. '\n' .. [[
+    * Module files installed in:                ]] .. system_installpath_modules .. '\n' .. [[
+    * Repository of installed EasyConfigs:      ]] .. system_repositorypath .. '\n' .. [[
+    * Sources of installed packages:            ]] .. system_sourcepath .. '\n' .. [[
+    * Containers installed in:                  ]] .. system_containerpath .. '\n' .. [[
+    * Packages installed in:                    ]] .. system_packagepath .. '\n' .. [[
+    * Custom EasyBlocks:                        ]] .. table.concat( easyblocks, ',' ) .. '\n' .. [[
+    * Custom module naming schemes:             ]] .. module_naming_scheme_dir .. '\n' .. [[
+      Using module naming scheme:               ]] .. module_naming_scheme .. '\n' .. [[
+      with suffix-module-path:                  ]] .. '\'' .. suffix_modules_path .. '\'\n' .. [[
+    * EasyBuild configuration files:            ]] .. system_configdir .. '\n' .. [[
+      - Generic config file:                    ]] .. system_configfile_generic .. '\n' .. [[
+      - Software stack-specific config file:    ]] .. system_configfile_stack .. '\n' .. [[
+    * Robot search path:                        ]] .. table.concat( robot_paths, ':' ) .. '\n' .. [[
+    * Search path for eb -S/--search:           ]] .. table.concat( search_paths, ':' ) .. '\n' .. [[
+    * Builds are performed in:                  ]] .. buildpath .. '\n' .. [[
+    * EasyBuild temporary files in:             ]] .. tmpdir .. '\n' .. [[
+
+If multiple configuration files are given, they are read in the following order:
+    1. System generic configuration file
+    2. System stack-specific configuration file
+Options that are redefined overwrite the old value. However, environment variables set by
+this module do take precedence over the values computed from the configuration files.
+
+To check the actual configuration used by EasyBuild, run ``eb --show-config`` or
+``eb --show-full-config``. This is also a good syntax check for the configuration files.
+
+]]
+
+
+if detail_mode == 'production' then
+
+-- Help system mode: Final block for EasyBuild-production only
+helptext = helptext .. [[
+First use for a software stack
+==============================
+This module can actually be used when bootstrapping EasyBuild. It is possible to
+do a temporary installation of EasyBuild outside the regular installation directories
+and then load this module to install EasyBuild in its final location from an EasyConfig
+file for EasyBuild and the temporary installation.
+
+No directories are created or added to the MODULEPATH by this modules as modules are
+installed in the directory where this module is found and as directories are created
+by EasyBuild as needed.
+
+]]
+
+end -- End of adding final block to the help text
+
+help( helptext ) -- Show help text in system mode.
+
+end -- Of the help block (if detail_mode == user then else)
+
 -- Final debugging information
 
 if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
