@@ -457,6 +457,38 @@ set_shell_function( 'clear-eb', bash_clear_eb, csh_clear_eb )
 
 -- -----------------------------------------------------------------------------
 --
+-- Create the user directory structure (in user mode only)
+--
+-- This isn't really needed as EasyBuild will create those that it needs on the
+-- fly, but it does help to suggest to users right away where which files will
+-- land.
+--
+
+if ( mode() == 'load' or mode() == 'show' ) and detail_mode == 'user' then
+
+    if not isDir( user_repositorypath )       then execute{ cmd='/usr/bin/mkdir -p ' .. user_repositorypath,       modeA={'load'} } end
+    if not isDir( user_sourcepath )           then execute{ cmd='/usr/bin/mkdir -p ' .. user_sourcepath,           modeA={'load'} } end
+    if not isDir( user_easyconfigdir )        then execute{ cmd='/usr/bin/mkdir -p ' .. user_easyconfigdir,        modeA={'load'} } end
+    if not isDir( user_easyblockdir )         then
+        execute{ cmd='/usr/bin/mkdir -p ' .. user_easyblockdir, modeA={'load'} }
+        -- Need to copy a dummy file here or eb --show-config will complain.
+        execute{ cmd='/usr/bin/cp -r ' .. pathJoin( system_easyblockdir, '00') .. ' ' .. user_easyblockdir, modeA={'load'} }
+    end
+    if not isDir( user_configdir )            then execute{ cmd='/usr/bin/mkdir -p ' .. user_configdir,            modeA={'load'} } end
+    if not isDir( user_installpath_software ) then execute{ cmd='/usr/bin/mkdir -p ' .. user_installpath_software, modeA={'load'} } end
+    if not isDir( user_installpath_modules )  then
+        execute{ cmd='/usr/bin/mkdir -p ' .. user_installpath_modules,  modeA={'load'} }
+        -- If the clusterach modules would be changed in a way that they do not put
+        -- directories in the MODULEPATH as long as they don't exist, then the next
+        -- line should be uncommented.
+        -- prepend_path( 'MODULEPATH', user_installpath_modules )
+    end
+  
+end
+  
+
+-- -----------------------------------------------------------------------------
+--
 -- Make an adaptive help block: If the module is loaded, different information
 -- will be shown.
 --
