@@ -677,6 +677,44 @@ help( helptext ) -- Show help text in system mode.
 
 end -- Of the help block (if detail_mode == user then else)
 
+-- -----------------------------------------------------------------------------
+--
+-- Print an informative message so that the user knows that EasyBuild is
+-- configured properly.
+--
+
+if mode() == 'load' and show_message then
+
+    local stack_message
+    stack_message = '\nEasyBuild configured to install software from the ' ..
+            stack_name .. '/'.. stack_version ..
+            ' software stack for the architecture ' .. osarch
+
+    if detail_mode == 'user' then
+        stack_message = stack_message ..
+            ' in the user tree at ' .. user_install_root .. '.\n'
+    elseif detail_mode == 'production' then
+        stack_message = stack_message ..
+            ' in the system application directories.\n'
+    elseif detail_mode == 'infrastructure' then
+        stack_message = stack_message ..
+            ' in the system infrastructure directories.\n'
+    else
+        LmodError( 'Unrecongnized module name' )
+    end
+
+    -- Unfortunately it looks like LmodMessage reformats the string and deletes the spaces?
+    stack_message = stack_message ..
+        '  * Software installation directory:    ' .. installpath_software             .. '\n' ..
+        '  * Modules installation directory:     ' .. installpath_modules              .. '\n' ..
+        '  * Repository:                         ' .. repositorypath                   .. '\n' ..
+        '  * Work directory for builds and logs: ' .. pathJoin( workdir, 'easybuild' ) .. '\n' ..
+        '    Clear work directory with clear-eb\n'
+
+    LmodMessage( stack_message )
+
+end -- if mode() == 'load' and show_message
+
 -- Final debugging information
 
 if os.getenv( '_CLUSTERMOD_LMOD_DEBUG' ) ~= nil then
