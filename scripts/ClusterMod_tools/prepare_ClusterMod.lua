@@ -276,5 +276,13 @@ print()
 -- TODO:
 -- .modulerc.lua files with synonyms????
 
+--
+-- Print a message
+--
+
+io.stdout:write( 
+    "To ensure that the proper versions of EasyBuild are available, run the update_easybuild.sh script."
+)
+
 
 
