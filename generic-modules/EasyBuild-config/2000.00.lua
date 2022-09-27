@@ -313,32 +313,15 @@ local EBrepo_work_dirs
 if detail_mode == 'user' then
 
     EBrepo_work_dirs = get_user_EBrepo_dirs( osarch, stack_name, stack_version )
-    for i,dir in ipairs( EBrepo_work_dirs ) do
-        table.insert( robot_paths, dir )
+    for i = #EBrepo_work_dirs, 1, -1 do
+        table.insert( robot_paths, EBrepo_work_dirs[i] )
     end
+
 
     if stack_version ~= 'system' then
         EBrepo_work_dirs = get_user_EBrepo_dirs( osarch_system, stack_name, 'system' )
-        for i,dir in ipairs( EBrepo_work_dirs ) do
-            table.insert( robot_paths, dir )
-        end
-    end
-
-end
-
---   + Include in user and production mode: The system repositories
-
-if detail_mode == 'user' or detail_mode == 'production' then
-
-    EBrepo_work_dirs = get_system_EBrepo_dirs( osarch, stack_name, stack_version )
-    for i,dir in ipairs( EBrepo_work_dirs ) do
-        table.insert( robot_paths, dir )
-    end
-
-    if stack_version ~= 'system' then
-        EBrepo_work_dirs = get_system_EBrepo_dirs( osarch_system, stack_name, 'system' )
-        for i,dir in ipairs( EBrepo_work_dirs ) do
-            table.insert( robot_paths, dir )
+        for i = #EBrepo_work_dirs, 1, -1 do
+            table.insert( robot_paths, EBrepo_work_dirs[i] )
         end
     end
 
@@ -347,6 +330,24 @@ end
 --   + Always include: The infrastructure repository for the current arch (no hierarchy)
 
 table.insert( robot_paths, infra_repositorypath )
+
+--   + Include in user and production mode: The system repositories
+
+if detail_mode == 'user' or detail_mode == 'production' then
+
+    EBrepo_work_dirs = get_system_EBrepo_dirs( osarch, stack_name, stack_version )
+    for i = #EBrepo_work_dirs, 1, -1 do
+        table.insert( robot_paths, EBrepo_work_dirs[i] )
+    end
+
+    if stack_version ~= 'system' then
+        EBrepo_work_dirs = get_system_EBrepo_dirs( osarch_system, stack_name, 'system' )
+        for i = #EBrepo_work_dirs, 1, -1 do
+            table.insert( robot_paths, EBrepo_work_dirs[i] )
+        end
+    end
+
+end
 
 --   + Now add the user easyconfig directory
 if detail_mode == 'user' then
