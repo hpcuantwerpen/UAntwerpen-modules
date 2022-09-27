@@ -202,6 +202,36 @@ do
             create_symlink( link_target, arch_modulefile )
 
             --
+            -- Create a .modulerc.lua file with the mapping on cluster names
+            --
+
+            if ClusterMod_ClusterMap[stack_version] ~=  nil then
+
+                print( '  - Creating the .modulerc file with alternative versions for the arch modules.' )
+
+                local modulerc_file = pathJoin( arch_dir, '.modulerc.lua' )
+                local modulerc_file_h = io.open( modulerc_file, 'w' )
+
+                if modulerc_file_h == nil then
+
+                    print( '\nWARNING: failed to create ' .. modulerc_file .. '.' ) 
+
+                else
+
+                    local cluster
+                    local osarch
+
+                    for cluster,osarch in pairs( ClusterMod_ClusterMap[stack_version] ) do
+                        modulerc_file_h:write( 'module_version(\'arch/' .. osarch .. '\', \'' .. cluster .. '\')\n' )
+                    end
+
+                    modulerc_file_h:close()
+
+                end
+
+            end
+
+            --
             -- Finally the EasyBuild configuration modules
             --
 
@@ -210,7 +240,7 @@ do
             link_target = pathJoin( repo_modules, 'generic-modules/EasyBuild-unlock', target_version )
             link_name = pathJoin( infra_modules, 'EasyBuild-unlock', ClusterMod_StackName .. '.lua' )
             
-            print( '  - Creating/configrming the EasyBuild-unlock module: link ' .. link_name .. ' linking to ' .. link_target .. '.' )
+            print( '  - Creating/confirming the EasyBuild-unlock module: link ' .. link_name .. ' linking to ' .. link_target .. '.' )
             mkDir( pathJoin( infra_modules, 'EasyBuild-unlock' ) )
             create_symlink( link_target, link_name )
 
@@ -222,7 +252,7 @@ do
                 link_target = pathJoin( repo_modules, 'generic-modules/EasyBuild-config', target_version )
                 link_name = pathJoin( infra_modules, 'EasyBuild-' .. module, ClusterMod_StackName .. '.lua' )
             
-                print( '  - Creating/configrming the EasyBuild-' .. module .. ' module: link ' .. link_name .. ' linking to ' .. link_target .. '.' )
+                print( '  - Creating/confirming the EasyBuild-' .. module .. ' module: link ' .. link_name .. ' linking to ' .. link_target .. '.' )
                 mkDir( pathJoin( infra_modules, 'EasyBuild-' .. module ) )
                 create_symlink( link_target, link_name )
             end
@@ -272,9 +302,6 @@ print( '\nCreating the sources directory ' .. sources_dir )
 mkDir( sources_dir )
 
 print()
-
--- TODO:
--- .modulerc.lua files with synonyms????
 
 --
 -- Print a message
