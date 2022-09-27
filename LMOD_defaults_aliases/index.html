@@ -15,7 +15,7 @@
     
     
       
-        <title>Scripts - UAntwerpen-modules documentation</title>
+        <title>LMOD defaults and aliases - UAntwerpen-modules documentation</title>
       
     
     
@@ -65,7 +65,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#scripts" class="md-skip">
+        <a href="#lmod-defaults-and-aliases" class="md-skip">
           Skip to content
         </a>
       
@@ -98,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Scripts
+              LMOD defaults and aliases
             
           </span>
         </div>
@@ -268,21 +268,6 @@
 
   
   
-  
-    <li class="md-nav__item">
-      <a href="../LMOD_defaults_aliases/" class="md-nav__link">
-        LMOD defaults and aliases
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
     
   
   
@@ -295,12 +280,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Scripts
+          LMOD defaults and aliases
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Scripts
+        LMOD defaults and aliases
       </a>
       
         
@@ -319,36 +304,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#enable_clustermodsh" class="md-nav__link">
-    enable_ClusterMod.sh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#check_systemdefinitionsh" class="md-nav__link">
-    check_systemdefinition.sh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#check_clusternodesh" class="md-nav__link">
-    check_clusternode.sh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prepare_clustermodsh" class="md-nav__link">
-    prepare_ClusterMod.sh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#update_easybuildsh" class="md-nav__link">
-    update_easybuild.sh
+  <a href="#aliases-for-the-clusterarch-modules" class="md-nav__link">
+    Aliases for the clusterarch modules
   </a>
   
 </li>
@@ -357,6 +314,21 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scripts/" class="md-nav__link">
+        Scripts
+      </a>
     </li>
   
 
@@ -528,36 +500,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#enable_clustermodsh" class="md-nav__link">
-    enable_ClusterMod.sh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#check_systemdefinitionsh" class="md-nav__link">
-    check_systemdefinition.sh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#check_clusternodesh" class="md-nav__link">
-    check_clusternode.sh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prepare_clustermodsh" class="md-nav__link">
-    prepare_ClusterMod.sh
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#update_easybuildsh" class="md-nav__link">
-    update_easybuild.sh
+  <a href="#aliases-for-the-clusterarch-modules" class="md-nav__link">
+    Aliases for the clusterarch modules
   </a>
   
 </li>
@@ -576,83 +520,48 @@
                 
 
 
-<h1 id="scripts">Scripts</h1>
-<h2 id="enable_clustermodsh">enable_ClusterMod.sh</h2>
-<p>The <code>enable_ClusterMod.sh</code> script prints the shell commands needed to enable the CalcUA
-stacks in a format suitable to be used with the <code>eval</code> bash shell function.</p>
-<p>Without arguments it assumes that the software stack is located two levels towards the
-root of the file system hierarchy from the location of the script. Alternatively it
-is possible to give the root of the software stack as an argument to the script.</p>
-<p>Besides setting a number of <code>LMOD_</code> environment variables to configure Lmod, it also sets
-the <code>CLUSTERMOD_SOFTWARESTACK</code> environment variable which points to the configuration file
-(itself a Lua script) of the software stack. Note that we need this variable to find 
-the system definition file which then tells the name of the cluster which is why we 
-cannot use the name of the cluster in the name of the environment variable.</p>
-<h2 id="check_systemdefinitionsh">check_systemdefinition.sh</h2>
-<p>This script runs a whole set of tests again the system definition file to check for inconsistencies
-or possible mistakes. </p>
-<p>Without command line arguments it will check the default file <code>etc/SystemDefinition.lua</code> in the parent
-directory of the directory containing the <code>check_systemdefinition.sh</code> script,
-but it is also possible to point the script to a different system definition file on the command line.</p>
-<p>It is certainly not a guarantee that there are no inconsistencies in the file, though it 
-is an extensive set of tests.</p>
-<h2 id="check_clusternodesh">check_clusternode.sh</h2>
-<p>The <code>check_clusternode.sh</code> script prints information about the node it is running on and 
-can also be used to check if the node is properly supported by a given system definition.</p>
-<p>Just as <code>check_systemdefinintion.sh</code>, without 
-command line arguments it will check the default file <code>etc/SystemDefinition.lua</code> in the parent
-directory of the directory containing the <code>check_clusternode.sh</code> script,
-but it is also possible to point the script to a different system definition file on the command line.</p>
-<h2 id="prepare_clustermodsh">prepare_ClusterMod.sh</h2>
-<p>This script is used to set up or extend the whole structure of the software stack.
-It should be run whenever new software stack versions are started or new nodes are added
-to the cluster. It tries to not be destructive to whatever files are already there, but
-will of course replace them when needed.</p>
-<p>The script will create the <code>etc/SoftwareStack.lua</code> file in the indicated install directory
-unless it is run in repair mode. This script is very essential in the whole module system:
-it helps many other components to find the location of other files.</p>
-<p>The script has several command line arguments:</p>
-<ul>
+<h1 id="lmod-defaults-and-aliases">LMOD defaults and aliases</h1>
+<h2 id="aliases-for-the-clusterarch-modules">Aliases for the clusterarch modules</h2>
+<p>There are two ways to define more user-friendly names for the clusterarch <code>arch</code>
+modules:</p>
+<ol>
 <li>
-<p><code>-h</code> or <code>--help</code>: Print help information and exit.</p>
+<p>Use <code>module_alias</code> statements in a modulerc file, e.g.,</p>
+<div class="highlight"><pre><span></span><code><span class="n">module_alias</span><span class="p">(</span><span class="s1">&#39;cluster/vaughan&#39;</span><span class="p">,</span> <span class="s1">&#39;arch/redhat8-zen2-noaccel&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>These will then show in a separate section of the <code>module avail</code> overview.</p>
 </li>
 <li>
-<p><code>-i</code>or <code>--installroot</code>: Points to the directory where the software stack should be
-  installed. The default value is derived from the location of the script (i.e., two
-  directories towards the root in the hierarchy).</p>
+<p>Use <code>module_version</code> statements in a modulerc file, e.g.,</p>
+<div class="highlight"><pre><span></span><code><span class="n">module_version</span><span class="p">(</span><span class="s1">&#39;arch/redhat8-zen2-noaccel&#39;</span><span class="p">,</span> <span class="s1">&#39;vaughan&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>These will be shown as attributes for the corresponding <code>arch</code> module in the
+<code>module avail</code> overview.</p>
+</li>
+</ol>
+<p>We want these alternative names to be separately defined for each software stack.
+The reasoning behind this is that for a special section of the cluster, e.g., a 
+section with GPU accelerators, we may not have a separate architecture in one 
+version of the software stack while we may have in the other, so we want the synonym
+to refer to different <code>arch</code> modules dependent on the software stack. </p>
+<p>There are again several ways to realise this that fit into the directory structure</p>
+<ol>
+<li>
+<p>We can define an additional <code>mgmt/LMOD</code> subdirectory and store a separate
+    modulerc file for each software stack in that directory. That file is then
+    added to the <code>LMOD_MODULERCFILE</code> PATH-style variable with the 
+    list of modulerc files that should be used.</p>
 </li>
 <li>
-<p><code>-e</code> or <code>--easybuild</code>: The absolute or relative path (with respect to the current
-  directory) of the repository with all custom EasyBuild files.</p>
+<p>The definitions can be put in a <code>.modulercz</code> file in the 
+    <code>modules-infrastructure/arch/calcua/yyyyx/arch</code> subdirectory.</p>
 </li>
-</ul>
-<p>The default is <code>UAntwerpen-easybuild</code> located two directories towards the root of
-  the directory in which the <code>prepare_ClusterMod.sh</code> script is located.</p>
-<ul>
-<li><code>-s</code> or <code>--systemdefinition</code>: The system definition file, with an absolute path or
-   path relative to the current directory.</li>
-</ul>
-<p>The default is <code>etc/SystemDefinition.lua</code> located in the parent directory of the
-   directory where the <code>prepare_ClusterMod.sh</code> script is found.</p>
-<ul>
-<li><code>-r</code> or <code>--repair</code>: Runs the script in repair mode.</li>
-</ul>
-<p>One can still indicate the installation directory and the script will then search in that
-  directory to locate eth <code>etc/SoftwareStack.lua</code> file. However, the <code>-e</code>/<code>--easybuild</code>
-  and <code>-s</code>/<code>--systemdefinition</code> flags should not be used as that data comes from the
-  <code>etc/SoftwareStack.lua</code> file.</p>
-<ul>
-<li><code>-d</code> or <code>--debug</code>: Mostly useful during development, prints additional debug information.</li>
-</ul>
-<h2 id="update_easybuildsh">update_easybuild.sh</h2>
-<p>This script checks if all the necessary versions of EasyBuild are installed.</p>
-<p>When given without arguments, it tries to locate the <code>SoftwareStack.lua</code> file
-relative to its own location. However, the root of the installation (which then
-contains <code>etc/SoftwareStack.lua</code>) can be given as a command line argument.</p>
-<p>The versions of EasyBuild that should be installed are derived from the
-<code>ClusterMod_SystemProperties</code> in the system definition file refered to by the
-<code>SoftwareStack.lua</code> file. Note that the necessary EasyConfig files should be 
-present, or the script will produce an error message.</p>
+</ol>
+<p>We have chosen for the <strong>second option</strong>.</p>
+<p>The <code>modulerc</code> file is generated by the <code>prepare_ClusterMod.sh</code> script based on
+information contained in the <code>ClusterMod_ClusterMap</code> variable of the system 
+definition file, and is also re-generated during a repair run, so the file should
+not be hand-edited.</p>
 
   <hr>
 <div class="md-source-file">
@@ -682,7 +591,7 @@ present, or the script will produce an error message.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../LMOD_defaults_aliases/" class="md-footer__link md-footer__link--prev" aria-label="Previous: LMOD defaults and aliases" rel="prev">
+        <a href="../environment_variables/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Environment variables" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -691,20 +600,20 @@ present, or the script will produce an error message.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              LMOD defaults and aliases
+              Environment variables
             </div>
           </div>
         </a>
       
       
         
-        <a href="../SitePackage/" class="md-footer__link md-footer__link--next" aria-label="Next: The SitePackage.lua file and its included LUA files" rel="next">
+        <a href="../scripts/" class="md-footer__link md-footer__link--next" aria-label="Next: Scripts" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              The SitePackage.lua file and its included LUA files
+              Scripts
             </div>
           </div>
           <div class="md-footer__button md-icon">
