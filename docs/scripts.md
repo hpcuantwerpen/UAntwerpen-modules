@@ -1,8 +1,8 @@
 # Scripts
 
-## enable_CalcUA.sh
+## enable_ClusterMod.sh
 
-The `enable_CalcUA.sh` script prints the shell commands needed to enable the CalcUA
+The `enable_ClusterMod.sh` script prints the shell commands needed to enable the CalcUA
 stacks in a format suitable to be used with the `eval` bash shell function.
 
 Without arguments it assumes that the software stack is located two levels towards the
@@ -34,14 +34,13 @@ is an extensive set of tests.
 The `check_clusternode.sh` script prints information about the node it is running on and 
 can also be used to check if the node is properly supported by a given system definition.
 
-
 Just as `check_systemdefinintion.sh`, without 
 command line arguments it will check the default file `etc/SystemDefinition.lua` in the parent
 directory of the directory containing the `check_clusternode.sh` script,
 but it is also possible to point the script to a different system definition file on the command line.
 
 
-## prepare_calcua.sh
+## prepare_ClusterMod.sh
 
 This script is used to set up or extend the whole structure of the software stack.
 It should be run whenever new software stack versions are started or new nodes are added
@@ -64,13 +63,13 @@ The script has several command line arguments:
   directory) of the repository with all custom EasyBuild files.
 
   The default is `UAntwerpen-easybuild` located two directories towards the root of
-  the directory in which the `prepare_calcua.sh` script is located.
+  the directory in which the `prepare_ClusterMod.sh` script is located.
 
 -  `-s` or `--systemdefinition`: The system definition file, with an absolute path or
    path relative to the current directory.
 
    The default is `etc/SystemDefinition.lua` located in the parent directory of the
-   directory where the `prepare_calcua.sh` script is found.
+   directory where the `prepare_ClusterMod.sh` script is found.
   
 - `-r` or `--repair`: Runs the script in repair mode.
 
@@ -83,12 +82,16 @@ The script has several command line arguments:
 - `-d` or `--debug`: Mostly useful during development, prints additional debug information.
 
 
-## prepare_calcua_stack.sh
-
-NOT NEEDED ANYMORE?
-
-
 ## update_easybuild.sh
 
-TODO: First fix where we will install EasyBuild...
+This script checks if all the necessary versions of EasyBuild are installed.
+
+When given without arguments, it tries to locate the `SoftwareStack.lua` file
+relative to its own location. However, the root of the installation (which then
+contains `etc/SoftwareStack.lua`) can be given as a command line argument.
+
+The versions of EasyBuild that should be installed are derived from the
+`ClusterMod_SystemProperties` in the system definition file refered to by the
+`SoftwareStack.lua` file. Note that the necessary EasyConfig files should be 
+present, or the script will produce an error message.
 
