@@ -365,7 +365,7 @@ table.insert( robot_paths, system_easyconfigdir )
 if detail_mode == 'user' or detail_mode == 'production' then
     local ebroot_easybuild = os.getenv( 'EBROOTEASYBUILD' )
     if ebroot_easybuild ~= nil then
-        table.insert( search_paths, pathJoin( ebroot_easybuild, 'easybuild/easyconfigs' ) )
+        table.insert( robot_paths, pathJoin( ebroot_easybuild, 'easybuild/easyconfigs' ) )
     end
 end
 
