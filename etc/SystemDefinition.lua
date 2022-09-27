@@ -97,7 +97,7 @@ ClusterMod_SystemTable = {
 --
 ClusterMod_SystemProperties = {
     ['system'] = {
-        ['EasyBuild'] = '4.6.0',
+        ['EasyBuild'] = '4.6.1',
         ['hierarchy'] = '2L',  -- Doesn't really matter as we use only one level
     },
     ['manual'] = {  -- This is not an EasyBuild-managed stack.
@@ -108,7 +108,7 @@ ClusterMod_SystemProperties = {
         ['hierarchy'] = '2L',
     },
     ['2022a'] = {
-        ['EasyBuild'] = '4.6.0',
+        ['EasyBuild'] = '4.6.1',
         ['hierarchy'] = '2L',
     },
 }
