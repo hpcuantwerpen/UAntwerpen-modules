@@ -644,9 +644,6 @@ test stack in a different file system.</p>
     it is not a good idea though to use Tcl-based modules even though Lmod can work with them.</p>
 </li>
 <li>
-<p>Module naming scheme</p>
-</li>
-<li>
 <p>Modules that should be hidden.</p>
 <p>This is not currently used in the configuration at UAntwerpen. It may be better to hide modules
 through Lmod instead as then modules maintain their regular version numbers and it is easier
@@ -712,15 +709,16 @@ the regular module tree, there does not seem to be a problem with this approach.
 <p>Sources subdirectories:</p>
 <ul>
 <li>
-<p><code>production</code> and <code>infrastructure</code> use the same directory, determined by the
-    <code>get_system_EBsources_dir</code> function and based on top of the system installation
-    directory.</p>
+<p><code>production</code> and <code>infrastructure</code> use the same directories in the install root of
+    the software installation. As 'sources' is the one in which automatically downloaded
+    files are written, that one comes before <code>sources-manual</code> in the sources search path.</p>
 </li>
 <li>
-<p><code>user</code> stores the sources in the directory determined by the <code>get_user_EBsources_dir</code>
-    function based on top of the user installation directory, but also adds the directory
-    used by <code>production</code> to the sources path so that sources that are already on the
-    system don't need to be downloaded again.</p>
+<p><code>user</code> adds the <code>sources</code> and <code>sources-manual</code> subdirectories in the user installation
+    root at the front of this list, with the <code>sources</code> subdirectory in the user installation
+    root first as that is the one to which EasyBuild-downloaded sources will be written.
+    The directories in <code>production</code> are added so that sources that are already available on
+    the system don't need to be downloaded again.</p>
 </li>
 </ul>
 </li>
@@ -794,6 +792,9 @@ used instead.</p>
 </ol>
 </li>
 <li>
+<p>Module naming scheme (and the installation directory of alternative module naming schemes)</p>
+</li>
+<li>
 <p>Build directory and temporary directory for EasyBuild: The subdirectories <code>build</code> and 
     <code>tmp</code> respectively of the work directory determined according to the followin algorithm:</p>
 <ul>
@@ -828,7 +829,7 @@ but it does eat from RAM disk space also.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 26, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 29, 2022</span>
       
     
   </small>
