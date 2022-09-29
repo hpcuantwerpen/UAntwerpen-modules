@@ -214,10 +214,12 @@ local easyconfigdir = mod_mode == 'user' and user_easyconfigdir or system_easyco
 local installpath =   mod_mode == 'user' and user_installpath   or system_installpath
 
 local system_sourcepath =          pathJoin( system_install_root, 'sources' )
+local system_sourcepath_manual =   pathJoin( system_install_root, 'sources-manual' )
 local system_containerpath =       pathJoin( system_install_root, 'containers' )
 local system_packagepath =         pathJoin( system_install_root, 'packages' )
 
 local user_sourcepath =            pathJoin( user_install_root,   'sources' )
+local user_sourcepath_manual =     pathJoin( user_install_root,   'sources-manual' )
 local user_containerpath =         pathJoin( user_install_root,   'containers' )
 local user_packagepath =           pathJoin( user_install_root,   'packages' )
 
@@ -295,11 +297,13 @@ local source_paths = {}
 --   + In usermode: The user source path comes first as that is where we want to write.
 if mod_mode == 'user' then
     table.insert( source_paths, user_sourcepath )
+    table.insert( source_paths, user_sourcepath_manual )
 end
 
 --   + The system source path is always included so that user installations that make small modifications
 --     to a config don't need to download again
 table.insert( source_paths, system_sourcepath )
+table.insert( source_paths, system_sourcepath_manual )
 
 -- - Build the robot path ROBOT_PATHS
 

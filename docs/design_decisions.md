@@ -361,16 +361,28 @@ InstallRoot
 ### Other subdirectories
 
 -   `sources` subdirectory to permanently store the sources. This directory is
-    further organised in the EasyBuild way. Downloads for manually installed
-    software can be added to it by putting it in the EasyBuild structure.
+    further organised in the EasyBuild way. 
 
-    In the future we may need to add an additional level to distinguish between
-    EasyBuild and other build tools that we may use and that have a different
-    structure for storing source files.
+-   `sources-manual` subdirectory to permanently store the sources that are downloaded
+    manually but used to install software via EasyBuild. This directory is
+    further organised in the EasyBuild way.
+
+    The reason to keep this directory separate from the one used for sources
+    downloaded automatically through EasyBuild is that it makes it easier to
+    clean up only those sources that are easy to recover. Moreover, in a test
+    installation one can link to the downloaded sources of the central installation
+    hence avoiding to have to copy the appropriate sources whenever starting with
+    a clean test installation.
+
+In the future we may need to add an additional level or additional directory
+to distinguish between
+EasyBuild and other build tools that we may use and that have a different
+structure for storing source files.
 
 ***Other subdirectories***
 ``` bash
 InstallRoot
- └─ sources
+ ├─ sources
+ └─ sources-manual
 ```
 

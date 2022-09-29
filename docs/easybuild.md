@@ -62,8 +62,6 @@ test stack in a different file system.
 -   Module syntax and naming scheme. Given that the whole module framework is based on Lmod, 
     it is not a good idea though to use Tcl-based modules even though Lmod can work with them.
 
--   Module naming scheme
-
 -   Modules that should be hidden.
 
     This is not currently used in the configuration at UAntwerpen. It may be better to hide modules
@@ -111,14 +109,15 @@ test stack in a different file system.
 
 -   Sources subdirectories:
 
-    -   `production` and `infrastructure` use the same directory, determined by the
-        `get_system_EBsources_dir` function and based on top of the system installation
-        directory.
+    -   `production` and `infrastructure` use the same directories in the install root of
+        the software installation. As 'sources' is the one in which automatically downloaded
+        files are written, that one comes before `sources-manual` in the sources search path.
 
-    -   `user` stores the sources in the directory determined by the `get_user_EBsources_dir`
-        function based on top of the user installation directory, but also adds the directory
-        used by `production` to the sources path so that sources that are already on the
-        system don't need to be downloaded again.
+    -   `user` adds the `sources` and `sources-manual` subdirectories in the user installation
+        root at the front of this list, with the `sources` subdirectory in the user installation
+        root first as that is the one to which EasyBuild-downloaded sources will be written.
+        The directories in `production` are added so that sources that are already available on
+        the system don't need to be downloaded again.
     
 -   Robot search path.
 
@@ -169,6 +168,8 @@ test stack in a different file system.
 
     4.  In `user` mode, `easybuild-user-<stackname>-<stackversion>.cfg` 
 
+
+-   Module naming scheme (and the installation directory of alternative module naming schemes)
 
 -   Build directory and temporary directory for EasyBuild: The subdirectories `build` and 
     `tmp` respectively of the work directory determined according to the followin algorithm:
