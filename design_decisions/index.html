@@ -251,11 +251,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#directory-structure" class="md-nav__link">
-    Directory structure
+  <a href="#directory-structure-of-the-central-installation" class="md-nav__link">
+    Directory structure of the central installation
   </a>
   
-    <nav class="md-nav" aria-label="Directory structure">
+    <nav class="md-nav" aria-label="Directory structure of the central installation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -295,6 +295,54 @@
         
           <li class="md-nav__item">
   <a href="#other-subdirectories" class="md-nav__link">
+    Other subdirectories
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directory-structure-of-the-user-installation" class="md-nav__link">
+    Directory structure of the user installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Directory structure of the user installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optional-repository-part-of-the-tree_1" class="md-nav__link">
+    (Optional) repository part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-part-of-the-tree_1" class="md-nav__link">
+    Module part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-directory-sw_1" class="md-nav__link">
+    Software directory SW
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manangement-subdirectory_1" class="md-nav__link">
+    Manangement subdirectory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-subdirectories_1" class="md-nav__link">
     Other subdirectories
   </a>
   
@@ -562,11 +610,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#directory-structure" class="md-nav__link">
-    Directory structure
+  <a href="#directory-structure-of-the-central-installation" class="md-nav__link">
+    Directory structure of the central installation
   </a>
   
-    <nav class="md-nav" aria-label="Directory structure">
+    <nav class="md-nav" aria-label="Directory structure of the central installation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -606,6 +654,54 @@
         
           <li class="md-nav__item">
   <a href="#other-subdirectories" class="md-nav__link">
+    Other subdirectories
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directory-structure-of-the-user-installation" class="md-nav__link">
+    Directory structure of the user installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Directory structure of the user installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optional-repository-part-of-the-tree_1" class="md-nav__link">
+    (Optional) repository part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-part-of-the-tree_1" class="md-nav__link">
+    Module part of the tree
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-directory-sw_1" class="md-nav__link">
+    Software directory SW
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manangement-subdirectory_1" class="md-nav__link">
+    Manangement subdirectory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-subdirectories_1" class="md-nav__link">
     Other subdirectories
   </a>
   
@@ -746,7 +842,7 @@ versions with versionsuffix for the architecture.</p>
 </ul>
 </li>
 </ul>
-<h2 id="directory-structure">Directory structure</h2>
+<h2 id="directory-structure-of-the-central-installation">Directory structure of the central installation</h2>
 <p>Separate module roots for infrastructure modules that follow a strict
 Lmod hierarchy and for the easybuild-managed modules that are arranged 
 by software stack and architecture.</p>
@@ -949,11 +1045,16 @@ these modules rather then inject them elsewhere via EasyBuild.</p>
 </li>
 </ul>
 <h3 id="software-directory-sw">Software directory <code>SW</code></h3>
-<p>This directory follows the same layout as the one for the EasyBuild-installed software,
-with two differences:</p>
+<p>This directory follows the same layout as the modules directory for the EasyBuild-installed software,
+with three differences:</p>
 <ol>
 <li>
-<p>At the architecture level, the short architecture string is used to save space</p>
+<p>At the stack level, the two levels are collapsed in a single name with the
+    two parts separated with a hyphen. For the <code>system</code> software, <code>calcua-</code> is
+    dropped from the name.</p>
+</li>
+<li>
+<p>At the architecture level, the short architecture string is used to save space, </p>
 </li>
 <li>
 <p>There is yet another pseudo-stack for manually installed software, called <code>MNL</code>  </p>
@@ -961,6 +1062,12 @@ with two differences:</p>
 as it is not managed at all by EasyBuild.</p>
 </li>
 </ol>
+<p>Depending on the constants set in the Linux kernel, one needs to be careful with the length
+of paths in the shebang line. Especially for a user installation there is a fair chance to bump
+into them. Furthermore, when compiling sometimes very long lists of <code>-L</code> arguments are used, and
+the shorter the directories given as an argument, the easier it becomes to maintain an overview
+of all the arguments as we have seen cases where they didn't fit anymore in a more or less 
+normal-sized terminal window.</p>
 <p><strong><em>Resulting structure of the software directory</em></strong><br />
 <div class="highlight"><pre><span></span><code>InstallRoot
  └─ SW
@@ -1044,13 +1151,122 @@ structure for storing source files.</p>
  ├─ sources
  └─ sources-manual
 </code></pre></div></p>
+<h2 id="directory-structure-of-the-user-installation">Directory structure of the user installation</h2>
+<p>The user installation is a subset of the system installation.
+Several directories are not needed. E.g., the structure to implement
+the software stack and architecture modules does not need to be duplicated.</p>
+<h3 id="optional-repository-part-of-the-tree_1">(Optional) repository part of the tree</h3>
+<p>An optional user repository with EasyConfigs etc. specific for the user is 
+supported. The directory should be called <code>UserRepo</code> but of course that does
+not dictate the name of the repository on GitHub or whatever other version control
+system is used.</p>
+<p><strong><em>(Optional) repository part of the tree</em></strong><br />
+<div class="highlight"><pre><span></span><code>InstallRoot
+ └─ UserRepo <span class="c1">#(1)</span>
+     └─ easybuild
+         ├─ easyconfigs
+         ├─ easyblocks
+         └─ config <span class="c1">#(2)</span>
+</code></pre></div></p>
+<ol>
+<li>EasyBuild setup</li>
+<li>Configuration files for some settings not done via environment</li>
+</ol>
+<h3 id="module-part-of-the-tree_1">Module part of the tree</h3>
+<p>The module part of the software installation tree is also much simpler than for the
+system installation as the <code>modules-infrastructure</code> part is not needed.</p>
+<ul>
+<li>
+<p>EasyBuild-managed modules: <code>modules-easybuild-user</code></p>
+<p>Here we treat the system-wide installed software which is independent from any calcua software
+stack as a separate software stack without version  Architecture-wise both are treated the same,
+though we expect that most if not all system-wide installed software will be installed in a
+generic architecture subdirectory.</p>
+<p>2 levels before arriving at the actual infrastructure modules:</p>
+<ol>
+<li>
+<p>Name-version of the software stack, e.g., <code>calcua-2021b</code> or <code>system</code></p>
+</li>
+<li>
+<p>Architecture string</p>
+</li>
+</ol>
+</li>
+<li>
+<p>This leads to the following view on the modules tree:</p>
+<div class="highlight"><pre><span></span><code>InstallRoot
+ └─ modules-easybuild <span class="c1">#(1)</span>
+     ├─ calcua-2021b
+     │   ├─ redhat8_x86_64 <span class="c1">#(2)</span>
+     │   ├─ redhat8-broadwell-noaccel
+     │   └─ redhat8-broadwell-quadro
+     └─ system* <span class="c1">#(3)</span>
+         ├─ redhat8-x86_64 <span class="c1">#(4)</span>
+         └─ redhat8-ivybridge-noaccel <span class="c1">#(5)</span>
+</code></pre></div>
+<ol>
+<li>Modules generated with EasyBuild</li>
+<li>Directory for potential generic builds if performance does not matter</li>
+<li>Modules outside the regular software stacks</li>
+<li>No specific processor versions, e.g., Matlab</li>
+<li>Specific processor version, e.g., Gaussian</li>
+</ol>
+</li>
+</ul>
+<p>The name of the modules tree is deliberately chosen differently from the one in 
+the system installation as that makes it a lot easier to make the implementation
+of the friendly category labels for <code>module avail</code> robust.</p>
+<h3 id="software-directory-sw_1">Software directory <code>SW</code></h3>
+<p>The structure of this part of the tree is essentially the same as for the
+system-installed software, but we don't foresee place for manually installed
+software.</p>
+<p><strong><em>Resulting structure of the software directory</em></strong><br />
+<div class="highlight"><pre><span></span><code>InstallRoot
+ └─ SW
+     ├─ calcua-2021b
+     │   ├─ RH8-x86_64
+     │   ├─ RH8-BRW-host
+     │   └─ RH8-BRW-NVGP61GL
+     └─ system <span class="c1">#(1) </span>
+         ├─ RH8-x86_64
+         └─ RH8-IVB-host
+</code></pre></div></p>
+<ol>
+<li>Sometimes relatively empty subdirs if EasyBuild only creates a module...</li>
+</ol>
+<h3 id="manangement-subdirectory_1">Manangement subdirectory</h3>
+<p>The management director is reduced to basically the <code>EBfiles_repo</code> for software 
+installed by the user. There is no similar directory needed for the infrastructure
+software, and users can generate their LMOD cache in the <code>.lmod.d</code> subdirectory
+in their home directory (and let LMOD do it automatically).</p>
+<p><code>mgmt</code> subdirectory for all (nearly) files that are somehow system-generated.</p>
+<p><strong><em>Resulting structure of the management directory</em></strong><br />
+<div class="highlight"><pre><span></span><code>InstallRoot
+ └─ EBfiles_repo
+     ├─ calcua-2021b
+     │   ├─ redhat8-x86_64
+     │   └─ redhat8-broadwell-noaccel
+     └─ system <span class="c1">#(1)</span>
+         └─ redhat8-x86_64 <span class="c1">#(2)</span>
+</code></pre></div></p>
+<ol>
+<li>Modules outside the regular software stacks</li>
+<li>No specific processor versions, e.g., Matlab</li>
+</ol>
+<h3 id="other-subdirectories_1">Other subdirectories</h3>
+<p>This structure mirrors the one of the system installation.</p>
+<p><strong><em>Other subdirectories</em></strong>
+<div class="highlight"><pre><span></span><code>InstallRoot
+ ├─ sources
+ └─ sources-manual
+</code></pre></div></p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 29, 2022</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2022</span>
       
     
   </small>
