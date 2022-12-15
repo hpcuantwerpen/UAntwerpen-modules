@@ -91,7 +91,7 @@
         -   Needs changes to `get_osarchs` and `get_osarchs_reverse`.
 
 
-## Directory structure
+## Directory structure of the central installation
 
 Separate module roots for infrastructure modules that follow a strict
 Lmod hierarchy and for the easybuild-managed modules that are arranged 
@@ -289,15 +289,26 @@ InstallRoot
 
 ### Software directory `SW`
 
-This directory follows the same layout as the one for the EasyBuild-installed software,
-with two differences:
+This directory follows the same layout as the modules directory for the EasyBuild-installed software,
+with three differences:
 
-1.  At the architecture level, the short architecture string is used to save space
+1.  At the stack level, the two levels are collapsed in a single name with the
+    two parts separated with a hyphen. For the `system` software, `calcua-` is
+    dropped from the name.
 
-2.  There is yet another pseudo-stack for manually installed software, called `MNL`  
+2.  At the architecture level, the short architecture string is used to save space, 
+
+3.  There is yet another pseudo-stack for manually installed software, called `MNL`  
 
     This directory has no corresponding modules directory in the EasyBuild-managed directory
     as it is not managed at all by EasyBuild.
+
+Depending on the constants set in the Linux kernel, one needs to be careful with the length
+of paths in the shebang line. Especially for a user installation there is a fair chance to bump
+into them. Furthermore, when compiling sometimes very long lists of `-L` arguments are used, and
+the shorter the directories given as an argument, the easier it becomes to maintain an overview
+of all the arguments as we have seen cases where they didn't fit anymore in a more or less 
+normal-sized terminal window.
 
 ***Resulting structure of the software directory***  
 ``` bash
@@ -378,6 +389,136 @@ In the future we may need to add an additional level or additional directory
 to distinguish between
 EasyBuild and other build tools that we may use and that have a different
 structure for storing source files.
+
+***Other subdirectories***
+``` bash
+InstallRoot
+ ├─ sources
+ └─ sources-manual
+```
+
+
+## Directory structure of the user installation
+
+The user installation is a subset of the system installation.
+Several directories are not needed. E.g., the structure to implement
+the software stack and architecture modules does not need to be duplicated.
+
+
+### (Optional) repository part of the tree
+
+An optional user repository with EasyConfigs etc. specific for the user is 
+supported. The directory should be called `UserRepo` but of course that does
+not dictate the name of the repository on GitHub or whatever other version control
+system is used.
+
+***(Optional) repository part of the tree***  
+``` bash
+InstallRoot
+ └─ UserRepo #(1)
+     └─ easybuild
+         ├─ easyconfigs
+         ├─ easyblocks
+         └─ config #(2)
+```
+
+1.  EasyBuild setup
+2.  Configuration files for some settings not done via environment
+
+
+### Module part of the tree
+
+The module part of the software installation tree is also much simpler than for the
+system installation as the `modules-infrastructure` part is not needed.
+
+-    EasyBuild-managed modules: `modules-easybuild-user`
+
+    Here we treat the system-wide installed software which is independent from any calcua software
+    stack as a separate software stack without version  Architecture-wise both are treated the same,
+    though we expect that most if not all system-wide installed software will be installed in a
+    generic architecture subdirectory.
+
+    2 levels before arriving at the actual infrastructure modules:
+
+    1.  Name-version of the software stack, e.g., `calcua-2021b` or `system`
+
+    2.  Architecture string
+
+-   This leads to the following view on the modules tree:
+
+    ``` bash
+    InstallRoot
+     └─ modules-easybuild #(1)
+         ├─ calcua-2021b
+         │   ├─ redhat8_x86_64 #(2)
+         │   ├─ redhat8-broadwell-noaccel
+         │   └─ redhat8-broadwell-quadro
+         └─ system* #(3)
+             ├─ redhat8-x86_64 #(4)
+             └─ redhat8-ivybridge-noaccel #(5)
+    ```
+    
+    1.  Modules generated with EasyBuild
+    2.  Directory for potential generic builds if performance does not matter
+    3.  Modules outside the regular software stacks
+    4.  No specific processor versions, e.g., Matlab
+    5.  Specific processor version, e.g., Gaussian
+
+The name of the modules tree is deliberately chosen differently from the one in 
+the system installation as that makes it a lot easier to make the implementation
+of the friendly category labels for `module avail` robust.
+
+
+### Software directory `SW`
+
+The structure of this part of the tree is essentially the same as for the
+system-installed software, but we don't foresee place for manually installed
+software.
+
+***Resulting structure of the software directory***  
+``` bash
+InstallRoot
+ └─ SW
+     ├─ calcua-2021b
+     │   ├─ RH8-x86_64
+     │   ├─ RH8-BRW-host
+     │   └─ RH8-BRW-NVGP61GL
+     └─ system #(1) 
+         ├─ RH8-x86_64
+         └─ RH8-IVB-host
+```
+
+1.  Sometimes relatively empty subdirs if EasyBuild only creates a module...
+
+
+### Manangement subdirectory
+
+The management director is reduced to basically the `EBfiles_repo` for software 
+installed by the user. There is no similar directory needed for the infrastructure
+software, and users can generate their LMOD cache in the `.lmod.d` subdirectory
+in their home directory (and let LMOD do it automatically).
+
+`mgmt` subdirectory for all (nearly) files that are somehow system-generated.
+
+
+***Resulting structure of the management directory***  
+``` bash
+InstallRoot
+ └─ EBfiles_repo
+     ├─ calcua-2021b
+     │   ├─ redhat8-x86_64
+     │   └─ redhat8-broadwell-noaccel
+     └─ system #(1)
+         └─ redhat8-x86_64 #(2)
+```
+
+1.  Modules outside the regular software stacks
+2.  No specific processor versions, e.g., Matlab
+
+
+### Other subdirectories
+
+This structure mirrors the one of the system installation.
 
 ***Other subdirectories***
 ``` bash

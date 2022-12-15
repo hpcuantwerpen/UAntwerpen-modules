@@ -984,7 +984,7 @@ end
 
 function get_user_module_dir( osarch, stack_name, stack_version )
 
-    local prefix = pathJoin( get_user_install_root(), 'modules' )
+    local prefix = pathJoin( get_user_install_root(), 'modules-easybuild-user' )
 
     return get_module_dir_worker( osarch, stack_name, stack_version, prefix, 'get_user_module_dir', get_module_dir_generator )
 
@@ -993,7 +993,7 @@ end
 
 function get_user_module_dirs( osarch, stack_name, stack_version )
 
-    local prefix = pathJoin( get_user_install_root(), 'modules' )
+    local prefix = pathJoin( get_user_install_root(), 'modules-easybuild-user' )
 
     return get_module_dirs_worker( osarch, stack_name, stack_version, prefix, 'get_user_module_dirs', get_module_dir_generator )
 

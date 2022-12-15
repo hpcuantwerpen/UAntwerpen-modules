@@ -234,7 +234,7 @@ local mapT =
         ['modules%-infrastructure/arch/']           = 'Available architectures for the software stack _STACK_',
         ['modules%-infrastructure/infrastructure/'] = 'Available infrastructure modules for _STACK_ on _ARCH_',
         ['modules%-easybuild/']                     = 'Available system-installed software modules for _STACK_ on _ARCH_',
-        ['modules/']                                = 'Available user-installed software modules for _STACK_ on _ARCH_',
+        ['modules%-easybuild%-user/']               = 'Available user-installed software modules for _STACK_ on _ARCH_',
         -- LMOD
         ['usr/share/lmod/lmod/modulefiles']         = 'LMOD modules',
         -- User-installed software
